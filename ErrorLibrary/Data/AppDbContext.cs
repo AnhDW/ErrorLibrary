@@ -12,11 +12,9 @@ namespace ErrorLibrary.Data
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Solution> Solutions { get; set; }
         public DbSet<Error> Errors { get; set; }
-        public DbSet<ErrorCategory> ErrorsCategory { get; set; }
+        public DbSet<ErrorCategory> ErrorCategories { get; set; }
 
-        public AppDbContext(DbContextOptions options) : base(options)
-        {
-        }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

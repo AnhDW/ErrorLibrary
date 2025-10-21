@@ -12,15 +12,13 @@ namespace ErrorLibrary.Services
 {
     public class UserService : IUserService
     {
-        //private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+        private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
 
-        public UserService(
-            //IDbContextFactory<AppDbContext> dbContextFactory, 
-            AppDbContext context, IMapper mapper)
+        public UserService(IDbContextFactory<AppDbContext> dbContextFactory, AppDbContext context, IMapper mapper)
         {
-            //_dbContextFactory = dbContextFactory;
+            _dbContextFactory = dbContextFactory;
             _context = context;
             _mapper = mapper;
         }
