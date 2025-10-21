@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using ErrorLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ErrorLibrary.Controllers
@@ -19,7 +18,7 @@ namespace ErrorLibrary.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
     }
 }
