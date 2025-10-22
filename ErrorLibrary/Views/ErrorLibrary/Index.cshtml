@@ -8,9 +8,100 @@
     <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện lỗi</span></h4>
         <div>
-            <button type="button" class="btn rounded-pill btn-primary">
+            <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#addModel">
                 <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
             </button>
+            <!-- Add Modal -->
+            <div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Thêm lỗi</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <div class="mb-2">
+                                    <label for="exampleFormControlSelect1" class="form-label">Nhóm lỗi</label>
+                                    <select class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                                        <option selected="">Chọn nhóm lỗi</option>
+                                        <option value="1">Nhóm lỗi 1</option>
+                                        <option value="2">Nhóm lỗi 2</option>
+                                        <option value="3">Nhóm lỗi 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="defaultFormControlInput" class="form-label">Mã lỗi</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập mã lỗi" aria-describedby="defaultFormControlHelp">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="defaultFormControlInput" class="form-label">Tên lỗi</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập tên lỗi" aria-describedby="defaultFormControlHelp">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="defaultFormControlInput" class="form-label">Loại lỗi</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập loại lỗi" aria-describedby="defaultFormControlHelp">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Sửa lỗi</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <div class="mb-2">
+                                    <label for="exampleFormControlSelect1" class="form-label">Nhóm lỗi</label>
+                                    <select class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                                        <option selected="">Chọn nhóm lỗi</option>
+                                        <option value="1">Nhóm lỗi 1</option>
+                                        <option value="2">Nhóm lỗi 2</option>
+                                        <option value="3">Nhóm lỗi 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="defaultFormControlInput" class="form-label">Mã lỗi</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập mã lỗi" aria-describedby="defaultFormControlHelp">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="defaultFormControlInput" class="form-label">Tên lỗi</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập tên lỗi" aria-describedby="defaultFormControlHelp">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="defaultFormControlInput" class="form-label">Loại lỗi</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập loại lỗi" aria-describedby="defaultFormControlHelp">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- Striped Rows -->
         <div class="card mt-4">
@@ -37,8 +128,10 @@
                                         <i class="bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i> Sửa</a>
+                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                           data-bs-target="#editModel"><i class="bx bx-edit-alt me-1"></i> Sửa</button>
                                         <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                       
                                     </div>
                                 </div>
                             </td>
