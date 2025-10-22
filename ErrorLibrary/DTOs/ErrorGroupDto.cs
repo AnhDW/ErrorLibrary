@@ -1,6 +1,6 @@
 ﻿namespace ErrorLibrary.DTOs
 {
-    public class ErrorCategoryDto
+    public class ErrorGroupDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

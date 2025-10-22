@@ -7,7 +7,7 @@ namespace ErrorLibrary.Services.IServices
 {
     public interface IErrorGroupService
     {
-        Task<PagedList<ErrorCategoryDto>> GetAll(ErrorGroupParams errorCategoryParams);
+        Task<PagedList<ErrorGroupDto>> GetAll(ErrorGroupParams errorCategoryParams);
         Task<List<ErrorGroup>> GetAll();
         Task<ErrorGroup> GetById(int id);
         void Add(ErrorGroup errorCategory);

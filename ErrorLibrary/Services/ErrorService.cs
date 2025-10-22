@@ -44,7 +44,7 @@ namespace ErrorLibrary.Services
 
         public async Task<List<Error>> GetAll()
         {
-            return await _context.Errors.ToListAsync();
+            return await _context.Errors.Include(x => x.ErrorGroup).ToListAsync();
         }
 
         public async Task<Error> GetById(int id)

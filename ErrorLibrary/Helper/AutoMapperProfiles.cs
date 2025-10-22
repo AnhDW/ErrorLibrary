@@ -10,7 +10,7 @@ namespace ErrorLibrary.Helper
         {
             CreateMap<Error, ErrorDto>().ReverseMap();
             CreateMap<Product, ProductDto>().ReverseMap();
-            CreateMap<ErrorGroup, ErrorCategoryDto>().ReverseMap();
+            CreateMap<ErrorGroup, ErrorGroupDto>().ReverseMap();
             CreateMap<ProductCategory, ProductCategoryDto>().ReverseMap();
             CreateMap<Solution, SolutionDto>().ReverseMap();
             CreateMap<ApplicationUser, UserDto>().ReverseMap();

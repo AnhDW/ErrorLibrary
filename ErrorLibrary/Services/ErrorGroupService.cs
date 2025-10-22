@@ -33,11 +33,11 @@ namespace ErrorLibrary.Services
             _context.ErrorGroups.Remove(errorCategory);
         }
 
-        public async Task<PagedList<ErrorCategoryDto>> GetAll(ErrorGroupParams errorCategoryParams)
+        public async Task<PagedList<ErrorGroupDto>> GetAll(ErrorGroupParams errorCategoryParams)
         {
             var query = _context.ErrorGroups.AsQueryable();
-            return await PagedList<ErrorCategoryDto>.CreateAsync(
-                query.AsNoTracking().ProjectTo<ErrorCategoryDto>(_mapper.ConfigurationProvider),
+            return await PagedList<ErrorGroupDto>.CreateAsync(
+                query.AsNoTracking().ProjectTo<ErrorGroupDto>(_mapper.ConfigurationProvider),
                 errorCategoryParams.PageNumber,
                 errorCategoryParams.PageSize);
         }
