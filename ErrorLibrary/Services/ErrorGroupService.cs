@@ -10,51 +10,51 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ErrorLibrary.Services
 {
-    public class ErrorCategoryService : IErrorCategoryService
+    public class ErrorGroupService : IErrorGroupService
     {
         private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
 
-        public ErrorCategoryService(IDbContextFactory<AppDbContext> dbContextFactory, AppDbContext context, IMapper mapper)
+        public ErrorGroupService(IDbContextFactory<AppDbContext> dbContextFactory, AppDbContext context, IMapper mapper)
         {
             _dbContextFactory = dbContextFactory;
             _context = context;
             _mapper = mapper;
         }
 
-        public void Add(ErrorCategory errorCategory)
+        public void Add(ErrorGroup errorCategory)
         {
-            _context.ErrorCategories.Add(errorCategory);
+            _context.ErrorGroups.Add(errorCategory);
         }
 
-        public void Delete(ErrorCategory errorCategory)
+        public void Delete(ErrorGroup errorCategory)
         {
-            _context.ErrorCategories.Remove(errorCategory);
+            _context.ErrorGroups.Remove(errorCategory);
         }
 
-        public async Task<PagedList<ErrorCategoryDto>> GetAll(ErrorCategoryParams errorCategoryParams)
+        public async Task<PagedList<ErrorCategoryDto>> GetAll(ErrorGroupParams errorCategoryParams)
         {
-            var query = _context.ErrorCategories.AsQueryable();
+            var query = _context.ErrorGroups.AsQueryable();
             return await PagedList<ErrorCategoryDto>.CreateAsync(
                 query.AsNoTracking().ProjectTo<ErrorCategoryDto>(_mapper.ConfigurationProvider),
                 errorCategoryParams.PageNumber,
                 errorCategoryParams.PageSize);
         }
 
-        public async Task<List<ErrorCategory>> GetAll()
+        public async Task<List<ErrorGroup>> GetAll()
         {
-            return await _context.ErrorCategories.ToListAsync();
+            return await _context.ErrorGroups.ToListAsync();
         }
 
-        public async Task<ErrorCategory> GetById(int id)
+        public async Task<ErrorGroup> GetById(int id)
         {
-            return (await _context.ErrorCategories.FindAsync(id))!;
+            return (await _context.ErrorGroups.FindAsync(id))!;
         }
 
-        public void Update(ErrorCategory errorCategory)
+        public void Update(ErrorGroup errorCategory)
         {
-            _context.ErrorCategories.Update(errorCategory);
+            _context.ErrorGroups.Update(errorCategory);
         }
     }
 }

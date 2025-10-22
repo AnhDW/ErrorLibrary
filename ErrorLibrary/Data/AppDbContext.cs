@@ -12,7 +12,7 @@ namespace ErrorLibrary.Data
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Solution> Solutions { get; set; }
         public DbSet<Error> Errors { get; set; }
-        public DbSet<ErrorCategory> ErrorCategories { get; set; }
+        public DbSet<ErrorGroup> ErrorGroups { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -31,9 +31,9 @@ namespace ErrorLibrary.Data
                 .HasForeignKey(x=>x.ErrorId);
 
             builder.Entity<Error>()
-                .HasOne(x=>x.ErrorCategory)
+                .HasOne(x=>x.ErrorGroup)
                 .WithMany(x=>x.Errors)
-                .HasForeignKey(x=>x.ErrorCategoryId);
+                .HasForeignKey(x=>x.ErrorGroupId);
         }
 
     }

@@ -1,6 +1,6 @@
 ﻿namespace ErrorLibrary.Helper.EntityParams
 {
-    public class ErrorCategoryParams : PaginationParams
+    public class ErrorGroupParams : PaginationParams
     {
     }
 }

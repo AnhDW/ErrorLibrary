@@ -1,6 +1,6 @@
 ﻿namespace ErrorLibrary.Entities
 {
-    public class ErrorCategory
+    public class ErrorGroup
     {
         public int Id { get; set; }
         public string Name { get; set; }
