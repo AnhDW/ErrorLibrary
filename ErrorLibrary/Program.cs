@@ -33,6 +33,7 @@ builder.Services.AddScoped<IErrorGroupService, ErrorGroupService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped<ISolutionService, SolutionService>();
+builder.Services.AddScoped<ISharedService, SharedService>();
 
 var assemblies = AppDomain.CurrentDomain.GetAssemblies()
     .Where(a => !a.FullName.StartsWith("Microsoft.Data.SqlClient"))
