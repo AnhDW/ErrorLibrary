@@ -10,7 +10,7 @@
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện lỗi</span></h4>
         <div>
             <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#addModel" onclick="addHandle()">
+                    data-bs-target="#addModel" onclick="addShowErrorModalHandle()">
                 <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
             </button>
             <!-- Add Modal -->
@@ -134,10 +134,10 @@
                                         </button>
                                         <div class="dropdown-menu">
                                             <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                        data-bs-target="#editModel" onclick="editHandle(@item.Id)">
+                                                    data-bs-target="#editModel" onclick="editShowErrorModalHandle(@item.Id)">
                                                     <i class="bx bx-edit-alt me-1"></i> Sửa
                                                 </button>
-                                            <a class="dropdown-item" href="javascript:void(0);" onclick='editHandle(@Html.Raw(Json.Serialize(item)))'><i class="bx bx-trash me-1"></i> Xóa</a>
+                                            <a class="dropdown-item" href="javascript:void(0);" onclick="deleteError(@item.Id)"><i class="bx bx-trash me-1"></i> Xóa</a>
                                        
                                         </div>
                                     </div>
@@ -157,7 +157,7 @@
 <!-- Content wrapper -->
 
 @section Scripts {
-    <script src="~/js/site.js">
+    <script src="~/js/error-library.js">
     </script>
 }
 

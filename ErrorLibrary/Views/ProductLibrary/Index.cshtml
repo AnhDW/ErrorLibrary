@@ -1,4 +1,4 @@
-﻿@model List<ErrorDto>
+﻿@model List<ProductDto>
 @{
     ViewData["Title"] = "Thư viện sản phẩm";
 }
@@ -10,7 +10,7 @@
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện sản phẩm</span></h4>
         <div>
             <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#addModel">
+                    data-bs-target="#addModel" onclick="addShowProductModalHandle()">
                 <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
             </button>
             <!-- Add Modal -->
@@ -35,8 +35,8 @@
                                     <input type="text" class="form-control" id="addPO" placeholder="Nhập tên sản phẩm" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="addCategory" class="form-label">Chủng loại</label>
-                                    <select class="form-select" id="addCategory" aria-label="Default select example">
+                                    <label for="addProductCategory" class="form-label">Chủng loại</label>
+                                    <select class="form-select" id="addProductCategory" aria-label="Default select example">
                                         <option selected="">Chọn chủng loại</option>
                                         <option value="1">VESTON NAM</option>
                                         <option value="2">VESTON 2</option>
@@ -52,7 +52,7 @@
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddProduct()">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -71,19 +71,21 @@
                         </div>
                         <form action="/" method="post">
                             <div class="modal-body">
+                                <input type="text" class="form-control" id="editProductId" placeholder="ID" aria-describedby="defaultFormControlHelp" hidden>
+
                                 <div class="mb-2">
                                     <label for="editProductCode" class="form-label">Mã sản phẩm</label>
                                     <input type="text" class="form-control" id="editProductCode" placeholder="Nhập mã sản phẩm" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
                                     <label for="editPO" class="form-label">PO</label>
-                                    <input type="text" class="form-control" id="editPO" placeholder="Nhập tên sản phẩm" aria-describedby="defaultFormControlHelp">
+                                    <input type="text" class="form-control" id="editProductPO" placeholder="Nhập tên sản phẩm" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="editCategory" class="form-label">Chủng loại</label>
-                                    <select class="form-select" id="editCategory" aria-label="Default select example">
+                                    <label for="editProductCategory" class="form-label">Chủng loại</label>
+                                    <select class="form-select" id="editProductCategory" aria-label="Default select example">
                                         <option selected="">Chọn chủng loại</option>
-                                        <option value="1">VESTON NAM</option>
+                                        <option value="1">VESTON NAM test</option>
                                         <option value="2">VESTON 2</option>
                                         <option value="3">VESTON 3</option>
                                     </select>
@@ -97,7 +99,7 @@
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="handleEditProduct()">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -118,10 +120,12 @@
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                        <tr>
-                            <td>ABC01</td>
-                            <td>001</td>
-                            <td>ÁO VESTON NAM</td>
+                        @foreach(var item in Model)
+                        {
+                            <tr>
+                            <td>@item.Code</td>
+                            <td>@item.PO</td>
+                            <td>@item.ProductCategory?.Name</td>
                             <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
                             <td>
                                 <div class="dropdown">
@@ -130,54 +134,16 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
+                                                    data-bs-target="#editModel" onclick="editShowProductModalHandle(@item.Id)">
                                             <i class="bx bx-edit-alt me-1"></i> Sửa
                                         </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                            <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteProduct(@item.Id)"><i class="bx bx-trash me-1"></i> Xóa</a>
                                     </div>
                                 </div>
                             </td>
-                        </tr>
-                        <tr>
-                            <td>ABC01</td>
-                            <td>001</td>
-                            <td>ÁO VESTON NAM</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                                        </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>ABC01</td>
-                            <td>001</td>
-                            <td>ÁO VESTON NAM</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                                        </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
+                            </tr>
+                        }
+                        
                     </tbody>
                 </table>
             </div>
@@ -188,3 +154,7 @@
     <div class="content-backdrop fade"></div>
 </div>
 <!-- Content wrapper -->
+@section Scripts {
+    <script src="~/js/product-library.js">
+    </script>
+}

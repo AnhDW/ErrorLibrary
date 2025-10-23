@@ -1,4 +1,4 @@
-﻿async function addHandle() {
+﻿async function addShowErrorModalHandle() {
     console.log('errData');
 
     const data = await getErrorGroups();
@@ -10,14 +10,13 @@
     $('#addErrorGroupSelect').html(html);
 }
 
-async function editHandle(errId) {
+async function editShowErrorModalHandle(errId) {
     const data = await getErrorGroups();
     let html = '<option value="" selected disabled>Chọn nhóm lỗi</option>';
     data.forEach(item => {
         html += `<option value="${item.id}">${item.name}</option>`;
     })
-    var err = await GetErrorById(errId);
-    console.log(err);
+    var err = await getErrorById(errId);
     $('#editErrorId').val(err.id);
     $('#editErrorGroupSelect').val(err.errorGroupId);
     $('#editErrorCode').val(err.code);
@@ -71,6 +70,7 @@ function handleEditError() {
         alert('Có lỗi xảy ra khi cập nhật');
     });
 }
+
 function handleDeleteError(id) {
     deleteError(id).then(function (res) {
         renderErrorTable();
@@ -79,6 +79,7 @@ function handleDeleteError(id) {
         alert('Có lỗi xảy ra khi cập nhật');
     });
 }
+
 function renderErrorTable() {
     getErrors().then(function (data) {
         let html = '';
@@ -96,7 +97,7 @@ function renderErrorTable() {
                                 </button>
                                 <div class="dropdown-menu">
                                     <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel" onclick="editHandle(${item.id})">
+                                                data-bs-target="#editModel" onclick="editShowErrorModalHandle(${item.id})">
                                             <i class="bx bx-edit-alt me-1"></i> Sửa
                                         </button>
                                         <a class="dropdown-item" href="javascript:void(0);" onclick="deleteError(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
@@ -119,7 +120,7 @@ function getErrors() {
     return $.get('/ErrorLibrary/GetErrors');
 }
 
-function GetErrorById(id) {
+function getErrorById(id) {
     return $.get('/ErrorLibrary/GetErrorById', {id : id});
 }
 
