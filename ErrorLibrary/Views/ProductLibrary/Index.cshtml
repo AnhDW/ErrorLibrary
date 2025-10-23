@@ -1,0 +1,190 @@
+﻿@model List<ErrorDto>
+@{
+    ViewData["Title"] = "Thư viện sản phẩm";
+}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện sản phẩm</span></h4>
+        <div>
+            <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#addModel">
+                <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
+            </button>
+            <!-- Add Modal -->
+            <div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Thêm sản phẩm</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <div class="mb-2">
+                                    <label for="defaultFormControlInput" class="form-label">Mã sản phẩm</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập mã sản phẩm" aria-describedby="defaultFormControlHelp">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="defaultFormControlInput" class="form-label">PO</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập tên sản phẩm" aria-describedby="defaultFormControlHelp">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="exampleFormControlSelect1" class="form-label">Chủng loại</label>
+                                    <select class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                                        <option selected="">Chọn chủng loại</option>
+                                        <option value="1">VESTON NAM</option>
+                                        <option value="2">VESTON 2</option>
+                                        <option value="3">VESTON 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="formFile" class="form-label">Ảnh</label>
+                                    <input class="form-control" type="file" id="formFile">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Sửa sản phẩm</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <div class="mb-2">
+                                    <label for="defaultFormControlInput" class="form-label">Mã sản phẩm</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập mã sản phẩm" aria-describedby="defaultFormControlHelp">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="defaultFormControlInput" class="form-label">PO</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập tên sản phẩm" aria-describedby="defaultFormControlHelp">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="exampleFormControlSelect1" class="form-label">Chủng loại</label>
+                                    <select class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                                        <option selected="">Chọn chủng loại</option>
+                                        <option value="1">VESTON NAM</option>
+                                        <option value="2">VESTON 2</option>
+                                        <option value="3">VESTON 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="formFile" class="form-label">Ảnh</label>
+                                    <input class="form-control" type="file" id="formFile">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Striped Rows -->
+        <div class="card mt-4">
+            <div class="table-responsive text-nowrap">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mã sản phẩm</th>
+                            <th>PO</th>
+                            <th>Chủng loại</th>
+                            <th>Ảnh</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        <tr>
+                            <td>ABC01</td>
+                            <td>001</td>
+                            <td>ÁO VESTON NAM</td>
+                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                data-bs-target="#editModel">
+                                            <i class="bx bx-edit-alt me-1"></i> Sửa
+                                        </button>
+                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>ABC01</td>
+                            <td>001</td>
+                            <td>ÁO VESTON NAM</td>
+                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                data-bs-target="#editModel">
+                                            <i class="bx bx-edit-alt me-1"></i> Sửa
+                                        </button>
+                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>ABC01</td>
+                            <td>001</td>
+                            <td>ÁO VESTON NAM</td>
+                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                data-bs-target="#editModel">
+                                            <i class="bx bx-edit-alt me-1"></i> Sửa
+                                        </button>
+                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--/ Striped Rows -->
+    </div>
+    <!-- / Content -->
+    <div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
