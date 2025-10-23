@@ -43,7 +43,7 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddError(ErrorDto errorDto)
+        public async Task<IActionResult> AddError([FromBody] ErrorDto errorDto)
         {
             _errorService.Add(_mapper.Map<Error>(errorDto));
             if (await _sharedService.SaveAllChanges())
@@ -57,7 +57,7 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditError(ErrorDto errorDto)
+        public async Task<IActionResult> EditError([FromBody] ErrorDto errorDto)
         {
             var error = await _errorService.GetById(errorDto.Id);
             if (error == null)
@@ -78,7 +78,7 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteError(int id)
+        public async Task<IActionResult> DeleteError([FromBody] int id)
         {
             var error = await _errorService.GetById(id);
             if (error == null)
