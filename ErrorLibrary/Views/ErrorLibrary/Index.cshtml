@@ -191,9 +191,9 @@
         };
         console.log(errorData);
         addError(errorData).then(
-            res =>{ alert(res.message);
             $('#addModel').modal('hide');
         });
+        renderErrorTable();
     }
     function renderErrorTable() {
         getErrors().then(function (data) {
@@ -256,11 +256,12 @@
     }
 
     function deleteError(id) {
+        console.log(id)
         return $.ajax({
             url: '/ErrorLibrary/DeleteError',
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({ id: id })
+            data: JSON.stringify(id)
         });
     }
 </script>
