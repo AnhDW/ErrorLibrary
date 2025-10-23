@@ -54,7 +54,7 @@
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddUser()">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -119,91 +119,7 @@
                             <th>Hành động</th>
                         </tr>
                     </thead>
-                    <tbody class="table-border-bottom-0">
-                        <tr>
-                            <td>johndoe</td>
-                            <td>John Doe</td>
-                            <td>johndoe@gmail.com</td>
-                            <td>NBC</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                                        </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>johndoe</td>
-                            <td>John Doe</td>
-                            <td>johndoe@gmail.com</td>
-                            <td>NBC</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                                        </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>johndoe</td>
-                            <td>John Doe</td>
-                            <td>johndoe@gmail.com</td>
-                            <td>NBC</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                                        </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>johndoe</td>
-                            <td>John Doe</td>
-                            <td>johndoe@gmail.com</td>
-                            <td>NBC</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                                        </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
+                    <tbody class="table-border-bottom-0" id="userTableBody">
                     </tbody>
                 </table>
             </div>
@@ -214,3 +130,78 @@
     <div class="content-backdrop fade"></div>
 </div>
 <!-- Content wrapper -->
+@section Scripts {
+    <script>
+        renderUsersTable();
+        function renderUsersTable() {
+            getUsers().then(function (data) {
+                let html = '';
+                data.forEach(item => {
+                    html += `
+                        <tr>
+                            <td>${item.code}</td>
+                            <td>${item.fullName}</td>
+                            <td>${item.email}</td>
+                            <td>NBC</td>
+                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                data-bs-target="#editModel">
+                                            <i class="bx bx-edit-alt me-1"></i> Sửa
+                                        </button>
+                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+                $('#userTableBody').html(html);
+            });
+        }
+
+         function getUsers(){
+            return $.get('/UserLibrary/GetUsers');
+        }
+
+         function handleAddUser() {
+            const username = $('#addUsername').val();
+            const password = $('#addPassword').val();
+            const fullName = $('#addFullName').val();
+            const email = $('#addEmail').val();
+            const unit = $('#addUnit').val();
+
+
+            const userData = {
+                code: username,
+                password,
+                confirmPassword:password,
+                fullName,
+                email
+            };
+
+        addUser(userData).then(function (res) {
+                $('#addModel').modal('hide');
+                renderUsersTable(); // ✅ chỉ gọi sau khi update thành công
+            }).catch(function (err) {
+                console.error(err);
+                alert('Có lỗi xảy ra khi cập nhật');
+            });
+        }
+
+        function addUser(userDto){
+            console.log('đã vào');
+            return $.ajax({
+                url: '/UserLibrary/AddUser',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(userDto)
+            });
+        }
+    </script>
+}
