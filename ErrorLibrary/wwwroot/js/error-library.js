@@ -100,7 +100,7 @@ function renderErrorTable() {
                                                 data-bs-target="#editModel" onclick="editShowErrorModalHandle(${item.id})">
                                             <i class="bx bx-edit-alt me-1"></i> Sửa
                                         </button>
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteError(${item.Id})"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                        <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteError(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
 
                                 </div>
                             </div>

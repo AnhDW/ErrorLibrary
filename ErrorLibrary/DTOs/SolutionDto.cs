@@ -8,5 +8,7 @@
         public string Handle { get; set; }
         public string? BeforeUrl { get; set; }
         public string? AfterUrl { get; set; }
+
+        public ErrorDto? Error { get; set; }
     }
 }

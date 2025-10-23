@@ -1,4 +1,4 @@
-﻿@model List<ErrorDto>
+﻿@model List<SolutionDto>
 @{
     ViewData["Title"] = "Thư viện hướng xử lý";
 }
@@ -10,7 +10,7 @@
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện hướng xử lý</span></h4>
         <div>
             <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#addModel">
+                    data-bs-target="#addModel" onclick="addShowSolutionModalHandle()">
                 <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
             </button>
             <!-- Add Modal -->
@@ -27,8 +27,8 @@
                         <form action="/" method="post">
                             <div class="modal-body">
                                 <div class="mb-2">
-                                    <label for="addErrorCode" class="form-label">Mã lỗi</label>
-                                    <select class="form-select" id="addErrorCode" aria-label="Default select example">
+                                    <label for="addErrorCodeSelect" class="form-label">Mã lỗi</label>
+                                    <select class="form-select" id="addErrorCodeSelect" aria-label="Default select example">
                                         <option selected="">Chọn mã lỗi</option>
                                         <option value="A1">A1</option>
                                         <option value="A2">A2</option>
@@ -76,21 +76,23 @@
                         <form action="/" method="post">
                             <div class="modal-body">
                                 <div class="mb-2">
-                                    <label for="editErrorCode" class="form-label">Mã lỗi</label>
-                                    <select class="form-select" id="editErrorCode" aria-label="Default select example">
+                                    <label for="editErrorCodeSelect" class="form-label">Mã lỗi</label>
+                                    <select class="form-select" id="editErrorCodeSelect" aria-label="Default select example">
                                         <option selected="">Chọn mã lỗi</option>
                                         <option value="A1">A1</option>
                                         <option value="A2">A2</option>
                                         <option value="A3">A3</option>
                                     </select>
                                 </div>
+                                <input class="form-control" type="file" id="editSolutionId" hidden>
+
                                 <div class="mb-2">
-                                    <label for="editCause" class="form-label">Nguyên nhân</label>
-                                    <textarea class="form-control" id="editCause" rows="3"></textarea>
+                                    <label for="editSolutionCause" class="form-label">Nguyên nhân</label>
+                                    <textarea class="form-control" id="editSolutionCause" rows="3"></textarea>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="editHandle" class="form-label">Hướng xử lý</label>
-                                    <textarea class="form-control" id="editHandle" rows="3"></textarea>
+                                    <label for="editSolutionHandle" class="form-label">Hướng xử lý</label>
+                                    <textarea class="form-control" id="editSolutionHandle" rows="3"></textarea>
                                 </div>
                                 <div class="mb-2">
                                     <label for="editBeforeImage" class="form-label">Ảnh trước xử lý</label>
@@ -127,111 +129,30 @@
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                        <tr>
-                            <td>A1</td>
-                            <td>Nguyên nhân 1</td>
-                            <td>Hướng xử lý 1</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
+                        @foreach(var item in Model)
+                        {
+                           <tr>
+                                <td>@item.Error.Code</td>
+                                <td>@item.Cause</td>
+                                <td>@item.Handle</td>
+                                <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
+                                <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded"></i>
                                         </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                        <div class="dropdown-menu">
+                                            <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                    data-bs-target="#editModel" onclick="editShowSolutionModalHandle(@item.Id)">
+                                                <i class="bx bx-edit-alt me-1"></i> Sửa
+                                            </button>
+                                            <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteSolution(@item.Id)"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>A1</td>
-                            <td>Nguyên nhân 1</td>
-                            <td>Hướng xử lý 1</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                                        </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>A1</td>
-                            <td>Nguyên nhân 1</td>
-                            <td>Hướng xử lý 1</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                                        </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>A1</td>
-                            <td>Nguyên nhân 1</td>
-                            <td>Hướng xử lý 1</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                                        </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>A1</td>
-                            <td>Nguyên nhân 1</td>
-                            <td>Hướng xử lý 1</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                                        </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr> 
+                        }
                     </tbody>
                 </table>
             </div>
@@ -242,3 +163,7 @@
     <div class="content-backdrop fade"></div>
 </div>
 <!-- Content wrapper -->
+@section Scripts {
+    <script src="~/js/solution-library.js">
+    </script>
+}

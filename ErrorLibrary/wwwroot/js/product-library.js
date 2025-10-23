@@ -37,12 +37,27 @@ function handleAddProduct() {
         $('#addModel').modal('hide');
         renderProductTable();
     }).catch(function (err) {
-        alert('Có lỗi xảy ra khi cập nhật');
+        alert('Có lỗi xảy ra khi thêm');
     });
 }
 
 function handleEditProduct() {
-    console.log('handle')
+    const id = $('#editProductId').val();
+    const code = $('#editProductCode').val();
+    const po = $('#editProductPO').val();
+    const productCategoryId = $('#editProductCategory').val();
+    const productData = {
+        id,
+        code,
+        po,
+        productCategoryId
+    };
+    deleteProduct(productData).then(function (res) {
+        $('#editModel').modal('hide');
+        renderProductTable();
+    }).catch(function (err) {
+        alert('Có lỗi xảy ra khi cập nhật');
+    });
 }
 
 function handleDeleteProduct(id) {
@@ -59,9 +74,9 @@ function renderProductTable() {
         data.forEach(item => {
             html += `
                     <tr>
-                        <td>${item.Code}</td>
-                        <td>${item.PO}</td>
-                        <td>${item.ProductCategory.Name}</td>
+                        <td>${item.code}</td>
+                        <td>${item.po}</td>
+                        <td>${item.productCategory.name}</td>
                         <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
                         <td>
                             <div class="dropdown">
@@ -70,10 +85,10 @@ function renderProductTable() {
                                 </button>
                                 <div class="dropdown-menu">
                                     <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel" onclick="editShowProductModalHandle(${item.Id})">
+                                                data-bs-target="#editModel" onclick="editShowProductModalHandle(${item.id})">
                                         <i class="bx bx-edit-alt me-1"></i> Sửa
                                     </button>
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteProduct(${item.Id})"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                        <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteProduct(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
                                 </div>
                             </div>
                         </td>
