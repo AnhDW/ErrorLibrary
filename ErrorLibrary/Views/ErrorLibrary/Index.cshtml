@@ -11,7 +11,7 @@
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện lỗi</span></h4>
         <div>
             <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#addModel">
+                    data-bs-target="#addModel" onclick="addHandle()">
                 <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
             </button>
             <!-- Add Modal -->
@@ -73,8 +73,8 @@
                         <form action="/" method="post">
                             <div class="modal-body">
                                 <div class="mb-2">
-                                    <label for="exampleFormControlSelect1" class="form-label">Nhóm lỗi</label>
-                                    <select class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                                    <label for="exampleFormControlSelect2" class="form-label">Nhóm lỗi</label>
+                                    <select class="form-select" id="exampleFormControlSelect2" aria-label="Default select example">
                                         <option selected="">Chọn nhóm lỗi</option>
                                         <option value="1">Nhóm lỗi 1</option>
                                         <option value="2">Nhóm lỗi 2</option>
@@ -133,7 +133,9 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                           data-bs-target="#editModel"><i class="bx bx-edit-alt me-1"></i> Sửa</button>
+                                                    data-bs-target="#editModel" onclick="editHandle()">
+                                                <i class="bx bx-edit-alt me-1"></i> Sửa
+                                            </button>
                                         <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
                                        
                                     </div>
@@ -152,3 +154,31 @@
     <div class="content-backdrop fade"></div>
 </div>
 <!-- Content wrapper -->
+
+<button onclick="loadErrorGroups()">Xem chi tiết</button>
+<div id="productDetails"></div>
+
+<script>
+    async function addHandle(){
+        const data = await getErrorGroups();
+        let html = '<option value="" selected disabled>Chọn nhóm lỗi</option>';
+        data.forEach(item => {
+            html += `<option value="${item.id}">${item.name}</option>`;
+        })
+        $('#exampleFormControlSelect1').html(html);
+    }
+
+    async function editHandle(){
+        const data = await getErrorGroups();
+        let html = '<option value="" selected disabled>Chọn nhóm lỗi</option>';
+        data.forEach(item => {
+            html += `<option value="${item.id}">${item.name}</option>`;
+        })
+        $('#exampleFormControlSelect2').html(html);
+    }
+
+    function getErrorGroups() {
+        return $.get('/ErrorLibrary/GetErrorGroups');
+    }
+
+</script>
