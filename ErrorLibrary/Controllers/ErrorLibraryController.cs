@@ -42,6 +42,12 @@ namespace ErrorLibrary.Controllers
             return Json(_mapper.Map<List<ErrorDto>>(errors));
         }
 
+        public async Task<IActionResult> GetErrorById(int id)
+        {
+            var error = await _errorService.GetById(id);
+            return Json(_mapper.Map<ErrorDto>(error));
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddError([FromBody] ErrorDto errorDto)
         {
@@ -57,7 +63,7 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditError([FromBody] ErrorDto errorDto)
+        public async Task<IActionResult> UpdateError([FromBody] ErrorDto errorDto)
         {
             var error = await _errorService.GetById(errorDto.Id);
             if (error == null)
