@@ -1,13 +1,12 @@
 ﻿@model List<ErrorDto>
 @{
-    ViewData["Title"] = "Thư viện hướng xử lý";
+    ViewData["Title"] = "Thư viện tài khoản";
 }
 <!-- Content wrapper -->
 <div class="content-wrapper">
     <!-- Content -->
-
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện hướng xử lý</span></h4>
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện tài khoản</span></h4>
         <div>
             <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
                     data-bs-target="#addModel">
@@ -18,7 +17,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalCenterTitle">Thêm hướng xử lý</h5>
+                            <h5 class="modal-title" id="modalCenterTitle">Thêm tài khoản</h5>
                             <button type="button"
                                     class="btn-close"
                                     data-bs-dismiss="modal"
@@ -27,28 +26,27 @@
                         <form action="/" method="post">
                             <div class="modal-body">
                                 <div class="mb-2">
-                                    <label for="defaultFormControlInput" class="form-label">Mã lỗi</label>
-                                    <select class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
-                                        <option selected="">Chọn mã lỗi</option>
-                                        <option value="A1">A1</option>
-                                        <option value="A2">A2</option>
-                                        <option value="A3">A3</option>
-                                    </select>
+                                    <label for="defaultFormControlInput" class="form-label">Tên đăng nhập</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập tên đăng nhập" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="exampleFormControlTextarea1" class="form-label">Nguyên nhân</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    <label for="defaultFormControlInput" class="form-label">Mật khẩu</label>
+                                    <input type="password" class="form-control" id="defaultFormControlInput" placeholder="Nhập mật khẩu" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="exampleFormControlTextarea1" class="form-label">Hướng xử lý</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    <label for="defaultFormControlInput" class="form-label">Họ tên</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập họ tên" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="formFile" class="form-label">Ảnh trước xử lý</label>
-                                    <input class="form-control" type="file" id="formFile">
+                                    <label for="defaultFormControlInput" class="form-label">Email</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập email" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="formFile" class="form-label">Ảnh sau xử lý</label>
+                                    <label for="defaultFormControlInput" class="form-label">Đơn vị</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập đơn vị" aria-describedby="defaultFormControlHelp">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="formFile" class="form-label">Ảnh</label>
                                     <input class="form-control" type="file" id="formFile">
                                 </div>
                             </div>
@@ -67,7 +65,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalCenterTitle">Sửa sản phẩm</h5>
+                            <h5 class="modal-title" id="modalCenterTitle">Sửa tài khoản</h5>
                             <button type="button"
                                     class="btn-close"
                                     data-bs-dismiss="modal"
@@ -76,28 +74,23 @@
                         <form action="/" method="post">
                             <div class="modal-body">
                                 <div class="mb-2">
-                                    <label for="defaultFormControlInput" class="form-label">Mã lỗi</label>
-                                    <select class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
-                                        <option selected="">Chọn mã lỗi</option>
-                                        <option value="A1">A1</option>
-                                        <option value="A2">A2</option>
-                                        <option value="A3">A3</option>
-                                    </select>
+                                    <label for="defaultFormControlInput" class="form-label">Tên đăng nhập</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập tên đăng nhập" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    <label for="defaultFormControlInput" class="form-label">Họ tên</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập họ tên" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="exampleFormControlTextarea1" class="form-label">Hướng xử lý</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    <label for="defaultFormControlInput" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="defaultFormControlInput" placeholder="Nhập email" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="formFile" class="form-label">Ảnh trước xử lý</label>
-                                    <input class="form-control" type="file" id="formFile">
+                                    <label for="defaultFormControlInput" class="form-label">Đơn vị</label>
+                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập đơn vị" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="formFile" class="form-label">Ảnh sau xử lý</label>
+                                    <label for="formFile" class="form-label">Ảnh</label>
                                     <input class="form-control" type="file" id="formFile">
                                 </div>
                             </div>
@@ -118,41 +111,20 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Mã lỗi</th>
-                            <th>Nguyên nhân</th>
-                            <th>Hướng xử lý</th>
-                            <th>Ảnh trước xử lý</th>
-                            <th>Ảnh sau xử lý</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Họ tên</th>
+                            <th>Email</th>
+                            <th>Đơn vị</th>
+                            <th>Ảnh</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
                         <tr>
-                            <td>A1</td>
-                            <td>Nguyên nhân 1</td>
-                            <td>Hướng xử lý 1</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                                        </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>A1</td>
-                            <td>Nguyên nhân 1</td>
-                            <td>Hướng xử lý 1</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
+                            <td>johndoe</td>
+                            <td>John Doe</td>
+                            <td>johndoe@gmail.com</td>
+                            <td>NBC</td>
                             <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
                             <td>
                                 <div class="dropdown">
@@ -170,31 +142,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>A1</td>
-                            <td>Nguyên nhân 1</td>
-                            <td>Hướng xử lý 1</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                                        </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>A1</td>
-                            <td>Nguyên nhân 1</td>
-                            <td>Hướng xử lý 1</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
+                            <td>johndoe</td>
+                            <td>John Doe</td>
+                            <td>johndoe@gmail.com</td>
+                            <td>NBC</td>
                             <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
                             <td>
                                 <div class="dropdown">
@@ -212,10 +163,31 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>A1</td>
-                            <td>Nguyên nhân 1</td>
-                            <td>Hướng xử lý 1</td>
+                            <td>johndoe</td>
+                            <td>John Doe</td>
+                            <td>johndoe@gmail.com</td>
+                            <td>NBC</td>
                             <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                data-bs-target="#editModel">
+                                            <i class="bx bx-edit-alt me-1"></i> Sửa
+                                        </button>
+                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>johndoe</td>
+                            <td>John Doe</td>
+                            <td>johndoe@gmail.com</td>
+                            <td>NBC</td>
                             <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
                             <td>
                                 <div class="dropdown">
