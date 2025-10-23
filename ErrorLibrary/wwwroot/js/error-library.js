@@ -86,7 +86,7 @@ function renderErrorTable() {
         data.forEach(item => {
             html += `
                     <tr>
-                        <td>${item.errorGroup.name}</td>
+                        <td>${item.errorGroup == null ? '' : item.errorGroup.name}</td>
                         <td>${item.code}</td>
                         <td>${item.name}</td>
                         <td>${item.errorCategory ?? ''}</td>
@@ -100,7 +100,7 @@ function renderErrorTable() {
                                                 data-bs-target="#editModel" onclick="editShowErrorModalHandle(${item.id})">
                                             <i class="bx bx-edit-alt me-1"></i> Sửa
                                         </button>
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="deleteError(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                        <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteError(${item.Id})"><i class="bx bx-trash me-1"></i> Xóa</a>
 
                                 </div>
                             </div>
@@ -109,6 +109,7 @@ function renderErrorTable() {
                     `;
         });
         $('#errorTableBody').html(html);
+        console.log(html, data);
     });
 }
 

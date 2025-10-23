@@ -31,8 +31,8 @@
                                     <input type="text" class="form-control" id="addProductCode" placeholder="Nhập mã sản phẩm" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="addPO" class="form-label">PO</label>
-                                    <input type="text" class="form-control" id="addPO" placeholder="Nhập tên sản phẩm" aria-describedby="defaultFormControlHelp">
+                                    <label for="addProductPO" class="form-label">PO</label>
+                                    <input type="text" class="form-control" id="addProductPO" placeholder="Nhập tên sản phẩm" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
                                     <label for="addProductCategory" class="form-label">Chủng loại</label>
@@ -108,7 +108,7 @@
         </div>
         <!-- Striped Rows -->
         <div class="card mt-4">
-            <div class="table-responsive text-nowrap">
+            <div  class="table-responsive text-nowrap">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -119,7 +119,7 @@
                             <th>Hành động</th>
                         </tr>
                     </thead>
-                    <tbody class="table-border-bottom-0">
+                    <tbody id="productTableBody" class="table-border-bottom-0">
                         @foreach(var item in Model)
                         {
                             <tr>

@@ -14,18 +14,31 @@ async function editShowProductModalHandle(productId) {
         html += `<option value="${item.id}">${item.name}</option>`;
     })
     var product = await getProductById(productId);
-    console.log(product);
+
     $('#editProductId').val(product.id);
     $('#editProductCode').val(product.code);
     $('#editProductPO').val(product.po);
     $('#editProductCategory').val(product.productCategoryId);
 
-
     $('#editProductCategory').html(html);
 }
 
 function handleAddProduct() {
-    console.log('handle')
+    const code = $('#addProductCode').val();
+    const po = $('#addProductPO').val();
+    const productCategoryId = $('#addProductCategory').val();
+
+    const productData = {
+        code,
+        po,
+        productCategoryId
+    };
+    addProduct(productData).then(function (res) {
+        $('#addModel').modal('hide');
+        renderProductTable();
+    }).catch(function (err) {
+        alert('Có lỗi xảy ra khi cập nhật');
+    });
 }
 
 function handleEditProduct() {
@@ -36,7 +49,6 @@ function handleDeleteProduct(id) {
     deleteProduct(id).then(function (res) {
         renderProductTable();
     }).catch(function (err) {
-        console.Product(err);
         alert('Có lỗi xảy ra khi cập nhật');
     });
 }
@@ -58,10 +70,10 @@ function renderProductTable() {
                                 </button>
                                 <div class="dropdown-menu">
                                     <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                            data-bs-target="#editModel">
+                                                data-bs-target="#editModel" onclick="editShowProductModalHandle(${item.Id})">
                                         <i class="bx bx-edit-alt me-1"></i> Sửa
                                     </button>
-                                    <a class="dropdown-item" href="javascript:void(0);" onclick=""><i class="bx bx-trash me-1"></i> Xóa</a>
+                                        <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteProduct(${item.Id})"><i class="bx bx-trash me-1"></i> Xóa</a>
                                 </div>
                             </div>
                         </td>
@@ -69,6 +81,7 @@ function renderProductTable() {
                     `;
         });
         $('#productTableBody').html(html);
+        console.log(html, data);
     });
 }
 
