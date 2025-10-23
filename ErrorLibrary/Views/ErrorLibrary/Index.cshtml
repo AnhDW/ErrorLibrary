@@ -28,8 +28,8 @@
                         <form action="/" method="post">
                             <div class="modal-body">
                                 <div class="mb-2">
-                                    <label for="exampleFormControlSelect1" class="form-label">Nhóm lỗi</label>
-                                    <select class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                                    <label for="addErrorGroupSelect" class="form-label">Nhóm lỗi</label>
+                                    <select class="form-select" id="addErrorGroupSelect" aria-label="Default select example">
                                         <option selected="">Chọn nhóm lỗi</option>
                                         <option value="1">Nhóm lỗi 1</option>
                                         <option value="2">Nhóm lỗi 2</option>
@@ -37,23 +37,23 @@
                                     </select>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="defaultFormControlInput" class="form-label">Mã lỗi</label>
-                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập mã lỗi" aria-describedby="defaultFormControlHelp">
+                                    <label for="addErrorCode" class="form-label">Mã lỗi</label>
+                                    <input type="text" class="form-control" id="addErrorCode" placeholder="Nhập mã lỗi" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="defaultFormControlInput" class="form-label">Tên lỗi</label>
-                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập tên lỗi" aria-describedby="defaultFormControlHelp">
+                                    <label for="addErrorName" class="form-label">Tên lỗi</label>
+                                    <input type="text" class="form-control" id="addErrorName" placeholder="Nhập tên lỗi" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="defaultFormControlInput" class="form-label">Loại lỗi</label>
-                                    <input type="text" class="form-control" id="defaultFormControlInput" placeholder="Nhập loại lỗi" aria-describedby="defaultFormControlHelp">
+                                    <label for="addErrorType" class="form-label">Loại lỗi</label>
+                                    <input type="text" class="form-control" id="addErrorType" placeholder="Nhập loại lỗi" aria-describedby="defaultFormControlHelp">
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddError()">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -118,7 +118,7 @@
                             <th>Hành động</th>
                         </tr>
                     </thead>
-                    <tbody class="table-border-bottom-0">
+                    <tbody class="table-border-bottom-0" id="errorTableBody">
                         @foreach(var item in Model)
                         {
                             <tr>
@@ -136,7 +136,7 @@
                                                     data-bs-target="#editModel" onclick="editHandle()">
                                                 <i class="bx bx-edit-alt me-1"></i> Sửa
                                             </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                            <a class="dropdown-item" href="javascript:void(0);" onclick="deleteError(@item.Id)"><i class="bx bx-trash me-1"></i> Xóa</a>
                                        
                                     </div>
                                 </div>
@@ -165,7 +165,7 @@
         data.forEach(item => {
             html += `<option value="${item.id}">${item.name}</option>`;
         })
-        $('#exampleFormControlSelect1').html(html);
+        $('#addErrorGroupSelect').html(html);
     }
 
     async function editHandle(){
@@ -177,6 +177,57 @@
         $('#exampleFormControlSelect2').html(html);
     }
 
+    function handleAddError() {
+        const errorGroupId = $('#addErrorGroupSelect').val();
+        const code = $('#addErrorCode').val();
+        const name = $('#addErrorName').val();
+        const type = $('#addErrorType').val();
+
+        const errorData = {
+            errorGroupId,
+            code,
+            name,
+            type
+        };
+        console.log(errorData);
+        addError(errorData).then(
+            res =>{ alert(res.message);
+            $('#addModel').modal('hide');
+        });
+    }
+    function renderErrorTable() {
+        getErrors().then(function (data) {
+            let html = '';
+            data.forEach(item => {
+                html += `
+                    <tr>
+                        <td>${item.errorGroup.name}</td>
+                        <td>${item.code}</td>
+                        <td>${item.name}</td>
+                        <td>${item.errorCategory}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                            data-bs-target="#editModel" onclick="editHandle(${item.id})">
+                                        <i class="bx bx-edit-alt me-1"></i> Sửa
+                                    </button>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="deleteError(${item.id})">
+                                        <i class="bx bx-trash me-1"></i> Xóa
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            $('#errorTableBody').html(html);
+        });
+    }
+
     function getErrorGroups() {
         return $.get('/ErrorLibrary/GetErrorGroups');
     }
@@ -186,6 +237,7 @@
     }
 
     function addError(errorDto){
+        console.log('đã vào');
         return $.ajax({
             url: '/ErrorLibrary/AddError',
             type: 'POST',
