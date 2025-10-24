@@ -14,13 +14,14 @@ async function editShowProductModalHandle(productId) {
         html += `<option value="${item.id}">${item.name}</option>`;
     })
     var product = await getProductById(productId);
+    console.log(product);
     $('#editProductCategory').html(html);
 
     $('#editProductId').val(product.id);
     $('#editProductCode').val(product.code);
     $('#editProductPO').val(product.po);
     $('#editProductCategory').val(product.productCategoryId);
-
+    $('#editProductImageUrl').val(product.imageUrl);
 }
 
 function handleAddProduct() {
@@ -34,6 +35,7 @@ function handleAddProduct() {
         productCategoryId
     };
     addProduct(productData).then(function (res) {
+        $('#addProductImage').val('');
         $('#addModel').modal('hide');
         renderProductTable();
     }).catch(function (err) {
@@ -46,13 +48,17 @@ function handleEditProduct() {
     const code = $('#editProductCode').val();
     const po = $('#editProductPO').val();
     const productCategoryId = $('#editProductCategory').val();
+    const imageUrl = $('#editProductImageUrl').val();
     const productData = {
         id,
         code,
         po,
-        productCategoryId
+        productCategoryId,
+        imageUrl
     };
+    console.log(productData);
     updateProduct(productData).then(function (res) {
+        $('#editProductImage').val('');
         $('#editModel').modal('hide');
         renderProductTable();
     }).catch(function (err) {
@@ -100,16 +106,27 @@ function renderProductTable() {
     });
 }
 
+//request
 function getProductCategories() {
-    return $.get('/ProductLibrary/GetProductCategories');
+    return ajaxRequest({
+        url: '/ProductLibrary/GetProductCategories',
+        method: 'GET',
+    })
 }
 
 function getProducts() {
-    return $.get('/ProductLibrary/GetProducts');
+    return ajaxRequest({
+        url: '/ProductLibrary/GetProducts',
+        method: 'GET',
+    })
 }
 
 function getProductById(id) {
-    return $.get('/ProductLibrary/GetProductById', { id: id });
+    return ajaxRequest({
+        url: '/ProductLibrary/GetProductById',
+        method: 'GET',
+        data: { id: id }
+    })
 }
 
 function addProduct(productDto) {
@@ -120,13 +137,13 @@ function addProduct(productDto) {
     formData.append("po", productDto.po);
     formData.append("file", $("#addProductImage")[0].files[0]);
 
-    return $.ajax({
+    return ajaxRequest({
         url: '/ProductLibrary/AddProduct',
-        type: 'POST',
+        method: 'POST',
         data: formData,
-        contentType: false,
-        processData: false
-    });
+        isFormData:true,
+        showLoading: true
+    })
 }
 
 function updateProduct(productDto) {
@@ -136,23 +153,23 @@ function updateProduct(productDto) {
     formData.append("productCategoryId", productDto.productCategoryId);
     formData.append("code", productDto.code);
     formData.append("po", productDto.po);
+    formData.append("imageUrl", productDto.imageUrl);
     formData.append("file", $("#editProductImage")[0].files[0]);
 
-    return $.ajax({
+    return ajaxRequest({
         url: '/ProductLibrary/UpdateProduct',
-        type: 'POST',
+        method: 'POST',
         data: formData,
-        contentType: false,
-        processData: false
-    });
+        isFormData: true,
+        showLoading: true
+    })
 }
 
 function deleteProduct(id) {
-    console.log(id)
-    return $.ajax({
+    return ajaxRequest({
         url: '/ProductLibrary/DeleteProduct',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(id)
-    });
+        method: 'POST',
+        data: id,
+        showLoading: true
+    })
 }

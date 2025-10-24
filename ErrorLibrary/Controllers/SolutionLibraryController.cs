@@ -76,6 +76,7 @@ namespace ErrorLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateSolution([FromForm] SolutionDto solutionDto)
         {
+            var solution = await _solutionService.GetById(solutionDto.Id);
             if(solutionDto.BeforeFile != null)
             {
                 _fileService.DeleteAttachment(solutionDto.BeforeUrl);
@@ -84,9 +85,8 @@ namespace ErrorLibrary.Controllers
             if(solutionDto.AfterFile != null)
             {
                 _fileService.DeleteAttachment(solutionDto.AfterUrl);
-                solutionDto.BeforeUrl = await _fileService.AddCompressAttachment(solutionDto.AfterFile);
+                solutionDto.AfterUrl = await _fileService.AddCompressAttachment(solutionDto.AfterFile);
             }
-            var solution = await _solutionService.GetById(solutionDto.Id);
             if (solution == null)
             {
                 _responseDto.IsSuccess = false;

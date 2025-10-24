@@ -1,4 +1,5 @@
-﻿async function addShowErrorModalHandle() {
+﻿//handle
+async function addShowErrorModalHandle() {
     console.log('errData');
 
     const data = await getErrorGroups();
@@ -113,42 +114,52 @@ function renderErrorTable() {
     });
 }
 
+// request
 function getErrorGroups() {
-    return $.get('/ErrorLibrary/GetErrorGroups');
+    return ajaxRequest({
+        url: '/ErrorLibrary/GetErrorGroups',
+        method: 'GET',
+    })
 }
 
 function getErrors() {
-    return $.get('/ErrorLibrary/GetErrors');
+    return ajaxRequest({
+        url: '/ErrorLibrary/GetErrors',
+        method: 'GET',
+    })
 }
 
 function getErrorById(id) {
-    return $.get('/ErrorLibrary/GetErrorById', {id : id});
+    return ajaxRequest({
+        url: '/ErrorLibrary/GetErrorById',
+        method: 'GET',
+        data: { id: id }
+    })
 }
 
 function addError(errorDto) {
-    return $.ajax({
+    return ajaxRequest({
         url: '/ErrorLibrary/AddError',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(errorDto)
-    });
+        method: 'POST',
+        data: errorDto,
+        showLoading: true
+    })
 }
 
 function updateError(errorDto) {
-    return $.ajax({
+    return ajaxRequest({
         url: '/ErrorLibrary/UpdateError',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(errorDto)
-    });
+        method: 'POST',
+        data: errorDto,
+        showLoading: true
+    })
 }
 
 function deleteError(id) {
-    console.log(id)
-    return $.ajax({
+    return ajaxRequest({
         url: '/ErrorLibrary/DeleteError',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(id)
-    });
+        method: 'POST',
+        data: id,
+        showLoading: true
+    })
 }

@@ -14,12 +14,13 @@ async function editShowSolutionModalHandle(solutionId) {
         html += `<option value="${item.id}">${item.code}</option>`;
     })
     var solution = await getSolutionById(solutionId);
-    console.log( solution);
     $('#editErrorCodeSelect').html(html);
     $('#editSolutionId').val(solution.id);
     $('#editSolutionCause').val(solution.cause);
     $('#editErrorCodeSelect').val(solution.errorId);
     $('#editSolutionHandle').val(solution.handle);
+    $('#editBeforeImageUrl').val(solution.beforeUrl);
+    $('#editAfterImageUrl').val(solution.afterUrl);
 }
 
 function handleAddSolution() {
@@ -32,7 +33,6 @@ function handleAddSolution() {
         errorId,
         handle
     };
-    console.log(solutionData);
     addSolution(solutionData).then(function (res) {
         $('#addModel').modal('hide');
         renderSolutionTable();
@@ -46,14 +46,16 @@ function handleEditSolution() {
     const cause = $('#editSolutionCause').val();
     const errorId = $('#editErrorCodeSelect').val();
     const handle = $('#editSolutionHandle').val();
-
+    const beforeUrl = $('#editBeforeImageUrl').val();
+    const afterUrl = $('#editAfterImageUrl').val();
     const solutionData = {
         id,
         cause,
         errorId,
-        handle
+        handle,
+        beforeUrl,
+        afterUrl
     };
-    console.log(solutionData);
     updateSolution(solutionData).then(function (res) {
         $('#editModel').modal('hide');
         renderSolutionTable();
@@ -99,19 +101,30 @@ function renderSolutionTable() {
                 `;
         });
         $('#solutionTableBody').html(html);
-        console.log(html, data);
     });
 }
+
+//request
 function getErrorsForSolution() {
-    return $.get('/SolutionLibrary/GetErrorsForSolution');
+    return ajaxRequest({
+        url: '/SolutionLibrary/GetErrorsForSolution',
+        method: 'GET',
+    })
 }
 
 function getSolutions() {
-    return $.get('/SolutionLibrary/GetSolutions');
+    return ajaxRequest({
+        url: '/SolutionLibrary/GetSolutions',
+        method: 'GET',
+    })
 }
 
 function getSolutionById(id) {
-    return $.get('/SolutionLibrary/GetSolutionById', { id: id });
+    return ajaxRequest({
+        url: '/SolutionLibrary/GetSolutionById',
+        method: 'GET',
+        data: { id: id }
+    })
 }
 
 function addSolution(solutionDto) {
@@ -123,13 +136,13 @@ function addSolution(solutionDto) {
     formData.append("beforeFile", $("#addBeforeImage")[0].files[0]);
     formData.append("afterFile", $("#addAfterImage")[0].files[0]);
 
-    return $.ajax({
+    return ajaxRequest({
         url: '/SolutionLibrary/AddSolution',
-        type: 'POST',
+        method: 'POST',
         data: formData,
-        contentType: false,
-        processData: false
-    });
+        isFormData: true,
+        showLoading: true
+    })
 }
 
 function updateSolution(solutionDto) {
@@ -138,24 +151,25 @@ function updateSolution(solutionDto) {
     formData.append("errorId", solutionDto.errorId);
     formData.append("cause", solutionDto.cause);
     formData.append("handle", solutionDto.handle);
+    formData.append("beforeUrl", solutionDto.beforeUrl);
+    formData.append("afterUrl", solutionDto.afterUrl);
     formData.append("beforeFile", $("#editBeforeImage")[0].files[0]);
     formData.append("afterFile", $("#editAfterImage")[0].files[0]);
 
-    console.log(formData);
-    return $.ajax({
+    return ajaxRequest({
         url: '/SolutionLibrary/UpdateSolution',
-        type: 'POST',
+        method: 'POST',
         data: formData,
-        contentType: false,
-        processData: false
-    });
+        isFormData: true,
+        showLoading: true
+    })
 }
 
 function deleteSolution(id) {
-    return $.ajax({
+    return ajaxRequest({
         url: '/SolutionLibrary/DeleteSolution',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(id)
-    });
+        method: 'POST',
+        data: id,
+        showLoading: true
+    })
 }

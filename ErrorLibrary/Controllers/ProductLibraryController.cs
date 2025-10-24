@@ -72,17 +72,18 @@ namespace ErrorLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProduct([FromForm] ProductDto productDto)
         {
-            if (productDto.File != null)
-            {
-                _fileService.DeleteAttachment(productDto.ImageUrl);
-                productDto.ImageUrl = await _fileService.AddCompressAttachment(productDto.File);
-            }
+            
             var product = await _productService.GetById(productDto.Id);
             if(product == null)
             {
                 _responseDto.IsSuccess=false;
                 _responseDto.Message = "Không tìm thấy 'sản phẩm' này trong thư viện";
                 return Json(_responseDto);
+            }
+            if (productDto.File != null)
+            {
+                _fileService.DeleteAttachment(productDto.ImageUrl);
+                productDto.ImageUrl = await _fileService.AddCompressAttachment(productDto.File);
             }
             _productService.Update(_mapper.Map(productDto, product));
             if (await _sharedService.SaveAllChanges())
