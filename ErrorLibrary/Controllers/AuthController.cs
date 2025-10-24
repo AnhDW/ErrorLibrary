@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ErrorLibrary.DTOs;
+using ErrorLibrary.Services;
 using ErrorLibrary.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
