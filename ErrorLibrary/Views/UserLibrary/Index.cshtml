@@ -73,6 +73,7 @@
                         </div>
                         <form action="/" method="post">
                             <div class="modal-body">
+                                <input type="text" class="form-control" id="editUserId" placeholder="ID" aria-describedby="defaultFormControlHelp" hidden>
                                 <div class="mb-2">
                                     <label for="editUsername" class="form-label">Tên đăng nhập</label>
                                     <input type="text" class="form-control" id="editUsername" placeholder="Nhập tên đăng nhập" aria-describedby="defaultFormControlHelp">
@@ -98,7 +99,7 @@
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="handleEditUser()">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -143,7 +144,7 @@
                             <td>${item.fullName}</td>
                             <td>${item.email}</td>
                             <td>NBC</td>
-                            <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
+                            <td><img src="/assets/img/avatars/1.png" alt="Avatar" style="width: 60px;" /></td>
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -151,10 +152,10 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel">
+                                                data-bs-target="#editModel" onclick=(editShowUserModalHandle('${item.id}'))>
                                             <i class="bx bx-edit-alt me-1"></i> Sửa
                                         </button>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                        <button type="button" class="dropdown-item" onclick="handleDeleteUser('${item.id}')"><i class="bx bx-trash me-1"></i> Xóa</a>
                                     </div>
                                 </div>
                             </td>
@@ -163,6 +164,10 @@
                 });
                 $('#userTableBody').html(html);
             });
+        }
+
+        function getUserById(id) {
+            return $.get('/UserLibrary/GetUserById', {id : id});
         }
 
          function getUsers(){
@@ -201,6 +206,66 @@
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(userDto)
+            });
+        }
+
+        async function editShowUserModalHandle(userId) {
+            var user = await getUserById(userId);
+
+            $('#editUserId').val(userId);
+            $('#editUsername').val(user.code);
+            $('#editFullName').val(user.fullName);
+            $('#editEmail').val(user.email);
+        }
+
+        function handleEditUser() {
+            const id = $('#editUserId').val();
+            const username = $('#editUsername').val();
+            const fullName = $('#editFullName').val();
+            const email = $('#editEmail').val();
+            // const unit = $('#editUnit').val();
+
+            const userData = {
+                id,
+                code: username,
+                fullName,
+                email
+            };
+            console.log(userData);
+            updateUser(userData).then(function (res) {
+                $('#editModel').modal('hide');
+                renderUsersTable();
+            }).catch(function (err) {
+                console.error(err);
+                alert('Có lỗi xảy ra khi cập nhật');
+            });
+        }
+
+        function updateUser(userDto) {
+            return $.ajax({
+                url: '/UserLibrary/UpdateUser',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(userDto)
+            });
+        }
+
+        function handleDeleteUser(id) {
+            deleteUser(id).then(function (res) {
+                renderUsersTable();
+            }).catch(function (err) {
+                console.error(err);
+                alert('Có lỗi xảy ra khi cập nhật');
+            });
+        }
+
+        function deleteUser(id) {
+            console.log(id)
+            return $.ajax({
+                url: '/UserLibrary/DeleteUser',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(id)
             });
         }
     </script>
