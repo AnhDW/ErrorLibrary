@@ -10,6 +10,6 @@
         public string? ConfirmPassword { get; set; }
         //public string? RoleName { get; set; }
         public string? AvatarUrl { get; set; }
-        public IFormFile? file { get; set; }
+        public IFormFile? File { get; set; }
     }
 }

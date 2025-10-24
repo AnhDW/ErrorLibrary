@@ -12,17 +12,20 @@ namespace ErrorLibrary.Controllers
         private readonly IUserService _userService;
         private readonly IAuthService _authService;
         private readonly ISharedService _sharedService;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public UserLibraryController(IUserService userService, IMapper mapper, ISharedService sharedService, IAuthService authService)
+        public UserLibraryController(IUserService userService, IAuthService authService, ISharedService sharedService, IFileService fileService, IMapper mapper)
         {
             _userService = userService;
+            _authService = authService;
+            _sharedService = sharedService;
+            _fileService = fileService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
-            _sharedService = sharedService;
-            _authService = authService;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -41,18 +44,26 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUser([FromBody] RegistrationRequestDto userDto)
+        public async Task<IActionResult> AddUser([FromForm] RegistrationRequestDto userDto)
         {
+            if (userDto.File != null)
+            {
+                userDto.AvatarUrl = await _fileService.AddCompressAttachment(userDto.File);
+            }
             var register = await _authService.Register(userDto);
-            
+            if (register.Error)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Lỗi trong quá trình thêm";
+                return Json(_responseDto);
+            }
             //Decode password
-            _responseDto.IsSuccess = false;
-            _responseDto.Message = "Lỗi trong quá trình thêm";
+            _responseDto.Message = "Thêm thành công";
             return Json(_responseDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateUser([FromBody] UserDto userDto)
+        public async Task<IActionResult> UpdateUser([FromForm] UserDto userDto)
         {
             var user = await _userService.GetById(userDto.Id);
             if (user == null)
@@ -60,6 +71,11 @@ namespace ErrorLibrary.Controllers
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Không tìm thấy 'Tài khoản' này trong thư viện";
                 return Json(_responseDto);
+            }
+            if (userDto.File != null)
+            {
+                _fileService.DeleteAttachment(userDto.AvatarUrl);
+                userDto.AvatarUrl = await _fileService.AddCompressAttachment(userDto.File);
             }
             _userService.Update(_mapper.Map(userDto, user));
             if (await _sharedService.SaveAllChanges())
