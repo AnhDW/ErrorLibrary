@@ -34,6 +34,12 @@ namespace ErrorLibrary.Controllers
             return Json(_mapper.Map<List<UserDto>>(users));
         }
 
+        public async Task<IActionResult> GetUserById(string id)
+        {
+            var user = await _userService.GetById(id);
+            return Json(_mapper.Map<UserDto>(user));
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddUser([FromBody] RegistrationRequestDto userDto)
         {
@@ -42,6 +48,48 @@ namespace ErrorLibrary.Controllers
             //Decode password
             _responseDto.IsSuccess = false;
             _responseDto.Message = "Lỗi trong quá trình thêm";
+            return Json(_responseDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateUser([FromBody] UserDto userDto)
+        {
+            var user = await _userService.GetById(userDto.Id);
+            if (user == null)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Không tìm thấy 'Tài khoản' này trong thư viện";
+                return Json(_responseDto);
+            }
+            _userService.Update(_mapper.Map(userDto, user));
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Message = "Cập nhật thành công";
+                return Json(_responseDto);
+            }
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Lỗi trong quá trình cập nhật";
+            return Json(_responseDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser([FromBody] string id)
+        {
+            var user = await _userService.GetById(id);
+            if (user == null)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Không tìm thấy 'Tài khoản' này trong thư viện";
+                return Json(_responseDto);
+            }
+            _userService.Delete(user);
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Message = "Xóa thành công";
+                return Json(_responseDto);
+            }
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Lỗi trong quá trình xóa";
             return Json(_responseDto);
         }
     }
