@@ -96,7 +96,7 @@
                                 </div>
                             </div> *@
                             <div class="mb-3">
-                                <button class="btn btn-primary d-grid w-100" type="submit">Đăng nhập</button>
+                                <button class="btn btn-primary d-grid w-100" type="button" onclick="handleLogin()">Đăng nhập</button>
                             </div>
                         </form>
                     </div>
@@ -119,36 +119,43 @@
     <!-- Vendors JS -->
     <!-- Main JS -->
     <script src="~/assets/js/main.js"></script>
-
+    <script src="~/js/base-request.js"></script>
     <!-- Page JS -->
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-</body>
-</html>
-
-@section Scripts {
     <script>
-         $("#loginForm").on("submit", function (e) {
-            const username = $("#username").val();
+        function handleLogin(){
+           const userName = $("#username").val();
             const password = $("#password").val();
 
-            console.log(username);
-             $.ajax({
-                url: "/Auth/Login",
-                type: "POST",
-                data: {
-                    username,
-                    password
-                },
-                success: function (response) {
-                    if (response.IsSuccess) {
-                        localStorage.setItem("access_token", response.token);
-                        alert("Login successful!");
-                    } else {
-                        alert(response.message);
-                    }
+            console.log(userName);
+            ajaxRequest({
+                url: '/Auth/Login',
+                method: 'POST',
+                data: { userName, password },
+                showLoading: true,
+                onSuccess: (res) => {
+                    localStorage.setItem('user', JSON.stringify(res.result.user));
+                    localStorage.setItem('access_token', res.result.token);
+                    window.location.href = "/ErrorLibrary";
                 }
             });
-        });
+        }
+        // function login() {
+        //     var userName = 'nguyenvanf'
+        //     var password = 'Pa$$w0rd'
+        //     return ajaxRequest({
+        //         url: '/Auth/Login',
+        //         method: 'POST',
+        //         data: { userName, password },
+        //         showLoading: true,
+        //         onSuccess: (res) => {
+        //             localStorage.setItem('user', JSON.stringify(res.result.user));
+        //             localStorage.setItem('access_token', res.result.token);
+        //         }
+        //     })
+        // }
     </script>
+</body>
+</html>
 }
