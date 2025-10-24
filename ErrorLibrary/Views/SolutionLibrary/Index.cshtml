@@ -36,12 +36,12 @@
                                     </select>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="addCause" class="form-label">Nguyên nhân</label>
-                                    <textarea class="form-control" id="addCause" rows="3"></textarea>
+                                    <label for="addSolutionCause" class="form-label">Nguyên nhân</label>
+                                    <textarea class="form-control" id="addSolutionCause" rows="3"></textarea>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="addHandle" class="form-label">Hướng xử lý</label>
-                                    <textarea class="form-control" id="addHandle" rows="3"></textarea>
+                                    <label for="addSolutionHandle" class="form-label">Hướng xử lý</label>
+                                    <textarea class="form-control" id="addSolutionHandle" rows="3"></textarea>
                                 </div>
                                 <div class="mb-2">
                                     <label for="addBeforeImage" class="form-label">Ảnh trước xử lý</label>
@@ -56,7 +56,7 @@
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddSolution()">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -84,7 +84,7 @@
                                         <option value="A3">A3</option>
                                     </select>
                                 </div>
-                                <input class="form-control" type="file" id="editSolutionId" hidden>
+                                <input class="form-control" type="text" id="editSolutionId" hidden>
 
                                 <div class="mb-2">
                                     <label for="editSolutionCause" class="form-label">Nguyên nhân</label>
@@ -107,7 +107,7 @@
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="handleEditSolution()">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -128,15 +128,15 @@
                             <th>Hành động</th>
                         </tr>
                     </thead>
-                    <tbody class="table-border-bottom-0">
+                    <tbody id="solutionTableBody" class="table-border-bottom-0">
                         @foreach(var item in Model)
                         {
                            <tr>
                                 <td>@item.Error.Code</td>
                                 <td>@item.Cause</td>
                                 <td>@item.Handle</td>
-                                <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                                <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
+                                <td><img src="@item.BeforeUrl" alt="Product" style="width: 60px;" /></td>
+                                <td><img src="@item.AfterUrl" alt="Product" style="width: 60px;" /></td>
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

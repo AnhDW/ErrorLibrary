@@ -14,13 +14,13 @@ async function editShowProductModalHandle(productId) {
         html += `<option value="${item.id}">${item.name}</option>`;
     })
     var product = await getProductById(productId);
+    $('#editProductCategory').html(html);
 
     $('#editProductId').val(product.id);
     $('#editProductCode').val(product.code);
     $('#editProductPO').val(product.po);
     $('#editProductCategory').val(product.productCategoryId);
 
-    $('#editProductCategory').html(html);
 }
 
 function handleAddProduct() {
@@ -52,7 +52,7 @@ function handleEditProduct() {
         po,
         productCategoryId
     };
-    deleteProduct(productData).then(function (res) {
+    updateProduct(productData).then(function (res) {
         $('#editModel').modal('hide');
         renderProductTable();
     }).catch(function (err) {
@@ -77,7 +77,7 @@ function renderProductTable() {
                         <td>${item.code}</td>
                         <td>${item.po}</td>
                         <td>${item.productCategory.name}</td>
-                        <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
+                        <td><img src="${item.imageUrl}" alt="Product" style="width: 60px;" /></td>
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -112,21 +112,38 @@ function getProductById(id) {
     return $.get('/ProductLibrary/GetProductById', { id: id });
 }
 
-function addProduct(ProductDto) {
+function addProduct(productDto) {
+    const formData = new FormData();
+
+    formData.append("productCategoryId", productDto.productCategoryId);
+    formData.append("code", productDto.code);
+    formData.append("po", productDto.po);
+    formData.append("file", $("#addProductImage")[0].files[0]);
+
     return $.ajax({
         url: '/ProductLibrary/AddProduct',
         type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(ProductDto)
+        data: formData,
+        contentType: false,
+        processData: false
     });
 }
 
-function updateProduct(ProductDto) {
+function updateProduct(productDto) {
+    const formData = new FormData();
+
+    formData.append("id", productDto.id);
+    formData.append("productCategoryId", productDto.productCategoryId);
+    formData.append("code", productDto.code);
+    formData.append("po", productDto.po);
+    formData.append("file", $("#editProductImage")[0].files[0]);
+
     return $.ajax({
         url: '/ProductLibrary/UpdateProduct',
         type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(ProductDto)
+        data: formData,
+        contentType: false,
+        processData: false
     });
 }
 

@@ -13,16 +13,18 @@ namespace ErrorLibrary.Controllers
         private readonly ISolutionService _solutionService;
         private readonly ISharedService _sharedService;
         private readonly IErrorService _errorService;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public SolutionLibraryController(ISolutionService solutionService, ISharedService sharedService, IErrorService errorService, IMapper mapper)
+        public SolutionLibraryController(ISolutionService solutionService, ISharedService sharedService, IErrorService errorService, IMapper mapper, IFileService fileService)
         {
             _solutionService = solutionService;
             _sharedService = sharedService;
             _errorService = errorService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
+            _fileService = fileService;
         }
 
         public async Task<IActionResult> Index()
@@ -50,8 +52,16 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddSolution([FromBody] SolutionDto solutionDto)
+        public async Task<IActionResult> AddSolution([FromForm] SolutionDto solutionDto)
         {
+            if (solutionDto.BeforeFile != null)
+            {
+                solutionDto.BeforeUrl = await _fileService.AddCompressAttachment(solutionDto.BeforeFile);
+            }
+            if (solutionDto.AfterFile != null)
+            {
+                solutionDto.BeforeUrl = await _fileService.AddCompressAttachment(solutionDto.AfterFile);
+            }
             _solutionService.Add(_mapper.Map<Solution>(solutionDto));
             if (await _sharedService.SaveAllChanges())
             {
@@ -64,8 +74,18 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateSolution([FromBody] SolutionDto solutionDto)
+        public async Task<IActionResult> UpdateSolution([FromForm] SolutionDto solutionDto)
         {
+            if(solutionDto.BeforeFile != null)
+            {
+                _fileService.DeleteAttachment(solutionDto.BeforeUrl);
+                solutionDto.BeforeUrl = await _fileService.AddCompressAttachment(solutionDto.BeforeFile);
+            }
+            if(solutionDto.AfterFile != null)
+            {
+                _fileService.DeleteAttachment(solutionDto.AfterUrl);
+                solutionDto.BeforeUrl = await _fileService.AddCompressAttachment(solutionDto.AfterFile);
+            }
             var solution = await _solutionService.GetById(solutionDto.Id);
             if (solution == null)
             {
@@ -94,6 +114,8 @@ namespace ErrorLibrary.Controllers
                 _responseDto.Message = "Không tìm thấy 'sản phẩm' này trong thư viện";
                 return Json(_responseDto);
             }
+            _fileService.DeleteAttachment(solution.BeforeUrl);
+            _fileService.DeleteAttachment(solution.AfterUrl);
             _solutionService.Delete(solution);
             if (await _sharedService.SaveAllChanges())
             {

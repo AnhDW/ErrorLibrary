@@ -20,20 +20,20 @@ async function editShowSolutionModalHandle(solutionId) {
     $('#editSolutionCause').val(solution.cause);
     $('#editErrorCodeSelect').val(solution.errorId);
     $('#editSolutionHandle').val(solution.handle);
-
 }
 
 function handleAddSolution() {
-    const code = $('#addSolutionCode').val();
-    const po = $('#addSolutionPO').val();
-    const SolutionCategoryId = $('#addSolutionCategory').val();
+    const cause = $('#addSolutionCause').val();
+    const errorId = $('#addErrorCodeSelect').val();
+    const handle = $('#addSolutionHandle').val();
 
-    const SolutionData = {
-        code,
-        po,
-        SolutionCategoryId
+    const solutionData = {
+        cause,
+        errorId,
+        handle
     };
-    addSolution(SolutionData).then(function (res) {
+    console.log(solutionData);
+    addSolution(solutionData).then(function (res) {
         $('#addModel').modal('hide');
         renderSolutionTable();
     }).catch(function (err) {
@@ -43,16 +43,18 @@ function handleAddSolution() {
 
 function handleEditSolution() {
     const id = $('#editSolutionId').val();
-    const code = $('#editSolutionCode').val();
-    const po = $('#editSolutionPO').val();
-    const SolutionCategoryId = $('#editSolutionCategory').val();
-    const SolutionData = {
+    const cause = $('#editSolutionCause').val();
+    const errorId = $('#editErrorCodeSelect').val();
+    const handle = $('#editSolutionHandle').val();
+
+    const solutionData = {
         id,
-        code,
-        po,
-        SolutionCategoryId
+        cause,
+        errorId,
+        handle
     };
-    deleteSolution(SolutionData).then(function (res) {
+    console.log(solutionData);
+    updateSolution(solutionData).then(function (res) {
         $('#editModel').modal('hide');
         renderSolutionTable();
     }).catch(function (err) {
@@ -73,30 +75,30 @@ function renderSolutionTable() {
         let html = '';
         data.forEach(item => {
             html += `
-                    <tr>
-                        <td>${item.error.code}</td>
-                        <td>${item.cause}</td>
-                        <td>${item.handle}</td>
-                        <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                        <td><img src="~/assets/img/avatars/1.png" alt="Product" style="width: 60px;" /></td>
-                        <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                    <i class="bx bx-dots-vertical-rounded"></i>
+                <tr>
+                    <td>${item.error.code}</td>
+                    <td>${item.cause}</td>
+                    <td>${item.handle}</td>
+                    <td><img src="${item.beforeUrl}" alt="Product" style="width: 60px;" /></td>
+                    <td><img src="${item.afterUrl}" alt="Product" style="width: 60px;" /></td>
+                    <td>
+                        <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                        data-bs-target="#editModel" onclick="editShowSolutionModalHandle(${item.id})">
+                                    <i class="bx bx-edit-alt me-1"></i> Sửa
                                 </button>
-                                <div class="dropdown-menu">
-                                            <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#editModel" onclick="editShowSolutionModalHandle(${item.id})">
-                                                <i class="bx bx-edit-alt me-1"></i> Sửa
-                                            </button>
-                                            <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteSolution(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                        </div>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteSolution(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
                             </div>
-                        </td>
-                    </tr>
-                    `;
+                        </div>
+                    </td>
+                </tr>
+                `;
         });
-        $('#SolutionTableBody').html(html);
+        $('#solutionTableBody').html(html);
         console.log(html, data);
     });
 }
@@ -112,26 +114,44 @@ function getSolutionById(id) {
     return $.get('/SolutionLibrary/GetSolutionById', { id: id });
 }
 
-function addSolution(SolutionDto) {
+function addSolution(solutionDto) {
+    const formData = new FormData();
+
+    formData.append("errorId", solutionDto.errorId);
+    formData.append("cause", solutionDto.cause);
+    formData.append("handle", solutionDto.handle);
+    formData.append("beforeFile", $("#addBeforeImage")[0].files[0]);
+    formData.append("afterFile", $("#addAfterImage")[0].files[0]);
+
     return $.ajax({
         url: '/SolutionLibrary/AddSolution',
         type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(SolutionDto)
+        data: formData,
+        contentType: false,
+        processData: false
     });
 }
 
-function updateSolution(SolutionDto) {
+function updateSolution(solutionDto) {
+    const formData = new FormData();
+    formData.append("id", solutionDto.id);
+    formData.append("errorId", solutionDto.errorId);
+    formData.append("cause", solutionDto.cause);
+    formData.append("handle", solutionDto.handle);
+    formData.append("beforeFile", $("#editBeforeImage")[0].files[0]);
+    formData.append("afterFile", $("#editAfterImage")[0].files[0]);
+
+    console.log(formData);
     return $.ajax({
         url: '/SolutionLibrary/UpdateSolution',
         type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(SolutionDto)
+        data: formData,
+        contentType: false,
+        processData: false
     });
 }
 
 function deleteSolution(id) {
-    console.log(id)
     return $.ajax({
         url: '/SolutionLibrary/DeleteSolution',
         type: 'POST',

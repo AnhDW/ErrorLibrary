@@ -9,6 +9,9 @@
         public string? BeforeUrl { get; set; }
         public string? AfterUrl { get; set; }
 
+        public IFormFile? BeforeFile { get; set; }
+        public IFormFile? AfterFile { get; set; }
+
         public ErrorDto? Error { get; set; }
     }
 }

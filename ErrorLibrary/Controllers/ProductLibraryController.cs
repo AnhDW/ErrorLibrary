@@ -11,18 +11,20 @@ namespace ErrorLibrary.Controllers
     public class ProductLibraryController : Controller
     {
         private readonly IProductCategoryService _productCategoryService;
+        private readonly IFileService _fileService;
         private readonly IProductService _productService;
         private readonly ISharedService _sharedService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public ProductLibraryController(IProductCategoryService productCategoryService, IProductService productService, IMapper mapper, ISharedService sharedService)
+        public ProductLibraryController(IProductCategoryService productCategoryService, IProductService productService, IMapper mapper, ISharedService sharedService, IFileService fileService)
         {
             _productCategoryService = productCategoryService;
             _productService = productService;
             _mapper = mapper;
             _sharedService = sharedService;
             _responseDto = new ResponseDto();
+            _fileService = fileService;
         }
 
         public async Task<IActionResult> Index()
@@ -50,8 +52,12 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProduct([FromBody] ProductDto productDto)
+        public async Task<IActionResult> AddProduct([FromForm] ProductDto productDto)
         {
+            if (productDto.File != null)
+            {
+                productDto.ImageUrl = await _fileService.AddCompressAttachment(productDto.File);
+            }
             _productService.Add(_mapper.Map<Product>(productDto));
             if (await _sharedService.SaveAllChanges())
             {
@@ -64,8 +70,13 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProduct([FromBody] ProductDto productDto)
+        public async Task<IActionResult> UpdateProduct([FromForm] ProductDto productDto)
         {
+            if (productDto.File != null)
+            {
+                _fileService.DeleteAttachment(productDto.ImageUrl);
+                productDto.ImageUrl = await _fileService.AddCompressAttachment(productDto.File);
+            }
             var product = await _productService.GetById(productDto.Id);
             if(product == null)
             {
@@ -94,6 +105,7 @@ namespace ErrorLibrary.Controllers
                 _responseDto.Message = "Không tìm thấy 'sản phẩm' này trong thư viện";
                 return Json(_responseDto);
             }
+            _fileService.DeleteAttachment(product.ImageUrl);
             _productService.Delete(product);
             if (await _sharedService.SaveAllChanges())
             {

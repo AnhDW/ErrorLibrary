@@ -17,13 +17,13 @@ async function editShowErrorModalHandle(errId) {
         html += `<option value="${item.id}">${item.name}</option>`;
     })
     var err = await getErrorById(errId);
+    $('#editErrorGroupSelect').html(html);
     $('#editErrorId').val(err.id);
-    $('#editErrorGroupSelect').val(err.errorGroupId);
     $('#editErrorCode').val(err.code);
     $('#editErrorName').val(err.name);
     $('#editErrorType').val(err.errorCategory);
+    $('#editErrorGroupSelect').val(err.errorGroupId);
 
-    $('#editErrorGroupSelect').html(html);
 }
 
 function handleAddError() {
