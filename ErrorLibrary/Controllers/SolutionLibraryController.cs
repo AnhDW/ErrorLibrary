@@ -90,7 +90,7 @@ namespace ErrorLibrary.Controllers
             if (solution == null)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Không tìm thấy 'sản phẩm' này trong thư viện";
+                _responseDto.Message = "Không tìm thấy 'giải pháp' này trong thư viện";
                 return Json(_responseDto);
             }
             _solutionService.Update(_mapper.Map(solutionDto, solution));
@@ -111,7 +111,7 @@ namespace ErrorLibrary.Controllers
             if (solution == null)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Không tìm thấy 'sản phẩm' này trong thư viện";
+                _responseDto.Message = "Không tìm thấy 'giải pháp' này trong thư viện";
                 return Json(_responseDto);
             }
             _fileService.DeleteAttachment(solution.BeforeUrl);

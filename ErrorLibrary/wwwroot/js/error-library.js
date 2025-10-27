@@ -110,7 +110,6 @@ function renderErrorTable() {
                     `;
         });
         $('#errorTableBody').html(html);
-        console.log(html, data);
     });
 }
 

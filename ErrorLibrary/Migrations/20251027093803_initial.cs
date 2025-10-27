@@ -78,7 +78,7 @@ namespace ErrorLibrary.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "ErrorCategories",
+                name: "ErrorGroups",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -90,7 +90,7 @@ namespace ErrorLibrary.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ErrorCategories", x => x.Id);
+                    table.PrimaryKey("PK_ErrorGroups", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -244,19 +244,21 @@ namespace ErrorLibrary.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ErrorCategoryId = table.Column<int>(type: "int", nullable: false),
+                    ErrorGroupId = table.Column<int>(type: "int", nullable: false),
                     Code = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ErrorCategory = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Errors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Errors_ErrorCategories_ErrorCategoryId",
-                        column: x => x.ErrorCategoryId,
-                        principalTable: "ErrorCategories",
+                        name: "FK_Errors_ErrorGroups_ErrorGroupId",
+                        column: x => x.ErrorGroupId,
+                        principalTable: "ErrorGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -354,9 +356,9 @@ namespace ErrorLibrary.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Errors_ErrorCategoryId",
+                name: "IX_Errors_ErrorGroupId",
                 table: "Errors",
-                column: "ErrorCategoryId");
+                column: "ErrorGroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_ProductCategoryId",
@@ -406,7 +408,7 @@ namespace ErrorLibrary.Migrations
                 name: "Errors");
 
             migrationBuilder.DropTable(
-                name: "ErrorCategories");
+                name: "ErrorGroups");
         }
     }
 }

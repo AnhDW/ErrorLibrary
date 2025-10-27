@@ -1,37 +1,4 @@
-﻿renderUsersTable();
-function renderUsersTable() {
-    getUsers().then(function (data) {
-        let html = '';
-        data.forEach(item => {
-            html += `
-                    <tr>
-                        <td>${item.code}</td>
-                        <td>${item.fullName}</td>
-                        <td>${item.email}</td>
-                        <td>NBC</td>
-                        <td><img src="${item.avatarUrl}" alt="Avatar" style="width: 60px;" /></td>
-                        <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                            data-bs-target="#editModel" onclick=(editShowUserModalHandle('${item.id}'))>
-                                        <i class="bx bx-edit-alt me-1"></i> Sửa
-                                    </button>
-                                    <button type="button" class="dropdown-item" onclick="handleDeleteUser('${item.id}')"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    `;
-        });
-        $('#userTableBody').html(html);
-    });
-}
-
-async function editShowUserModalHandle(userId) {
+﻿async function editShowUserModalHandle(userId) {
     var user = await getUserById(userId);
 
     $('#editUserId').val(userId);
@@ -89,6 +56,38 @@ function handleEditUser() {
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');
+    });
+}
+
+function renderUsersTable() {
+    getUsers().then(function (data) {
+        let html = '';
+        data.forEach(item => {
+            html += `
+                    <tr>
+                        <td>${item.code}</td>
+                        <td>${item.fullName}</td>
+                        <td>${item.email}</td>
+                        <td>NBC</td>
+                        <td><img src="${item.avatarUrl}" alt="Avatar" style="width: 60px;" /></td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                            data-bs-target="#editModel" onclick=(editShowUserModalHandle('${item.id}'))>
+                                        <i class="bx bx-edit-alt me-1"></i> Sửa
+                                    </button>
+                                    <button type="button" class="dropdown-item" onclick="handleDeleteUser('${item.id}')"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    `;
+        });
+        $('#userTableBody').html(html);
     });
 }
 

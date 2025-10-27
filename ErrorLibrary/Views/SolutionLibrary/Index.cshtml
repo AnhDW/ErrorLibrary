@@ -131,30 +131,6 @@
                         </tr>
                     </thead>
                     <tbody id="solutionTableBody" class="table-border-bottom-0">
-                        @foreach(var item in Model)
-                        {
-                           <tr>
-                                <td>@item.Error.Code</td>
-                                <td>@item.Cause</td>
-                                <td>@item.Handle</td>
-                                <td><img src="@item.BeforeUrl" alt="Product" style="width: 60px;" /></td>
-                                <td><img src="@item.AfterUrl" alt="Product" style="width: 60px;" /></td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                            <i class="bx bx-dots-vertical-rounded"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                    data-bs-target="#editModel" onclick="editShowSolutionModalHandle(@item.Id)">
-                                                <i class="bx bx-edit-alt me-1"></i> Sửa
-                                            </button>
-                                            <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteSolution(@item.Id)"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr> 
-                        }
                     </tbody>
                 </table>
             </div>

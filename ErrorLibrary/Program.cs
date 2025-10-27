@@ -14,7 +14,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
 {
-    options.UseMySql(builder.Configuration.GetConnectionString("TanConnect"),
+    options.UseMySql(builder.Configuration.GetConnectionString("BTConnect"),
         new MySqlServerVersion(new Version(8, 0, 36)));
 });
 
@@ -51,7 +51,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();

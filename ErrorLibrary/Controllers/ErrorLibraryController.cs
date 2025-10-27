@@ -25,9 +25,7 @@ namespace ErrorLibrary.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var errors = await _errorService.GetAll();
-
-            return View(_mapper.Map<List<ErrorDto>>(errors));
+            return View();
         }
 
         public async Task<IActionResult> GetErrorGroups()

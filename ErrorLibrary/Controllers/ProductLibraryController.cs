@@ -29,8 +29,7 @@ namespace ErrorLibrary.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var products = await _productService.GetAll();
-            return View(_mapper.Map<List<ProductDto>>(products));
+            return View();
         }
 
         public async Task<IActionResult> GetProductCategories()

@@ -102,7 +102,6 @@ function renderProductTable() {
                     `;
         });
         $('#productTableBody').html(html);
-        console.log(html, data);
     });
 }
 

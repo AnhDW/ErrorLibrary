@@ -1,9 +1,13 @@
 ﻿$(document).ready(function () {
     const path = window.location.pathname;
 
-    if (path.includes('/page-a')) {
-        loadDataForPageA();
-    } else if (path.includes('/page-b')) {
-        loadDataForPageB();
+    if (path.includes('/ErrorLibrary')) {
+        renderErrorTable();
+    } else if (path.includes('/ProductLibrary')) {
+        renderProductTable();
+    } else if (path.includes('/SolutionLibrary')) {
+        renderSolutionTable();
+    } else if (path.includes('/UserLibrary')) {
+        renderUsersTable();
     }
 });

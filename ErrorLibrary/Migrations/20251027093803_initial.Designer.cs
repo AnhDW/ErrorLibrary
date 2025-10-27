@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ErrorLibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251022072912_EditErrorGroup")]
-    partial class EditErrorGroup
+    [Migration("20251027093803_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -143,7 +143,6 @@ namespace ErrorLibrary.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("ErrorCategory")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("ErrorGroupId")
