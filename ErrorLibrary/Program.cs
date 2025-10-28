@@ -14,7 +14,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
 {
-    options.UseMySql(builder.Configuration.GetConnectionString("BTConnect"),
+    options.UseMySql(builder.Configuration.GetConnectionString("TanConnect"),
         new MySqlServerVersion(new Version(8, 0, 36)));
 });
 
@@ -34,6 +34,10 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped<ISolutionService, SolutionService>();
 builder.Services.AddScoped<ISharedService, SharedService>();
+builder.Services.AddScoped<IUnitService, UnitService>();
+builder.Services.AddScoped<IEnterpriseService, EnterpriseService>();
+builder.Services.AddScoped<IFactoryService, FactoryService>();
+builder.Services.AddScoped<ILineService, LineService>();
 
 var assemblies = AppDomain.CurrentDomain.GetAssemblies()
     .Where(a => !a.FullName.StartsWith("Microsoft.Data.SqlClient"))
