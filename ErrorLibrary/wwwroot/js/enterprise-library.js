@@ -81,9 +81,10 @@ function renderEnterprisesTable() {
         data.forEach(item => {
             html += `
                     <tr>
+                        <td>${item.factory.unit.name}</td>
+                        <td>${item.factory.name}</td>
                         <td>${item.name}</td>
                         <td>${item.description}</td>
-                        <td>${item.factory.name}</td>
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -102,6 +103,7 @@ function renderEnterprisesTable() {
                     `;
         });
         $('#enterpriseTableBody').html(html);
+        console.log(data);
     });
 }
 
