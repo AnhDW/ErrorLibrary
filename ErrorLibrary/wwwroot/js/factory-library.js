@@ -55,8 +55,12 @@ function handleEditFactory() {
         description
     };
     updateFactory(factoryData).then(function (res) {
-        $('#editModel').modal('hide');
-        renderFactoryTable();
+        if (res.isSuccess) {
+            $('#editModel').modal('hide');
+            renderFactoryTable();
+        } else {
+            alert(res.message);
+        }
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');

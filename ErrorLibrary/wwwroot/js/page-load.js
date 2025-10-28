@@ -10,5 +10,11 @@ $(document).ready(function () {
         renderSolutionTable();
     } else if (path.includes('/UserLibrary')) {
         renderUsersTable();
+    } else if (path.includes('/EnterpriseLibrary')){
+        renderEnterprisesTable();
+    } else if (path.includes('/FactoryLibrary')){
+        renderFactoryTable();
+    } else if (path.includes('/UnitLibrary')) {
+        renderUnitTable();
     }
 });
