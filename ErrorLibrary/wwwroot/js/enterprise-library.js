@@ -18,6 +18,7 @@ async function editShowEnterpriseModalHandle(entId) {
     })
     var ent = await getEnterpriseById(entId);
     $('#editFactorySelect').html(html);
+    $('#editFactorySelect').val(ent.factoryId);
     $('#editId').val(ent.id);
     $('#editName').val(ent.name);
     $('#editDescription').val(ent.description);
@@ -35,8 +36,12 @@ function handleAddEnterprise() {
     };
 
     addEnterprise(enterpriseData).then(function (res) {
-        $('#addModel').modal('hide');
-        renderEnterprisesTable();
+        if (res.isSuccess) {
+            $('#addModel').modal('hide');
+            renderEnterprisesTable();
+        } else {
+            alert(res.message);
+        }
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');
@@ -58,8 +63,12 @@ function handleEditEnterprise() {
         description
     };
     updateEnterprise(enterpriseData).then(function (res) {
-        $('#editModel').modal('hide');
-        renderEnterprisesTable();
+        if (res.isSuccess) {
+            $('#editModel').modal('hide');
+            renderEnterprisesTable();
+        } else {
+            alert(res.message);
+        }
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');

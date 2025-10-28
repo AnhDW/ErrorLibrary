@@ -48,6 +48,12 @@ namespace ErrorLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEnterprise([FromBody] EnterpriseDto enterpriseDto)
         {
+            if(await _enterpriseService.CheckNameExists(enterpriseDto.Name, enterpriseDto.FactoryId))
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Tên đã tồn tại trong nhà máy này";
+                return Json(_responseDto);
+            }
             _enterpriseService.Add(_mapper.Map<Enterprise>(enterpriseDto));
             if (await _sharedService.SaveAllChanges())
             {
@@ -69,6 +75,17 @@ namespace ErrorLibrary.Controllers
                 _responseDto.Message = "Không tìm thấy 'Xưởng' này trong thư viện";
                 return Json(_responseDto);
             }
+            
+            bool isNameExists = await _enterpriseService.CheckNameExists(enterpriseDto.Name, enterpriseDto.FactoryId) &&
+                (enterpriseDto.Name != enterprise.Name || enterpriseDto.FactoryId != enterprise.FactoryId);
+            
+            if (isNameExists)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Tên đã tồn tại trong nhà máy này";
+                return Json(_responseDto);
+            }
+
             _enterpriseService.Update(_mapper.Map(enterpriseDto, enterprise));
             if (await _sharedService.SaveAllChanges())
             {
