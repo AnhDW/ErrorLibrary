@@ -31,7 +31,6 @@ namespace ErrorLibrary.Services
         public async Task<bool> CheckNameExists(string name, int enterpriseId)
         {
             return await _context.Lines.AnyAsync(x => x.Name == name && x.EnterpriseId == enterpriseId);
-
         }
 
         public void Delete(Line line)

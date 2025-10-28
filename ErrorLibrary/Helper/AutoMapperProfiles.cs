@@ -14,6 +14,8 @@ namespace ErrorLibrary.Helper
             CreateMap<ProductCategory, ProductCategoryDto>().ReverseMap();
             CreateMap<Solution, SolutionDto>().ReverseMap();
             CreateMap<ApplicationUser, UserDto>().ReverseMap();
+            CreateMap<Unit, UnitDto>().ReverseMap();
+            CreateMap<Factory, FactoryDto>().ReverseMap();
 
         }
     }
