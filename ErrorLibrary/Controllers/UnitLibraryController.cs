@@ -61,6 +61,60 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Update([FromBody] UnitDto unitDto)
+        {
+            var unit = await _unitService.GetById(unitDto.Id);
+            if(unit == null)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
+                return Json(_responseDto);
+            }
+
+            bool isNameExists = await _unitService.CheckNameExists(unitDto.Name) && unitDto.Name != unit.Name;
+
+            if (isNameExists)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Tên đơn vị đã tồn tại";
+                return Json(_responseDto);
+            }
+
+            _unitService.Update(_mapper.Map(unitDto, unit));
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Message = "Cập nhật đơn vị thành công";
+                return Json(_responseDto);
+            }
+
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Lỗi trong quá trình cập nhật";
+            return Json(_responseDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromBody] int id)
+        {
+            var unit = await _unitService.GetById(id);
+            if (unit == null)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
+                return Json(_responseDto);
+            }
+
+            _unitService.Delete(unit);
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Message = "Xóa đơn vị thành công";
+                return Json(_responseDto);
+            }
+
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Lỗi trong quá trình xóa";
+            return Json(_responseDto);
+        }
 
     }
 }
