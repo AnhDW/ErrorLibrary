@@ -28,6 +28,11 @@ namespace ErrorLibrary.Services
             _context.Factories.Add(factory);
         }
 
+        public async Task<bool> CheckNameExists(string name)
+        {
+            return await _context.Factories.AnyAsync(x => x.Name == name);
+        }
+
         public void Delete(Factory factory)
         {
             _context.Factories.Remove(factory);

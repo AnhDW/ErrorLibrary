@@ -28,6 +28,12 @@ namespace ErrorLibrary.Services
             _context.Lines.Add(line);
         }
 
+        public async Task<bool> CheckNameExists(string name)
+        {
+            return await _context.Lines.AnyAsync(x => x.Name == name);
+
+        }
+
         public void Delete(Line line)
         {
             _context.Lines.Remove(line);

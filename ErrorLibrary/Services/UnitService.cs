@@ -28,6 +28,11 @@ namespace ErrorLibrary.Services
             _context.Units.Add(unit);
         }
 
+        public async Task<bool> CheckNameExists(string name)
+        {
+            return await _context.Units.AnyAsync(x => x.Name == name);
+        }
+
         public void Delete(Unit unit)
         {
             _context.Units.Remove(unit);

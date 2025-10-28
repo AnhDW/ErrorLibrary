@@ -3,6 +3,17 @@
 }
 
 function editShowUnitModalHandle(id) {
-    console.log('show edit')
+    console.log('show add')
+}
+
+function handleAddUnit() {
+
+}
+
+function handleEditUnit() {
+
+}
+
+function handleDeleteUnit(id) {
 
 }

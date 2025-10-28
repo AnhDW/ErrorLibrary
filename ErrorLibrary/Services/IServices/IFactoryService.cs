@@ -13,5 +13,6 @@ namespace ErrorLibrary.Services.IServices
         void Add(Factory factory);
         void Update(Factory factory);
         void Delete(Factory factory);
+        Task<bool> CheckNameExists(string name);
     }
 }

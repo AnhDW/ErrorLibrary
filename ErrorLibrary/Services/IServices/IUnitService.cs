@@ -13,5 +13,6 @@ namespace ErrorLibrary.Services.IServices
         void Add(Unit unit);
         void Update(Unit unit);
         void Delete(Unit unit);
+        Task<bool> CheckNameExists(string name);
     }
 }

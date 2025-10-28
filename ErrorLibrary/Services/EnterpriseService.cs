@@ -28,6 +28,11 @@ namespace ErrorLibrary.Services
             _context.Enterprises.Add(enterprise);
         }
 
+        public async Task<bool> CheckNameExists(string name)
+        {
+            return await _context.Enterprises.AnyAsync(x => x.Name == name);
+        }
+
         public void Delete(Enterprise enterprise)
         {
             _context.Enterprises.Remove(enterprise);
