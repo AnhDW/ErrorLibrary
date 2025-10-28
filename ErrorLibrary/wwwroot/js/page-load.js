@@ -9,5 +9,7 @@
         renderSolutionTable();
     } else if (path.includes('/UserLibrary')) {
         renderUsersTable();
+    } else if (path.includes('/EnterpriseLibrary')) {
+        renderEnterprisesTable();
     }
 });

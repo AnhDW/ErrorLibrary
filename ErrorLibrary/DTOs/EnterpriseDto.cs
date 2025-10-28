@@ -1,4 +1,6 @@
-﻿namespace ErrorLibrary.DTOs
+﻿using ErrorLibrary.Entities;
+
+namespace ErrorLibrary.DTOs
 {
     public class EnterpriseDto
     {
@@ -6,5 +8,6 @@
         public int FactoryId { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
+        public FactoryDto? Factory { get; set; }
     }
 }
