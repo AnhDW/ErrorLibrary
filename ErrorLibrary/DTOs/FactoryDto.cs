@@ -6,5 +6,7 @@
         public int UnitId { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
+
+        public UnitDto? Unit { get; set; }
     }
 }

@@ -36,11 +36,11 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetUnitById(int id)
         {
             var unit = await _unitService.GetById(id);
-            return Json(_mapper.Map<List<UnitDto>>(unit));
+            return Json(_mapper.Map<UnitDto>(unit));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody]UnitDto unitDto)
+        public async Task<IActionResult> AddUnit([FromBody]UnitDto unitDto)
         {
             if(await _unitService.CheckNameExists(unitDto.Name))
             {
@@ -62,7 +62,7 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update([FromBody] UnitDto unitDto)
+        public async Task<IActionResult> UpdateUnit([FromBody] UnitDto unitDto)
         {
             var unit = await _unitService.GetById(unitDto.Id);
             if(unit == null)
@@ -94,7 +94,7 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete([FromBody] int id)
+        public async Task<IActionResult> DeleteUnit([FromBody] int id)
         {
             var unit = await _unitService.GetById(id);
             if (unit == null)

@@ -1,9 +1,6 @@
 ﻿//handle
 async function addShowErrorModalHandle() {
-    console.log('errData');
-
     const data = await getErrorGroups();
-    console.log(data);
     let html = '<option value="" selected disabled>Chọn nhóm lỗi</option>';
     data.forEach(item => {
         html += `<option value="${item.id}">${item.name}</option>`;

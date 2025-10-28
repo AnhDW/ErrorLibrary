@@ -26,21 +26,21 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetFactorys()
+        public async Task<IActionResult> GetFactories()
         {
-            var factorys = await _factoryService.GetAll();
-            return Json(_mapper.Map<List<FactoryDto>>(factorys));
+            var factories = await _factoryService.GetAll();
+            return Json(_mapper.Map<List<FactoryDto>>(factories));
 
         }
 
         public async Task<IActionResult> GetFactoryById(int id)
         {
             var factory = await _factoryService.GetById(id);
-            return Json(_mapper.Map<List<FactoryDto>>(factory));
+            return Json(_mapper.Map<FactoryDto>(factory));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] FactoryDto factoryDto)
+        public async Task<IActionResult> AddFactory([FromBody] FactoryDto factoryDto)
         {
             if (await _factoryService.CheckNameExists(factoryDto.Name, factoryDto.UnitId))
             {
@@ -62,7 +62,7 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update([FromBody] FactoryDto factoryDto)
+        public async Task<IActionResult> UpdateFactory([FromBody] FactoryDto factoryDto)
         {
             var factory = await _factoryService.GetById(factoryDto.Id);
             if (factory == null)
@@ -72,12 +72,12 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            bool isNameExists = await _factoryService.CheckNameExists(factoryDto.Name, factory.UnitId) && factoryDto.Name != factory.Name;
+            bool isNameExists = await _factoryService.CheckNameExists(factoryDto.Name, factory.UnitId) && (factoryDto.Name != factory.Name && factoryDto.UnitId != factory.UnitId);
 
             if (isNameExists)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Tên nhà máy đã tồn tại";
+                _responseDto.Message = "Tên nhà máy đã tồn tại trong đơn vị này";
                 return Json(_responseDto);
             }
 
@@ -94,7 +94,7 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete([FromBody] int id)
+        public async Task<IActionResult> DeleteFactory([FromBody] int id)
         {
             var factory = await _factoryService.GetById(id);
             if (factory == null)

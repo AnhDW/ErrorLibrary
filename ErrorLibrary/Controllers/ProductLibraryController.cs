@@ -41,7 +41,7 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetProducts()
         {
             var products = await _productService.GetAll();
-            return Json(_mapper.Map< List<ProductDto>>(products));
+            return Json(_mapper.Map<List<ProductDto>>(products));
         }
 
         public async Task<IActionResult> GetProductById(int id)
