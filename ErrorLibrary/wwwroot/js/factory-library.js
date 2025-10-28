@@ -1,1 +1,1 @@
-﻿
+﻿console.log('trang thư viện xưởng')

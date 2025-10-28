@@ -9,7 +9,7 @@
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện nhà máy</span></h4>
         <div>
             <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#addModel" onclick="addShowUnitModalHandle()">
+                    data-bs-target="#addModel" onclick="addShowFactoryModalHandle()">
                 <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
             </button>
             <!-- Add Modal -->
@@ -26,19 +26,28 @@
                         <form action="/" method="post">
                             <div class="modal-body">
                                 <div class="mb-2">
-                                    <label for="addUnitName" class="form-label">Tên nhà máy</label>
-                                    <input type="text" class="form-control" id="addUnitName" placeholder="Nhập tên nhà máy" aria-describedby="defaultFormControlHelp">
+                                    <label for="addUnitSelect" class="form-label">Chọn đơn vị</label>
+                                    <select class="form-select" id="addUnitSelect" aria-label="Default select example">
+                                        <option selected="">Chọn đơn vị</option>
+                                        <option value="A1">Đơn vị 1</option>
+                                        <option value="A2">Đơn vị 2</option>
+                                        <option value="A3">Đơn vị 3</option>
+                                    </select>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="addUnitDescription" class="form-label">Nhập mô tả</label>
-                                    <textarea class="form-control" id="addUnitDescription" rows="3"></textarea>
+                                    <label for="addFactoryName" class="form-label">Tên nhà máy</label>
+                                    <input type="text" class="form-control" id="addFactoryName" placeholder="Nhập tên nhà máy" aria-describedby="defaultFormControlHelp">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="addFactoryDescription" class="form-label">Nhập mô tả</label>
+                                    <textarea class="form-control" id="addFactoryDescription" rows="3"></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary" onclick="handleAddUnit()">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddFactory()">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -57,22 +66,31 @@
                         </div>
                         <form action="/" method="post">
                             <div class="modal-body">
-                                <input type="text" class="form-control" id="editUnitId" placeholder="ID" aria-describedby="defaultFormControlHelp" hidden>
+                                <div class="mb-2">
+                                    <label for="editUnitSelect" class="form-label">Chọn đơn vị</label>
+                                    <select class="form-select" id="editUnitSelect" aria-label="Default select example">
+                                        <option selected="">Chọn đơn vị</option>
+                                        <option value="A1">Đơn vị 1</option>
+                                        <option value="A2">Đơn vị 2</option>
+                                        <option value="A3">Đơn vị 3</option>
+                                    </select>
+                                </div>
+                                <input type="text" class="form-control" id="editFactoryId" placeholder="ID" aria-describedby="defaultFormControlHelp" hidden>
 
                                 <div class="mb-2">
-                                    <label for="editUnitName" class="form-label">Tên nhà máy</label>
-                                    <input type="text" class="form-control" id="editUnitName" placeholder="Nhập tên nhà máy" aria-describedby="defaultFormControlHelp">
+                                    <label for="editFactoryName" class="form-label">Tên nhà máy</label>
+                                    <input type="text" class="form-control" id="editFactoryName" placeholder="Nhập tên nhà máy" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="editUnitDescription" class="form-label">Nhập mô tả</label>
-                                    <textarea class="form-control" id="editUnitDescription" rows="3"></textarea>
+                                    <label for="editFactoryDescription" class="form-label">Nhập mô tả</label>
+                                    <textarea class="form-control" id="editFactoryDescription" rows="3"></textarea>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary" onclick="handleEditUnit()">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="handleEditFactory()">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -91,7 +109,7 @@
                     </thead>
                     <tbody id="unitTableBody" class="table-border-bottom-0">
                         <tr>
-                            <td>Đơn vị 1</td>
+                            <td>Nhà máy 1</td>
                             <td>Mô tả 1</td>
                             <td>
                                 <div class="dropdown">
@@ -100,10 +118,10 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel" onclick="editShowUnitModalHandle(1)">
+                                                data-bs-target="#editModel" onclick="editShowFactoryModalHandle(1)">
                                             <i class="bx bx-edit-alt me-1"></i> Sửa
                                         </button>
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteUnit(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                        <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteFactory(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
                                     </div>
                                 </div>
                             </td>
