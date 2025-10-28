@@ -36,7 +36,10 @@ namespace ErrorLibrary.Services
         public async Task<PagedList<EnterpriseDto>> GetAll(EnterpriseParam enterpriseParam)
         {
             var query = _context.Enterprises.AsQueryable();
-
+            if(enterpriseParam.FactoryId != null)
+            {
+                query = query.Where(x=>x.FactoryId == enterpriseParam.FactoryId);
+            }
             return await PagedList<EnterpriseDto>.CreateAsync(
                 query.AsNoTracking().ProjectTo<EnterpriseDto>(_mapper.ConfigurationProvider),
                 enterpriseParam.PageNumber,

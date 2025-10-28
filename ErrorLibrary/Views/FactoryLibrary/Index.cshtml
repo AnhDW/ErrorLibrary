@@ -1,0 +1,124 @@
+﻿@{
+    ViewData["Title"] = "Thư viện nhà máy";
+}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện nhà máy</span></h4>
+        <div>
+            <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#addModel" onclick="addShowUnitModalHandle()">
+                <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
+            </button>
+            <!-- Add Modal -->
+            <div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Thêm nhà máy</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <div class="mb-2">
+                                    <label for="addUnitName" class="form-label">Tên nhà máy</label>
+                                    <input type="text" class="form-control" id="addUnitName" placeholder="Nhập tên nhà máy" aria-describedby="defaultFormControlHelp">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="addUnitDescription" class="form-label">Nhập mô tả</label>
+                                    <textarea class="form-control" id="addUnitDescription" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddUnit()">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Sửa nhà máy</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <input type="text" class="form-control" id="editUnitId" placeholder="ID" aria-describedby="defaultFormControlHelp" hidden>
+
+                                <div class="mb-2">
+                                    <label for="editUnitName" class="form-label">Tên nhà máy</label>
+                                    <input type="text" class="form-control" id="editUnitName" placeholder="Nhập tên nhà máy" aria-describedby="defaultFormControlHelp">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="editUnitDescription" class="form-label">Nhập mô tả</label>
+                                    <textarea class="form-control" id="editUnitDescription" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="handleEditUnit()">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Striped Rows -->
+        <div class="card mt-4">
+            <div class="table-responsive text-nowrap">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tên nhà máy</th>
+                            <th>Mô tả</th>
+                        </tr>
+                    </thead>
+                    <tbody id="unitTableBody" class="table-border-bottom-0">
+                        <tr>
+                            <td>Đơn vị 1</td>
+                            <td>Mô tả 1</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                data-bs-target="#editModel" onclick="editShowUnitModalHandle(1)">
+                                            <i class="bx bx-edit-alt me-1"></i> Sửa
+                                        </button>
+                                        <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteUnit(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--/ Striped Rows -->
+    </div>
+    <!-- / Content -->
+    <div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+@section Scripts {
+    <script src="~/js/factory-library.js">
+    </script>
+}

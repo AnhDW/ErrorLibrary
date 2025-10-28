@@ -2,5 +2,6 @@
 {
     public class EnterpriseParam : PaginationParams
     {
+        public int? FactoryId { get; set; }
     }
 }
