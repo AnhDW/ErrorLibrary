@@ -28,9 +28,9 @@ namespace ErrorLibrary.Services
             _context.Factories.Add(factory);
         }
 
-        public async Task<bool> CheckNameExists(string name)
+        public async Task<bool> CheckNameExists(string name, int unitId)
         {
-            return await _context.Factories.AnyAsync(x => x.Name == name);
+            return await _context.Factories.AnyAsync(x => x.Name == name && x.UnitId == unitId);
         }
 
         public void Delete(Factory factory)

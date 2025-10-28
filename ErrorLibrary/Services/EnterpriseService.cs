@@ -28,9 +28,9 @@ namespace ErrorLibrary.Services
             _context.Enterprises.Add(enterprise);
         }
 
-        public async Task<bool> CheckNameExists(string name)
+        public async Task<bool> CheckNameExists(string name, int factoryId)
         {
-            return await _context.Enterprises.AnyAsync(x => x.Name == name);
+            return await _context.Enterprises.AnyAsync(x => x.Name == name && x.FactoryId == factoryId);
         }
 
         public void Delete(Enterprise enterprise)

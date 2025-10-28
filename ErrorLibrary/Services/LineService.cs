@@ -28,9 +28,9 @@ namespace ErrorLibrary.Services
             _context.Lines.Add(line);
         }
 
-        public async Task<bool> CheckNameExists(string name)
+        public async Task<bool> CheckNameExists(string name, int enterpriseId)
         {
-            return await _context.Lines.AnyAsync(x => x.Name == name);
+            return await _context.Lines.AnyAsync(x => x.Name == name && x.EnterpriseId == enterpriseId);
 
         }
 

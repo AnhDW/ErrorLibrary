@@ -13,6 +13,6 @@ namespace ErrorLibrary.Services.IServices
         void Add(Line line);
         void Update(Line line);
         void Delete(Line line);
-        Task<bool> CheckNameExists(string name);
+        Task<bool> CheckNameExists(string name, int enterpriseId);
     }
 }

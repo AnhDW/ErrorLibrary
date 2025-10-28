@@ -40,9 +40,25 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(UnitDto unitDto)
+        public async Task<IActionResult> Add([FromBody]UnitDto unitDto)
         {
+            if(await _unitService.CheckNameExists(unitDto.Name))
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Tên đơn vị đã tồn tại";
+                return Json(_responseDto);
+            }
 
+            _unitService.Add(_mapper.Map<Unit>(unitDto));
+            if(await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Message = "Thêm đơn vị thành công";
+                return Json(_responseDto);
+            }
+
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Lỗi trong quá trình thêm";
+            return Json(_responseDto);
         }
 
 
