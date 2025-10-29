@@ -58,6 +58,8 @@ function handleAddEnterprise() {
         description
     };
 
+    console.log(enterpriseData)
+
     addEnterprise(enterpriseData).then(function (res) {
         if (res.isSuccess) {
             $('#addModel').modal('hide');
