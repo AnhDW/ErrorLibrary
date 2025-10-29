@@ -31,13 +31,12 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetLines()
         {
             var lines = await _lineService.GetAll();
-            return Json(_mapper.Map<List<LineDto>>(lines));
-        }
-
-        public async Task<IActionResult> GetEnterprises()
-        {
-            var enterprises = await _enterpriseService.GetAll();
-            return Json(_mapper.Map<List<EnterpriseDto>>(enterprises));
+            return Json(_mapper.Map<List<LineDto>>(lines
+                .OrderBy(x=>x.Enterprise.Factory.Unit.Name)
+                .ThenBy(x=>x.Enterprise.Factory.Name)
+                .ThenBy(x=>x.Enterprise.Name)
+                .ThenBy(x=>x.Name)
+                ));
         }
 
         public async Task<IActionResult> GetLineById(int id)
@@ -49,6 +48,12 @@ namespace ErrorLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> AddLine([FromBody] LineDto lineDto)
         {
+            if (await _lineService.CheckNameExists(lineDto.Name, lineDto.EnterpriseId))
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Tên chuyền đã tồn tại trong xưởng này";
+                return Json(_responseDto);
+            }
             _lineService.Add(_mapper.Map<Line>(lineDto));
             if (await _sharedService.SaveAllChanges())
             {
@@ -70,6 +75,17 @@ namespace ErrorLibrary.Controllers
                 _responseDto.Message = "Không tìm thấy 'Chuyền' này trong thư viện";
                 return Json(_responseDto);
             }
+
+            bool isNameExists = await _lineService.CheckNameExists(lineDto.Name, lineDto.EnterpriseId) &&
+                (lineDto.Name != line.Name || lineDto.EnterpriseId != line.EnterpriseId);
+
+            if (isNameExists)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Tên chuyền đã tồn tại trong xưởng này";
+                return Json(_responseDto);
+            }
+
             _lineService.Update(_mapper.Map(lineDto, line));
             if (await _sharedService.SaveAllChanges())
             {

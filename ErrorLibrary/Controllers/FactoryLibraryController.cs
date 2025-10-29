@@ -29,13 +29,13 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetFactories()
         {
             var factories = await _factoryService.GetAll();
-            return Json(_mapper.Map<List<FactoryDto>>(factories.OrderBy(x => x.UnitId).ThenBy(x => x.Id)));
+            return Json(_mapper.Map<List<FactoryDto>>(factories.OrderBy(x => x.Unit.Name).ThenBy(x => x.Name)));
         }
 
         public async Task<IActionResult> GetFactoriesByUnitId(int unitId)
         {
             var factories = await _factoryService.GetAllByUnitId(unitId);
-            return Json(_mapper.Map<List<FactoryDto>>(factories.OrderBy(x => x.UnitId).ThenBy(x => x.Id)));
+            return Json(_mapper.Map<List<FactoryDto>>(factories.OrderBy(x=>x.Name)));
         }
 
         public async Task<IActionResult> GetFactoryById(int id)
