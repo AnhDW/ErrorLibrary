@@ -16,5 +16,7 @@ $(document).ready(function () {
         renderFactoryTable();
     } else if (path.includes('/UnitLibrary')) {
         renderUnitTable();
+    } else if (path.includes('/LineLibrary')) {
+        renderLinesTable();
     }
 });

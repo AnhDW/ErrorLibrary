@@ -1,82 +1,77 @@
-﻿async function addShowEnterpriseModalHandle() {
-    console.log('enterpriseData');
-
-    const data = await getFactories();
+﻿async function addShowLineModalHandle() {
+    const data = await getEnterprises();
     console.log(data);
-    let html = '<option value="" selected disabled>Chọn nhà máy</option>';
+    let html = '<option value="" selected disabled>Chọn xưởng</option>';
     data.forEach(item => {
         html += `<option value="${item.id}">${item.name}</option>`;
     })
-    $('#addFactorySelect').html(html);
+    $('#addEnterpriseSelect').html(html);
 }
 
-async function editShowEnterpriseModalHandle(entId) {
-    const data = await getFactories();
-    let html = '<option value="" selected disabled>Chọn nhà máy</option>';
+async function editShowLineModalHandle(lineId) {
+    const data = await getEnterprises();
+    let html = '<option value="" selected disabled>Chọn xưởng</option>';
     data.forEach(item => {
         html += `<option value="${item.id}">${item.name}</option>`;
     })
-    var ent = await getEnterpriseById(entId);
-    $('#editFactorySelect').html(html);
-    $('#editId').val(ent.id);
-    $('#editName').val(ent.name);
-    $('#editDescription').val(ent.description);
+    var line = await getLineById(lineId);
+    $('#editEnterpriseSelect').html(html);
+    $('#editId').val(line.id);
+    $('#editName').val(line.name);
+    $('#editDescription').val(line.description);
 }
 
-function handleAddEnterprise() {
-    const factoryId = $('#addFactorySelect').val();
+function handleAddLine() {
+    const enterpriseId = $('#addEnterpriseSelect').val();
     const name = $('#addName').val();
     const description = $('#addDescription').val();
 
-    const enterpriseData = {
-        factoryId,
+    const lineData = {
+        enterpriseId,
         name,
         description
     };
-
-    console.log(enterpriseData)
-
-    addEnterprise(enterpriseData).then(function (res) {
+    addLine(lineData).then(function (res) {
         $('#addModel').modal('hide');
-        renderEnterprisesTable();
+        renderLinesTable();
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');
     });
 }
 
-function handleEditEnterprise() {
+function handleEditLine() {
     const id = $('#editId').val();
-    const factoryId = $('#editFactorySelect').val();
+    const enterpriseId = $('#editEnterpriseSelect').val();
     const name = $('#editName').val();
     const description = $('#editDescription').val();
 
     // const unit = $('#editUnit').val();
 
-    const enterpriseData = {
+    const lineData= {
         id,
-        factoryId,
+        enterpriseId,
         name,
         description
     };
-    updateEnterprise(enterpriseData).then(function (res) {
+    updateLine(lineData).then(function (res) {
         $('#editModel').modal('hide');
-        renderEnterprisesTable();
+        renderLinesTable();
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');
     });
 }
 
-function renderEnterprisesTable() {
-    getEnterprises().then(function (data) {
+function renderLinesTable() {
+    getLines().then(function (data) {
         let html = '';
         data.forEach(item => {
             html += `
                     <tr>
                         <td>${item.name}</td>
                         <td>${item.description}</td>
-                        <td>${item.factory.name}</td>
+                        <td>${item.enterprise.name}</td>
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -84,70 +79,70 @@ function renderEnterprisesTable() {
                                 </button>
                                 <div class="dropdown-menu">
                                     <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                            data-bs-target="#editModel" onclick=(editShowEnterpriseModalHandle(${item.id}))>
+                                            data-bs-target="#editModel" onclick=(editShowLineModalHandle(${item.id}))>
                                         <i class="bx bx-edit-alt me-1"></i> Sửa
                                     </button>
-                                    <button type="button" class="dropdown-item" onclick="handleDeleteEnterprise(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                    <button type="button" class="dropdown-item" onclick="handleDeleteLine(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
                                 </div>
                             </div>
                         </td>
                     </tr>
                     `;
         });
-        $('#enterpriseTableBody').html(html);
+        $('#lineTableBody').html(html);
     });
 }
 
-function handleDeleteEnterprise(id) {
-    deleteEnterprise(id).then(function (res) {
-        renderEnterprisesTable();
+function handleDeleteLine(id) {
+    deleteLine(id).then(function (res) {
+        renderLinesTable();
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');
     });
 }
 
-function getFactories() {
+function getEnterprises() {
     return ajaxRequest({
-        url: '/EnterpriseLibrary/GetFactories',
+        url: '/LineLibrary/GetEnterprises',
         method: 'GET',
     })
 }
 
-function getEnterprises() {
+function getLines() {
     return ajaxRequest({
-        url: '/EnterpriseLibrary/GetEnterprises',
+        url: '/LineLibrary/GetLines',
         method: 'GET',
     });
 }
 
-function getEnterpriseById(id) {
+function getLineById(id) {
     return ajaxRequest({
-        url: '/EnterpriseLibrary/GetEnterpriseById',
+        url: '/LineLibrary/GetLineById',
         method: 'GET',
         data: { id: id },
     });
 }
 
-function addEnterprise(enterpriseDto) {
+function addLine(lineDto) {
     return ajaxRequest({
-        url: '/EnterpriseLibrary/AddEnterprise',
+        url: '/LineLibrary/AddLine',
         method: 'POST',
-        data: enterpriseDto,
+        data: lineDto,
         showLoading: true
     });
 }
 
-function updateEnterprise(enterpriseDto) {
+function updateLine(lineDto) {
     return ajaxRequest({
-        url: '/EnterpriseLibrary/UpdateEnterprise',
+        url: '/LineLibrary/UpdateLine',
         method: 'POST',
-        data: enterpriseDto,
+        data: lineDto,
         showLoading: true
     });
 }
 
-function deleteEnterprise(id) {
+function deleteLine(id) {
     // return $.ajax({
     //     url: '/UserLibrary/DeleteUser',
     //     type: 'POST',
@@ -155,7 +150,7 @@ function deleteEnterprise(id) {
     //     data: JSON.stringify(id)
     // });
     return ajaxRequest({
-        url: '/EnterpriseLibrary/DeleteEnterprise',
+        url: '/LineLibrary/DeleteLine',
         method: 'POST',
         data: id,
         showLoading: true

@@ -1,15 +1,15 @@
 ﻿@model List<ErrorDto>
 @{
-    ViewData["Title"] = "Thư viện xưởng";
+    ViewData["Title"] = "Thư viện chuyền";
 }
 <!-- Content wrapper -->
 <div class="content-wrapper">
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện xưởng</span></h4>
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện chuyền</span></h4>
         <div>
             <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#addModel" onclick="addShowEnterpriseModalHandle()">
+                    data-bs-target="#addModel" onclick="addShowLineModalHandle()">
                 <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
             </button>
             <!-- Add Modal -->
@@ -17,7 +17,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalCenterTitle">Thêm xưởng</h5>
+                            <h5 class="modal-title" id="modalCenterTitle">Thêm chuyền</h5>
                             <button type="button"
                                     class="btn-close"
                                     data-bs-dismiss="modal"
@@ -26,17 +26,17 @@
                         <form action="/" method="post">
                             <div class="modal-body">
                                 <div class="mb-2">
-                                    <label for="addFactorySelect" class="form-label">Nhà máy</label>
-                                    <select class="form-select" id="addFactorySelect" aria-label="Default select example">
-                                        <option selected="">Chọn nhà máy</option>
-                                        <option value="1">Nhà máy 1</option>
-                                        <option value="2">Nhà máy 2</option>
-                                        <option value="3">Nhà máy 3</option>
+                                    <label for="addEnterpriseSelect" class="form-label">Xưởng</label>
+                                    <select class="form-select" id="addEnterpriseSelect" aria-label="Default select example">
+                                        <option selected="">Chọn xưởng</option>
+                                        <option value="1">Xưởng 1</option>
+                                        <option value="2">Xưởng 2</option>
+                                        <option value="3">Xưởng 3</option>
                                     </select>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="addName" class="form-label">Tên xưởng</label>
-                                    <input type="text" class="form-control" id="addName" placeholder="Nhập tên xưởng" aria-describedby="defaultFormControlHelp">
+                                    <label for="addName" class="form-label">Tên chuyền</label>
+                                    <input type="text" class="form-control" id="addName" placeholder="Nhập tên chuyền" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
                                     <label for="addDescription" class="form-label">Mô tả</label>
@@ -47,7 +47,7 @@
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary" onclick="handleAddEnterprise()">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddLine()">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -58,7 +58,7 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalCenterTitle">Sửa xưởng</h5>
+                            <h5 class="modal-title" id="modalCenterTitle">Sửa chuyền</h5>
                             <button type="button"
                                     class="btn-close"
                                     data-bs-dismiss="modal"
@@ -68,17 +68,17 @@
                             <div class="modal-body">
                                 <input type="text" class="form-control" id="editId" placeholder="ID" aria-describedby="defaultFormControlHelp" hidden>
                                 <div class="mb-2">
-                                    <label for="editFactorySelect" class="form-label">Nhà máy</label>
-                                    <select class="form-select" id="editFactorySelect" aria-label="Default select example">
-                                        <option selected="">Chọn nhà máy</option>
-                                        <option value="1">Nhà máy 1</option>
-                                        <option value="2">Nhà máy 2</option>
-                                        <option value="3">Nhà máy 3</option>
+                                    <label for="editEnterpriseSelect" class="form-label">Xưởng</label>
+                                    <select class="form-select" id="editEnterpriseSelect" aria-label="Default select example">
+                                        <option selected="">Chọn xưởng</option>
+                                        <option value="1">Xưởng 1</option>
+                                        <option value="2">Xưởng 2</option>
+                                        <option value="3">Xưởng 3</option>
                                     </select>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="editName" class="form-label">Tên xưởng</label>
-                                    <input type="text" class="form-control" id="editName" placeholder="Nhập tên xưởng" aria-describedby="defaultFormControlHelp">
+                                    <label for="editName" class="form-label">Tên chuyền</label>
+                                    <input type="text" class="form-control" id="editName" placeholder="Nhập tên chuyền" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
                                     <label for="editDescription" class="form-label">Mô tả</label>
@@ -89,7 +89,7 @@
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary" onclick="handleEditEnterprise()">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="handleEditLine()">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -102,13 +102,13 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Tên xưởng</th>
+                            <th>Tên chuyền</th>
                             <th>Mô tả</th>
-                            <th>Nhà máy</th>
+                            <th>Xưởng</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
-                    <tbody class="table-border-bottom-0" id="enterpriseTableBody">
+                    <tbody class="table-border-bottom-0" id="lineTableBody">
                     </tbody>
                 </table>
             </div>
@@ -120,6 +120,6 @@
 </div>
 <!-- Content wrapper -->
 @section Scripts {
-    <script src="~/js/enterprise-library.js">
+    <script src="~/js/line-library.js">
     </script>
 }
