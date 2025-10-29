@@ -7,5 +7,7 @@ namespace ErrorLibrary.Entities
         public string Code {  get; set; }
         public string FullName { get; set; }
         public string? AvatarUrl { get; set; }
+
+        public List<ErrorDetail> ErrorDetails { get; set; } = new List<ErrorDetail>();
     }
 }

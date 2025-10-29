@@ -8,5 +8,6 @@
         public string? Description { get; set; }
 
         public Enterprise Enterprise { get; set; }
+        public List<ErrorDetail> ErrorDetails { get; set; } = new List<ErrorDetail>();
     }
 }

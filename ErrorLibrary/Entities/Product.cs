@@ -9,5 +9,6 @@
         public string? ImageUrl { get; set; }
 
         public ProductCategory ProductCategory { get; set; }
+        public List<ErrorDetail> ErrorDetails { get; set; } = new List<ErrorDetail>();
     }
 }

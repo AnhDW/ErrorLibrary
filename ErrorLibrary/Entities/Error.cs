@@ -9,5 +9,6 @@
         public string? ErrorCategory { get; set; }
         public ErrorGroup ErrorGroup { get; set; }
         public List<Solution> Solutions { get; set; } = new List<Solution>();
+        public List<ErrorDetail> ErrorDetails { get; set; } = new List<ErrorDetail>();
     }
 }
