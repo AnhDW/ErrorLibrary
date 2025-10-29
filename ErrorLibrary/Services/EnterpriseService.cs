@@ -53,7 +53,7 @@ namespace ErrorLibrary.Services
 
         public async Task<List<Enterprise>> GetAll()
         {
-            return await _context.Enterprises.Include(x=>x.Factory).ToListAsync();
+            return await _context.Enterprises.Include(x=>x.Factory).ThenInclude(x=>x.Unit).ToListAsync();
         }
 
         public async Task<Enterprise> GetById(int id)

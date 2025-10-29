@@ -72,7 +72,8 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            bool isNameExists = await _factoryService.CheckNameExists(factoryDto.Name, factory.UnitId) && (factoryDto.Name != factory.Name && factoryDto.UnitId != factory.UnitId);
+            bool isNameExists = await _factoryService.CheckNameExists(factoryDto.Name, factoryDto.UnitId)
+                     && (factoryDto.Name != factory.Name || factoryDto.UnitId != factory.UnitId);
 
             if (isNameExists)
             {

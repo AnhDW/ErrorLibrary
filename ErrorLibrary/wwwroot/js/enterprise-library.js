@@ -18,6 +18,7 @@ async function editShowEnterpriseModalHandle(entId) {
     })
     var ent = await getEnterpriseById(entId);
     $('#editFactorySelect').html(html);
+    $('#editFactorySelect').val(ent.factoryId);
     $('#editId').val(ent.id);
     $('#editName').val(ent.name);
     $('#editDescription').val(ent.description);
@@ -37,8 +38,12 @@ function handleAddEnterprise() {
     console.log(enterpriseData)
 
     addEnterprise(enterpriseData).then(function (res) {
-        $('#addModel').modal('hide');
-        renderEnterprisesTable();
+        if (res.isSuccess) {
+            $('#addModel').modal('hide');
+            renderEnterprisesTable();
+        } else {
+            alert(res.message);
+        }
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');
@@ -60,8 +65,12 @@ function handleEditEnterprise() {
         description
     };
     updateEnterprise(enterpriseData).then(function (res) {
-        $('#editModel').modal('hide');
-        renderEnterprisesTable();
+        if (res.isSuccess) {
+            $('#editModel').modal('hide');
+            renderEnterprisesTable();
+        } else {
+            alert(res.message);
+        }
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');
@@ -74,9 +83,10 @@ function renderEnterprisesTable() {
         data.forEach(item => {
             html += `
                     <tr>
+                        <td>${item.factory.unit.name}</td>
+                        <td>${item.factory.name}</td>
                         <td>${item.name}</td>
                         <td>${item.description}</td>
-                        <td>${item.factory.name}</td>
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -95,6 +105,7 @@ function renderEnterprisesTable() {
                     `;
         });
         $('#enterpriseTableBody').html(html);
+        console.log(data);
     });
 }
 
