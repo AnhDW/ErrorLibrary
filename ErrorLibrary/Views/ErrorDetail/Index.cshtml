@@ -1,0 +1,214 @@
+﻿@model List<ErrorDto>
+@{
+    ViewData["Title"] = "Khai báo lỗi theo mã hàng";
+}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Khai báo lỗi theo mã hàng</span></h4>
+        <div>
+            <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#addModel" onclick="addShowEnterpriseModalHandle()">
+                <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
+            </button>
+            <!-- Add Modal -->
+            <div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Thêm lỗi</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <div class="mb-2">
+                                    <label for="addUnitSelect" class="form-label">Đơn vị</label>
+                                    <select class="form-select" id="addUnitSelect" aria-label="Default select example" onchange="handleSelectUnit(this.value, 'add')">
+                                        <option selected="">Chọn đơn vị</option>
+                                        <option value="1">Đơn vị 1</option>
+                                        <option value="2">Đơn vị 2</option>
+                                        <option value="3">Đơn vị 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="addFactorySelect" class="form-label">Nhà máy</label>
+                                    <select class="form-select" id="addFactorySelect" aria-label="Default select example" disabled>
+                                        <option selected="">Chọn nhà máy</option>
+                                        <option value="1">Nhà máy 1</option>
+                                        <option value="2">Nhà máy 2</option>
+                                        <option value="3">Nhà máy 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="addEnterpriseSelect" class="form-label">Xưởng</label>
+                                    <select class="form-select" id="addEnterpriseSelect" aria-label="Default select example" disabled>
+                                        <option selected="">Chọn xưởng</option>
+                                        <option value="1">Xưởng 1</option>
+                                        <option value="2">Xưởng 2</option>
+                                        <option value="3">Xưởng 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="addLineSelect" class="form-label">Chuyền</label>
+                                    <select class="form-select" id="addLineSelect" aria-label="Default select example" disabled>
+                                        <option selected="">Chọn chuyền</option>
+                                        <option value="1">Chuyền 1</option>
+                                        <option value="2">Chuyền 2</option>
+                                        <option value="3">Chuyền 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="addProductCode" class="form-label">Mã hàng</label>
+                                    <select class="form-select" id="addProductCode" aria-label="Default select example" disabled>
+                                        <option selected="">Chọn mã hàng</option>
+                                        <option value="1">MH001</option>
+                                        <option value="2">MH002</option>
+                                        <option value="3">Mh003</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="addErrorCode" class="form-label">Mã lỗi</label>
+                                    <select class="form-select" id="addErrorCode" aria-label="Default select example" disabled>
+                                        <option selected="">Chọn mã lỗi</option>
+                                        <option value="1">A01</option>
+                                        <option value="2">A02</option>
+                                        <option value="3">A03</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="addQuantity" class="form-label">Số lượng lỗi</label>
+                                    <input type="number" class="form-control" id="addQuantity" placeholder="Nhập số lượng lỗi" aria-describedby="defaultFormControlHelp">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddEnterprise()">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Sửa lỗi</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <div class="mb-2">
+                                    <label for="editUnitSelect" class="form-label">Đơn vị</label>
+                                    <select class="form-select" id="editUnitSelect" aria-label="Default select example" onchange="handleSelectUnit(this.value, 'add')">
+                                        <option selected="">Chọn đơn vị</option>
+                                        <option value="1">Đơn vị 1</option>
+                                        <option value="2">Đơn vị 2</option>
+                                        <option value="3">Đơn vị 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="editFactorySelect" class="form-label">Nhà máy</label>
+                                    <select class="form-select" id="editFactorySelect" aria-label="Default select example" disabled>
+                                        <option selected="">Chọn nhà máy</option>
+                                        <option value="1">Nhà máy 1</option>
+                                        <option value="2">Nhà máy 2</option>
+                                        <option value="3">Nhà máy 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="editEnterpriseSelect" class="form-label">Xưởng</label>
+                                    <select class="form-select" id="editEnterpriseSelect" aria-label="Default select example" disabled>
+                                        <option selected="">Chọn xưởng</option>
+                                        <option value="1">Xưởng 1</option>
+                                        <option value="2">Xưởng 2</option>
+                                        <option value="3">Xưởng 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="editLineSelect" class="form-label">Chuyền</label>
+                                    <select class="form-select" id="editLineSelect" aria-label="Default select example" disabled>
+                                        <option selected="">Chọn chuyền</option>
+                                        <option value="1">Chuyền 1</option>
+                                        <option value="2">Chuyền 2</option>
+                                        <option value="3">Chuyền 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="editProductCode" class="form-label">Mã hàng</label>
+                                    <select class="form-select" id="editProductCode" aria-label="Default select example" disabled>
+                                        <option selected="">Chọn mã hàng</option>
+                                        <option value="1">MH001</option>
+                                        <option value="2">MH002</option>
+                                        <option value="3">Mh003</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="editErrorCode" class="form-label">Mã lỗi</label>
+                                    <select class="form-select" id="editErrorCode" aria-label="Default select example" disabled>
+                                        <option selected="">Chọn mã lỗi</option>
+                                        <option value="1">A01</option>
+                                        <option value="2">A02</option>
+                                        <option value="3">A03</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="editQuantity" class="form-label">Số lượng lỗi</label>
+                                    <input type="number" class="form-control" id="editQuantity" placeholder="Nhập số lượng lỗi" aria-describedby="defaultFormControlHelp">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="handleEditEnterprise()">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Striped Rows -->
+        <div class="card mt-4">
+            <div class="table-responsive text-nowrap">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Đơn vị</th>
+                            <th>Nhà máy</th>
+                            <th>Xưởng</th>
+                            <th>Chuyền</th>
+                            <th>Mã hàng</th>
+                            <th>Lỗi</th>
+                            <th>Số lượng</th>
+                            <th>Người nhập</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0" id="enterpriseTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--/ Striped Rows -->
+    </div>
+    <!-- / Content -->
+    <div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+@section Scripts {
+    <script src="~/js/enterprise-library.js"></script>
+    <script src="~/js/request/enterprise-request.js"></script>
+    <script src="~/js/request/unit-request.js"></script>
+    <script src="~/js/request/factory-request.js"></script>
+
+}
+
