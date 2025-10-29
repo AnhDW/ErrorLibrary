@@ -56,6 +56,11 @@ namespace ErrorLibrary.Services
             return await _context.Enterprises.Include(x=>x.Factory).ThenInclude(x=>x.Unit).ToListAsync();
         }
 
+        public async Task<List<Enterprise>> GetAllByFactoryId(int factoryId)
+        {
+            return await _context.Enterprises.Where(x=>x.FactoryId == factoryId).ToListAsync();
+        }
+
         public async Task<Enterprise> GetById(int id)
         {
             return ( await _context.Enterprises.FindAsync(id))!;

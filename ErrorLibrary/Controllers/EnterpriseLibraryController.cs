@@ -30,13 +30,7 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetEnterprises()
         {
             var enterprises = await _enterpriseService.GetAll();
-            return Json(_mapper.Map<List<EnterpriseDto>>(enterprises));
-        }
-
-        public async Task<IActionResult> GetFactories()
-        {
-            var factories = await _factoryService.GetAll();
-            return Json(_mapper.Map<List<FactoryDto>>(factories));
+            return Json(_mapper.Map<List<EnterpriseDto>>(enterprises.OrderBy(x => x.Factory.UnitId).ThenBy(x => x.FactoryId).ThenBy(x => x.Id)));
         }
 
         public async Task<IActionResult> GetEnterpriseById(int id)

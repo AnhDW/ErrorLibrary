@@ -56,6 +56,11 @@ namespace ErrorLibrary.Services
             return await _context.Lines.ToListAsync();
         }
 
+        public async Task<List<Line>> GetAllByEnterpriseId(int enterpriseId)
+        {
+            return await _context.Lines.Where(x=>x.EnterpriseId == enterpriseId).ToListAsync();
+        }
+
         public async Task<Line> GetById(int id)
         {
             return (await _context.Lines.FindAsync(id))!;

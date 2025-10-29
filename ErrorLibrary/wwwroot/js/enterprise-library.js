@@ -1,23 +1,46 @@
-﻿async function addShowEnterpriseModalHandle() {
-    console.log('enterpriseData');
-
-    const data = await getFactories();
-    console.log(data);
+﻿async function handleSelectUnit(value, action) {
+    console.log(value, action);
+    const factoryByUnit = await getFactoriesByUnitId(value);
     let html = '<option value="" selected disabled>Chọn nhà máy</option>';
-    data.forEach(item => {
+    factoryByUnit.forEach(item => {
         html += `<option value="${item.id}">${item.name}</option>`;
     })
-    $('#addFactorySelect').html(html);
+    if (action === 'add') {
+        $('#addFactorySelect').prop('disabled', false);
+        $('#addFactorySelect').html(html);
+    }
+    if (action === 'edit') {
+        $('#editFactorySelect').prop('disabled', false);
+        $('#editFactorySelect').html(html);
+    }
 }
 
-async function editShowEnterpriseModalHandle(entId) {
-    const data = await getFactories();
-    let html = '<option value="" selected disabled>Chọn nhà máy</option>';
+async function addShowEnterpriseModalHandle() {
+    console.log('enterpriseData');
+
+    const data = await getUnits();
+    let html = '<option value="" selected disabled>Chọn đơn vị</option>';
     data.forEach(item => {
         html += `<option value="${item.id}">${item.name}</option>`;
     })
+    $('#addUnitSelect').html(html);
+}
+
+async function editShowEnterpriseModalHandle(entId, unitId) {
+    const units = await getUnits();
+    const factories = await getFactories();
+    let unitHtml = '<option value="" selected disabled>Chọn đơn vị</option>';
+    units.forEach(item => {
+        unitHtml += `<option value="${item.id}">${item.name}</option>`;
+    });
+    let html = '<option value="" selected disabled>Chọn nhà máy</option>';
+    factories.forEach(item => {
+        html += `<option value="${item.id}">${item.name}</option>`;
+    });
     var ent = await getEnterpriseById(entId);
+    $('#editUnitSelect').html(unitHtml);
     $('#editFactorySelect').html(html);
+    $('#editUnitSelect').val(unitId);
     $('#editFactorySelect').val(ent.factoryId);
     $('#editId').val(ent.id);
     $('#editName').val(ent.name);
@@ -92,7 +115,7 @@ function renderEnterprisesTable() {
                                 </button>
                                 <div class="dropdown-menu">
                                     <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                            data-bs-target="#editModel" onclick=(editShowEnterpriseModalHandle(${item.id}))>
+                                            data-bs-target="#editModel" onclick=(editShowEnterpriseModalHandle(${item.id}, ${item.factory.unitId}))>
                                         <i class="bx bx-edit-alt me-1"></i> Sửa
                                     </button>
                                     <button type="button" class="dropdown-item" onclick="handleDeleteEnterprise(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
@@ -114,13 +137,6 @@ function handleDeleteEnterprise(id) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');
     });
-}
-
-function getFactories() {
-    return ajaxRequest({
-        url: '/EnterpriseLibrary/GetFactories',
-        method: 'GET',
-    })
 }
 
 function getEnterprises() {

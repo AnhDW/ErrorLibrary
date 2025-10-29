@@ -9,6 +9,7 @@ namespace ErrorLibrary.Services.IServices
     {
         Task<PagedList<EnterpriseDto>> GetAll(EnterpriseParam enterpriseParam);
         Task<List<Enterprise>> GetAll();
+        Task<List<Enterprise>> GetAllByFactoryId(int factoryId);
         Task<Enterprise> GetById(int id);
         void Add(Enterprise enterprise);
         void Update(Enterprise enterprise);

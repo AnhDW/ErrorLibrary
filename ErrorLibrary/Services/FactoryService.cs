@@ -56,6 +56,11 @@ namespace ErrorLibrary.Services
             return await _context.Factories.Include(x => x.Unit).ToListAsync();
         }
 
+        public async Task<List<Factory>> GetAllByUnitId(int unitId)
+        {
+            return await _context.Factories.Where(x=>x.UnitId == unitId).ToListAsync();
+        }
+
         public async Task<Factory> GetById(int id)
         {
             return (await _context.Factories.FindAsync(id))!;

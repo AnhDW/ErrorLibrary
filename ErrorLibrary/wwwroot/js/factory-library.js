@@ -83,25 +83,24 @@ function renderFactoryTable() {
         data.forEach(item => {
             html += `
                     <tr>
-
-                            <td>${item.unit.name}</td>
-                            <td>${item.name}</td>
-                            <td>${item.description}</td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
+                        <td>${item.unit.name}</td>
+                        <td>${item.name}</td>
+                        <td>${item.description}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                            data-bs-target="#editModel" onclick="editShowFactoryModalHandle(${item.id})">
+                                        <i class="bx bx-edit-alt me-1"></i> Sửa
                                     </button>
-                                    <div class="dropdown-menu">
-                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel" onclick="editShowFactoryModalHandle(${item.id})">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                                        </button>
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteFactory(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                    </div>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteFactory(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
                                 </div>
-                            </td>
-                        </tr>
+                            </div>
+                        </td>
+                    </tr>
                     `;
         });
         $('#factoryTableBody').html(html);
@@ -112,6 +111,14 @@ function getFactories() {
     return ajaxRequest({
         url: '/FactoryLibrary/GetFactories',
         method: 'GET',
+    })
+}
+
+function getFactoriesByUnitId(unitId) {
+    return ajaxRequest({
+        url: '/FactoryLibrary/GetFactoriesByUnitId',
+        method: 'GET',
+        data: { unitId: unitId }
     })
 }
 
