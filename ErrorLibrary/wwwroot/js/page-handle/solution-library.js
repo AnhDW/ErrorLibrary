@@ -1,18 +1,14 @@
 ﻿async function addShowSolutionModalHandle() {
     const data = await getErrorsForSolution();
-    let html = '<option selected="">Chọn chủng loại</option>';
-    data.forEach(item => {
-        html += `<option value="${item.id}">${item.code}</option>`;
-    })
+    const html = renderSelectOptions(data, 'Chọn lỗi');
+
     $('#addErrorCodeSelect').html(html);
 }
 
 async function editShowSolutionModalHandle(solutionId) {
     const data = await getErrorsForSolution();
-    let html = '<option selected="">Chọn chủng loại</option>';
-    data.forEach(item => {
-        html += `<option value="${item.id}">${item.code}</option>`;
-    })
+    const html = renderSelectOptions(data, 'Chọn lỗi');
+
     var solution = await getSolutionById(solutionId);
     $('#editErrorCodeSelect').html(html);
     $('#editSolutionId').val(solution.id);

@@ -1,6 +1,6 @@
 ﻿namespace ErrorLibrary.Helper.EntityParams
 {
-    public class FactoryParam : PaginationParams
+    public class FactoryParams : PaginationParams
     {
         public int? UnitId { get; set; }
     }

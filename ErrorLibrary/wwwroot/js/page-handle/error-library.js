@@ -1,19 +1,14 @@
 ﻿//handle
 async function addShowErrorModalHandle() {
     const data = await getErrorGroups();
-    let html = '<option value="" selected disabled>Chọn nhóm lỗi</option>';
-    data.forEach(item => {
-        html += `<option value="${item.id}">${item.name}</option>`;
-    })
+    const html = renderSelectOptions(data, 'Chọn nhóm lỗi');
     $('#addErrorGroupSelect').html(html);
 }
 
 async function editShowErrorModalHandle(errId) {
     const data = await getErrorGroups();
-    let html = '<option value="" selected disabled>Chọn nhóm lỗi</option>';
-    data.forEach(item => {
-        html += `<option value="${item.id}">${item.name}</option>`;
-    })
+    const html = renderSelectOptions(data, 'Chọn nhóm lỗi');
+
     var err = await getErrorById(errId);
     $('#editErrorGroupSelect').html(html);
     $('#editErrorId').val(err.id);

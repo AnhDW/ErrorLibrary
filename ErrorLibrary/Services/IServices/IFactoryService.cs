@@ -7,7 +7,7 @@ namespace ErrorLibrary.Services.IServices
 {
     public interface IFactoryService
     {
-        Task<PagedList<FactoryDto>> GetAll(FactoryParam factoryParam);
+        Task<PagedList<FactoryDto>> GetAll(FactoryParams factoryParam);
         Task<List<Factory>> GetAll();
         Task<List<Factory>> GetAllByUnitId(int unitId);
         Task<Factory> GetById(int id);

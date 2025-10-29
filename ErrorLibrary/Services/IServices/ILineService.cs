@@ -7,7 +7,7 @@ namespace ErrorLibrary.Services.IServices
 {
     public interface ILineService
     {
-        Task<PagedList<LineDto>> GetAll(LineParam lineParam);
+        Task<PagedList<LineDto>> GetAll(LineParams lineParam);
         Task<List<Line>> GetAll();
         Task<List<Line>> GetAllByEnterpriseId(int enterpriseId);
         Task<Line> GetById(int id);

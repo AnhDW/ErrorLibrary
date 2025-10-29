@@ -1,18 +1,14 @@
 ﻿async function addShowProductModalHandle() {
     const data = await getProductCategories();
-    let html = '<option selected="">Chọn chủng loại</option>';
-    data.forEach(item => {
-        html += `<option value="${item.id}">${item.name}</option>`;
-    })
+    const html = renderSelectOptions(data, 'Chọn chủng loại');
+
     $('#addProductCategory').html(html);
 }
 
 async function editShowProductModalHandle(productId) {
     const data = await getProductCategories();
-    let html = '<option selected="">Chọn chủng loại</option>';
-    data.forEach(item => {
-        html += `<option value="${item.id}">${item.name}</option>`;
-    })
+    const html = renderSelectOptions(data, 'Chọn chủng loại');
+
     var product = await getProductById(productId);
     console.log(product);
     $('#editProductCategory').html(html);

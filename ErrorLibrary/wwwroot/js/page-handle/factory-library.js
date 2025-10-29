@@ -1,18 +1,14 @@
 ﻿async function addShowFactoryModalHandle() {
     const data = await getUnits();
-    let html = '<option value="" selected disabled>Chọn đơn vị</option>';
-    data.forEach(item => {
-        html += `<option value="${item.id}">${item.name}</option>`;
-    })
+    const html = renderSelectOptions(data, 'Chọn đơn vị');
+
     $('#addUnitSelect').html(html);
 }
 
 async function editShowFactoryModalHandle(id) {
     const data = await getUnits();
-    let html = '<option value="" selected disabled>Chọn đơn vị</option>';
-    data.forEach(item => {
-        html += `<option value="${item.id}">${item.name}</option>`;
-    })
+    const html = renderSelectOptions(data, 'Chọn đơn vị');
+
     var factory = await getFactoryById(id);
     $('#editUnitSelect').html(html);
     $('#editUnitSelect').val(factory.unitId);

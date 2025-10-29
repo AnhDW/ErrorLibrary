@@ -7,7 +7,7 @@ namespace ErrorLibrary.Services.IServices
 {
     public interface IEnterpriseService
     {
-        Task<PagedList<EnterpriseDto>> GetAll(EnterpriseParam enterpriseParam);
+        Task<PagedList<EnterpriseDto>> GetAll(EnterpriseParams enterpriseParam);
         Task<List<Enterprise>> GetAll();
         Task<List<Enterprise>> GetAllByFactoryId(int factoryId);
         Task<Enterprise> GetById(int id);

@@ -38,7 +38,7 @@ namespace ErrorLibrary.Services
             _context.Factories.Remove(factory);
         }
 
-        public async Task<PagedList<FactoryDto>> GetAll(FactoryParam factoryParam)
+        public async Task<PagedList<FactoryDto>> GetAll(FactoryParams factoryParam)
         {
             var query = _context.Factories.AsQueryable();
             if(factoryParam.UnitId != null)

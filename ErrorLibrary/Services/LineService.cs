@@ -38,7 +38,7 @@ namespace ErrorLibrary.Services
             _context.Lines.Remove(line);
         }
 
-        public async Task<PagedList<LineDto>> GetAll(LineParam lineParam)
+        public async Task<PagedList<LineDto>> GetAll(LineParams lineParam)
         {
             var query = _context.Lines.AsQueryable();
             if(lineParam.EnterpriseId != null)

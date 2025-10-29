@@ -38,7 +38,7 @@ namespace ErrorLibrary.Services
             _context.Enterprises.Remove(enterprise);
         }
 
-        public async Task<PagedList<EnterpriseDto>> GetAll(EnterpriseParam enterpriseParam)
+        public async Task<PagedList<EnterpriseDto>> GetAll(EnterpriseParams enterpriseParam)
         {
             var query = _context.Enterprises.AsQueryable();
             if(enterpriseParam.FactoryId != null)
