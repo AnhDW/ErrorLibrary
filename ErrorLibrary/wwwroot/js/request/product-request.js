@@ -1,11 +1,4 @@
-﻿function getProductCategories() {
-    return ajaxRequest({
-        url: '/ProductLibrary/GetProductCategories',
-        method: 'GET',
-    })
-}
-
-function getProducts() {
+﻿function getProducts() {
     return ajaxRequest({
         url: '/ProductLibrary/GetProducts',
         method: 'GET',

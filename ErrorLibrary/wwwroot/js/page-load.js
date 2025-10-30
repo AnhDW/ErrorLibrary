@@ -10,13 +10,17 @@ $(document).ready(function () {
         renderSolutionTable();
     } else if (path.includes('/UserLibrary')) {
         renderUsersTable();
-    } else if (path.includes('/EnterpriseLibrary')){
+    } else if (path.includes('/EnterpriseLibrary')) {
         renderEnterprisesTable();
-    } else if (path.includes('/FactoryLibrary')){
+    } else if (path.includes('/FactoryLibrary')) {
         renderFactoryTable();
     } else if (path.includes('/UnitLibrary')) {
         renderUnitTable();
     } else if (path.includes('/LineLibrary')) {
         renderLinesTable();
+    } else if (path.includes('/ErrorGroupLibrary')) {
+        renderErrorGroupTable();
+    } else if (path.includes('/ProductCategoryLibrary')) {
+        renderProductCategoryTable();
     }
 });

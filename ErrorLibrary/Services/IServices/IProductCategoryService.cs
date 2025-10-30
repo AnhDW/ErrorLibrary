@@ -13,5 +13,6 @@ namespace ProductCategoryLibrary.Services.IServices
         void Add(ProductCategory productCategory);
         void Update(ProductCategory productCategory);
         void Delete(ProductCategory productCategory);
+        Task<bool> CheckNameExists(string name);
     }
 }

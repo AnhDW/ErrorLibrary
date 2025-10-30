@@ -1,11 +1,4 @@
-﻿function getErrorGroups() {
-    return ajaxRequest({
-        url: '/ErrorLibrary/GetErrorGroups',
-        method: 'GET',
-    })
-}
-
-function getErrors() {
+﻿function getErrors() {
     return ajaxRequest({
         url: '/ErrorLibrary/GetErrors',
         method: 'GET',

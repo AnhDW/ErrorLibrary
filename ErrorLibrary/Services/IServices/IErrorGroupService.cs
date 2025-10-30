@@ -13,5 +13,6 @@ namespace ErrorLibrary.Services.IServices
         void Add(ErrorGroup errorCategory);
         void Update(ErrorGroup errorCategory);
         void Delete(ErrorGroup errorCategory);
+        Task<bool> CheckNameExists(string name);
     }
 }

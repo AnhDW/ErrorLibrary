@@ -28,6 +28,11 @@ namespace ErrorLibrary.Services
             _context.ProductCategories.Add(productCategory);
         }
 
+        public async Task<bool> CheckNameExists(string name)
+        {
+            return await _context.ProductCategories.AnyAsync(c => c.Name == name);
+        }
+
         public void Delete(ProductCategory productCategory)
         {
             _context.ProductCategories.Remove(productCategory);
