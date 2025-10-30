@@ -39,6 +39,8 @@ builder.Services.AddScoped<IEnterpriseService, EnterpriseService>();
 builder.Services.AddScoped<IFactoryService, FactoryService>();
 builder.Services.AddScoped<ILineService, LineService>();
 builder.Services.AddScoped<IErrorDetailService, ErrorDetailService>();
+builder.Services.AddScoped<IUserOrganizationService, UserOrganizationService>();
+builder.Services.AddScoped<IOrganizationService, OrganizationService>();
 
 var assemblies = AppDomain.CurrentDomain.GetAssemblies()
     .Where(a => !a.FullName.StartsWith("Microsoft.Data.SqlClient"))

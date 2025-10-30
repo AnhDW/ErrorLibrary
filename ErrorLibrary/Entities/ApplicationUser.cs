@@ -9,5 +9,6 @@ namespace ErrorLibrary.Entities
         public string? AvatarUrl { get; set; }
 
         public List<ErrorDetail> ErrorDetails { get; set; } = new List<ErrorDetail>();
+        public List<UserOrganization> UserOrganizations { get; set; } = new List<UserOrganization>();
     }
 }

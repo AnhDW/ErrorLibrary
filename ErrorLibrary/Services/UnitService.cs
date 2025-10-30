@@ -38,7 +38,7 @@ namespace ErrorLibrary.Services
             _context.Units.Remove(unit);
         }
 
-        public async Task<PagedList<UnitDto>> GetAll(UnitParam unitParam)
+        public async Task<PagedList<UnitDto>> GetAll(UnitParams unitParam)
         {
             var query = _context.Units.AsQueryable();
 

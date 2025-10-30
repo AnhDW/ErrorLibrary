@@ -19,6 +19,7 @@ namespace ErrorLibrary.Data
         public DbSet<Factory> Factories { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<ErrorDetail> ErrorDetails { get; set; }
+        public DbSet<UserOrganization> UserOrganizations { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -76,6 +77,13 @@ namespace ErrorLibrary.Data
             builder.Entity<ErrorDetail>()
                 .HasOne(x => x.User)
                 .WithMany(x => x.ErrorDetails)
+                .HasForeignKey(x => x.UserId);
+
+            builder.Entity<UserOrganization>()
+                .HasKey(x => new { x.UserId, x.OrganizationType, x.OrganizationId });
+            builder.Entity<UserOrganization>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.UserOrganizations)
                 .HasForeignKey(x => x.UserId);
         }
 
