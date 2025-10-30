@@ -20,10 +20,14 @@ namespace ErrorLibrary.Services
 
         public async Task<IEnumerable<object>> GetOrganizationTree()
         {
-            var unitsTask = _context.Units.Select(x => new { x.Id, x.Name }).ToListAsync();
-            var factoriesTask = _context.Factories.Select(x => new { x.Id, x.Name, x.UnitId }).ToListAsync();
-            var enterprisesTask = _context.Enterprises.Select(x => new { x.Id, x.Name, x.FactoryId }).ToListAsync();
-            var linesTask = _context.Lines.Select(x => new { x.Id, x.Name, x.EnterpriseId }).ToListAsync();
+            using var unitsContext = _dbContextFactory.CreateDbContext();
+            using var factoriesContext = _dbContextFactory.CreateDbContext();
+            using var enterprisesContext = _dbContextFactory.CreateDbContext();
+            using var linesContext = _dbContextFactory.CreateDbContext();
+            var unitsTask = unitsContext.Units.Select(x => new { x.Id, x.Name }).ToListAsync();
+            var factoriesTask = factoriesContext.Factories.Select(x => new { x.Id, x.Name, x.UnitId }).ToListAsync();
+            var enterprisesTask = enterprisesContext.Enterprises.Select(x => new { x.Id, x.Name, x.FactoryId }).ToListAsync();
+            var linesTask = linesContext.Lines.Select(x => new { x.Id, x.Name, x.EnterpriseId }).ToListAsync();
 
             await Task.WhenAll(unitsTask, factoriesTask, enterprisesTask, linesTask);
 
@@ -38,23 +42,27 @@ namespace ErrorLibrary.Services
 
             var tree = units.Select(u => new
             {
-                value = $"unit_{u.Id}",
-                lable = u.Name,
-                childrens = factoriesByUnit.TryGetValue(u.Id, out var factories) ?
+                id = $"unit_{u.Id}",
+                text = u.Name,
+                icon = "fa-solid fa-building",
+                children = factoriesByUnit.TryGetValue(u.Id, out var factories) ?
                 factories.Select(f => new
                 {
-                    value = $"factory_{f.Id}",
-                    lable = f.Name,
-                    childrens = enterprisesByFactory.TryGetValue(f.Id, out var enterprises) ?
+                    id = $"factory_{f.Id}",
+                    text = f.Name,
+                    icon = "fa-solid fa-industry",
+                    children = enterprisesByFactory.TryGetValue(f.Id, out var enterprises) ?
                     enterprises.Select(e => new
                     {
-                        value = $"enterprise_{e.Id}",
-                        lable = e.Name,
+                        id = $"enterprise_{e.Id}",
+                        text = e.Name,
+                        icon = "fa-solid fa-store",
                         children = linesByEnterprise.TryGetValue(e.Id, out var lines) ?
                         lines.Select(l => new
                         {
-                            value = $"line_{l.Id}",
-                            lable = l.Name,
+                            id = $"line_{l.Id}",
+                            text = l.Name,
+                            icon = "fa-solid fa-pallet",
                         }) : null
                     }) : null
                 }) : null

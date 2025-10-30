@@ -1,5 +1,50 @@
-﻿async function editShowUserModalHandle(userId) {
+﻿async function addShowUserModalHandle() {
+    var tree = await GetOrganizationTree();
+    $('#addTree')
+        .on('loaded.jstree', function () {
+            selectedIds.forEach(id => {
+                $('#tree').jstree('check_node', id);
+            });
+        })
+        .on('changed.jstree', function (e, data) {
+            var i, j, r = [];
+            for (i = 0, j = data.selected.length; i < j; i++) {
+                r.push(data.instance.get_node(data.selected[i]).id);
+            }
+            console.log(r);
+        })
+        .jstree({
+            'core': {
+                'data': tree
+            },
+            "plugins": ["wholerow", "checkbox"],
+        })
+
+}
+
+async function editShowUserModalHandle(userId) {
     var user = await getUserById(userId);
+    var tree = await GetOrganizationTree();
+    var selectedIds = ['factory_5', 'line_9', 'line_10', 'enterprise_5'];
+    $('#editTree')
+        .on('loaded.jstree', function () {
+            selectedIds.forEach(id => {
+                $('#tree').jstree('check_node', id);
+            });
+        })
+        .on('changed.jstree', function (e, data) {
+            var i, j, r = [];
+            for (i = 0, j = data.selected.length; i < j; i++) {
+                r.push(data.instance.get_node(data.selected[i]).id);
+            }
+            console.log(r);
+        })
+        .jstree({
+            'core': {
+                'data': tree
+            },
+            "plugins": ["wholerow", "checkbox"],
+        })
 
     $('#editUserId').val(userId);
     $('#editUsername').val(user.code);

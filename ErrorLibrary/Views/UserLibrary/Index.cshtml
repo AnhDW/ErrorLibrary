@@ -9,7 +9,7 @@
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện tài khoản</span></h4>
         <div>
             <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#addModel">
+                    data-bs-target="#addModel" onclick="addShowUserModalHandle()">
                 <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
             </button>
             <!-- Add Modal -->
@@ -45,7 +45,7 @@
                                     <label for="addUnit" class="form-label">Đơn vị</label>
                                     <input type="text" class="form-control" id="addUnit" placeholder="Nhập đơn vị" aria-describedby="defaultFormControlHelp">
                                 </div>
-                                <div id="tree"></div>
+                                <div id="addTree"></div>
                                 <div class="mb-2">
                                     <label for="addImage" class="form-label">Ảnh</label>
                                     <input class="form-control" type="file" id="addAvatarFile">
@@ -91,6 +91,7 @@
                                     <label for="editUnit" class="form-label">Đơn vị</label>
                                     <input type="text" class="form-control" id="editUnit" placeholder="Nhập đơn vị" aria-describedby="defaultFormControlHelp">
                                 </div>
+                                <div id="editTree"></div>
                                 <div class="mb-2">
                                     <label for="editAvatarFile" class="form-label">Ảnh</label>
                                     <input class="form-control" type="file" id="editAvatarFile">
@@ -134,33 +135,8 @@
 </div>
 <!-- Content wrapper -->
 @section Scripts{
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
     <script src="~/js/page-handle/user-library.js"></script>
     <script src="~/js/request/user-request.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
-    <script>
-        $(function () {
-            $('#tree').jstree({
-                'core': {
-                    'data': [
-                        { "text": "Đơn vị 1","icon": "fa-solid fa-building", "children": [
-                            { "text": "Nhà máy 1","icon": "fa-solid fa-industry", "children": [{ "text": "Xưởng 1","icon": "fa-solid fa-store", "children":[
-                                    { "text": "Chuyền 1","icon": "fa-solid fa-pallet"}
-                                ]}] },
-                            { "text": "Nhà máy 2","icon": "fa-solid fa-industry", }
-                        ]},
-                        { "text": "Đơn vị 2","icon": "fa-solid fa-building" }
-                    ]
-                },
-                "plugins": ["wholerow", "checkbox"],
-            })
-            .on('changed.jstree', function (e, data) {
-                var i, j, r = [];
-                for(i = 0, j = data.selected.length; i < j; i++) {
-                r.push(data.instance.get_node(data.selected[i]).text);
-                }
-                console.log(r);
-            })
-        });
-    </script>
+    <script src="~/js/request/organization-request.js"></script>
+    <script src="~/js/request/user-organization-request.js"></script>
 }

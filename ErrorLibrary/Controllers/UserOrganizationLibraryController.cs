@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ErrorLibrary.DTOs;
+using ErrorLibrary.Entities;
 using ErrorLibrary.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,29 +28,62 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetUserOrganizations()
         {
             var userOrganizations = await _userOrganizationService.GetAll();
             return Json(_mapper.Map<List<UserOrganizationDto>>(userOrganizations));
         }
 
-        public async Task<IActionResult> GetById(string userId, string organizationType, int organizationId)
+        public async Task<IActionResult> GetUserOrganizationById(string userId, string organizationType, int organizationId)
         {
             var userOrganization = await _userOrganizationService.GetById(userId, organizationType, organizationId);
             return Json(_mapper.Map<UserOrganizationDto>(userOrganization));
         }
 
-        public async Task<IActionResult> GetUsersByOrganizationId(string organizationType, int organizationId)
+        public async Task<IActionResult> GetUserIdsByOrganization(string organizationType, int organizationId)
         {
             var userIds = await _userOrganizationService.GetUserIdsByOrganizationId(organizationType, organizationId);
-            var users = await _userService.GetByUserIds(userIds);
-            return Json(_mapper.Map<List<UserDto>>(users));
+            return Json(userIds);
         }
 
         public async Task<IActionResult> GetOrganizationsByUserId(string userId)
         {
             var organizations = await _userOrganizationService.GetOrganizationIdsByUserId(userId);
             return Json(organizations);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateOrganizationsByUser([FromBody] UpdateOrganizationsByUserDto updateOrganizationsByUserDto)
+        {
+            var organizations = await _userOrganizationService.GetOrganizationIdsByUserId(updateOrganizationsByUserDto.UserId);
+            var addOrganizations = updateOrganizationsByUserDto.Organizations.Except(organizations);
+            var delOrganizations = organizations.Except(updateOrganizationsByUserDto.Organizations);
+
+            foreach (var organization in addOrganizations)
+            {
+                _userOrganizationService.Add(new UserOrganization
+                {
+                    UserId = updateOrganizationsByUserDto.UserId,
+                    OrganizationType = organization.organizationType,
+                    OrganizationId = organization.organizationId,
+                });
+            }
+
+            foreach (var organization in delOrganizations)
+            {
+                var userOrganization = await _userOrganizationService
+                    .GetById(updateOrganizationsByUserDto.UserId, organization.organizationType, organization.organizationId);
+                _userOrganizationService.Delete(userOrganization);
+            }
+
+            if(await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Message = "Cập nhật thành công";
+                return Json(_responseDto);
+            }
+
+            _responseDto.Message = "Không có thay đổi";
+            return Json(_responseDto);
         }
     }
 }
