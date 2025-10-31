@@ -43,7 +43,7 @@ async function addShowErrorDetailModalHandle() {
     const errors = await getErrors();
     const unitHtml = renderSelectOptionsByField(units, 'Chọn đơn vị', 'id', 'name');
     const productHtml = renderSelectOptionsByField(products, 'Chọn mã hàng', 'id', 'code');
-    const errorHtml = renderSelectOptionsByField(errors, 'Chọn mã hàng', 'id', 'code');
+    const errorHtml = renderSelectOptionsByField(errors, 'Chọn mã lỗi', 'id', 'code');
     console.log(errors);
     $('#addUnitSelect').html(unitHtml);
     $('#addProductSelect').html(productHtml);
@@ -64,7 +64,7 @@ async function editShowErrorDetailModalHandle(errorDetail) {
     const enterpriseHtml = renderSelectOptionsByField(enterprises, 'Chọn xưởng', 'id', 'name');
     const lineHtml = renderSelectOptionsByField(lines, 'Chọn chuyền', 'id', 'name');
     const productHtml = renderSelectOptionsByField(products, 'Chọn mã hàng', 'id', 'code');
-    const errorHtml = renderSelectOptionsByField(errors, 'Chọn mã hàng', 'id', 'code');
+    const errorHtml = renderSelectOptionsByField(errors, 'Chọn mã lỗi', 'id', 'code');
 
     $('#editUnitSelect').html(unitHtml);
     $('#editFactorySelect').html(factoryHtml);

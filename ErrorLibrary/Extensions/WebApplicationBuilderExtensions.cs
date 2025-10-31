@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 namespace ErrorLibrary.Extensions
@@ -28,6 +30,28 @@ namespace ErrorLibrary.Extensions
                     ValidIssuer = issuer,
                     ValidAudience = audience,
                     ValidateAudience = true
+                };
+                x.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = async context =>
+                    {
+                        var userManager = context.HttpContext.RequestServices.GetRequiredService<UserManager<Entities.ApplicationUser>>();
+
+                        var userId = context.Principal?.FindFirstValue(ClaimTypes.NameIdentifier);
+                        var tokenStamp = context.Principal?.FindFirstValue("security_stamp");
+
+                        if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(tokenStamp))
+                        {
+                            context.Fail("Token không chứa thông tin cần thiết.");
+                            return;
+                        }
+
+                        var user = await userManager.FindByIdAsync(userId);
+                        if (user == null || user.SecurityStamp != tokenStamp)
+                        {
+                            context.Fail("Token không hợp lệ do SecurityStamp thay đổi.");
+                        }
+                    }
                 };
             });
 
