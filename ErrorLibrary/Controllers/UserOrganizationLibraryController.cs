@@ -49,15 +49,17 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetOrganizationsByUserId(string userId)
         {
             var organizations = await _userOrganizationService.GetOrganizationIdsByUserId(userId);
-            return Json(organizations);
+            
+            return Json(organizations.Select(x=>new {x.organizationType, x.organizationId}));
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateOrganizationsByUser([FromBody] UpdateOrganizationsByUserDto updateOrganizationsByUserDto)
         {
-            var organizations = await _userOrganizationService.GetOrganizationIdsByUserId(updateOrganizationsByUserDto.UserId);
-            var addOrganizations = updateOrganizationsByUserDto.Organizations.Except(organizations);
-            var delOrganizations = organizations.Except(updateOrganizationsByUserDto.Organizations);
+            var newOrganizations = updateOrganizationsByUserDto.Organizations.Select(x => (organizationType: x.OrganizationType, organizationId: x.OrganizationId)).ToList();
+            var currentOrganizations = await _userOrganizationService.GetOrganizationIdsByUserId(updateOrganizationsByUserDto.UserId);
+            var addOrganizations = newOrganizations.Except(currentOrganizations);
+            var delOrganizations = currentOrganizations.Except(newOrganizations);
 
             foreach (var organization in addOrganizations)
             {

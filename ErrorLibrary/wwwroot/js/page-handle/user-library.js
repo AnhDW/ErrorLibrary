@@ -1,23 +1,14 @@
-﻿async function addShowUserModalHandle() {
+﻿var addTree = $('#addTree').jstree(true);
+var editTree = $('#editTree').jstree(true);
+async function addShowUserModalHandle() {
     var tree = await GetOrganizationTree();
     $('#addTree')
-        .on('loaded.jstree', function () {
-            selectedIds.forEach(id => {
-                $('#tree').jstree('check_node', id);
-            });
-        })
-        .on('changed.jstree', function (e, data) {
-            var i, j, r = [];
-            for (i = 0, j = data.selected.length; i < j; i++) {
-                r.push(data.instance.get_node(data.selected[i]).id);
-            }
-            console.log(r);
-        })
         .jstree({
             'core': {
-                'data': tree
+                'data': tree,
+                'themes': { 'name': 'proton', 'responsive': true }
             },
-            "plugins": ["wholerow", "checkbox"],
+            'plugins': ["wholerow", "checkbox"],
         })
 
 }
@@ -25,23 +16,24 @@
 async function editShowUserModalHandle(userId) {
     var user = await getUserById(userId);
     var tree = await GetOrganizationTree();
-    var selectedIds = ['factory_5', 'line_9', 'line_10', 'enterprise_5'];
+    //gán ids hiện tại
+    var selectedIds = await getOrganizationsByUserId(userId);
+    var organizationIds = selectedIds.map(x => { return x.organizationType + "_" + x.organizationId })
+    console.log(selectedIds, organizationIds);
+    if ($.jstree.reference('#editTree')) {
+        $('#editTree').jstree('destroy').off(); // off để gỡ event cũ
+    }
+
     $('#editTree')
         .on('loaded.jstree', function () {
-            selectedIds.forEach(id => {
-                $('#tree').jstree('check_node', id);
+            organizationIds.forEach(id => {
+                $('#editTree').jstree('check_node', id);
             });
-        })
-        .on('changed.jstree', function (e, data) {
-            var i, j, r = [];
-            for (i = 0, j = data.selected.length; i < j; i++) {
-                r.push(data.instance.get_node(data.selected[i]).id);
-            }
-            console.log(r);
         })
         .jstree({
             'core': {
-                'data': tree
+                'data': tree,
+                'themes': { 'name': 'proton', 'responsive': true }
             },
             "plugins": ["wholerow", "checkbox"],
         })
@@ -58,9 +50,16 @@ function handleAddUser() {
     const password = $('#addPassword').val();
     const fullName = $('#addFullName').val();
     const email = $('#addEmail').val();
-    const unit = $('#addUnit').val();
 
-
+    var selectedIds = $('#addTree').jstree('get_selected');
+    console.log(selectedIds);
+    var organizations = selectedIds.map(x => {
+        return {
+            organizationType: x.split("_")[0],
+            organizationId: x.split("_")[1]
+        };
+    });
+    console.log(selectedIds);
     const userData = {
         code: username,
         password,
@@ -72,6 +71,11 @@ function handleAddUser() {
     addUser(userData).then(function (res) {
         $('#addModel').modal('hide');
         renderUsersTable();
+        const updateOrganizationsByUserData = {
+            userId: res.result.id,
+            organizations: organizations
+        }
+        updateOrganizationsByUser(updateOrganizationsByUserData);
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');
@@ -85,8 +89,14 @@ function handleEditUser() {
     const email = $('#editEmail').val();
     const avatarUrl = $('#editAvatarUrl').val();
 
-    // const unit = $('#editUnit').val();
+    var selectedIds = $('#editTree').jstree('get_selected');
+    var organizations = selectedIds.map(x => {
+        return {
+            organizationType: x.split("_")[0],
+            organizationId: x.split("_")[1]
+        }; });
 
+    console.log(selectedIds, organizations);
     const userData = {
         id,
         code: username,
@@ -94,9 +104,25 @@ function handleEditUser() {
         email,
         avatarUrl
     };
-    console.log(userData);
+
+    const updateOrganizationsByUserData = {
+        userId: id,
+        organizations: organizations
+    }
+    
+    console.log(updateOrganizationsByUserData);
     updateUser(userData).then(function (res) {
         $('#editModel').modal('hide');
+        renderUsersTable();
+    }).catch(function (err) {
+        console.error(err);
+        alert('Có lỗi xảy ra khi cập nhật');
+    });
+    updateOrganizationsByUser(updateOrganizationsByUserData);
+}
+
+function handleDeleteUser(id) {
+    deleteUser(id).then(function (res) {
         renderUsersTable();
     }).catch(function (err) {
         console.error(err);
@@ -135,13 +161,3 @@ function renderUsersTable() {
         $('#userTableBody').html(html);
     });
 }
-
-function handleDeleteUser(id) {
-    deleteUser(id).then(function (res) {
-        renderUsersTable();
-    }).catch(function (err) {
-        console.error(err);
-        alert('Có lỗi xảy ra khi cập nhật');
-    });
-}
-

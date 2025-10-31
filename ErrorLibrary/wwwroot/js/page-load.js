@@ -22,5 +22,7 @@ $(document).ready(function () {
         renderErrorGroupTable();
     } else if (path.includes('/ProductCategoryLibrary')) {
         renderProductCategoryTable();
+    } else if (path.includes('/ErrorDetailLibrary')) {
+        renderErrorDetailsTable();
     }
 });

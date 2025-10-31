@@ -9,7 +9,7 @@
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Khai báo lỗi theo mã hàng</span></h4>
         <div>
             <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#addModel" onclick="addShowEnterpriseModalHandle()">
+                    data-bs-target="#addModel" onclick="addShowErrorDetailModalHandle()">
                 <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
             </button>
             <!-- Add Modal -->
@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="mb-2">
                                     <label for="addFactorySelect" class="form-label">Nhà máy</label>
-                                    <select class="form-select" id="addFactorySelect" aria-label="Default select example" disabled>
+                                    <select class="form-select" id="addFactorySelect" aria-label="Default select example" onchange="handleSelectFactory(this.value, 'add')" disabled>
                                         <option selected="">Chọn nhà máy</option>
                                         <option value="1">Nhà máy 1</option>
                                         <option value="2">Nhà máy 2</option>
@@ -45,7 +45,7 @@
                                 </div>
                                 <div class="mb-2">
                                     <label for="addEnterpriseSelect" class="form-label">Xưởng</label>
-                                    <select class="form-select" id="addEnterpriseSelect" aria-label="Default select example" disabled>
+                                    <select class="form-select" id="addEnterpriseSelect" aria-label="Default select example" onchange="handleSelectEnterprise(this.value, 'add')" disabled>
                                         <option selected="">Chọn xưởng</option>
                                         <option value="1">Xưởng 1</option>
                                         <option value="2">Xưởng 2</option>
@@ -62,8 +62,8 @@
                                     </select>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="addProductCode" class="form-label">Mã hàng</label>
-                                    <select class="form-select" id="addProductCode" aria-label="Default select example" disabled>
+                                    <label for="addProductSelect" class="form-label">Mã hàng</label>
+                                    <select class="form-select" id="addProductSelect" aria-label="Default select example">
                                         <option selected="">Chọn mã hàng</option>
                                         <option value="1">MH001</option>
                                         <option value="2">MH002</option>
@@ -71,8 +71,8 @@
                                     </select>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="addErrorCode" class="form-label">Mã lỗi</label>
-                                    <select class="form-select" id="addErrorCode" aria-label="Default select example" disabled>
+                                    <label for="addErrorSelect" class="form-label">Mã lỗi</label>
+                                    <select class="form-select" id="addErrorSelect" aria-label="Default select example">
                                         <option selected="">Chọn mã lỗi</option>
                                         <option value="1">A01</option>
                                         <option value="2">A02</option>
@@ -88,7 +88,7 @@
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary" onclick="handleAddEnterprise()">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddErrorDetail()">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -109,7 +109,7 @@
                             <div class="modal-body">
                                 <div class="mb-2">
                                     <label for="editUnitSelect" class="form-label">Đơn vị</label>
-                                    <select class="form-select" id="editUnitSelect" aria-label="Default select example" onchange="handleSelectUnit(this.value, 'add')">
+                                    <select class="form-select" id="editUnitSelect" aria-label="Default select example" onchange="handleSelectUnit(this.value, 'edit')">
                                         <option selected="">Chọn đơn vị</option>
                                         <option value="1">Đơn vị 1</option>
                                         <option value="2">Đơn vị 2</option>
@@ -118,7 +118,7 @@
                                 </div>
                                 <div class="mb-2">
                                     <label for="editFactorySelect" class="form-label">Nhà máy</label>
-                                    <select class="form-select" id="editFactorySelect" aria-label="Default select example" disabled>
+                                    <select class="form-select" id="editFactorySelect" aria-label="Default select example" disabled onchange="handleSelectFactory(this.value, 'edit')">
                                         <option selected="">Chọn nhà máy</option>
                                         <option value="1">Nhà máy 1</option>
                                         <option value="2">Nhà máy 2</option>
@@ -127,7 +127,7 @@
                                 </div>
                                 <div class="mb-2">
                                     <label for="editEnterpriseSelect" class="form-label">Xưởng</label>
-                                    <select class="form-select" id="editEnterpriseSelect" aria-label="Default select example" disabled>
+                                    <select class="form-select" id="editEnterpriseSelect" aria-label="Default select example" disabled onchange="handleSelectEnterprise(this.value, 'edit')">
                                         <option selected="">Chọn xưởng</option>
                                         <option value="1">Xưởng 1</option>
                                         <option value="2">Xưởng 2</option>
@@ -144,8 +144,8 @@
                                     </select>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="editProductCode" class="form-label">Mã hàng</label>
-                                    <select class="form-select" id="editProductCode" aria-label="Default select example" disabled>
+                                    <label for="editProductSelect" class="form-label">Mã hàng</label>
+                                    <select class="form-select" id="editProductSelect" aria-label="Default select example">
                                         <option selected="">Chọn mã hàng</option>
                                         <option value="1">MH001</option>
                                         <option value="2">MH002</option>
@@ -153,14 +153,16 @@
                                     </select>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="editErrorCode" class="form-label">Mã lỗi</label>
-                                    <select class="form-select" id="editErrorCode" aria-label="Default select example" disabled>
+                                    <label for="editErrorSelect" class="form-label">Mã lỗi</label>
+                                    <select class="form-select" id="editErrorSelect" aria-label="Default select example">
                                         <option selected="">Chọn mã lỗi</option>
                                         <option value="1">A01</option>
                                         <option value="2">A02</option>
                                         <option value="3">A03</option>
                                     </select>
                                 </div>
+                                <input type="text" class="form-control" id="userId" placeholder="Nhập số lượng lỗi" aria-describedby="defaultFormControlHelp" hidden>
+
                                 <div class="mb-2">
                                     <label for="editQuantity" class="form-label">Số lượng lỗi</label>
                                     <input type="number" class="form-control" id="editQuantity" placeholder="Nhập số lượng lỗi" aria-describedby="defaultFormControlHelp">
@@ -170,7 +172,7 @@
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary" onclick="handleEditEnterprise()">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="handleEditErrorDetail()">Lưu</button>
                             </div>
                         </form>
                     </div>
@@ -193,7 +195,7 @@
                             <th>Người nhập</th>
                         </tr>
                     </thead>
-                    <tbody class="table-border-bottom-0" id="enterpriseTableBody">
+                    <tbody class="table-border-bottom-0" id="errorDetailTableBody">
                     </tbody>
                 </table>
             </div>
@@ -205,10 +207,14 @@
 </div>
 <!-- Content wrapper -->
 @section Scripts {
-    <script src="~/js/enterprise-library.js"></script>
-    <script src="~/js/request/enterprise-request.js"></script>
+    <script src="~/js/page-handle/error-detail-library.js"></script>
+    <script src="~/js/request/error-detail-request.js"></script>
     <script src="~/js/request/unit-request.js"></script>
     <script src="~/js/request/factory-request.js"></script>
+    <script src="~/js/request/enterprise-request.js"></script>
+    <script src="~/js/request/line-request.js"></script>
+    <script src="~/js/request/product-request.js"></script>
+    <script src="~/js/request/error-request.js"></script>
 
 }
 

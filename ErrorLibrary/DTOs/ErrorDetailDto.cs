@@ -10,9 +10,9 @@ namespace ErrorLibrary.DTOs
         public string UserId { get; set; }
         public int Quantity { get; set; }
 
-        public Line? Line { get; set; }
-        public Product? Product { get; set; }
-        public Error? Error { get; set; }
-        public ApplicationUser? User { get; set; }
+        public LineDto? Line { get; set; }
+        public ProductDto? Product { get; set; }
+        public ErrorDto? Error { get; set; }
+        public UserDto? User { get; set; }
     }
 }

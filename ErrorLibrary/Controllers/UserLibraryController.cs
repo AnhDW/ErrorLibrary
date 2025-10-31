@@ -58,6 +58,7 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
             //Decode password
+            _responseDto.Result = register.User;
             _responseDto.Message = "Thêm thành công";
             return Json(_responseDto);
         }

@@ -4,6 +4,13 @@
         method: 'GET',
     });
 }
+function getLinesByEnterpriseId(enterpriseId) {
+    return ajaxRequest({
+        url: '/LineLibrary/GetLinesByEnterpriseId',
+        method: 'GET',
+        data: { enterpriseId: enterpriseId },
+    });
+}
 
 function getLineById(id) {
     return ajaxRequest({

@@ -29,7 +29,7 @@ function getOrganizationsByUserId(userId) {
     })
 }
 
-function UpdateOrganizationsByUser(updateOrganizationsByUserDto) {
+function updateOrganizationsByUser(updateOrganizationsByUserDto) {
     return ajaxRequest({
         url: '/UserOrganizationLibrary/UpdateOrganizationsByUser',
         method: 'POST',

@@ -39,6 +39,12 @@ namespace ErrorLibrary.Controllers
                 ));
         }
 
+        public async Task<IActionResult> GetLinesByEnterpriseId(int enterpriseId)
+        {
+            var lines = await _lineService.GetAllByEnterpriseId(enterpriseId);
+            return Json(_mapper.Map<List<LineDto>>(lines.OrderBy(x=>x.Name)));
+        }
+
         public async Task<IActionResult> GetLineById(int id)
         {
             var line = await _lineService.GetById(id);

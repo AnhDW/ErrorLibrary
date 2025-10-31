@@ -19,6 +19,7 @@ namespace ErrorLibrary.Helper
             CreateMap<Factory, FactoryDto>().ReverseMap();
             CreateMap<Enterprise, EnterpriseDto>().ReverseMap();
             CreateMap<Line, LineDto>().ReverseMap();
+            CreateMap<ErrorDetail, ErrorDetailDto>().ReverseMap();
         }
     }
 }

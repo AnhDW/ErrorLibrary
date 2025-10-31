@@ -1,0 +1,7 @@
+﻿.jstree-proton .jstree-wholerow-hovered {
+    background: rgba(0,0,0,0.05) !important;
+}
+
+.jstree-proton .jstree-wholerow-clicked {
+    background: rgba(0,123,255,0.1) !important; /* xanh nhạt nhẹ */
+}
