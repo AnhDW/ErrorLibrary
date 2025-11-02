@@ -3,6 +3,7 @@ using ErrorLibrary.Entities;
 using ErrorLibrary.Extensions;
 using ErrorLibrary.Services;
 using ErrorLibrary.Services.IServices;
+using ErrorLibrary.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProductCategoryLibrary.Services.IServices;
@@ -14,7 +15,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
 {
-    options.UseMySql(builder.Configuration.GetConnectionString("BTConnect"),
+    options.UseMySql(builder.Configuration.GetConnectionString("TanConnect"),
         new MySqlServerVersion(new Version(8, 0, 36)));
 });
 
@@ -48,6 +49,7 @@ var assemblies = AppDomain.CurrentDomain.GetAssemblies()
 
 builder.Services.AddAutoMapper(cfg => cfg.AddMaps(assemblies));
 builder.AddAppAuthetication();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -70,6 +72,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+app.MapHub<ErrorHub>("/errorHub");
 
 AddlyMigration();
 app.Run();

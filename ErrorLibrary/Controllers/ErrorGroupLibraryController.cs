@@ -21,7 +21,8 @@ namespace ErrorLibrary.Controllers
             _mapper = mapper;
             _responseDto = new ResponseDto();
         }
-
+        
+        [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any)]
         public IActionResult Index()
         {
             return View();
