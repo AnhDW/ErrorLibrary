@@ -23,17 +23,17 @@ function handleAddError() {
     const errorGroupId = $('#addErrorGroupSelect').val();
     const code = $('#addErrorCode').val();
     const name = $('#addErrorName').val();
-    const type = $('#addErrorType').val();
+    const errorCategory = $('#addErrorType').val();
 
     const errorData = {
         errorGroupId,
         code,
         name,
-        type
+        errorCategory
     };
     addError(errorData).then(function (res) {
         $('#addModel').modal('hide');
-        renderErrorTable(); // ✅ chỉ gọi sau khi update thành công
+        renderErrorTable();
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');
@@ -45,14 +45,14 @@ function handleEditError() {
     const errorGroupId = $('#editErrorGroupSelect').val();
     const code = $('#editErrorCode').val();
     const name = $('#editErrorName').val();
-    const type = $('#editErrorType').val();
+    const errorCategory = $('#editErrorType').val();
 
     const errorData = {
         id,
         errorGroupId,
         code,
         name,
-        type
+        errorCategory
     };
     console.log(errorData);
     updateError(errorData).then(function (res) {

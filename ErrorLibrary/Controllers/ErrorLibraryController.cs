@@ -59,7 +59,7 @@ namespace ErrorLibrary.Controllers
             _errorService.Add(error);
             if (await _sharedService.SaveAllChanges())
             {
-                await _hubContext.Clients.All.SendAsync("ErrorAdded", error);
+                //await _hubContext.Clients.All.SendAsync("ErrorAdded", error);
                 _responseDto.Message = "Thêm thành công";
                 return Json(_responseDto);
             }
@@ -78,10 +78,11 @@ namespace ErrorLibrary.Controllers
                 _responseDto.Message = "Không tìm thấy 'Lỗi' này trong thư viện";
                 return Json(_responseDto);
             }
+            
             _errorService.Update(_mapper.Map(errorDto, error));
             if (await _sharedService.SaveAllChanges())
             {
-                await _hubContext.Clients.All.SendAsync("ErrorUpdated", error);
+                //await _hubContext.Clients.All.SendAsync("ErrorUpdated", error);
                 _responseDto.Message = "Cập nhật thành công";
                 return Json(_responseDto);
             }

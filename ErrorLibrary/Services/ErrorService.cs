@@ -49,7 +49,7 @@ namespace ErrorLibrary.Services
 
         public async Task<Error> GetById(int id)
         {
-            return (await _context.Errors.FindAsync(id))!;
+            return (await _context.Errors.FirstOrDefaultAsync(x=>x.Id==id))!;
         }
 
         public void Update(Error error)
