@@ -78,7 +78,7 @@ function renderErrorTable() {
         let html = '';
         data.forEach(item => {
             html += `
-                    <tr>
+                    <tr id="row_${item.id}">
                         <td>${item.errorGroup == null ? '' : item.errorGroup.name}</td>
                         <td>${item.code}</td>
                         <td>${item.name}</td>
