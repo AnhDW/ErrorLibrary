@@ -10,6 +10,7 @@ namespace ErrorLibrary.Helper
         public AutoMapperProfiles()
         {
             CreateMap<Error, ErrorDto>().ReverseMap();
+            CreateMap<Error, ErrorDisplayDto>().ReverseMap();
             CreateMap<Product, ProductDto>().ReverseMap();
             CreateMap<ErrorGroup, ErrorGroupDto>().ReverseMap();
             CreateMap<ProductCategory, ProductCategoryDto>().ReverseMap();

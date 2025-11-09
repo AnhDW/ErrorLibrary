@@ -33,7 +33,7 @@ function handleAddError() {
     };
     addError(errorData).then(function (res) {
         $('#addModel').modal('hide');
-        renderErrorTable();
+        //renderErrorTable();
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');
@@ -57,7 +57,7 @@ function handleEditError() {
     console.log(errorData);
     updateError(errorData).then(function (res) {
         $('#editModel').modal('hide');
-        renderErrorTable();
+        //renderErrorTable();
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');
@@ -66,7 +66,7 @@ function handleEditError() {
 
 function handleDeleteError(id) {
     deleteError(id).then(function (res) {
-        renderErrorTable();
+        //renderErrorTable();
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');

@@ -18,7 +18,8 @@ function addError(errorDto) {
         url: '/ErrorLibrary/AddError',
         method: 'POST',
         data: errorDto,
-        showLoading: true
+        showLoading: true,
+        useToken: true
     })
 }
 
@@ -27,7 +28,8 @@ function updateError(errorDto) {
         url: '/ErrorLibrary/UpdateError',
         method: 'POST',
         data: errorDto,
-        showLoading: true
+        showLoading: true,
+        useToken:true
     })
 }
 
@@ -36,6 +38,8 @@ function deleteError(id) {
         url: '/ErrorLibrary/DeleteError',
         method: 'POST',
         data: id,
-        showLoading: true
+        showLoading: true,
+        useToken: true
+
     })
 }

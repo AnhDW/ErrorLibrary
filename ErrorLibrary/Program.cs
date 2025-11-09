@@ -49,7 +49,7 @@ var assemblies = AppDomain.CurrentDomain.GetAssemblies()
 
 builder.Services.AddAutoMapper(cfg => cfg.AddMaps(assemblies));
 builder.AddAppAuthetication();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR().AddMessagePackProtocol();
 
 var app = builder.Build();
 
