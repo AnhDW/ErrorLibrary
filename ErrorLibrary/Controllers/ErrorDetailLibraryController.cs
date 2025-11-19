@@ -12,14 +12,18 @@ namespace ErrorLibrary.Controllers
 {
     public class ErrorDetailLibraryController : Controller
     {
+        private readonly IErrorDetailAttachmentService _errorDetailAttachmentService;
         private readonly IErrorDetailService _errorDetailService;
+        private readonly IFileService _fileService;
         private readonly ISharedService _sharedService;
         private IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public ErrorDetailLibraryController(IErrorDetailService errorDetailService, ISharedService sharedService, IMapper mapper)
+        public ErrorDetailLibraryController(IErrorDetailAttachmentService errorDetailAttachmentService, IErrorDetailService errorDetailService, IFileService fileService, ISharedService sharedService, IMapper mapper)
         {
+            _errorDetailAttachmentService = errorDetailAttachmentService;
             _errorDetailService = errorDetailService;
+            _fileService = fileService;
             _sharedService = sharedService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
@@ -44,9 +48,13 @@ namespace ErrorLibrary.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> AddErrorDetail([FromBody] ErrorDetailDto errorDetailDto)
+        public async Task<IActionResult> AddErrorDetail([FromForm] ErrorDetailDto errorDetailDto)
         {
             errorDetailDto.UserId = User.GetUserId();
+            if(errorDetailDto.Files.Count > 0)
+            {
+                await AddAttachments(errorDetailDto.Files, errorDetailDto.LineId, errorDetailDto.ProductId, errorDetailDto.ErrorId, errorDetailDto.UserId);
+            }
             _errorDetailService.Add(_mapper.Map<ErrorDetail>(errorDetailDto));
             if (await _sharedService.SaveAllChanges())
             {
@@ -54,6 +62,7 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
+            await DeleteAttachments(errorDetailDto.LineId, errorDetailDto.ProductId, errorDetailDto.ErrorId, errorDetailDto.UserId);
             _responseDto.IsSuccess = false;
             _responseDto.Message = "Lỗi trong quá trình thêm";
             return Json(_responseDto);
@@ -77,6 +86,7 @@ namespace ErrorLibrary.Controllers
                 _responseDto.Message = "Không thể cập nhật dòng của người khác";
                 return Json(_responseDto);
             }
+
             _errorDetailService.Update(_mapper.Map(errorDetailDto, errorDetail));
             if (await _sharedService.SaveAllChanges())
             {
@@ -109,6 +119,7 @@ namespace ErrorLibrary.Controllers
             _errorDetailService.Delete(errorDetail);
             if (await _sharedService.SaveAllChanges())
             {
+                await DeleteAttachments(deleteErrorDetailDto.LineId, deleteErrorDetailDto.ProductId, deleteErrorDetailDto.ErrorId, deleteErrorDetailDto.UserId);
                 _responseDto.Message = "Xóa chi tiết lỗi thành công";
                 return Json(_responseDto);
             }
@@ -116,6 +127,43 @@ namespace ErrorLibrary.Controllers
             _responseDto.IsSuccess = false;
             _responseDto.Message = "Lỗi trong quá trình xóa";
             return Json(_responseDto);
+        }
+
+        private async Task<bool> AddAttachments(List<IFormFile> files, int lineId, int productId, int errorId, string userId)
+        {
+            foreach (var file in files)
+            {
+                var filePath = _fileService.AddAttachment(file);
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    return false;
+                }
+                var errorDetailAttachment = new ErrorDetailAttachment
+                {
+                    LineId = lineId,
+                    ProductId = productId,
+                    ErrorId = errorId,
+                    UserId = userId,
+                    Url = filePath,
+                    FileName = file.FileName,
+                    ContentType = file.ContentType,
+                    CreatedAt = DateTime.UtcNow
+                };
+                _errorDetailAttachmentService.Add(errorDetailAttachment);
+
+            }
+            return await _sharedService.SaveAllChanges();
+        }
+
+        private async Task<bool> DeleteAttachments(int lineId, int productId, int errorId, string userId)
+        {
+            var attachments = await _errorDetailAttachmentService.GetByErrorDetail(lineId, productId, errorId, userId);
+            foreach (var attachment in attachments)
+            {
+                _fileService.DeleteAttachment(attachment.Url);
+                _errorDetailAttachmentService.Delete(attachment);
+            }
+            return await _sharedService.SaveAllChanges();
         }
     }
 }

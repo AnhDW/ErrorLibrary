@@ -10,6 +10,8 @@ namespace ErrorLibrary.DTOs
         public string UserId { get; set; }
         public int Quantity { get; set; }
 
+        public List<IFormFile> Files { get; set; } = new List<IFormFile>();
+
         public LineDto? Line { get; set; }
         public ProductDto? Product { get; set; }
         public ErrorDto? Error { get; set; }

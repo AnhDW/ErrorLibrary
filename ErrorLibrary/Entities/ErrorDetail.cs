@@ -12,5 +12,7 @@
         public Product Product { get; set; }
         public Error Error { get; set;}
         public ApplicationUser User { get; set; }
+
+        public List<ErrorDetailAttachment> ErrorDetailAttachments { get; set; } = new();
     }
 }
