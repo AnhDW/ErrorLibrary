@@ -51,11 +51,19 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> AddErrorDetail([FromForm] ErrorDetailDto errorDetailDto)
         {
             errorDetailDto.UserId = User.GetUserId();
-            if(errorDetailDto.Files.Count > 0)
+            var errorDetail = _mapper.Map<ErrorDetail>(errorDetailDto);
+            if (errorDetailDto.Files.Count > 0)
             {
                 await AddAttachments(errorDetailDto.Files, errorDetailDto.LineId, errorDetailDto.ProductId, errorDetailDto.ErrorId, errorDetailDto.UserId);
+                //errorDetail.ErrorDetailAttachments.Add(new ErrorDetailAttachment
+                //{
+                //    Url = "temp",
+                //    FileName = "temp",
+                //    ContentType = "temp",
+                //    CreatedAt = DateTime.UtcNow
+                //});
             }
-            _errorDetailService.Add(_mapper.Map<ErrorDetail>(errorDetailDto));
+            _errorDetailService.Add(errorDetail);
             if (await _sharedService.SaveAllChanges())
             {
                 _responseDto.Message = "Thêm chi tiết lỗi thành công";
