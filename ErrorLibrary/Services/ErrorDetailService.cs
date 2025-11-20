@@ -33,12 +33,12 @@ namespace ErrorLibrary.Services
             _context.ErrorDetails.Remove(errorDetail);
         }
 
-        public Task<PagedList<ErrorDetailDto>> GetAll(ErrorDetailParams errorDetailParams)
+        public Task<PagedList<ErrorDetailDisplayDto>> GetAll(ErrorDetailParams errorDetailParams)
         {
             var query = _context.ErrorDetails.AsQueryable();
 
-            return PagedList<ErrorDetailDto>.CreateAsync(
-                query.AsNoTracking().ProjectTo<ErrorDetailDto>(_mapper.ConfigurationProvider),
+            return PagedList<ErrorDetailDisplayDto>.CreateAsync(
+                query.AsNoTracking().ProjectTo<ErrorDetailDisplayDto>(_mapper.ConfigurationProvider),
                 errorDetailParams.PageNumber,
                 errorDetailParams.PageSize
                 );

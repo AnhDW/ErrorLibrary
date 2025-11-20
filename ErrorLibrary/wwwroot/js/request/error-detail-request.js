@@ -14,10 +14,22 @@ function getErrorDetailById(lineId, productId, errorId, userId) {
 }
 
 function addErrorDetail(errorDetailDto) {
+    const formData = new FormData();
+
+    formData.append("lineId", errorDetailDto.lineId);
+    formData.append("productId", errorDetailDto.productId);
+    formData.append("errorId", errorDetailDto.errorId);
+    formData.append("userId", errorDetailDto.userId);
+    formData.append("quantity", errorDetailDto.quantity);
+    const files = $("#addErrorDetailAttachment")[0].files;
+    for (let i = 0; i < files.length; i++) {
+        formData.append("files", files[i]);  // <-- append từng file
+    }
     return ajaxRequest({
         url: '/ErrorDetailLibrary/AddErrorDetail',
         method: 'POST',
-        data: errorDetailDto,
+        data: formData,
+        isFormData: true,
         showLoading: true,
         useToken: true,
     })
@@ -38,6 +50,7 @@ function deleteErrorDetail(deleteErrorDetailDto) {
         url: '/ErrorDetailLibrary/DeleteErrorDetail',
         method: 'POST',
         data: deleteErrorDetailDto,
-        showLoading: true
+        showLoading: true,
+        useToken: true,
     })
 }

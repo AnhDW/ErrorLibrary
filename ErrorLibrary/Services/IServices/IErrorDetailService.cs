@@ -8,7 +8,7 @@ namespace ErrorLibrary.Services.IServices
 {
     public interface IErrorDetailService
     {
-        Task<PagedList<ErrorDetailDto>> GetAll(ErrorDetailParams errorDetailParams);
+        Task<PagedList<ErrorDetailDisplayDto>> GetAll(ErrorDetailParams errorDetailParams);
         Task<List<ErrorDetail>> GetAll();
         Task<ErrorDetail> GetById(int lineId, int productId, int errorId, string userId);
         void Add(ErrorDetail errorDetail);

@@ -153,7 +153,7 @@ function renderErrorDetailsTable() {
                                         data-bs-target="#editModel" onclick='editShowErrorDetailModalHandle(${JSON.stringify(item).replace(/'/g, "\\'")})'>
                                     <i class="bx bx-edit-alt me-1"></i> Sửa
                                 </button>
-                                <button type="button" class="dropdown-item" onclick="handleDeleteErrorDetail(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                <button type="button" class="dropdown-item" onclick='handleDeleteErrorDetail(${JSON.stringify(item).replace(/'/g, "\\'")})'><i class="bx bx-trash me-1"></i> Xóa</a>
                             </div>
                         </div>
                     </td>
@@ -165,8 +165,16 @@ function renderErrorDetailsTable() {
     });
 }
 
-function handleDeleteErrorDetail(id) {
-    deleteErrorDetail(id).then(function (res) {
+function handleDeleteErrorDetail(errorDetail) {
+    const deleteErrorDetailDto = {
+        lineId : errorDetail.lineId,
+        productId : errorDetail.productId,
+        errorId : errorDetail.errorId,
+        userId : errorDetail.userId
+    };
+    console.log(errorDetail);
+    console.log(deleteErrorDetailDto);
+    deleteErrorDetail(deleteErrorDetailDto).then(function (res) {
         renderErrorDetailsTable();
     }).catch(function (err) {
         console.error(err);
