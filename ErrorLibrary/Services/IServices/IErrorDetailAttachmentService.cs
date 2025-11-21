@@ -6,7 +6,7 @@ namespace ErrorLibrary.Services.IServices
     {
         Task<List<ErrorDetailAttachment>> GetAll();
         Task<List<ErrorDetailAttachment>> GetByErrorDetail(int lineId, int productId, int errorId, string userId);
-        Task<ErrorDetailAttachment> GetByIdAsync(int id);
+        Task<ErrorDetailAttachment> GetById(int id);
         void Add(ErrorDetailAttachment errorDetailAttachment);
         void Update(ErrorDetailAttachment errorDetailAttachment);
         void Delete(ErrorDetailAttachment errorDetailAttachment);

@@ -41,7 +41,7 @@ namespace ErrorLibrary.Services
                 .ToListAsync();
         }
 
-        public async Task<ErrorDetailAttachment> GetByIdAsync(int id)
+        public async Task<ErrorDetailAttachment> GetById(int id)
         {
             return (await _context.ErrorDetailAttachments.FindAsync(id))!;
         }

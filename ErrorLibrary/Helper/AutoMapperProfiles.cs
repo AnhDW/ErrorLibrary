@@ -22,6 +22,7 @@ namespace ErrorLibrary.Helper
             CreateMap<Line, LineDto>().ReverseMap();
             CreateMap<ErrorDetail, ErrorDetailDto>().ReverseMap();
             CreateMap<ErrorDetail, ErrorDetailDisplayDto>().ReverseMap();
+            CreateMap<ErrorDetailAttachment, ErrorDetailAttachmentDto>().ReverseMap();
         }
     }
 }
