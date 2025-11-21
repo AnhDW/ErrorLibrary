@@ -82,6 +82,9 @@ async function editShowErrorDetailModalHandle(errorDetail) {
     $('#editQuantity').val(errorDetail.quantity);
     $('#userId').val(errorDetail.userId);
 }
+ function showImagesModal(errorDetail) {
+    console.log(errorDetail)
+}
 
 function handleAddErrorDetail() {
     const lineId = $('#addLineSelect').val();
@@ -143,7 +146,7 @@ function renderErrorDetailsTable() {
                     <td>${item.error.code}</td>
                     <td>${item.quantity}</td>
                     <td>${item.user.fullName}</td>
-                    <td><button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                    <td><button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="modal" data-bs-target="#imagesModal" onclick='showImagesModal(${JSON.stringify(item).replace(/'/g, "\\'")})'>
                                 <i class="bx bx-images"></i>
                         </button>
                     </td>
