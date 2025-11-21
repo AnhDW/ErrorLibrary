@@ -143,6 +143,10 @@ function renderErrorDetailsTable() {
                     <td>${item.error.code}</td>
                     <td>${item.quantity}</td>
                     <td>${item.user.fullName}</td>
+                    <td><button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-images"></i>
+                        </button>
+                    </td>
                     <td>
                         <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
