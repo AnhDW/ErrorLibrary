@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
+using ErrorLibrary.Services;
 using ErrorLibrary.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,18 +10,20 @@ namespace ErrorLibrary.Controllers
     public class ErrorDetailAttachmentLibraryController : Controller
     {
         private readonly IErrorDetailAttachmentService _errorDetailAttachmentService;
+        private readonly IErrorDetailService _errorDetailService;
         private readonly IFileService _fileService;
         private readonly ISharedService _sharedService;
         private IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public ErrorDetailAttachmentLibraryController(IErrorDetailAttachmentService errorDetailAttachmentService, IFileService fileService, ISharedService sharedService, IMapper mapper)
+        public ErrorDetailAttachmentLibraryController(IErrorDetailAttachmentService errorDetailAttachmentService, IFileService fileService, ISharedService sharedService, IMapper mapper, IErrorDetailService errorDetailService)
         {
             _errorDetailAttachmentService = errorDetailAttachmentService;
             _fileService = fileService;
             _sharedService = sharedService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
+            _errorDetailService = errorDetailService;
         }
 
         //public IActionResult Index()
@@ -45,14 +48,37 @@ namespace ErrorLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> AddErrorDetailAttachment([FromForm] ErrorDetailAttachmentDto errorDetailAttachmentDto)
         {
-            var filePath = _fileService.AddAttachment(errorDetailAttachmentDto.File);
-            errorDetailAttachmentDto.Url = filePath;
-            errorDetailAttachmentDto.FileName = errorDetailAttachmentDto.File.FileName;
-            errorDetailAttachmentDto.ContentType = errorDetailAttachmentDto.File.ContentType;
-            _errorDetailAttachmentService.Add(_mapper.Map<ErrorDetailAttachment>(errorDetailAttachmentDto));
+            var errorDetail = await _errorDetailService.GetById(errorDetailAttachmentDto.LineId, errorDetailAttachmentDto.ProductId, errorDetailAttachmentDto.ErrorId, errorDetailAttachmentDto.UserId);
+            if (errorDetail == null)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Không tìm thấy 'chi tiết lỗi' này trong thư viện";
+                return Json(_responseDto);
+            }
+            if (errorDetailAttachmentDto.Files.Count > 0)
+            {
+                foreach(var file in errorDetailAttachmentDto.Files)
+                {
+                    var filePath = _fileService.AddAttachment(file);
+                    var errorDetailAttachment = new ErrorDetailAttachment
+                    {
+                        LineId = errorDetailAttachmentDto.LineId,
+                        ProductId = errorDetailAttachmentDto.ProductId,
+                        ErrorId = errorDetailAttachmentDto.ErrorId,
+                        UserId = errorDetailAttachmentDto.UserId,
+                        Url = filePath,
+                        FileName = file.FileName,
+                        ContentType = file.ContentType
+                    };
+                    errorDetailAttachment.Url = filePath;
+                    errorDetailAttachment.FileName = file.FileName;
+                    errorDetailAttachment.ContentType = file.ContentType;
+                    _errorDetailAttachmentService.Add(errorDetailAttachment);
+                }
+            }
             if(await _sharedService.SaveAllChanges())
             {
-                _responseDto.Message = "Thêm hình ảnh thành công";
+                _responseDto.Message = $"Đã thêm {errorDetailAttachmentDto.Files.Count} hình ảnh thành công";
                 return Json(_responseDto);
             }
             _responseDto.IsSuccess = false;
@@ -61,7 +87,7 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteErrorDetailAttachment(int id)
+        public async Task<IActionResult> DeleteErrorDetailAttachment([FromBody] int id)
         {
             var attachment = await _errorDetailAttachmentService.GetById(id);
             if (attachment == null)

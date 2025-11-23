@@ -83,7 +83,8 @@ async function editShowErrorDetailModalHandle(errorDetail) {
     $('#userId').val(errorDetail.userId);
 }
  function showImagesModal(errorDetail) {
-    console.log(errorDetail)
+     console.log(errorDetail);
+     renderErrorDetailAttachment(errorDetail.lineId, errorDetail.productId, errorDetail.errorId, errorDetail.userId);
 }
 
 function handleAddErrorDetail() {
@@ -103,9 +104,9 @@ function handleAddErrorDetail() {
     addErrorDetail(errorDetailData).then(function (res) {
         $('#addModel').modal('hide');
         renderErrorDetailsTable();
+        resToastr(res);
     }).catch(function (err) {
-        console.error(err);
-        alert('Có lỗi xảy ra khi cập nhật');
+        toastr.error(err);
     });
 }
 
@@ -126,9 +127,9 @@ function handleEditErrorDetail() {
     updateErrorDetail(errorDetailData).then(function (res) {
         $('#editModel').modal('hide');
         renderErrorDetailsTable();
+        resToastr(res);
     }).catch(function (err) {
-        console.error(err);
-        alert('Có lỗi xảy ra khi cập nhật');
+        toastr.error(err);
     });
 }
 
@@ -183,8 +184,8 @@ function handleDeleteErrorDetail(errorDetail) {
     console.log(deleteErrorDetailDto);
     deleteErrorDetail(deleteErrorDetailDto).then(function (res) {
         renderErrorDetailsTable();
+        resToastr(res);
     }).catch(function (err) {
-        console.error(err);
-        alert('Có lỗi xảy ra khi cập nhật');
+        toastr.error(err);
     });
 }

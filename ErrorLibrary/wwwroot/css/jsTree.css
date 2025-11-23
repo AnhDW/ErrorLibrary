@@ -6,7 +6,7 @@
     background: rgba(0,123,255,0.1) !important; /* xanh nhạt nhẹ */
 }
 
-
+/*css quản lý ảnh*/
 .upload-box {
     width: 100px;
     height: 100px;
@@ -21,7 +21,73 @@
     transition: 0.2s;
 }
 
-    .upload-box:hover {
-        border-color: #007bff;
-        color: #007bff;
+.upload-box:hover {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+    .image-container img {
+        border-radius: 6px;
+        transition: 0.3s ease;
     }
+
+/* Lớp phủ toàn ảnh */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex; /* Chia 2 phần đều nhau */
+    opacity: 0;
+    background: rgba(0,0,0,0.6);
+    transition: 0.3s ease;
+    border-radius: 6px;
+}
+
+.image-container:hover .overlay {
+    opacity: 1;
+}
+
+/* 2 phần click */
+.overlay-left,
+.overlay-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+/* Hover từng phần */
+.overlay-left:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.overlay-right:hover {
+    background: rgba(255,0,0,0.2);
+}
+
+/* gallery */
+.inline-gallery-container {
+    width: 100%;
+    padding: 400px;
+}
+
+.inline-gallery-container .lg-image {
+    margin-top: 47px;
+    margin-bottom: 100px;
+}
+    /* Giới hạn chiều cao của ảnh để không bị thumbnail che */
+    /*#inline-gallery-container .lg-inner {
+        height: calc(100% - 100px);
+    }*/

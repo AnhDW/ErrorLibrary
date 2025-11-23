@@ -24,8 +24,10 @@ function addErrorDetailAttachment(errorDetailAttachmentDto) {
     formData.append("fileName", errorDetailAttachmentDto.fileName);
     formData.append("url", errorDetailAttachmentDto.url);
     formData.append("contentType", errorDetailAttachmentDto.contentType);
-
-    formData.append("file", $("#addErrorDetailAttachment")[0].files[0]);
+    const files = $("#editErrorDetailAttachment")[0].files;
+    for (let i = 0; i < files.length; i++) {
+        formData.append("files", files[i]);
+    }
 
     return ajaxRequest({
         url: '/ErrorDetailAttachmentLibrary/AddErrorDetailAttachment',
@@ -41,7 +43,7 @@ function deleteErrorDetailAttachment(id) {
     return ajaxRequest({
         url: '/ErrorDetailAttachmentLibrary/DeleteErrorDetailAttachment',
         method: 'POST',
-        data: {id},
+        data: id,
         showLoading: true,
         useToken: true,
     })

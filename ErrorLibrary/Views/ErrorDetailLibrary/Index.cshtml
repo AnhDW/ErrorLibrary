@@ -187,7 +187,8 @@
                 </div>
             </div>
 
-            @* Images model *@
+
+            <!-- Images Modal -->
             <div class="modal fade" id="imagesModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
@@ -199,31 +200,48 @@
                                     aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <div class="d-flex flex-row-reverse">
-                                <div class="pe-4">
-                                    <button type="button" class="btn text-danger">
-                                        <i class="bx bx-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="d-flex flex-row flex-wrap justify-content-center align-items-center">
+                            <div id="errorDetailAttachments" class="d-flex flex-row flex-wrap justify-content-center align-items-center">
                                 <div class="p-1 upload-wrapper">
                                     <label for="editErrorDetailAttachment" class="upload-box">
                                         <i class="bx bx-plus"></i>
                                     </label>
+                                    <input hidden type="text" id="editLineIdAttachment" />
+                                    <input hidden type="text" id="editProductIdAttachment" />
+                                    <input hidden type="text" id="editErrorIdAttachment" />
+                                    <input hidden type="text" id="editUserIdAttachment" />
                                     <input hidden type="file" id="editErrorDetailAttachment" multiple accept="image/*">
                                 </div>
-                                <div class="p-1"><img src="~/assets/img/avatars/1.png" alt class="w-px-100 h-auto rounded-2" /></div>
-                                <div class="p-1"><img src="~/assets/img/avatars/1.png" alt class="w-px-100 h-auto rounded-2" /></div>
-                                <div class="p-1"><img src="~/assets/img/avatars/1.png" alt class="w-px-100 h-auto rounded-2" /></div>
-                                <div class="p-1"><img src="~/assets/img/avatars/1.png" alt class="w-px-100 h-auto rounded-2" /></div>
-                                <div class="p-1"><img src="~/assets/img/avatars/1.png" alt class="w-px-100 h-auto rounded-2" /></div>
-                                <div class="p-1"><img src="~/assets/img/avatars/1.png" alt class="w-px-100 h-auto rounded-2" /></div>
+                                <div class="p-1 image-container">
+                                    <img src="~/images/4295ca61-cd6f-4058-a860-3ae6155b6c26.jpg" alt="" class="w-px-100 h-auto" />
+                                    <div class="overlay">
+                                        <div class="overlay-left" data-action="view" onclick="overlayLeftHandle()"><i class="bx bx-bullseye"></i></div>
+                                        <div class="overlay-right" data-action="delete" onclick="overlayRightHandle()"><i class="bx bx-trash"></i></div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Images Preview Modal -->
+            <div class="modal fade" id="imagePreviewModal" tabindex="-1" style="background-color: rgba(0,0,0,0.6);">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <!-- modal-xl cho rộng -->
+                    <div class="modal-content bg-black" >
+                        <div class="modal-header">
+                            <h5 class="modal-title text-light">Xem ảnh</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div id="inline-gallery-container" class="inline-gallery-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
         </div>
         <!-- Striped Rows -->
@@ -256,6 +274,7 @@
 <!-- Content wrapper -->
 @section Scripts {
     <script src="~/js/page-handle/error-detail-library.js"></script>
+    <script src="~/js/page-handle/error-detail-attachment-library.js"></script>
     <script src="~/js/request/error-detail-request.js"></script>
     <script src="~/js/request/unit-request.js"></script>
     <script src="~/js/request/factory-request.js"></script>
