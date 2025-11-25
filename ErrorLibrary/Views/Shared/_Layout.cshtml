@@ -64,21 +64,32 @@
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
             <!-- Menu -->
-
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
                     <a href="index.html" class="app-brand-link">
-                        <span class="app-brand-text demo menu-text fw-bolder ms-2">Thư viện lỗi</span>
+                        <span class="app-brand-text demo menu-text fw-bolder ms-2">Chất lượng sản phẩm</span>
                     </a>
 
                     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
                         <i class="bx bx-chevron-left bx-sm align-middle"></i>
                     </a>
                 </div>
-
                 <div class="menu-inner-shadow"></div>
-
                 <ul class="menu-inner py-1">
+                    <li class="menu-item open">
+                        <a href="javascript:void(0)" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+                            <div data-i18n="Chức năng">Chức năng</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a class="menu-link" asp-controller="ErrorDetailLibrary" asp-action="Index">
+                                    <i class="menu-icon tf-icons fa-solid fa-circle-exclamation"></i>
+                                    <div style="margin-left: 4px;">Lỗi theo mã hàng</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="menu-item">
                         <a href="javascript:void(0)" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-box"></i>
@@ -89,6 +100,18 @@
                                 <a class="menu-link" asp-controller="ErrorLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-triangle-exclamation"></i>
                                     <div style="margin-left: 4px;">Lỗi</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a class="menu-link" asp-controller="ErrorGroupLibrary" asp-action="Index">
+                                    <i class="menu-icon tf-icons fa-solid fa-exclamation"></i>
+                                    <div style="margin-left: 4px;">Nhóm lỗi</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a class="menu-link" asp-controller="ProductCategoryLibrary" asp-action="Index">
+                                    <i class="menu-icon tf-icons fa-solid fa-layer-group"></i>
+                                    <div style="margin-left: 4px;">Chủng loại sản phẩm</div>
                                 </a>
                             </li>
                             <li class="menu-item">
@@ -103,48 +126,6 @@
                                     <div style="margin-left: 4px;">Hướng xử lý</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
-                                <a class="menu-link" asp-controller="UserLibrary" asp-action="Index">
-                                    <i class="menu-icon tf-icons fa-solid fa-users"></i>
-                                    <div style="margin-left: 4px;">Tài khoản</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="menu-item">
-                        <a href="javascript:void(0)" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                            <div data-i18n="Chức năng">Chức năng</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a class="menu-link" asp-controller="ErrorGroupLibrary" asp-action="Index">
-                                    <i class="menu-icon tf-icons fa-solid fa-exclamation"></i>
-                                    <div style="margin-left: 4px;">Nhóm lỗi</div>
-                                </a>
-                            </li>
-
-                            <li class="menu-item">
-                                <a class="menu-link" asp-controller="ErrorDetailLibrary" asp-action="Index">
-                                    <i class="menu-icon tf-icons fa-solid fa-circle-exclamation"></i>
-                                    <div style="margin-left: 4px;">Lỗi theo mã hàng</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a class="menu-link" asp-controller="ProductCategoryLibrary" asp-action="Index">
-                                    <i class="menu-icon tf-icons fa-solid fa-layer-group"></i>
-                                    <div style="margin-left: 4px;">Chủng loại sản phẩm</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="menu-item">
-                        <a href="javascript:void(0)" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-cog"></i>
-                            <div data-i18n="Cài đặt">Cài đặt</div>
-                        </a>
-                        <ul class="menu-sub">
                             <li class="menu-item">
                                 <a class="menu-link" asp-controller="UnitLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-building"></i>
@@ -171,7 +152,20 @@
                             </li>
                         </ul>
                     </li>
-                   
+                    <li class="menu-item">
+                        <a href="javascript:void(0)" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons bx bx-cog"></i>
+                            <div data-i18n="Cấu hình">Cấu hình</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a class="menu-link" asp-controller="UserLibrary" asp-action="Index">
+                                    <i class="menu-icon tf-icons fa-solid fa-users"></i>
+                                    <div style="margin-left: 4px;">Tài khoản</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </aside>
             <!-- / Menu -->
