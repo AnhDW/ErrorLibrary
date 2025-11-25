@@ -1,6 +1,7 @@
 ﻿
 $(document).ready(function () {
     const path = window.location.pathname;
+    //menuItemActive(path.split('/')[1]);
     console.log(path);
     if (path.includes('/ErrorLibrary')) {
         renderErrorTable();
@@ -26,3 +27,16 @@ $(document).ready(function () {
         renderErrorDetailsTable();
     }
 });
+
+
+//function menuItemActive(controller) {
+//    const currentLink = $(`.menu-link[href^="/${controller}"]`);
+//    const menuSub = currentLink.closest('ul.menu-sub');
+//    const parentMenuItem = menuSub.closest('li.menu-item');
+//    const menuItem = currentLink.closest('li.menu-item');
+//    parentMenuItem.addClass('open');
+//    menuItem.addClass('active');
+//    console.log(menuInner.html());
+//}
+
+
