@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    var featureControllers = new[] { "Home", "ErrorDetailLibrary" };
+    var libraryControllers = new[] { "ErrorLibrary", "ErrorGroupLibrary", "ProductCategoryLibrary", "ProductLibrary", "SolutionLibrary", "UnitLibrary", "FactoryLibrary", "EnterpriseLibrary", "LineLibrary" };
+    var settingControllers = new[] { "UserLibrary" };
+}
+<!DOCTYPE html>
 
 <html lang="en"
       class="light-style layout-menu-fixed"
@@ -40,9 +46,9 @@
 
     <!-- Page CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jstree-bootstrap-theme@1.0.1/dist/themes/proton/style.min.css" />
-    <link rel="stylesheet" href="~/css/jsTree.css"/>
+    <link rel="stylesheet" href="~/css/jsTree.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    
+
     <!-- light gallery css -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.4.0/css/lightgallery-bundle.css" />
 
@@ -67,22 +73,21 @@
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
                     <a href="index.html" class="app-brand-link">
-                        <span class="app-brand-text demo menu-text fw-bolder ms-2">Chất lượng sản phẩm</span>
+                        <span style="font-size: 20px" class="app-brand-text demo menu-text fw-bolder ms-1">Chất lượng sản phẩm</span>
                     </a>
-
                     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
                         <i class="bx bx-chevron-left bx-sm align-middle"></i>
                     </a>
                 </div>
                 <div class="menu-inner-shadow"></div>
                 <ul class="menu-inner py-1">
-                    <li class="menu-item open">
+                    <li class="menu-item @(featureControllers.Contains(controllerName) ? "open" : "")">
                         <a href="javascript:void(0)" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-cube-alt"></i>
                             <div data-i18n="Chức năng">Chức năng</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item">
+                            <li class="menu-item @(controllerName == "ErrorDetailLibrary" ? "active" : "")">
                                 <a class="menu-link" asp-controller="ErrorDetailLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-circle-exclamation"></i>
                                     <div style="margin-left: 4px;">Lỗi theo mã hàng</div>
@@ -90,61 +95,61 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item @(libraryControllers.Contains(controllerName) ? "open" : "")">
                         <a href="javascript:void(0)" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-box"></i>
                             <div data-i18n="Thư viện">Thư viện</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item">
+                            <li class="menu-item @(controllerName == "ErrorLibrary" ? "active" : "")">
                                 <a class="menu-link" asp-controller="ErrorLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-triangle-exclamation"></i>
                                     <div style="margin-left: 4px;">Lỗi</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item @(controllerName == "ErrorGroupLibrary" ? "active" : "")">
                                 <a class="menu-link" asp-controller="ErrorGroupLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-exclamation"></i>
                                     <div style="margin-left: 4px;">Nhóm lỗi</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item @(controllerName == "ProductCategoryLibrary" ? "active" : "")">
                                 <a class="menu-link" asp-controller="ProductCategoryLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-layer-group"></i>
                                     <div style="margin-left: 4px;">Chủng loại sản phẩm</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item @(controllerName == "ProductLibrary" ? "active" : "")">
                                 <a class="menu-link" asp-controller="ProductLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-shirt"></i>
                                     <div style="margin-left: 4px;">Sản phẩm</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item @(controllerName == "SolutionLibrary" ? "active" : "")">
                                 <a class="menu-link" asp-controller="SolutionLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-check"></i>
                                     <div style="margin-left: 4px;">Hướng xử lý</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item @(controllerName == "UnitLibrary" ? "active" : "")">
                                 <a class="menu-link" asp-controller="UnitLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-building"></i>
                                     <div style="margin-left: 4px;">Đơn vị</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item @(controllerName == "FactoryLibrary" ? "active" : "")">
                                 <a class="menu-link" asp-controller="FactoryLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-industry"></i>
                                     <div style="margin-left: 4px;">Nhà máy</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item @(controllerName == "EnterpriseLibrary" ? "active" : "")">
                                 <a class="menu-link" asp-controller="EnterpriseLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-store"></i>
                                     <div style="margin-left: 4px;">Xưởng</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item @(controllerName == "LineLibrary" ? "active" : "")">
                                 <a class="menu-link" asp-controller="LineLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-pallet"></i>
                                     <div style="margin-left: 4px;">Chuyền</div>
@@ -152,13 +157,13 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item @(settingControllers.Contains(controllerName) ? "open" : "")">
                         <a href="javascript:void(0)" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-cog"></i>
                             <div data-i18n="Cấu hình">Cấu hình</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item">
+                            <li class="menu-item @(controllerName == "UserLibrary" ? "active" : "")">
                                 <a class="menu-link" asp-controller="UserLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-users"></i>
                                     <div style="margin-left: 4px;">Tài khoản</div>
@@ -236,7 +241,7 @@
 
                 <!-- / Navbar -->
                 <!-- Content wrapper -->
-               @RenderBody()
+                @RenderBody()
                 <!-- Content wrapper -->
             </div>
             <!-- / Layout page -->
@@ -246,7 +251,6 @@
         <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
-
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script src="~/assets/vendor/libs/jquery/jquery.js"></script>

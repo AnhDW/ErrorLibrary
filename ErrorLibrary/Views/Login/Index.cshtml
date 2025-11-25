@@ -137,7 +137,7 @@
                 onSuccess: (res) => {
                     localStorage.setItem('user', JSON.stringify(res.result.user));
                     localStorage.setItem('access_token', res.result.token);
-                    window.location.href = "/ErrorLibrary";
+                    window.location.href = "/Home";
                 }
             });
         }
