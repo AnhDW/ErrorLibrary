@@ -20,6 +20,12 @@ function autoLogoutIfExpired() {
     }
 }
 
+function handleLogout() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user');
+    window.location.href = '/Login'; // hoặc URL login của bạn
+}
+
 // Kiểm tra mỗi 1 phút
 setInterval(autoLogoutIfExpired, 60 * 1000);
 
