@@ -14,5 +14,7 @@ namespace ErrorLibrary.Services.IServices
         void Add(ErrorDetail errorDetail);
         void Update(ErrorDetail errorDetail);
         void Delete(ErrorDetail errorDetail);
+
+        Task<bool> CheckExists(int lineId, int productId, int errorId, string userId);
     }
 }

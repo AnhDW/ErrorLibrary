@@ -14,3 +14,11 @@ function renderSelectOptionsByField(data, defaultLabel = 'Chọn mục', valueFi
     return html;
 }
 
+function renderSelectErrorOptions(error, defaultLabel = 'Chọn mục') {
+    let html = `<option value="" selected disabled>${defaultLabel}</option>`;
+    error.forEach(item => {
+        html += `<option value="${item.id}">${item.code} - ${item.name}</option>`;
+    });
+    return html;
+}
+

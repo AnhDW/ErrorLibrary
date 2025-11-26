@@ -28,6 +28,11 @@ namespace ErrorLibrary.Services
             _context.ErrorDetails.Add(errorDetail);
         }
 
+        public Task<bool> CheckExists(int lineId, int productId, int errorId, string userId)
+        {
+            return _context.ErrorDetails.AnyAsync(ed => ed.LineId == lineId && ed.ProductId == productId && ed.ErrorId == errorId && ed.UserId == userId);
+        }
+
         public void Delete(ErrorDetail errorDetail)
         {
             _context.ErrorDetails.Remove(errorDetail);
