@@ -14,5 +14,6 @@ namespace ErrorLibrary.Services.IServices
         void Update(ErrorGroup errorCategory);
         void Delete(ErrorGroup errorCategory);
         Task<bool> CheckNameExists(string name);
+        Task<bool> CheckCodeExists(string code);
     }
 }

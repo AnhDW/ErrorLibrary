@@ -7,6 +7,7 @@ async function editShowErrorGroupModalHandle(id) {
     var errorGroup = await getErrorGroupById(id);
     $('#editErrorGroupId').val(errorGroup.id);
     $('#editErrorGroupName').val(errorGroup.name);
+    $('#editErrorGroupCode').val(errorGroup.code);
     $('#editErrorGroupDescription').val(errorGroup.description);
 
 }
@@ -14,9 +15,11 @@ async function editShowErrorGroupModalHandle(id) {
 function handleAddErrorGroup() {
 
     const name = $('#addErrorGroupName').val();
+    const code = $('#addErrorGroupCode').val();
     const description = $('#addErrorGroupDescription').val();
     const errorGroupData = {
         name,
+        code,
         description
     };
     addErrorGroup(errorGroupData).then(function (res) {
@@ -32,10 +35,12 @@ function handleEditErrorGroup() {
 
     const id = $('#editErrorGroupId').val();
     const name = $('#editErrorGroupName').val();
+    const code = $('#editErrorGroupCode').val();
     const description = $('#editErrorGroupDescription').val();
     const errorGroupData = {
         id,
         name,
+        code,
         description
     };
     updateErrorGroup(errorGroupData).then(function (res) {
@@ -64,6 +69,7 @@ function renderErrorGroupTable() {
             html += `
                     <tr>
                             <td>${item.name}</td>
+                            <td>${item.code}</td>
                             <td>${item.description}</td>
                             <td>
                                 <div class="dropdown">

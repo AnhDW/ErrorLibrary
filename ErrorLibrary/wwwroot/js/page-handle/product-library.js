@@ -17,6 +17,7 @@ async function editShowProductModalHandle(productId) {
     $('#editProductCode').val(product.code);
     $('#editProductPO').val(product.po);
     $('#editProductCategory').val(product.productCategoryId);
+    $('#editProductQuantity').val(product.quantity);
     $('#editProductImageUrl').val(product.imageUrl);
 }
 
@@ -24,11 +25,13 @@ function handleAddProduct() {
     const code = $('#addProductCode').val();
     const po = $('#addProductPO').val();
     const productCategoryId = $('#addProductCategory').val();
+    const quantity = $('#addProductQuantity').val();
 
     const productData = {
         code,
         po,
-        productCategoryId
+        productCategoryId,
+        quantity
     };
     addProduct(productData).then(function (res) {
         $('#addProductImage').val('');
@@ -45,12 +48,15 @@ function handleEditProduct() {
     const po = $('#editProductPO').val();
     const productCategoryId = $('#editProductCategory').val();
     const imageUrl = $('#editProductImageUrl').val();
+    const quantity = $('#editProductQuantity').val();
+
     const productData = {
         id,
         code,
         po,
         productCategoryId,
-        imageUrl
+        imageUrl,
+        quantity
     };
     console.log(productData);
     updateProduct(productData).then(function (res) {
@@ -79,6 +85,7 @@ function renderProductTable() {
                         <td>${item.code}</td>
                         <td>${item.po}</td>
                         <td>${item.productCategory.name}</td>
+                        <td>${item.quantity}</td>
                         <td><img src="${item.imageUrl}" alt="Product" style="width: 60px;" /></td>
                         <td>
                             <div class="dropdown">

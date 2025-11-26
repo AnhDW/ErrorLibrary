@@ -44,10 +44,18 @@ namespace ErrorLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> AddErrorGroup([FromBody] ErrorGroupDto errorGroupDto)
         {
+
             if (await _errorGroupService.CheckNameExists(errorGroupDto.Name))
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Tên nhóm lỗi đã tồn tại";
+                return Json(_responseDto);
+            }
+
+            if(await _errorGroupService.CheckCodeExists(errorGroupDto.Code))
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Mã nhóm lỗi đã tồn tại";
                 return Json(_responseDto);
             }
 
@@ -75,11 +83,19 @@ namespace ErrorLibrary.Controllers
             }
 
             bool isNameExists = await _errorGroupService.CheckNameExists(errorGroupDto.Name) && errorGroupDto.Name != errorGroup.Name;
+            bool isCodeExists = await _errorGroupService.CheckCodeExists(errorGroupDto.Code) && errorGroupDto.Code != errorGroup.Code;
 
             if (isNameExists)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Tên nhóm lỗi đã tồn tại";
+                return Json(_responseDto);
+            }
+
+            if (isCodeExists)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Mã nhóm lỗi đã tồn tại";
                 return Json(_responseDto);
             }
 

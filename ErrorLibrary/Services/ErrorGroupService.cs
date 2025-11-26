@@ -28,6 +28,11 @@ namespace ErrorLibrary.Services
             _context.ErrorGroups.Add(errorCategory);
         }
 
+        public async Task<bool> CheckCodeExists(string code)
+        {
+            return await _context.ErrorGroups.AnyAsync(x => x.Code == code);
+        }
+
         public async Task<bool> CheckNameExists(string name)
         {
             return await _context.ErrorGroups.AnyAsync(x => x.Name == name);
