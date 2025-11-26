@@ -52,8 +52,29 @@
             onSuccess(response);
         },
         error: function (xhr) {
-            console.error('AJAX Error:', xhr.responseText);
-            onError(xhr);
+            //console.error('AJAX Error:', xhr.responseText);
+            //onError(xhr);
+            switch (xhr.status) {
+                case 400:
+                    toastr.error("Bad Request");
+                    break;
+                case 401:
+                    toastr.error("Unauthorized - cần đăng nhập");
+                    // redirect login hoặc gọi refresh token
+                    window.location.href = "/Login";
+                    break;
+                case 403:
+                    toastr.error("Forbidden - không có quyền truy cập");
+                    break;
+                case 404:
+                    toastr.error("Not found");
+                    break;
+                case 500:
+                    toastr.error("Server lỗi - liên hệ admin");
+                    break;
+                default:
+                    toastr.error("Lỗi không xác định:", xhr.status);
+            }
         },
         complete: function () {
             if (showLoading) {

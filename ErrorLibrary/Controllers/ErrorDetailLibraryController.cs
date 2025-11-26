@@ -50,13 +50,13 @@ namespace ErrorLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> AddErrorDetail([FromForm] ErrorDetailDto errorDetailDto)
         {
-            if (await _errorDetailService.CheckExists(errorDetailDto.LineId, errorDetailDto.ProductId, errorDetailDto.ErrorId, User.GetUserId()))
+            errorDetailDto.UserId = User.GetUserId();
+            if (await _errorDetailService.CheckExists(errorDetailDto.LineId, errorDetailDto.ProductId, errorDetailDto.ErrorId, errorDetailDto.UserId))
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Đã tồn tại 'chi tiết lỗi' này trong thư viện, nếu có thay đổi hãy cập nhật";
                 return Json(_responseDto);
             }
-            errorDetailDto.UserId = User.GetUserId();
             var errorDetail = _mapper.Map<ErrorDetail>(errorDetailDto);
             if (errorDetailDto.Files.Count > 0)
             {
