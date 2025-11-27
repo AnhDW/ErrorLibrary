@@ -6,6 +6,7 @@
 function errorRowHtml(error) {
     return `<tr id="row_${error.Id}">
                         <td>${error.ErrorGroup == null ? '' : error.ErrorGroup.Name}</td>
+                        <td>${error.ProductCategory == null ? '' : error.ProductCategory.Name}</td>
                         <td>${error.Code}</td>
                         <td>${error.Name}</td>
                         <td>${error.ErrorCategory ?? ''}</td>
@@ -29,6 +30,7 @@ function errorRowHtml(error) {
 }
 //Khi có sản phẩm mới
 connection.on("errorAdded", (error) => {
+    console.log(error);
     const tbody = document.getElementById("errorTableBody");
     tbody.insertAdjacentHTML("afterbegin", errorRowHtml(error));
 });

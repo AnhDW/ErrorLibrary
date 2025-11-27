@@ -7,6 +7,8 @@
         $('#addFactorySelect').html(html);
     } else if (action === 'edit') {
         $('#editFactorySelect').prop('disabled', false);
+        $('#editEnterpriseSelect').prop('disabled', true);
+        $('#editLineSelect').prop('disabled', true);
         $('#editFactorySelect').html(html);
     }
 }
@@ -20,6 +22,7 @@ async function handleSelectFactory(value, action) {
         $('#addEnterpriseSelect').html(html);
     } else if (action === 'edit') {
         $('#editEnterpriseSelect').prop('disabled', false);
+        $('#editLineSelect').prop('disabled', true);
         $('#editEnterpriseSelect').html(html);
     }
 }
@@ -34,6 +37,20 @@ async function handleSelectEnterprise(value, action) {
     } else if (action === 'edit') {
         $('#editLineSelect').prop('disabled', false);
         $('#editLineSelect').html(html);
+    }
+}
+
+async function handleSelectError(value, action) {
+    const error = await getErrorById(value);
+    const productsByProductCategory = await getProductsByProductCategoryById(error.productCategoryId);
+    const html = renderSelectOptionsByField(productsByProductCategory, 'Chọn sản phẩm', 'id', 'code');
+
+    if (action === 'add') {
+        $('#addProductSelect').prop('disabled', false);
+        $('#addProductSelect').html(html);
+    } else if (action === 'edit') {
+        $('#editProductSelect').prop('disabled', false);
+        $('#editProductSelect').html(html);
     }
 }
 
@@ -57,8 +74,8 @@ async function editShowErrorDetailModalHandle(errorDetail) {
     const factories = await getFactories();
     const enterprises = await getEnterprises();
     const lines = await getLines();
-    const products = await getProducts();
     const errors = await getErrors();
+    const products = await getProducts();
     const unitHtml = renderSelectOptionsByField(units, 'Chọn đơn vị', 'id', 'name');
     const factoryHtml = renderSelectOptionsByField(factories, 'Chọn nhà máy', 'id', 'name');
     const enterpriseHtml = renderSelectOptionsByField(enterprises, 'Chọn xưởng', 'id', 'name');

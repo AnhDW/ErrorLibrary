@@ -5,6 +5,14 @@
     })
 }
 
+function getProductsByProductCategoryById(productCategoryId) {
+    return ajaxRequest({
+        url: '/ProductLibrary/GetProductsByProductCategoryById',
+        method: 'GET',
+        data: { productCategoryId: productCategoryId }
+    })
+}
+
 function getProductById(id) {
     return ajaxRequest({
         url: '/ProductLibrary/GetProductById',
@@ -19,6 +27,7 @@ function addProduct(productDto) {
     formData.append("productCategoryId", productDto.productCategoryId);
     formData.append("code", productDto.code);
     formData.append("po", productDto.po);
+    formData.append("quantity", productDto.quantity);
     formData.append("file", $("#addProductImage")[0].files[0]);
 
     return ajaxRequest({
@@ -37,6 +46,7 @@ function updateProduct(productDto) {
     formData.append("productCategoryId", productDto.productCategoryId);
     formData.append("code", productDto.code);
     formData.append("po", productDto.po);
+    formData.append("quantity", productDto.quantity);
     formData.append("imageUrl", productDto.imageUrl);
     formData.append("file", $("#editProductImage")[0].files[0]);
 

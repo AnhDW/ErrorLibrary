@@ -4,6 +4,7 @@ using ErrorLibrary.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ErrorLibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251127011626_addQuantityColumnForProductTbl")]
+    partial class addQuantityColumnForProductTbl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,14 +177,9 @@ namespace ErrorLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("ProductCategoryId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ErrorGroupId");
-
-                    b.HasIndex("ProductCategoryId");
 
                     b.ToTable("Errors");
                 });
@@ -576,15 +574,7 @@ namespace ErrorLibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ErrorLibrary.Entities.ProductCategory", "ProductCategory")
-                        .WithMany("Errors")
-                        .HasForeignKey("ProductCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("ErrorGroup");
-
-                    b.Navigation("ProductCategory");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.ErrorDetail", b =>
@@ -785,8 +775,6 @@ namespace ErrorLibrary.Migrations
 
             modelBuilder.Entity("ErrorLibrary.Entities.ProductCategory", b =>
                 {
-                    b.Navigation("Errors");
-
                     b.Navigation("Products");
                 });
 

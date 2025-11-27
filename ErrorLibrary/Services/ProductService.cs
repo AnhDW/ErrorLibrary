@@ -47,6 +47,13 @@ namespace ErrorLibrary.Services
             return await _context.Products.Include(x => x.ProductCategory).ToListAsync();
         }
 
+        public async Task<List<Product>> GetAllByProductCategoryId(int productCategoryId)
+        {
+            return await _context.Products
+                .Where(x => x.ProductCategoryId == productCategoryId)
+                .ToListAsync();
+        }
+
         public async Task<Product> GetById(int id)
         {
             return (await _context.Products.FindAsync(id))!;

@@ -7,6 +7,7 @@ using ErrorLibrary.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using ProductCategoryLibrary.Services.IServices;
 using System.Threading.Tasks;
 
 namespace ErrorLibrary.Controllers
@@ -15,13 +16,14 @@ namespace ErrorLibrary.Controllers
     {
         private readonly IHubContext<ErrorHub> _hubContext;
         private readonly IErrorService _errorService;
+        private readonly IProductCategoryService _productCategoryService;
         private readonly IErrorGroupService _errorGroupService;
         private readonly ISharedService _sharedService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public ErrorLibraryController(IHubContext<ErrorHub> hubContext, IErrorService errorService, IErrorGroupService errorGroupService, ISharedService sharedService, IMapper mapper, IUserService userService)
+        public ErrorLibraryController(IHubContext<ErrorHub> hubContext, IErrorService errorService, IErrorGroupService errorGroupService, ISharedService sharedService, IMapper mapper, IUserService userService, IProductCategoryService productCategoryService)
         {
             _hubContext = hubContext;
             _errorService = errorService;
@@ -30,6 +32,7 @@ namespace ErrorLibrary.Controllers
             _mapper = mapper;
             _responseDto = new ResponseDto();
             _userService = userService;
+            _productCategoryService = productCategoryService;
         }
 
         [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any)]
@@ -57,10 +60,11 @@ namespace ErrorLibrary.Controllers
         {
             var user = await _userService.GetById(User.GetUserId());
             var errorGroup =  await _errorGroupService.GetById(errorDto.ErrorGroupId);
-            if (errorGroup == null)
+            var productCategory = await _productCategoryService.GetById(errorDto.ProductCategoryId);
+            if (errorGroup == null || productCategory == null)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Không tìm thấy 'Nhóm Lỗi' này trong thư viện";
+                _responseDto.Message = errorGroup == null ? "Không tìm thấy 'Nhóm Lỗi' này trong thư viện" : "Không tìm thấy 'Chủng loại sản phẩm' này trong thư viện";
                 return Json(_responseDto);
             }
             var error = _mapper.Map<Error>(errorDto);
@@ -69,6 +73,7 @@ namespace ErrorLibrary.Controllers
             {
                 var errorDisplayDto = _mapper.Map<ErrorDisplayDto>(error);
                 errorDisplayDto.ErrorGroup = _mapper.Map<ErrorGroupDto>(errorGroup);
+                errorDisplayDto.ProductCategory = _mapper.Map<ProductCategoryDto>(productCategory);
                 await _hubContext.Clients.All.SendAsync("ErrorAdded", errorDisplayDto);
                 await _hubContext.Clients.All.SendAsync("Notification", $"{user.FullName} vừa thêm dòng 'error' có id:{error.Id}");
                 _responseDto.Message = "Thêm thành công";
@@ -85,10 +90,11 @@ namespace ErrorLibrary.Controllers
         {
             var user = await _userService.GetById(User.GetUserId());
             var errorGroup = await _errorGroupService.GetById(errorDto.ErrorGroupId);
-            if (errorGroup == null)
+            var productCategory = await _productCategoryService.GetById(errorDto.ProductCategoryId);
+            if (errorGroup == null || productCategory == null)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Không tìm thấy 'Nhóm Lỗi' này trong thư viện";
+                _responseDto.Message = errorGroup == null ? "Không tìm thấy 'Nhóm Lỗi' này trong thư viện" : "Không tìm thấy 'Chủng loại sản phẩm' này trong thư viện";
                 return Json(_responseDto);
             }
             var error = await _errorService.GetById(errorDto.Id);
@@ -103,6 +109,7 @@ namespace ErrorLibrary.Controllers
             {
                 var errorDisplayDto = _mapper.Map<ErrorDisplayDto>(error);
                 errorDisplayDto.ErrorGroup = _mapper.Map<ErrorGroupDto>(errorGroup);
+                errorDisplayDto.ProductCategory = _mapper.Map<ProductCategoryDto>(productCategory);
                 await _hubContext.Clients.All.SendAsync("ErrorUpdated", errorDisplayDto);
                 await _hubContext.Clients.All.SendAsync("Notification", $"{user.FullName} vừa cập nhật dòng 'error' có id:{error.Id}");
                 _responseDto.Message = "Cập nhật thành công";

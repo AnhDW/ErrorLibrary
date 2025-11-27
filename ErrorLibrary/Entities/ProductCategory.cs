@@ -7,5 +7,6 @@
         public string? Description { get; set; }
 
         public List<Product> Products { get; set; } = new List<Product>();
+        public List<Error> Errors { get; set; } = new List<Error>();
     }
 }

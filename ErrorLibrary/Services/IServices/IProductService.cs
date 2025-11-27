@@ -9,6 +9,7 @@ namespace ErrorLibrary.Services.IServices
     {
         Task<PagedList<ProductDto>> GetAll(ProductParams productParams);
         Task<List<Product>> GetAll();
+        Task<List<Product>> GetAllByProductCategoryId(int productCategoryId);
         Task<Product> GetById(int id);
         void Add(Product product);
         void Update(Product product);

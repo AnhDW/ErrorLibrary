@@ -7,6 +7,7 @@
         $('#addFactorySelect').html(html);
     } else if (action === 'edit') {
         $('#editFactorySelect').prop('disabled', false);
+        $('#editEnterpriseSelect').prop('disabled', true);
         $('#editFactorySelect').html(html);
     }
 }
@@ -40,7 +41,7 @@ async function editShowLineModalHandle(line) {
     const factoryHtml = renderSelectOptions(factories, 'Chọn nhà máy');
     const enterpriseHtml = renderSelectOptions(enterprises, 'Chọn xưởng');
 
-    $('#editUniteSelect').html(unitHtml);
+    $('#editUnitSelect').html(unitHtml);
     $('#editFactorySelect').html(factoryHtml);
     $('#editEnterpriseSelect').html(enterpriseHtml);
     $('#editUnitSelect').val(line.enterprise.factory.unitId);

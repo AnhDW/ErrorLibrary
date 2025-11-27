@@ -36,6 +36,15 @@
                                     </select>
                                 </div>
                                 <div class="mb-2">
+                                    <label for="addProductCategorySelect" class="form-label">Chủng loại sản phẩm</label>
+                                    <select class="form-select" id="addProductCategorySelect" aria-label="Default select example">
+                                        <option selected="">Chọn chủng loại sản phẩm</option>
+                                        <option value="1">Chủng loại sản phẩm 1</option>
+                                        <option value="2">Chủng loại sản phẩm 2</option>
+                                        <option value="3">Chủng loại sản phẩm 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
                                     <label for="addErrorCode" class="form-label">Mã lỗi</label>
                                     <input type="text" class="form-control" id="addErrorCode" placeholder="Nhập mã lỗi" aria-describedby="defaultFormControlHelp">
                                 </div>
@@ -80,6 +89,15 @@
                                         <option value="3">Nhóm lỗi 3</option>
                                     </select>
                                 </div>
+                                <div class="mb-2">
+                                    <label for="editProductCategorySelect" class="form-label">Chủng loại sản phẩm</label>
+                                    <select class="form-select" id="editProductCategorySelect" aria-label="Default select example">
+                                        <option selected="">Chọn chủng loại sản phẩm</option>
+                                        <option value="1">Chủng loại sản phẩm 1</option>
+                                        <option value="2">Chủng loại sản phẩm 2</option>
+                                        <option value="3">Chủng loại sản phẩm 3</option>
+                                    </select>
+                                </div>
                                 <input type="text" class="form-control" id="editErrorId" placeholder="ID" aria-describedby="defaultFormControlHelp" hidden>
 
                                 <div class="mb-2">
@@ -113,6 +131,7 @@
                     <thead>
                         <tr>
                             <th>Nhóm lỗi</th>
+                            <th>Chủng loại sản phẩm</th>
                             <th>Mã lỗi</th>
                             <th>Tên lỗi</th>
                             <th>Loại lỗi</th>
@@ -135,6 +154,7 @@
     <script src="~/js/page-handle/error-library.js"></script>
     <script src="~/js/request/error-request.js"></script>
     <script src="~/js/request/error-group-request.js"></script>
+    <script src="~/js/request/product-category-request.js"></script>
     <script src="~/js/signal-r/error-hub.js"></script>
 
 }

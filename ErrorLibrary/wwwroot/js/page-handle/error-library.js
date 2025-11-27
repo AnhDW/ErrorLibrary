@@ -1,38 +1,50 @@
 ﻿//handle
 async function addShowErrorModalHandle() {
-    const data = await getErrorGroups();
-    const html = renderSelectOptions(data, 'Chọn nhóm lỗi');
-    $('#addErrorGroupSelect').html(html);
+    const errorGroups = await getErrorGroups();
+    const errorGroupsHtml = renderSelectOptions(errorGroups, 'Chọn nhóm lỗi');
+    const productCategories = await getProductCategories();
+    const productCategoriesHtml = renderSelectOptions(productCategories, 'Chọn chủng loại sản phẩm');
+
+    $('#addErrorGroupSelect').html(errorGroupsHtml);
+    $('#addProductCategorySelect').html(productCategoriesHtml);
 }
 
 async function editShowErrorModalHandle(errId) {
-    const data = await getErrorGroups();
-    const html = renderSelectOptions(data, 'Chọn nhóm lỗi');
+    const errorGroups = await getErrorGroups();
+    const errorGroupsHtml = renderSelectOptions(errorGroups, 'Chọn nhóm lỗi');
+    const productCategories = await getProductCategories();
+    const productCategoriesHtml = renderSelectOptions(productCategories, 'Chọn chủng loại sản phẩm');
 
     var err = await getErrorById(errId);
-    $('#editErrorGroupSelect').html(html);
+    console.log(err);
+    $('#editErrorGroupSelect').html(errorGroupsHtml);
+    $('#editProductCategorySelect').html(productCategoriesHtml);
+
     $('#editErrorId').val(err.id);
     $('#editErrorCode').val(err.code);
     $('#editErrorName').val(err.name);
     $('#editErrorType').val(err.errorCategory);
     $('#editErrorGroupSelect').val(err.errorGroupId);
+    $('#editProductCategorySelect').val(err.productCategoryId);
 
 }
 
 function handleAddError() {
     const errorGroupId = $('#addErrorGroupSelect').val();
+    const productCategoryId = $('#addProductCategorySelect').val();
     const code = $('#addErrorCode').val();
     const name = $('#addErrorName').val();
     const errorCategory = $('#addErrorType').val();
 
     const errorData = {
         errorGroupId,
+        productCategoryId,
         code,
         name,
         errorCategory
     };
     addError(errorData).then(function (res) {
-        $('#addModel').modal('hide');
+        //$('#addModel').modal('hide');
         //renderErrorTable();
     }).catch(function (err) {
         console.error(err);
@@ -43,6 +55,7 @@ function handleAddError() {
 function handleEditError() {
     const id = $('#editErrorId').val();
     const errorGroupId = $('#editErrorGroupSelect').val();
+    const productCategoryId = $('#editProductCategorySelect').val();
     const code = $('#editErrorCode').val();
     const name = $('#editErrorName').val();
     const errorCategory = $('#editErrorType').val();
@@ -50,6 +63,7 @@ function handleEditError() {
     const errorData = {
         id,
         errorGroupId,
+        productCategoryId,
         code,
         name,
         errorCategory
@@ -80,6 +94,7 @@ function renderErrorTable() {
             html += `
                     <tr id="row_${item.id}">
                         <td>${item.errorGroup == null ? '' : item.errorGroup.name}</td>
+                        <td>${item.productCategory == null ? '' : item.productCategory.name}</td>
                         <td>${item.code}</td>
                         <td>${item.name}</td>
                         <td>${item.errorCategory ?? ''}</td>

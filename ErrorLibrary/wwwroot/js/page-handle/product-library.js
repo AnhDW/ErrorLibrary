@@ -33,6 +33,7 @@ function handleAddProduct() {
         productCategoryId,
         quantity
     };
+    console.log(productData);
     addProduct(productData).then(function (res) {
         $('#addProductImage').val('');
         $('#addModel').modal('hide');

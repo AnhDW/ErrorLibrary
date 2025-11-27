@@ -32,18 +32,18 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetProductCategories()
-        {
-            var productCategories = await _productCategoryService.GetAll();
-            return Json(_mapper.Map<List<ProductCategoryDto>>(productCategories));
-        }
-
         public async Task<IActionResult> GetProducts()
         {
             var products = await _productService.GetAll();
             return Json(_mapper.Map<List<ProductDto>>(products));
         }
 
+        public async Task<IActionResult> GetProductsByProductCategoryById(int productCategoryId)
+        {
+            var products = await _productService.GetAllByProductCategoryId(productCategoryId);
+            return Json(_mapper.Map<List<ProductDto>>(products));
+        }
+        
         public async Task<IActionResult> GetProductById(int id)
         {
             var product = await _productService.GetById(id);

@@ -42,6 +42,11 @@ namespace ErrorLibrary.Data
                 .WithMany(x=>x.Errors)
                 .HasForeignKey(x=>x.ErrorGroupId);
 
+            builder.Entity<Error>()
+                .HasOne(x => x.ProductCategory)
+                .WithMany(x => x.Errors)
+                .HasForeignKey(x => x.ProductCategoryId);
+
             builder.Entity<Line>()
                 .HasOne(x=>x.Enterprise)
                 .WithMany(x=>x.Lines)
