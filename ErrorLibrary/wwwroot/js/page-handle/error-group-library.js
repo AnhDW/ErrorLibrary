@@ -12,6 +12,19 @@ async function editShowErrorGroupModalHandle(id) {
 
 }
 
+function setErrorGroupCode(elementId) {
+    const currentCode = $('#' + elementId).val();
+    if (currentCode) {
+        generateErrorGroupCodeWhenUpdate(currentCode).then(function (res) {
+            $('#' + elementId).val(res.result);
+        });
+    } else {
+        generateErrorGroupCode().then(function (res) {
+            $('#' + elementId).val(res.result);
+        });
+    }
+}
+
 function handleAddErrorGroup() {
 
     const name = $('#addErrorGroupName').val();

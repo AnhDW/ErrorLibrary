@@ -61,9 +61,35 @@ namespace ErrorLibrary.Services
                 .ToListAsync();
         }
 
+        public async Task<List<string>> GetAllCodesByErrorGroupId(int errorGroupId)
+        {
+            return await _context.Errors
+                .Where(x => x.ErrorGroupId == errorGroupId)
+                .Select(x => x.Code)
+                .ToListAsync();
+        }
+
         public async Task<Error> GetById(int id)
         {
             return (await _context.Errors.FirstOrDefaultAsync(x=>x.Id==id))!;
+        }
+
+        public string GetNextErrorCode(string errorGroupCode, List<string> existingCodes)
+        {
+            var numbers = existingCodes
+                .Select(code => code.Substring(errorGroupCode.Length))
+                .Where(num => int.TryParse(num, out _))
+                .Select(int.Parse)
+                .OrderBy(x => x)
+                .ToList();
+            int nextNumber = 1;
+            foreach (var n in numbers)
+            {
+                if (n == nextNumber) nextNumber++;
+                else break; // gặp số bị hổng → lấy số đó
+            }
+
+            return $"{errorGroupCode}{nextNumber}";
         }
 
         public void Update(Error error)

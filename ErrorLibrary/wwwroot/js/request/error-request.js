@@ -13,6 +13,25 @@ function getErrorById(id) {
     })
 }
 
+function generateErrorCode(errorGroupId) {
+    return ajaxRequest({
+        url: '/ErrorLibrary/GenerateErrorCode',
+        method: 'GET',
+        data: { errorGroupId: errorGroupId }
+    })
+}
+
+function generateErrorCodeWhenUpdate(errorGroupId, currentCode) {
+    return ajaxRequest({
+        url: '/ErrorLibrary/GenerateErrorCodeWhenUpdate',
+        method: 'GET',
+        data: {
+            errorGroupId: errorGroupId,
+            currentCode: currentCode
+        }
+    })
+}
+
 function addError(errorDto) {
     return ajaxRequest({
         url: '/ErrorLibrary/AddError',

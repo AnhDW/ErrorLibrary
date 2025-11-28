@@ -55,7 +55,27 @@ namespace ErrorLibrary.Controllers
             var error = await _errorService.GetById(id);
             return Json(_mapper.Map<ErrorDisplayDto>(error));
         }
-        
+
+
+        public async Task<IActionResult> GenerateErrorCode(int errorGroupId)
+        {
+            var errorGroup = await _errorGroupService.GetById(errorGroupId);
+            var existingCodes = await _errorService.GetAllCodesByErrorGroupId(errorGroup.Id);
+            var nextCode = _errorService.GetNextErrorCode(errorGroup.Code, existingCodes);
+            _responseDto.Result = nextCode;
+            return Json(_responseDto);
+        }
+
+        public async Task<IActionResult> GenerateErrorCodeWhenUpdate(int errorGroupId, string currentCode)
+        {
+            var errorGroup = await _errorGroupService.GetById(errorGroupId);
+            var existingCodes = await _errorService.GetAllCodesByErrorGroupId(errorGroup.Id);
+            existingCodes = existingCodes.Where(x => x != currentCode).ToList();
+            var nextCode = _errorService.GetNextErrorCode(errorGroup.Code, existingCodes);
+            _responseDto.Result = nextCode;
+            return Json(_responseDto);
+        }
+
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddError([FromBody] ErrorDto errorDto)

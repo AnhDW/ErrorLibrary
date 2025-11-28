@@ -31,7 +31,7 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetErrorGroups()
         {
             var errorGroups = await _errorGroupService.GetAll();
-            return Json(_mapper.Map<List<ErrorGroupDto>>(errorGroups));
+            return Json(_mapper.Map<List<ErrorGroupDto>>(errorGroups.OrderBy(x=>x.Code)));
 
         }
 
@@ -44,7 +44,16 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GenerateErrorGroupCode()
         {
             var existingCodes = await _errorGroupService.GetAllCodes();
-            var nextCode = _errorGroupService.GetNextErrorCode(existingCodes);
+            var nextCode = _errorGroupService.GetNextErrorGroupCode(existingCodes);
+            _responseDto.Result = nextCode;
+            return Json(_responseDto);
+        }
+
+        public async Task<IActionResult> GenerateErrorGroupCodeWhenUpdate(string currentCode)
+        {
+            var existingCodes = await _errorGroupService.GetAllCodes();
+            existingCodes = existingCodes.Where(x => x != currentCode).ToList();
+            var nextCode = _errorGroupService.GetNextErrorGroupCode(existingCodes);
             _responseDto.Result = nextCode;
             return Json(_responseDto);
         }

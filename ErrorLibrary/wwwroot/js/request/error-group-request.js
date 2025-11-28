@@ -20,6 +20,14 @@ function generateErrorGroupCode() {
     })
 }
 
+function generateErrorGroupCodeWhenUpdate(currentCode) {
+    return ajaxRequest({
+        url: '/ErrorGroupLibrary/GenerateErrorGroupCodeWhenUpdate',
+        method: 'GET',
+        data: { currentCode: currentCode }
+    })
+}
+
 function addErrorGroup(errorGroupDto) {
     return ajaxRequest({
         url: '/ErrorGroupLibrary/AddErrorGroup',

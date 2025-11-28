@@ -14,7 +14,7 @@ namespace ErrorLibrary.Services.IServices
         void Update(ErrorGroup errorGroup);
         void Delete(ErrorGroup errorGroup);
         string GetLetterFromNumber(int number);
-        string GetNextErrorCode(List<string> existingCodes);
+        string GetNextErrorGroupCode(List<string> existingCodes);
         Task<List<string>> GetAllCodes();
         Task<int> Count();
         Task<bool> CheckNameExists(string name);

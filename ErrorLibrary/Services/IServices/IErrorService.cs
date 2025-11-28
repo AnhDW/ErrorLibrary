@@ -13,6 +13,8 @@ namespace ErrorLibrary.Services.IServices
         void Add(Error error);
         void Update(Error error);
         void Delete(Error error);
+        string GetNextErrorCode(string errorGroupCode, List<string> existingCodes);
+        Task<List<string>> GetAllCodesByErrorGroupId(int errorGroupId);
         Task<bool> CheckNameExists(string name);
         Task<bool> CheckCodeExists(string code);
     }

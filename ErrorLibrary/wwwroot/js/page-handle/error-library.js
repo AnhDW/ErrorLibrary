@@ -35,6 +35,26 @@ async function editShowErrorModalHandle(errId) {
     $('#editProductCategorySelect').val(err.productCategoryId);
 
 }
+function setErrorCode(elementId) {
+    const currentCode = $('#' + elementId).val();
+    if (currentCode) {
+        const errorGroupId = $('#editErrorGroupSelect').val();
+        if (!errorGroupId || errorGroupId === '') {
+            toastr.warning('Vui lòng chọn nhóm lỗi trước khi tạo mã lỗi');
+        }
+        generateErrorCodeWhenUpdate(errorGroupId, currentCode).then(function (res) {
+            $('#' + elementId).val(res.result);
+        });
+    } else {
+        const errorGroupId = $('#addErrorGroupSelect').val();
+        if (!errorGroupId || errorGroupId === '') {
+            toastr.warning('Vui lòng chọn nhóm lỗi trước khi tạo mã lỗi');
+        }
+        generateErrorCode(errorGroupId).then(function (res) {
+            $('#' + elementId).val(res.result);
+        });
+    }
+}
 
 function handleAddError() {
     const errorGroupId = $('#addErrorGroupSelect').val();

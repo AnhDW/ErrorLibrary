@@ -84,7 +84,7 @@ namespace ErrorLibrary.Services
             return letters;
         }
 
-        public string GetNextErrorCode(List<string> existingCodes)
+        public string GetNextErrorGroupCode(List<string> existingCodes)
         {
             int index = 0;
             while (true)

@@ -55,7 +55,13 @@
                                 </div>
                                 <div class="mb-2">
                                     <label for="addErrorCode" class="form-label">Mã lỗi</label>
-                                    <input type="text" class="form-control" id="addErrorCode" placeholder="Nhập mã lỗi" aria-describedby="defaultFormControlHelp">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="addErrorCode" placeholder="Nhập mã lỗi">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="setErrorCode('addErrorCode')">Tạo mã tự động</button>
+                                    </div>
+                                    <small class="form-text text-muted">
+                                        Mã lỗi sẽ tự sinh theo (mã nhóm lỗi + thứ tự lỗi) A1, A2, … , B1, C1, … nếu bạn nhấn vào nút Tạo mã tự động.
+                                    </small>
                                 </div>
                                 <div class="mb-2">
                                     <label for="addErrorName" class="form-label">Tên lỗi</label>
@@ -116,7 +122,13 @@
 
                                 <div class="mb-2">
                                     <label for="editErrorCode" class="form-label">Mã lỗi</label>
-                                    <input type="text" class="form-control" id="editErrorCode" placeholder="Nhập mã lỗi" aria-describedby="defaultFormControlHelp">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="editErrorCode" placeholder="Nhập mã lỗi">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="setErrorCode('editErrorCode')">Tạo mã tự động</button>
+                                    </div>
+                                    <small class="form-text text-muted">
+                                        Mã lỗi sẽ tự sinh theo (mã nhóm lỗi + thứ tự lỗi) A1, A2, … , B1, … , C1, … nếu bạn nhấn vào nút Tạo mã tự động.
+                                    </small>
                                 </div>
                                 <div class="mb-2">
                                     <label for="editErrorName" class="form-label">Tên lỗi</label>
