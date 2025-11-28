@@ -21,6 +21,8 @@ $(document).ready(function () {
         renderLinesTable();
     } else if (path.includes('/ErrorGroupLibrary')) {
         renderErrorGroupTable();
+    } else if (path.includes('/ErrorCategoryLibrary')) {
+        renderErrorCategoryTable();
     } else if (path.includes('/ProductCategoryLibrary')) {
         renderProductCategoryTable();
     } else if (path.includes('/ErrorDetailLibrary')) {

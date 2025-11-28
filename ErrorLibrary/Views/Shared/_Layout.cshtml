@@ -1,7 +1,7 @@
 ﻿@{
     var controllerName = ViewContext.RouteData.Values["controller"].ToString();
     var featureControllers = new[] { "Home", "ErrorDetailLibrary" };
-    var libraryControllers = new[] { "ErrorLibrary", "ErrorGroupLibrary", "ProductCategoryLibrary", "ProductLibrary", "SolutionLibrary", "UnitLibrary", "FactoryLibrary", "EnterpriseLibrary", "LineLibrary" };
+    var libraryControllers = new[] { "ErrorLibrary", "ErrorGroupLibrary", "ErrorCategoryLibrary", "ProductCategoryLibrary", "ProductLibrary", "SolutionLibrary", "UnitLibrary", "FactoryLibrary", "EnterpriseLibrary", "LineLibrary" };
     var settingControllers = new[] { "UserLibrary" };
 }
 <!DOCTYPE html>
@@ -111,6 +111,12 @@
                                 <a class="menu-link" asp-controller="ErrorGroupLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-exclamation"></i>
                                     <div style="margin-left: 4px;">Nhóm lỗi</div>
+                                </a>
+                            </li>
+                            <li class="menu-item @(controllerName == "ErrorCategoryLibrary" ? "active" : "")">
+                                <a class="menu-link" asp-controller="ErrorCategoryLibrary" asp-action="Index">
+                                    <i class="menu-icon tf-icons fa-solid fa-exclamation"></i>
+                                    <div style="margin-left: 4px;">Loại lỗi</div>
                                 </a>
                             </li>
                             <li class="menu-item @(controllerName == "ProductCategoryLibrary" ? "active" : "")">

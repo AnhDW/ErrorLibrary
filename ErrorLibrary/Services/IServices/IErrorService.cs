@@ -13,5 +13,7 @@ namespace ErrorLibrary.Services.IServices
         void Add(Error error);
         void Update(Error error);
         void Delete(Error error);
+        Task<bool> CheckNameExists(string name);
+        Task<bool> CheckCodeExists(string code);
     }
 }

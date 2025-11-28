@@ -13,6 +13,7 @@ namespace ErrorLibrary.Data
         public DbSet<Solution> Solutions { get; set; }
         public DbSet<Error> Errors { get; set; }
         public DbSet<ErrorGroup> ErrorGroups { get; set; }
+        public DbSet<ErrorCategory> ErrorCategories { get; set; }
 
         public DbSet<Line> Lines { get; set; }
         public DbSet<Enterprise> Enterprises { get; set; }
@@ -41,6 +42,11 @@ namespace ErrorLibrary.Data
                 .HasOne(x=>x.ErrorGroup)
                 .WithMany(x=>x.Errors)
                 .HasForeignKey(x=>x.ErrorGroupId);
+
+            builder.Entity<Error>()
+                .HasOne(x=>x.ErrorCategory)
+                .WithMany(x=>x.Errors)
+                .HasForeignKey(x=>x.ErrorCategoryId);
 
             builder.Entity<Error>()
                 .HasOne(x => x.ProductCategory)

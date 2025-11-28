@@ -13,6 +13,13 @@ function getErrorGroupById(id) {
     })
 }
 
+function generateErrorGroupCode() {
+    return ajaxRequest({
+        url: '/ErrorGroupLibrary/GenerateErrorGroupCode',
+        method: 'GET',
+    })
+}
+
 function addErrorGroup(errorGroupDto) {
     return ajaxRequest({
         url: '/ErrorGroupLibrary/AddErrorGroup',

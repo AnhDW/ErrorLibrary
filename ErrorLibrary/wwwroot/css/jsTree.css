@@ -87,7 +87,9 @@
     margin-top: 47px;
     margin-bottom: 100px;
 }
-    /* Giới hạn chiều cao của ảnh để không bị thumbnail che */
-    /*#inline-gallery-container .lg-inner {
-        height: calc(100% - 100px);
-    }*/
+
+table td {
+    white-space: normal;
+    word-wrap: break-word;
+}
+

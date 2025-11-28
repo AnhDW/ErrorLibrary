@@ -7,6 +7,7 @@ using ErrorLibrary.Helper;
 using ErrorLibrary.Helper.EntityParams;
 using ErrorLibrary.Services.IServices;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ErrorLibrary.Services
 {
@@ -23,9 +24,9 @@ namespace ErrorLibrary.Services
             _mapper = mapper;
         }
 
-        public void Add(ErrorGroup errorCategory)
+        public void Add(ErrorGroup errorGroup)
         {
-            _context.ErrorGroups.Add(errorCategory);
+            _context.ErrorGroups.Add(errorGroup);
         }
 
         public async Task<bool> CheckCodeExists(string code)
@@ -38,18 +39,23 @@ namespace ErrorLibrary.Services
             return await _context.ErrorGroups.AnyAsync(x => x.Name == name);
         }
 
-        public void Delete(ErrorGroup errorCategory)
+        public async Task<int> Count()
         {
-            _context.ErrorGroups.Remove(errorCategory);
+            return await _context.ErrorGroups.CountAsync();
         }
 
-        public async Task<PagedList<ErrorGroupDto>> GetAll(ErrorGroupParams errorCategoryParams)
+        public void Delete(ErrorGroup errorGroup)
+        {
+            _context.ErrorGroups.Remove(errorGroup);
+        }
+
+        public async Task<PagedList<ErrorGroupDto>> GetAll(ErrorGroupParams errorGroupParams)
         {
             var query = _context.ErrorGroups.AsQueryable();
             return await PagedList<ErrorGroupDto>.CreateAsync(
                 query.AsNoTracking().ProjectTo<ErrorGroupDto>(_mapper.ConfigurationProvider),
-                errorCategoryParams.PageNumber,
-                errorCategoryParams.PageSize);
+                errorGroupParams.PageNumber,
+                errorGroupParams.PageSize);
         }
 
         public async Task<List<ErrorGroup>> GetAll()
@@ -57,14 +63,42 @@ namespace ErrorLibrary.Services
             return await _context.ErrorGroups.ToListAsync();
         }
 
+        public async Task<List<string>> GetAllCodes()
+        {
+            return await _context.ErrorGroups.Select(eg => eg.Code).ToListAsync();
+        }
+
         public async Task<ErrorGroup> GetById(int id)
         {
             return (await _context.ErrorGroups.FindAsync(id))!;
         }
 
-        public void Update(ErrorGroup errorCategory)
+        public string GetLetterFromNumber(int number)
         {
-            _context.ErrorGroups.Update(errorCategory);
+            string letters = "";
+            while (number >= 0)
+            {
+                letters = (char)(number % 26 + 'A') + letters;
+                number = number / 26 - 1;
+            }
+            return letters;
+        }
+
+        public string GetNextErrorCode(List<string> existingCodes)
+        {
+            int index = 0;
+            while (true)
+            {
+                string code = GetLetterFromNumber(index);
+                if (!existingCodes.Contains(code))
+                    return code;
+                index++;
+            }
+        }
+
+        public void Update(ErrorGroup errorGroup)
+        {
+            _context.ErrorGroups.Update(errorGroup);
         }
     }
 }

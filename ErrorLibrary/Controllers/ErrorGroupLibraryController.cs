@@ -41,6 +41,14 @@ namespace ErrorLibrary.Controllers
             return Json(_mapper.Map<ErrorGroupDto>(errorGroup));
         }
 
+        public async Task<IActionResult> GenerateErrorGroupCode()
+        {
+            var existingCodes = await _errorGroupService.GetAllCodes();
+            var nextCode = _errorGroupService.GetNextErrorCode(existingCodes);
+            _responseDto.Result = nextCode;
+            return Json(_responseDto);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddErrorGroup([FromBody] ErrorGroupDto errorGroupDto)
         {

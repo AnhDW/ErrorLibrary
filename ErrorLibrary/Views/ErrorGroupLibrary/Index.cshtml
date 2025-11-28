@@ -31,7 +31,13 @@
                                 </div>
                                 <div class="mb-2">
                                     <label for="addErrorGroupCode" class="form-label">Mã nhóm lỗi</label>
-                                    <input type="text" class="form-control" id="addErrorGroupCode" placeholder="Nhập mã nhóm lỗi" aria-describedby="defaultFormControlHelp">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="addErrorGroupCode" placeholder="Nhập mã nhóm lỗi">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="generateErrorGroupCode()">Tạo mã tự động</button>
+                                    </div>
+                                    <small class="form-text text-muted">
+                                        Mã nhóm lỗi sẽ tự sinh theo thứ tự A, B, C, … Z, AA, AB, … AZ, BA, … nếu bạn nhấn vào nút Tạo mã tự động.
+                                    </small>
                                 </div>
                                 <div class="mb-2">
                                     <label for="addErrorGroupDescription" class="form-label">Nhập mô tả</label>
@@ -68,8 +74,14 @@
                                     <input type="text" class="form-control" id="editErrorGroupName" placeholder="Nhập tên nhóm lỗi" aria-describedby="defaultFormControlHelp">
                                 </div>
                                 <div class="mb-2">
-                                    <label for="editErrorGroupCode" class="form-label">Mã nhóm lỗi</label>
-                                    <input type="text" class="form-control" id="editErrorGroupCode" placeholder="Nhập mã nhóm lỗi" aria-describedby="defaultFormControlHelp">
+                                    <label for="addErrorGroupCode" class="form-label">Mã nhóm lỗi</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="addErrorGroupCode" placeholder="Nhập mã nhóm lỗi">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="generateErrorGroupCode()">Tạo mã tự động</button>
+                                    </div>
+                                    <small class="form-text text-muted">
+                                        Mã nhóm lỗi sẽ tự sinh theo thứ tự A, B, C, … Z, AA, AB, … AZ, BA, … nếu bạn nhấn vào nút Tạo mã tự động.
+                                    </small>
                                 </div>
                                 <div class="mb-2">
                                     <label for="editErrorGroupDescription" class="form-label">Nhập mô tả</label>

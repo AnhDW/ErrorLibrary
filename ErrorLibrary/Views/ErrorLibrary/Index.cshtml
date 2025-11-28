@@ -36,6 +36,15 @@
                                     </select>
                                 </div>
                                 <div class="mb-2">
+                                    <label for="addErrorCategorySelect" class="form-label">Loại lỗi</label>
+                                    <select class="form-select" id="addErrorCategorySelect" aria-label="Default select example">
+                                        <option selected="">Chọn chủng loại lỗi</option>
+                                        <option value="1">Loại lỗi 1</option>
+                                        <option value="1">Loại lỗi 2</option>
+                                        <option value="1">Loại lỗi 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
                                     <label for="addProductCategorySelect" class="form-label">Chủng loại sản phẩm</label>
                                     <select class="form-select" id="addProductCategorySelect" aria-label="Default select example">
                                         <option selected="">Chọn chủng loại sản phẩm</option>
@@ -51,10 +60,6 @@
                                 <div class="mb-2">
                                     <label for="addErrorName" class="form-label">Tên lỗi</label>
                                     <input type="text" class="form-control" id="addErrorName" placeholder="Nhập tên lỗi" aria-describedby="defaultFormControlHelp">
-                                </div>
-                                <div class="mb-2">
-                                    <label for="addErrorType" class="form-label">Loại lỗi</label>
-                                    <input type="text" class="form-control" id="addErrorType" placeholder="Nhập loại lỗi" aria-describedby="defaultFormControlHelp">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -90,6 +95,15 @@
                                     </select>
                                 </div>
                                 <div class="mb-2">
+                                    <label for="editErrorCategorySelect" class="form-label">Loại lỗi</label>
+                                    <select class="form-select" id="editErrorCategorySelect" aria-label="Default select example">
+                                        <option selected="">Chọn chủng loại lỗi</option>
+                                        <option value="1">Loại lỗi 1</option>
+                                        <option value="1">Loại lỗi 2</option>
+                                        <option value="1">Loại lỗi 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
                                     <label for="editProductCategorySelect" class="form-label">Chủng loại sản phẩm</label>
                                     <select class="form-select" id="editProductCategorySelect" aria-label="Default select example">
                                         <option selected="">Chọn chủng loại sản phẩm</option>
@@ -107,10 +121,6 @@
                                 <div class="mb-2">
                                     <label for="editErrorName" class="form-label">Tên lỗi</label>
                                     <input type="text" class="form-control" id="editErrorName" placeholder="Nhập tên lỗi" aria-describedby="defaultFormControlHelp">
-                                </div>
-                                <div class="mb-2">
-                                    <label for="editErrorType" class="form-label">Loại lỗi</label>
-                                    <input type="text" class="form-control" id="editErrorType" placeholder="Nhập loại lỗi" aria-describedby="defaultFormControlHelp">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -131,10 +141,10 @@
                     <thead>
                         <tr>
                             <th>Nhóm lỗi</th>
+                            <th>Loại lỗi</th>
                             <th>Chủng loại sản phẩm</th>
                             <th>Mã lỗi</th>
                             <th>Tên lỗi</th>
-                            <th>Loại lỗi</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -154,6 +164,7 @@
     <script src="~/js/page-handle/error-library.js"></script>
     <script src="~/js/request/error-request.js"></script>
     <script src="~/js/request/error-group-request.js"></script>
+    <script src="~/js/request/error-category-request.js"></script>
     <script src="~/js/request/product-category-request.js"></script>
     <script src="~/js/signal-r/error-hub.js"></script>
 

@@ -2,22 +2,28 @@
 async function addShowErrorModalHandle() {
     const errorGroups = await getErrorGroups();
     const errorGroupsHtml = renderSelectOptions(errorGroups, 'Chọn nhóm lỗi');
+    const errorCategories = await getErrorCategories();
+    const errorCategoriesHtml = renderSelectOptions(errorCategories, 'Chọn loại lỗi');
     const productCategories = await getProductCategories();
     const productCategoriesHtml = renderSelectOptions(productCategories, 'Chọn chủng loại sản phẩm');
-
+    
     $('#addErrorGroupSelect').html(errorGroupsHtml);
+    $('#addErrorCategorySelect').html(errorCategoriesHtml);
     $('#addProductCategorySelect').html(productCategoriesHtml);
 }
 
 async function editShowErrorModalHandle(errId) {
     const errorGroups = await getErrorGroups();
     const errorGroupsHtml = renderSelectOptions(errorGroups, 'Chọn nhóm lỗi');
+    const errorCategories = await getErrorCategories();
+    const errorCategoriesHtml = renderSelectOptions(errorCategories, 'Chọn loại lỗi');
     const productCategories = await getProductCategories();
     const productCategoriesHtml = renderSelectOptions(productCategories, 'Chọn chủng loại sản phẩm');
 
     var err = await getErrorById(errId);
     console.log(err);
     $('#editErrorGroupSelect').html(errorGroupsHtml);
+    $('#editErrorCategorySelect').html(errorCategoriesHtml);
     $('#editProductCategorySelect').html(productCategoriesHtml);
 
     $('#editErrorId').val(err.id);
@@ -25,65 +31,66 @@ async function editShowErrorModalHandle(errId) {
     $('#editErrorName').val(err.name);
     $('#editErrorType').val(err.errorCategory);
     $('#editErrorGroupSelect').val(err.errorGroupId);
+    $('#editErrorCategorySelect').val(err.errorCategoryId);
     $('#editProductCategorySelect').val(err.productCategoryId);
 
 }
 
 function handleAddError() {
     const errorGroupId = $('#addErrorGroupSelect').val();
+    const errorCategoryId = $('#addErrorCategorySelect').val();
     const productCategoryId = $('#addProductCategorySelect').val();
     const code = $('#addErrorCode').val();
     const name = $('#addErrorName').val();
-    const errorCategory = $('#addErrorType').val();
 
     const errorData = {
         errorGroupId,
+        errorCategoryId,
         productCategoryId,
         code,
-        name,
-        errorCategory
+        name
     };
     addError(errorData).then(function (res) {
         //$('#addModel').modal('hide');
         //renderErrorTable();
+        resToastr(res);
     }).catch(function (err) {
-        console.error(err);
-        alert('Có lỗi xảy ra khi cập nhật');
+        toastr.error(err);
     });
 }
 
 function handleEditError() {
     const id = $('#editErrorId').val();
     const errorGroupId = $('#editErrorGroupSelect').val();
+    const errorCategoryId = $('#editErrorCategorySelect').val();
     const productCategoryId = $('#editProductCategorySelect').val();
     const code = $('#editErrorCode').val();
     const name = $('#editErrorName').val();
-    const errorCategory = $('#editErrorType').val();
 
     const errorData = {
         id,
         errorGroupId,
+        errorCategoryId,
         productCategoryId,
         code,
-        name,
-        errorCategory
+        name
     };
     console.log(errorData);
     updateError(errorData).then(function (res) {
         $('#editModel').modal('hide');
         //renderErrorTable();
+        resToastr(res);
     }).catch(function (err) {
-        console.error(err);
-        alert('Có lỗi xảy ra khi cập nhật');
+        toastr.error(err);
     });
 }
 
 function handleDeleteError(id) {
     deleteError(id).then(function (res) {
         //renderErrorTable();
+        resToastr(res);
     }).catch(function (err) {
-        console.error(err);
-        alert('Có lỗi xảy ra khi cập nhật');
+        toastr.error(err);
     });
 }
 
@@ -94,10 +101,10 @@ function renderErrorTable() {
             html += `
                     <tr id="row_${item.id}">
                         <td>${item.errorGroup == null ? '' : item.errorGroup.name}</td>
+                        <td>${item.errorCategory == null ? '' : item.errorCategory.name}</td>
                         <td>${item.productCategory == null ? '' : item.productCategory.name}</td>
                         <td>${item.code}</td>
                         <td>${item.name}</td>
-                        <td>${item.errorCategory ?? ''}</td>
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

@@ -18,12 +18,13 @@ namespace ErrorLibrary.Controllers
         private readonly IErrorService _errorService;
         private readonly IProductCategoryService _productCategoryService;
         private readonly IErrorGroupService _errorGroupService;
+        private readonly IErrorCategoryService _errorCategoryService;
         private readonly ISharedService _sharedService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public ErrorLibraryController(IHubContext<ErrorHub> hubContext, IErrorService errorService, IErrorGroupService errorGroupService, ISharedService sharedService, IMapper mapper, IUserService userService, IProductCategoryService productCategoryService)
+        public ErrorLibraryController(IHubContext<ErrorHub> hubContext, IErrorService errorService, IErrorGroupService errorGroupService, ISharedService sharedService, IMapper mapper, IUserService userService, IProductCategoryService productCategoryService, IErrorCategoryService errorCategoryService)
         {
             _hubContext = hubContext;
             _errorService = errorService;
@@ -33,6 +34,7 @@ namespace ErrorLibrary.Controllers
             _responseDto = new ResponseDto();
             _userService = userService;
             _productCategoryService = productCategoryService;
+            _errorCategoryService = errorCategoryService;
         }
 
         [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any)]
@@ -60,6 +62,7 @@ namespace ErrorLibrary.Controllers
         {
             var user = await _userService.GetById(User.GetUserId());
             var errorGroup =  await _errorGroupService.GetById(errorDto.ErrorGroupId);
+            var errorCategory = await _errorCategoryService.GetById(errorDto.ErrorCategoryId ?? -1);
             var productCategory = await _productCategoryService.GetById(errorDto.ProductCategoryId);
             if (errorGroup == null || productCategory == null)
             {
@@ -67,15 +70,31 @@ namespace ErrorLibrary.Controllers
                 _responseDto.Message = errorGroup == null ? "Không tìm thấy 'Nhóm Lỗi' này trong thư viện" : "Không tìm thấy 'Chủng loại sản phẩm' này trong thư viện";
                 return Json(_responseDto);
             }
+
+            if (await _errorService.CheckNameExists(errorDto.Name))
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Tên lỗi đã tồn tại";
+                return Json(_responseDto);
+            }
+
+            if (await _errorService.CheckCodeExists(errorDto.Code))
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Mã lỗi đã tồn tại";
+                return Json(_responseDto);
+            }
+            
             var error = _mapper.Map<Error>(errorDto);
             _errorService.Add(error);
             if (await _sharedService.SaveAllChanges())
             {
                 var errorDisplayDto = _mapper.Map<ErrorDisplayDto>(error);
                 errorDisplayDto.ErrorGroup = _mapper.Map<ErrorGroupDto>(errorGroup);
+                errorDisplayDto.ErrorCategory = _mapper.Map<ErrorCategoryDto>(errorCategory);
                 errorDisplayDto.ProductCategory = _mapper.Map<ProductCategoryDto>(productCategory);
                 await _hubContext.Clients.All.SendAsync("ErrorAdded", errorDisplayDto);
-                await _hubContext.Clients.All.SendAsync("Notification", $"{user.FullName} vừa thêm dòng 'error' có id:{error.Id}");
+                await _hubContext.Clients.All.SendAsync("Notification", $"{user.FullName} vừa thêm dòng 'error':{error.Code}");
                 _responseDto.Message = "Thêm thành công";
                 return Json(_responseDto);
             }
@@ -90,6 +109,7 @@ namespace ErrorLibrary.Controllers
         {
             var user = await _userService.GetById(User.GetUserId());
             var errorGroup = await _errorGroupService.GetById(errorDto.ErrorGroupId);
+            var errorCategory = await _errorCategoryService.GetById(errorDto.ErrorCategoryId ?? -1);
             var productCategory = await _productCategoryService.GetById(errorDto.ProductCategoryId);
             if (errorGroup == null || productCategory == null)
             {
@@ -104,14 +124,33 @@ namespace ErrorLibrary.Controllers
                 _responseDto.Message = "Không tìm thấy 'Lỗi' này trong thư viện";
                 return Json(_responseDto);
             }
+
+            bool isNameExists = await _errorService.CheckNameExists(errorDto.Name) && errorDto.Name != error.Name;
+            bool isCodeExists = await _errorService.CheckCodeExists(errorDto.Code) && errorDto.Code != error.Code;
+
+            if (isNameExists)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Tên lỗi đã tồn tại";
+                return Json(_responseDto);
+            }
+
+            if (isCodeExists)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Mã lỗi đã tồn tại";
+                return Json(_responseDto);
+            }
+
             _errorService.Update(_mapper.Map(errorDto, error));
             if (await _sharedService.SaveAllChanges())
             {
                 var errorDisplayDto = _mapper.Map<ErrorDisplayDto>(error);
                 errorDisplayDto.ErrorGroup = _mapper.Map<ErrorGroupDto>(errorGroup);
+                errorDisplayDto.ErrorCategory = _mapper.Map<ErrorCategoryDto>(errorCategory);
                 errorDisplayDto.ProductCategory = _mapper.Map<ProductCategoryDto>(productCategory);
                 await _hubContext.Clients.All.SendAsync("ErrorUpdated", errorDisplayDto);
-                await _hubContext.Clients.All.SendAsync("Notification", $"{user.FullName} vừa cập nhật dòng 'error' có id:{error.Id}");
+                await _hubContext.Clients.All.SendAsync("Notification", $"{user.FullName} vừa cập nhật dòng 'error':{error.Code}");
                 _responseDto.Message = "Cập nhật thành công";
                 return Json(_responseDto);
             }
@@ -136,7 +175,7 @@ namespace ErrorLibrary.Controllers
             if (await _sharedService.SaveAllChanges())
             {
                 await _hubContext.Clients.All.SendAsync("ErrorDeleted", id);
-                await _hubContext.Clients.All.SendAsync("Notification", $"{user.FullName} vừa xóa dòng 'error' có id:{error.Id}");
+                await _hubContext.Clients.All.SendAsync("Notification", $"{user.FullName} vừa xóa dòng 'error':{error.Code}");
                 _responseDto.Message = "Xóa thành công";
                 return Json(_responseDto);
             }

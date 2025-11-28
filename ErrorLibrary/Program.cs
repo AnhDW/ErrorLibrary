@@ -31,6 +31,7 @@ builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IErrorService, ErrorService>();
 builder.Services.AddScoped<IErrorGroupService, ErrorGroupService>();
+builder.Services.AddScoped<IErrorCategoryService, ErrorCategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
 builder.Services.AddScoped<ISolutionService, SolutionService>();

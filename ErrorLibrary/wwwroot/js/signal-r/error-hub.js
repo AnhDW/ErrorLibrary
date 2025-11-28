@@ -6,10 +6,10 @@
 function errorRowHtml(error) {
     return `<tr id="row_${error.Id}">
                         <td>${error.ErrorGroup == null ? '' : error.ErrorGroup.Name}</td>
+                        <td>${error.ErrorCategory == null ? '' : error.ErrorCategory.Name}</td>
                         <td>${error.ProductCategory == null ? '' : error.ProductCategory.Name}</td>
                         <td>${error.Code}</td>
                         <td>${error.Name}</td>
-                        <td>${error.ErrorCategory ?? ''}</td>
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

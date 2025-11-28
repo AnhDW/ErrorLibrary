@@ -28,6 +28,16 @@ namespace ErrorLibrary.Services
             _context.Errors.Add(error);
         }
 
+        public async Task<bool> CheckCodeExists(string code)
+        {
+            return await _context.Errors.AnyAsync(x => x.Code == code);
+        }
+
+        public async Task<bool> CheckNameExists(string name)
+        {
+            return await _context.Errors.AnyAsync(y => y.Name == name);
+        }
+
         public void Delete(Error error)
         {
             _context.Errors.Remove(error);
@@ -46,6 +56,7 @@ namespace ErrorLibrary.Services
         {
             return await _context.Errors
                 .Include(x => x.ErrorGroup)
+                .Include(x => x.ErrorCategory)
                 .Include(x => x.ProductCategory)
                 .ToListAsync();
         }
