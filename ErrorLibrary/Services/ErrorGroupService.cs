@@ -39,11 +39,6 @@ namespace ErrorLibrary.Services
             return await _context.ErrorGroups.AnyAsync(x => x.Name == name);
         }
 
-        public async Task<int> Count()
-        {
-            return await _context.ErrorGroups.CountAsync();
-        }
-
         public void Delete(ErrorGroup errorGroup)
         {
             _context.ErrorGroups.Remove(errorGroup);
@@ -71,6 +66,24 @@ namespace ErrorLibrary.Services
         public async Task<ErrorGroup> GetById(int id)
         {
             return (await _context.ErrorGroups.FindAsync(id))!;
+        }
+
+        public async Task<ErrorGroup> GetByName(string name)
+        {
+            return (await _context.ErrorGroups.FirstOrDefaultAsync(x => x.Name == name))!;
+        }
+
+        public async Task<List<ErrorGroup>> GetByNames(List<string> names)
+        {
+            return await _context.ErrorGroups.Where(x=> names.Contains(x.Name)).ToListAsync();
+        }
+
+        public async Task<int> GetIdByName(string name)
+        {
+            return await _context.ErrorGroups
+                .Where(x => x.Name == name)
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
         }
 
         public string GetLetterFromNumber(int number)

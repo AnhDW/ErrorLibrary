@@ -48,8 +48,20 @@
         contentType: isGet ? 'application/x-www-form-urlencoded; charset=UTF-8' : contentType,
         processData: isGet ? true : processData,
         headers: headers,
-        success: function (response) {
-            onSuccess(response);
+        success: function (response, status, xhr) {
+            const paginationHeader = xhr.getResponseHeader('Pagination');
+            let pagination = null;
+
+            if (paginationHeader) {
+                try {
+                    pagination = JSON.parse(paginationHeader);
+                    console.log("📌 Pagination:", pagination);
+                    response.paginationHeader = pagination;
+                } catch (e) {
+                    console.error("Lỗi parse Pagination:", e);
+                }
+            }
+            onSuccess(response, pagination);
         },
         error: function (xhr) {
             //console.error('AJAX Error:', xhr.responseText);

@@ -7,7 +7,7 @@ namespace ErrorLibrary.Services.IServices
 {
     public interface IErrorService
     {
-        Task<PagedList<ErrorDto>> GetAll(ErrorParams errorParams);
+        Task<PagedList<ErrorDisplayDto>> GetAll(ErrorParams errorParams);
         Task<List<Error>> GetAll();
         Task<Error> GetById(int id);
         void Add(Error error);
@@ -15,7 +15,9 @@ namespace ErrorLibrary.Services.IServices
         void Delete(Error error);
         string GetNextErrorCode(string errorGroupCode, List<string> existingCodes);
         Task<List<string>> GetAllCodesByErrorGroupId(int errorGroupId);
-        Task<bool> CheckNameExists(string name);
+        Task<bool> CheckNameExists(int errorGroupId, int errorCategoryId, int productCategoryId, string name);
         Task<bool> CheckCodeExists(string code);
+
+        void DeleteRange(List<Error> errors);
     }
 }

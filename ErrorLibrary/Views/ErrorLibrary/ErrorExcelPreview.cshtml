@@ -1,0 +1,151 @@
+﻿@model PreviewErrorExcelDto
+<p class="text-center text-warning"><i class="fas fa-exclamation-triangle"></i></i> Kiểm tra lại trước khi thêm</p>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="error-group-tab" data-bs-toggle="tab" data-bs-target="#errorGroup" type="button" role="tab" aria-controls="home" aria-selected="true">
+            Nhóm lỗi
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="product-category-tab" data-bs-toggle="tab" data-bs-target="#productCategory" type="button" role="tab" aria-controls="home" aria-selected="true">
+            Chủng loại sản phẩm
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="error-category-tab" data-bs-toggle="tab" data-bs-target="#errorCategory" type="button" role="tab" aria-controls="home" aria-selected="true">
+            Loại lỗi
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="error-tab" data-bs-toggle="tab" data-bs-target="#error" type="button" role="tab" aria-controls="home" aria-selected="true">
+            Lỗi
+        </button>
+    </li>
+</ul>
+<div class="tab-content"  id="myTabContent">
+    <div class="tab-pane fade show active" id="errorGroup" role="tabpanel" aria-labelledby="error-group-tab">
+        <div class="card mt-4">
+            <div style="max-height:480px;" class="table-responsive text-nowrap">
+                <table id="previewErrorTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mã nhóm lỗi</th>
+                            <th>Tên nhóm lỗi</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewErrorTableBody" class="table-border-bottom-0" >
+                        @foreach (var item in Model.ErrorGroups)
+                        {
+                            <tr>
+                                <td>@item.Code</td>
+                                <td>@item.Name</td>
+                                <td><small class="badge text-wrap bg-info">Đã tồn tại trong thư viện</small></td>
+                            </tr>
+                        }
+                        @foreach (var item in Model.ErrorGroupNamesExcept)
+                        {
+                            <tr>
+                                <td>Không xác định</td>
+                                <td>@item</td>
+                                <td><small class="badge text-wrap bg-danger">Mới</small></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade show" id="productCategory" role="tabpanel" aria-labelledby="product-category-tab">
+        <div class="card mt-4">
+            <div style="max-height:480px;" class="table-responsive text-nowrap">
+                <table id="previewErrorTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tên chủng loại</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewErrorTableBody" class="table-border-bottom-0 ">
+                        @foreach (var item in Model.ProductCategories)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td><small class="badge text-wrap bg-info">Đã tồn tại trong thư viện</small></td>
+
+                            </tr>
+                        }
+                        @foreach (var item in Model.ProductCategoryNamesExcept)
+                        {
+                            <tr>
+                                <td>@item</td>
+                                <td><small class="badge text-wrap bg-danger">Mới</small></td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade show" id="errorCategory" role="tabpanel" aria-labelledby="error-category-tab">
+        <div class="card mt-4">
+            <div style="max-height:480px;" class="table-responsive text-nowrap">
+                <table id="previewErrorTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tên loại lỗi</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewErrorTableBody" class="table-border-bottom-0 ">
+                        @foreach (var item in Model.ErrorCategories)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td><small class="badge text-wrap bg-info">Đã tồn tại trong thư viện</small></td>
+                            </tr>
+                        }
+                        @foreach (var item in Model.ErrorCategoryNamesExcept)
+                        {
+                            <tr>
+                                <td>@item</td>
+                                <td><small class="badge text-wrap bg-danger">Mới</small></td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade show" id="error" role="tabpanel" aria-labelledby="error-tab">
+        <div class="card mt-4">
+            <div style="max-height:480px;" class="table-responsive text-nowrap">
+                <table id="previewErrorTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nhóm lỗi</th>
+                            <th>Chủng loại sản phẩm</th>
+                            <th>Tên lỗi</th>
+                            <th>Loại lỗi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewErrorTableBody" class="table-border-bottom-0 ">
+                        @foreach (var item in Model.Excel)
+                        {
+                            <tr>
+                                <td>@item.ErrorGroup</td>
+                                <td>@item.ProductCategory</td>
+                                <td>@item.ErrorName</td>
+                                <td>@item.ErrorCategory</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+

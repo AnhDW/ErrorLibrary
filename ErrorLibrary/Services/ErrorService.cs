@@ -7,6 +7,7 @@ using ErrorLibrary.Helper;
 using ErrorLibrary.Helper.EntityParams;
 using ErrorLibrary.Services.IServices;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace ErrorLibrary.Services
 {
@@ -33,9 +34,14 @@ namespace ErrorLibrary.Services
             return await _context.Errors.AnyAsync(x => x.Code == code);
         }
 
-        public async Task<bool> CheckNameExists(string name)
+        public async Task<bool> CheckNameExists(int errorGroupId, int errorCategoryId, int productCategoryId, string name)
         {
-            return await _context.Errors.AnyAsync(y => y.Name == name);
+            return await _context.Errors.AnyAsync(x =>
+                x.ErrorGroupId == errorGroupId &&
+                x.ErrorCategoryId == errorCategoryId &&
+                x.ProductCategoryId == productCategoryId &&
+                x.Name == name
+            );
         }
 
         public void Delete(Error error)
@@ -43,11 +49,45 @@ namespace ErrorLibrary.Services
             _context.Errors.Remove(error);
         }
 
-        public async Task<PagedList<ErrorDto>> GetAll(ErrorParams errorParams)
+        public void DeleteRange(List<Error> errors)
         {
-            var query = _context.Errors.AsQueryable();
-            return await PagedList<ErrorDto>.CreateAsync(
-                query.AsNoTracking().ProjectTo<ErrorDto>(_mapper.ConfigurationProvider),
+            _context.Errors.RemoveRange(errors);
+        }
+
+        public async Task<PagedList<ErrorDisplayDto>> GetAll(ErrorParams errorParams)
+        {
+            var query = _context.Errors
+                //.OrderBy(x => Regex.Match(x.Code, @"^[A-Za-z]+").Value)
+                //.ThenBy(x => int.Parse(Regex.Match(x.Code, @"\d+").Value))
+                .AsQueryable();
+            
+            if (errorParams.ErrorGroupIds.Any())
+            {
+                query = query.Where(x => errorParams.ErrorGroupIds.Contains(x.ErrorGroupId));
+            }
+            
+            if (errorParams.ErrorCategoryIds.Any())
+            {
+                query = query.Where(x => errorParams.ErrorCategoryIds.Contains(x.ErrorCategoryId ?? -1));
+            }
+            
+            if (errorParams.ProductCategoryIds.Any())
+            {
+                query = query.Where(x => errorParams.ProductCategoryIds.Contains(x.ProductCategoryId));
+            }
+
+            if (!string.IsNullOrEmpty(errorParams.Code))
+            {
+                query = query.Where(x => x.Code.Contains(errorParams.Code));
+            }
+
+            if (!string.IsNullOrEmpty(errorParams.Name))
+            {
+                query = query.Where(x => x.Name.Contains(errorParams.Name));
+            }
+
+            return await PagedList<ErrorDisplayDto>.CreateAsync(
+                query.AsNoTracking().ProjectTo<ErrorDisplayDto>(_mapper.ConfigurationProvider),
                 errorParams.PageNumber,
                 errorParams.PageSize);
         }

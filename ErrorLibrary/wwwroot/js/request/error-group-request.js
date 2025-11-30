@@ -54,3 +54,12 @@ function deleteErrorGroup(id) {
         showLoading: true
     })
 }
+
+function addErrorGroupByNames(names) {
+    return ajaxRequest({
+        url: '/ErrorGroupLibrary/AddErrorGroupByNames',
+        method: 'POST',
+        data: names,
+        showLoading: true
+    })
+}

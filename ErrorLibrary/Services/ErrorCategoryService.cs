@@ -57,6 +57,19 @@ namespace ErrorLibrary.Services
             return (await _context.ErrorCategories.FindAsync(id))!;
         }
 
+        public async Task<List<ErrorCategory>> GetByNames(List<string> names)
+        {
+            return await _context.ErrorCategories.Where(x => names.Contains(x.Name)).ToListAsync();
+        }
+
+        public async Task<int> GetIdByName(string name)
+        {
+            return await _context.ErrorCategories
+                .Where(x => x.Name == name)
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
+        }
+
         public void Update(ErrorCategory errorCategory)
         {
             _context.ErrorCategories.Update(errorCategory);

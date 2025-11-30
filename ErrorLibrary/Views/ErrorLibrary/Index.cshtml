@@ -13,6 +13,52 @@
                     data-bs-target="#addModel" onclick="addShowErrorModalHandle()">
                 <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
             </button>
+
+            <button type="button" class="btn rounded-pill ui-bg-overlay" data-bs-toggle="modal"
+                    data-bs-target="#importModel">
+                <i class="bx bx-import"></i>
+            </button>
+            <!-- Import Modal -->
+            <div class="modal fade" id="importModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered " role="document">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Import</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="mb-2 col-md-6">
+                                        <label for="importErrors" class="form-label">Chọn file</label>
+                                        <input class="form-control" type="file" id="importErrors">
+                                    </div>
+                                    <div class="mb-2 col-md-6">
+                                        <label for="sheetSelect" class="form-label">Work sheet</label>
+                                        <select class="form-select" id="sheetSelect" aria-label="Default select example">
+                                            <option selected="">Chọn work sheet</option>
+                                            <option value="1">Work sheet 1</option>
+                                            <option value="2">Work sheet 2</option>
+                                            <option value="3">Work sheet 3</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="importErrorsExcel()">Import</button>
+                            </div>
+                        </form>
+                        <div id="preview" ></div>
+                    </div>
+                </div>
+            </div>
             <!-- Add Modal -->
             <div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -57,10 +103,10 @@
                                     <label for="addErrorCode" class="form-label">Mã lỗi</label>
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="addErrorCode" placeholder="Nhập mã lỗi">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="setErrorCode('addErrorCode')">Tạo mã tự động</button>
+                                        <button type="button" class="btn btn-outline-secondary" onclick="setAddErrorCode()">Tạo mã tự động</button>
                                     </div>
                                     <small class="form-text text-muted">
-                                        Mã lỗi sẽ tự sinh theo (mã nhóm lỗi + thứ tự lỗi) A1, A2, … , B1, C1, … nếu bạn nhấn vào nút Tạo mã tự động.
+                                        Mã lỗi sẽ tự sinh theo <span class="text-primary">( mã nhóm lỗi + thứ tự lỗi )</span> A1, A2, … , B1, … , C1, …
                                     </small>
                                 </div>
                                 <div class="mb-2">
@@ -124,10 +170,10 @@
                                     <label for="editErrorCode" class="form-label">Mã lỗi</label>
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="editErrorCode" placeholder="Nhập mã lỗi">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="setErrorCode('editErrorCode')">Tạo mã tự động</button>
+                                        <button type="button" class="btn btn-outline-secondary" onclick="setEditErrorCode()">Tạo mã tự động</button>
                                     </div>
                                     <small class="form-text text-muted">
-                                        Mã lỗi sẽ tự sinh theo (mã nhóm lỗi + thứ tự lỗi) A1, A2, … , B1, … , C1, … nếu bạn nhấn vào nút Tạo mã tự động.
+                                        Mã lỗi sẽ tự sinh theo <span class="text-primary">( mã nhóm lỗi + thứ tự lỗi )</span> A1, A2, … , B1, … , C1, …
                                     </small>
                                 </div>
                                 <div class="mb-2">
@@ -148,7 +194,7 @@
         </div>
         <!-- Striped Rows -->
         <div class="card mt-4">
-            <div style="min-height:200px;" class="table-responsive text-nowrap">
+            <div style="min-height:200px;max-height:500px;" class="table-responsive text-nowrap scrollspy-example">
                 <table id="errorTable" class="table table-striped">
                     <thead>
                         <tr>
@@ -160,10 +206,14 @@
                             <th>Hành động</th>
                         </tr>
                     </thead>
-                    <tbody id="errorTableBody" class="table-border-bottom-0">
+                    <tbody id="errorTableBody" class="table-border-bottom-0" style="">
                     </tbody>
                 </table>
             </div>
+            <!-- UI PAGINATION -->
+            <nav aria-label="Page navigation" class="mt-3">
+                <ul class="pagination justify-content-center" id="errorPagination"></ul>
+            </nav>
         </div>
         <!--/ Striped Rows -->
     </div>

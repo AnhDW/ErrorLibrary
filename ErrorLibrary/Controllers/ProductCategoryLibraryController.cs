@@ -116,5 +116,35 @@ namespace ErrorLibrary.Controllers
             _responseDto.Message = "Lỗi trong quá trình xóa";
             return Json(_responseDto);
         }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddProductCategoryByNames([FromBody] List<string> names)
+        {
+            if (!names.Any())
+            {
+                _responseDto.Message = "Không có chủng loại sản phẩm mới nào được thêm";
+                return Json(_responseDto);
+            }
+            var existingProductCategories = await _productCategoryService.GetByNames(names);
+            var existingNames = existingProductCategories.Select(x => x.Name).ToList();
+            var newNames = names.Except(existingNames).ToList();
+            foreach (var name in newNames)
+            {
+                var newProductCategory = new ProductCategory
+                {
+                    Name = name,
+                    Description = string.Empty
+                };
+                _productCategoryService.Add(newProductCategory);
+            }
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Message = $"Đã thêm {newNames.Count} nhóm lỗi thành công";
+                return Json(_responseDto);
+            }
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Lỗi trong quá trình thêm";
+            return Json(_responseDto);
+        }
     }
 }

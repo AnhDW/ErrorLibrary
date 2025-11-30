@@ -1,4 +1,8 @@
-﻿//handle
+﻿var errorParams = {
+    pageNumber: 1, pageSize: 10
+}
+
+//handle
 async function addShowErrorModalHandle() {
     const errorGroups = await getErrorGroups();
     const errorGroupsHtml = renderSelectOptions(errorGroups, 'Chọn nhóm lỗi');
@@ -35,25 +39,30 @@ async function editShowErrorModalHandle(errId) {
     $('#editProductCategorySelect').val(err.productCategoryId);
 
 }
-function setErrorCode(elementId) {
-    const currentCode = $('#' + elementId).val();
-    if (currentCode) {
-        const errorGroupId = $('#editErrorGroupSelect').val();
-        if (!errorGroupId || errorGroupId === '') {
-            toastr.warning('Vui lòng chọn nhóm lỗi trước khi tạo mã lỗi');
-        }
-        generateErrorCodeWhenUpdate(errorGroupId, currentCode).then(function (res) {
-            $('#' + elementId).val(res.result);
-        });
-    } else {
-        const errorGroupId = $('#addErrorGroupSelect').val();
-        if (!errorGroupId || errorGroupId === '') {
-            toastr.warning('Vui lòng chọn nhóm lỗi trước khi tạo mã lỗi');
-        }
-        generateErrorCode(errorGroupId).then(function (res) {
-            $('#' + elementId).val(res.result);
-        });
+
+function setAddErrorCode() {
+    const errorGroupId = $('#addErrorGroupSelect').val();
+    if (!errorGroupId || errorGroupId === '') {
+        toastr.warning('Vui lòng chọn nhóm lỗi trước khi tạo mã lỗi');
+        return;
     }
+    generateErrorCode(errorGroupId).then(function (res) {
+        $('#addErrorCode').val(res.result);
+    });
+}
+
+async function setEditErrorCode() {
+    var errorId = $('#editErrorId').val();
+    var error = await getErrorById(errorId);
+    console.log(error);
+    const errorGroupId = $('#editErrorGroupSelect').val();
+    if (!errorGroupId || errorGroupId === '') {
+        toastr.warning('Vui lòng chọn nhóm lỗi trước khi tạo mã lỗi');
+        return;
+    }
+    generateErrorCodeWhenUpdate(errorGroupId, error.code).then(function (res) {
+        $('#editErrorCode').val(res.result);
+    });
 }
 
 function handleAddError() {
@@ -115,34 +124,109 @@ function handleDeleteError(id) {
 }
 
 function renderErrorTable() {
-    getErrors().then(function (data) {
+    getErrorsPagination(errorParams).then(function (res) {
         let html = '';
-        data.forEach(item => {
+        res.result.forEach(item => {
             html += `
-                    <tr id="row_${item.id}">
-                        <td>${item.errorGroup == null ? '' : item.errorGroup.name}</td>
-                        <td>${item.errorCategory == null ? '' : item.errorCategory.name}</td>
-                        <td>${item.productCategory == null ? '' : item.productCategory.name}</td>
-                        <td>${item.code}</td>
-                        <td>${item.name}</td>
-                        <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                                data-bs-target="#editModel" onclick="editShowErrorModalHandle(${item.id})">
-                                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                                        </button>
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteError(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
+                <tr id="row_${item.id}">
+                    <td>${item.errorGroup == null ? '' : item.errorGroup.name}</td>
+                    <td>${item.errorCategory == null ? '' : item.errorCategory.name}</td>
+                    <td>${item.productCategory == null ? '' : item.productCategory.name}</td>
+                    <td>${item.code}</td>
+                    <td>${item.name}</td>
+                    <td>
+                        <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                            data-bs-target="#editModel" onclick="editShowErrorModalHandle(${item.id})">
+                                        <i class="bx bx-edit-alt me-1"></i> Sửa
+                                    </button>
+                                    <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteError(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
 
-                                </div>
                             </div>
-                        </td>
-                    </tr>
-                    `;
+                        </div>
+                    </td>
+                </tr>
+                `;
         });
         $('#errorTableBody').html(html);
+        renderPagination(res.paginationHeader, 'errorChangePage', 'errorPagination');
     });
 }
+
+function errorChangePage(page) {
+    errorParams.pageNumber = page;
+    renderErrorTable();
+}
+
+//import handle
+document.getElementById('importErrors').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+        const data = new Uint8Array(event.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+
+        // lấy danh sách sheet
+        const sheetNames = workbook.SheetNames;
+
+        let html = `<option value="" selected disabled>Chọn work sheet</option>`;
+        sheetNames.forEach((item, index) => {
+            html += `<option value="${index}">${item}</option>`;
+        });
+
+        $('#sheetSelect').html(html);
+
+    };
+
+    reader.readAsArrayBuffer(file);
+});
+
+var errorGroupNamesExcept = [];
+var productCategoryNamesExcept = [];
+var errorCategoryNamesExcept = [];
+var errorExcel = [];
+
+document.getElementById('sheetSelect').addEventListener('change', function (e) {
+    const worksheetIndex = $('#sheetSelect').val();
+    const importModel = $('#importModel');
+    const importModelChild = importModel.find('.modal-dialog');
+    importModelChild.addClass('modal-xl');
+
+    console.log(importModel);
+    importErrorsToExcel({ worksheetIndex: worksheetIndex }).then(async function (res) {
+        var previewErrorExcel = res.result;
+        var html = await errorExcelPreview(previewErrorExcel);
+        $('#preview').html(html);
+        errorGroupNamesExcept = previewErrorExcel.errorGroupNamesExcept;
+        productCategoryNamesExcept = previewErrorExcel.productCategoryNamesExcept;
+        errorCategoryNamesExcept = previewErrorExcel.errorCategoryNamesExcept;
+        errorExcel = previewErrorExcel.excel;
+    });
+});
+
+async function importErrorsExcel() {
+    const worksheetIndex = $('#sheetSelect').val();
+    if (!worksheetIndex) {
+        toastr.warning('Bạn chưa chọn work sheet');
+        return;
+    }
+    const results = await Promise.allSettled([
+        addErrorGroupByNames(errorGroupNamesExcept),
+        addProductCategoryByNames(productCategoryNamesExcept),
+        addErrorCategoryByNames(errorCategoryNamesExcept)
+    ]);
+    resToastr(results[0]);
+    resToastr(results[1]);
+    resToastr(results[2]);
+    // format lại file excel theo error và insert ở đây
+    //await deleteAll();
+    addErrorsToErrorExcelDto(errorExcel).then(function (res) {
+        console.log(res);
+    });
+}
+

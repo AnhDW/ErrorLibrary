@@ -39,3 +39,12 @@ function deleteErrorCategory(id) {
         showLoading: true
     })
 }
+
+function addErrorCategoryByNames(names) {
+    return ajaxRequest({
+        url: '/ErrorCategoryLibrary/AddErrorCategoryByNames',
+        method: 'POST',
+        data: names,
+        showLoading: true
+    })
+}

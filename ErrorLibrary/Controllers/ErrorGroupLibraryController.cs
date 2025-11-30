@@ -21,7 +21,7 @@ namespace ErrorLibrary.Controllers
             _mapper = mapper;
             _responseDto = new ResponseDto();
         }
-        
+
         [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any)]
         public IActionResult Index()
         {
@@ -31,7 +31,7 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetErrorGroups()
         {
             var errorGroups = await _errorGroupService.GetAll();
-            return Json(_mapper.Map<List<ErrorGroupDto>>(errorGroups.OrderBy(x=>x.Code)));
+            return Json(_mapper.Map<List<ErrorGroupDto>>(errorGroups.OrderBy(x => x.Code)));
 
         }
 
@@ -69,7 +69,7 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            if(await _errorGroupService.CheckCodeExists(errorGroupDto.Code))
+            if (await _errorGroupService.CheckCodeExists(errorGroupDto.Code))
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Mã nhóm lỗi đã tồn tại";
@@ -148,6 +148,40 @@ namespace ErrorLibrary.Controllers
 
             _responseDto.IsSuccess = false;
             _responseDto.Message = "Lỗi trong quá trình xóa";
+            return Json(_responseDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddErrorGroupByNames([FromBody] List<string> names)
+        {
+            if (!names.Any())
+            {
+                _responseDto.Message = "Không có nhóm lỗi mới nào được thêm";
+                return Json(_responseDto);
+            }
+            var existingErrorGroups = await _errorGroupService.GetByNames(names);
+            var existingNames = existingErrorGroups.Select(x => x.Name).ToList();
+            var newNames = names.Except(existingNames).ToList();
+            var existingCodes = await _errorGroupService.GetAllCodes();
+            foreach (var name in newNames)
+            {
+                var nextCode = _errorGroupService.GetNextErrorGroupCode(existingCodes);
+                var newErrorGroup = new ErrorGroup
+                {
+                    Name = name,
+                    Code = nextCode,
+                    Description = string.Empty
+                };
+                existingCodes.Add(nextCode);
+                _errorGroupService.Add(newErrorGroup);
+            }
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Message = $"Đã thêm {newNames.Count} nhóm lỗi thành công";
+                return Json(_responseDto);
+            }
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Lỗi trong quá trình thêm";
             return Json(_responseDto);
         }
     }

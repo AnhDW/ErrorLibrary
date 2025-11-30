@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
-using ErrorLibrary.Services;
 using ErrorLibrary.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -120,5 +119,34 @@ namespace ErrorLibrary.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> AddErrorCategoryByNames([FromBody] List<string> names)
+        {
+            if(!names.Any())
+            {
+                _responseDto.Message = "Không có loại lỗi mới nào được thêm";
+                return Json(_responseDto);
+            }
+            var existingErrorCategories = await _errorCategoryService.GetByNames(names);
+            var existingNames = existingErrorCategories.Select(x => x.Name).ToList();
+            var newNames = names.Except(existingNames).ToList();
+            foreach (var name in newNames)
+            {
+                var newErrorCategory = new ErrorCategory
+                {
+                    Name = name,
+                    Description = string.Empty
+                };
+                _errorCategoryService.Add(newErrorCategory);
+            }
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Message = $"Đã thêm {newNames.Count} nhóm lỗi thành công";
+                return Json(_responseDto);
+            }
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Lỗi trong quá trình thêm";
+            return Json(_responseDto);
+        }
     }
 }

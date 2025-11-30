@@ -2,12 +2,17 @@
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Extensions;
+using ErrorLibrary.Helper.EntityParams;
 using ErrorLibrary.Services.IServices;
 using ErrorLibrary.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using OfficeOpenXml;
 using ProductCategoryLibrary.Services.IServices;
+using SixLabors.ImageSharp.ColorSpaces;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ErrorLibrary.Controllers
@@ -43,11 +48,28 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ErrorExcelPreview([FromBody] PreviewErrorExcelDto previewErrorExcelDto)
+        {
+            return PartialView("ErrorExcelPreview", previewErrorExcelDto);
+        }
+
+        public async Task<IActionResult> GetErrorsPagination([FromQuery] ErrorParams errorParams)
+        {
+            var result = await _errorService.GetAll(errorParams);
+            Response.AddPaginationHeader(new Helper.PaginationHeader(result.CurrentPage, result.PageSize, result.TotalCount, result.TotalPages));
+            _responseDto.Result = result;
+            return Json(_responseDto);
+        }
+
         //[ResponseCache(Duration = 10, Location = ResponseCacheLocation.Client)]
         public async Task<IActionResult> GetErrors()
         {
             var errors = await _errorService.GetAll();
-            return Json(_mapper.Map<List<ErrorDisplayDto>>(errors));
+            _responseDto.Result = _mapper.Map<List<ErrorDisplayDto>>(
+                errors.OrderBy(x => Regex.Match(x.Code, @"^[A-Za-z]+").Value)
+                .ThenBy(x => int.Parse(Regex.Match(x.Code, @"\d+").Value)));
+            return Json(_responseDto);
         }
 
         public async Task<IActionResult> GetErrorById(int id)
@@ -55,7 +77,6 @@ namespace ErrorLibrary.Controllers
             var error = await _errorService.GetById(id);
             return Json(_mapper.Map<ErrorDisplayDto>(error));
         }
-
 
         public async Task<IActionResult> GenerateErrorCode(int errorGroupId)
         {
@@ -91,7 +112,7 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            if (await _errorService.CheckNameExists(errorDto.Name))
+            if (await _errorService.CheckNameExists(errorDto.ErrorGroupId, errorDto.ErrorCategoryId ?? -1, errorDto.ProductCategoryId, errorDto.Name))
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Tên lỗi đã tồn tại";
@@ -145,7 +166,8 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            bool isNameExists = await _errorService.CheckNameExists(errorDto.Name) && errorDto.Name != error.Name;
+            bool isNameExists = await _errorService.CheckNameExists(errorDto.ErrorGroupId, errorDto.ErrorCategoryId ?? -1, errorDto.ProductCategoryId, errorDto.Name) 
+                && errorDto.Name != error.Name;
             bool isCodeExists = await _errorService.CheckCodeExists(errorDto.Code) && errorDto.Code != error.Code;
 
             if (isNameExists)
@@ -197,6 +219,113 @@ namespace ErrorLibrary.Controllers
                 await _hubContext.Clients.All.SendAsync("ErrorDeleted", id);
                 await _hubContext.Clients.All.SendAsync("Notification", $"{user.FullName} vừa xóa dòng 'error':{error.Code}");
                 _responseDto.Message = "Xóa thành công";
+                return Json(_responseDto);
+            }
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Lỗi trong quá trình xóa";
+            return Json(_responseDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ImportErrorsToExcel([FromForm] ImportErrorDto importErrorDto)
+        {
+            ExcelPackage.License.SetNonCommercialPersonal("ErrorLibrary");
+
+            var errorExcelDtos = new List<ErrorExcelDto>();
+            using (var stream = new MemoryStream())
+            {
+                await importErrorDto.File.CopyToAsync(stream);
+                using (var package = new ExcelPackage(stream))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[importErrorDto.WorksheetIndex];
+                    int rowCount = worksheet.Dimension.Rows;
+
+                    for (int row = 2; row <= rowCount; row++) // Bỏ header
+                    {
+                        errorExcelDtos.Add(new ErrorExcelDto
+                        {
+                            ErrorGroup = worksheet.Cells[row, 1].Text,
+                            ProductCategory = worksheet.Cells[row, 2].Text,
+                            ErrorName = worksheet.Cells[row, 3].Text,
+                            ErrorCategory = worksheet.Cells[row, 4].Text,
+                        });
+                    }
+                }
+            }
+            var errorGroupNames = errorExcelDtos.Select(x => x.ErrorGroup).Distinct().ToList();
+            var productCategoryNames = errorExcelDtos.Select(x => x.ProductCategory).Distinct().ToList();
+            var errorCategoryNames = errorExcelDtos.Select(x => x.ErrorCategory).Distinct().ToList();
+
+            var errorGroups = await _errorGroupService.GetByNames(errorGroupNames);
+            var productCategories = await _productCategoryService.GetByNames(productCategoryNames);
+            var errorCategories = await _errorCategoryService.GetByNames(errorCategoryNames);
+
+            var errorGroupNamesExcept = errorGroupNames.Except(errorGroups.Select(x => x.Name)).ToList();
+            var productCategoryNamesExcept = productCategoryNames.Except(productCategories.Select(x => x.Name)).ToList();
+            var errorCategoryNamesExcept = errorCategoryNames.Except(errorCategories.Select(x => x.Name)).ToList();
+
+            var previewErrorExcel = new PreviewErrorExcelDto
+            {
+                ErrorGroups = _mapper.Map<List<ErrorGroupDto>>(errorGroups),
+                ProductCategories = _mapper.Map<List<ProductCategoryDto>>(productCategories),
+                ErrorCategories = _mapper.Map<List<ErrorCategoryDto>>(errorCategories),
+                ErrorGroupNamesExcept = errorGroupNamesExcept,
+                ProductCategoryNamesExcept = productCategoryNamesExcept,
+                ErrorCategoryNamesExcept = errorCategoryNamesExcept,
+                Excel = errorExcelDtos,
+            };
+            _responseDto.Result = previewErrorExcel;
+            return Json(_responseDto);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> AddErrorsToErrorExcelDto([FromBody] List<ErrorExcelDto> errorExcelDtos)
+        {
+            var user = await _userService.GetById(User.GetUserId());
+            var errorGroups = await _errorGroupService.GetByNames(errorExcelDtos.Select(x => x.ErrorGroup).Distinct().ToList());
+            foreach (var errorGroup in errorGroups)
+            {
+                var existingErrorCodes = await _errorService.GetAllCodesByErrorGroupId(errorGroup.Id);
+                var errorExcelDtosByerrorGroup = errorExcelDtos.Where(x => x.ErrorGroup == errorGroup.Name);
+                foreach (var errorExcelDto in errorExcelDtosByerrorGroup)
+                {
+                    var productCategoryId = await _productCategoryService.GetIdByName(errorExcelDto.ProductCategory);
+                    var errorCategoryId = await _errorCategoryService.GetIdByName(errorExcelDto.ErrorCategory);
+                    if (await _errorService.CheckNameExists(errorGroup.Id, errorCategoryId, productCategoryId, errorExcelDto.ErrorName))
+                        continue;
+                    var code = _errorService.GetNextErrorCode(errorGroup.Code, existingErrorCodes);
+                    var error = new Error
+                    {
+                        Name = errorExcelDto.ErrorName,
+                        Code = _errorService.GetNextErrorCode(errorGroup.Code, existingErrorCodes),
+                        ErrorGroupId = errorGroup.Id,
+                        ProductCategoryId = productCategoryId,
+                        ErrorCategoryId = errorCategoryId,
+                    };
+                    existingErrorCodes.Add(code);
+                    _errorService.Add(error);
+                }
+            }
+            if (await _sharedService.SaveAllChanges())
+            {
+                await _hubContext.Clients.All.SendAsync("Notification", $"{user.FullName} vừa thêm nhiều dòng 'error' từ file excel");
+                _responseDto.Message = "Thêm thành công";
+                return Json(_responseDto);
+            }
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Lỗi trong quá trình thêm";
+            return Json(_responseDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAll()
+        {
+            var errors = await _errorService.GetAll();
+            _errorService.DeleteRange(errors);
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Message = "Xóa tất cả lỗi thành công";
                 return Json(_responseDto);
             }
             _responseDto.IsSuccess = false;

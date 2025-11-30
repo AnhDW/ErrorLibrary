@@ -57,6 +57,19 @@ namespace ErrorLibrary.Services
             return (await _context.ProductCategories.FindAsync(id))!;
         }
 
+        public async Task<List<ProductCategory>> GetByNames(List<string> names)
+        {
+            return await _context.ProductCategories.Where(x => names.Contains(x.Name)).ToListAsync();
+        }
+
+        public async Task<int> GetIdByName(string name)
+        {
+            return await _context.ProductCategories
+                .Where(c => c.Name == name)
+                .Select(c => c.Id)
+                .FirstOrDefaultAsync();
+        }
+
         public void Update(ProductCategory productCategory)
         {
             _context.ProductCategories.Update(productCategory);

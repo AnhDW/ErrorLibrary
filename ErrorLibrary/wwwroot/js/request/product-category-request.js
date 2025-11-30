@@ -39,3 +39,12 @@ function deleteProductCategory(id) {
         showLoading: true
     })
 }
+
+function addProductCategoryByNames(names) {
+    return ajaxRequest({
+        url: '/ProductCategoryLibrary/AddProductCategoryByNames',
+        method: 'POST',
+        data: names,
+        showLoading: true
+    })
+}

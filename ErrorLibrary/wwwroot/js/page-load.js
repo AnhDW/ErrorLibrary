@@ -41,4 +41,61 @@ $(document).ready(function () {
 //    console.log(menuInner.html());
 //}
 
+function renderPagination(pagination, functionName, elementId) {
+    let { currentPage, totalPages, pageSize } = pagination;
+    let html = '';
+
+    // << First Page
+    html += `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="${functionName}(1)">«</a>
+        </li>
+    `;
+
+    // < Previous
+    html += `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="${functionName}(${currentPage - 1})">‹</a>
+        </li>
+    `;
+
+    // Dãy trang động (max 9 số)
+    let startPage = Math.max(1, currentPage - 4);
+    let endPage = Math.min(totalPages, currentPage + 4);
+
+    // Nếu đầu bị cắt → thêm ...
+    if (startPage > 1) {
+        html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+        html += `
+            <li class="page-item ${i === currentPage ? 'active' : ''}">
+                <a class="page-link" href="#" onclick="${functionName}(${i})">${i}</a>
+            </li>
+        `;
+    }
+
+    // Nếu cuối bị cắt → thêm ...
+    if (endPage < totalPages) {
+        html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+    }
+
+    // > Next
+    html += `
+        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="${functionName}(${currentPage + 1})">›</a>
+        </li>
+    `;
+
+    // >> Last Page
+    html += `
+        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="${functionName}(${totalPages})">»</a>
+        </li>
+    `;
+
+    $(`#${elementId}`).html(html);
+}
+
 
