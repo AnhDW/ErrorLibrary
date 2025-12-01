@@ -7,6 +7,7 @@ using ErrorLibrary.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProductCategoryLibrary.Services.IServices;
+using System.Threading.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,13 +77,17 @@ app.MapControllerRoute(
     .WithStaticAssets();
 app.MapHub<ErrorHub>("/errorHub");
 
-AddlyMigration();
+await AddlyMigration();
 app.Run();
 
-void AddlyMigration()
+async Task AddlyMigration()
 {
     using (var scope = app.Services.CreateScope())
     {
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+
+        await DbInitializer.SeedAsync(userManager, roleManager);
         var _db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         if (_db.Database.GetPendingMigrations().Count() > 0)
         {

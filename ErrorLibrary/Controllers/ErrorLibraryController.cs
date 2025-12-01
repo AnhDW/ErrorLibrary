@@ -300,7 +300,7 @@ namespace ErrorLibrary.Controllers
                     var productCategoryId = productCategories.First(x => x.Name == errorExcelDto.ProductCategory).Id;
                     var errorCategoryId = errorCategories.First(x => x.Name == errorExcelDto.ErrorCategory).Id;
                     string key = $"{errorGroup.Id}|{errorCategoryId}|{productCategoryId}|{errorExcelDto.ErrorName}";
-                    
+
                     if (existingNames.Contains(key)) continue;
 
                     var code = _errorService.GetNextErrorCode(errorGroup.Code, existingErrorCodes);

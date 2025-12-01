@@ -239,11 +239,11 @@ async function importErrorsExcel() {
         addProductCategoryByNames(productCategoryNamesExcept),
         addErrorCategoryByNames(errorCategoryNamesExcept)
     ]);
-    resToastr(results[0]);
-    resToastr(results[1]);
-    resToastr(results[2]);
+    resToastr(results[0].value);
+    resToastr(results[1].value);
+    resToastr(results[2].value);
     // format lại file excel theo error và insert ở đây
-    //await deleteAll();
+    /*await deleteAll();*/
     addErrorsToErrorExcelDto(errorExcel).then(function (res) {
         console.log(res);
         $('#importModel').modal('hide');
