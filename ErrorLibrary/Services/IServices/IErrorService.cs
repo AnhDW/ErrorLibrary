@@ -18,6 +18,7 @@ namespace ErrorLibrary.Services.IServices
         Task<bool> CheckNameExists(int errorGroupId, int errorCategoryId, int productCategoryId, string name);
         Task<bool> CheckCodeExists(string code);
 
+        void AddRange(List<Error> errors);
         void DeleteRange(List<Error> errors);
     }
 }

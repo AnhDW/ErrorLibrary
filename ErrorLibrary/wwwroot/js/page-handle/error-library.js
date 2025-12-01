@@ -1,5 +1,10 @@
 ﻿var errorParams = {
-    pageNumber: 1, pageSize: 10
+    errorGroupIds: [],
+    errorCategoryIds: [],
+    productCategoryIds: [],
+    code: '',
+    name: '',
+    pageNumber: 1, pageSize: 20
 }
 
 //handle
@@ -123,6 +128,20 @@ function handleDeleteError(id) {
     });
 }
 
+async function renderErrorHeadFilter() {
+    const [errorGroups, errorCategories, productCategories] = await Promise.all([
+        getErrorGroups(),
+        getErrorCategories(),
+        getProductCategories()
+    ]);
+
+    $('#errorGroupsHeader').html(renderFilterByField(errorGroups, 'nhóm lỗi', 'ErrorGroup', 'id', 'name', 'error-group'));
+    $('#errorCategoriesHeader').html(renderFilterByField(errorCategories, 'loại lỗi', 'ErrorCategory', 'id', 'name', 'error-category'));
+    $('#productCategoriesHeader').html(renderFilterByField(productCategories, 'chủng loại sản phẩm', 'ProductCategory', 'id', 'name', 'product-category'));
+    $('#errorCodesHeader').html(renderFilterByField([], 'mã lỗi', 'searchErrorCode', '', '', '', true));
+    $('#errorNamesHeader').html(renderFilterByField([], 'tên lỗi', 'searchErrorName', '', '', '', true));
+}
+
 function renderErrorTable() {
     getErrorsPagination(errorParams).then(function (res) {
         let html = '';
@@ -227,6 +246,59 @@ async function importErrorsExcel() {
     //await deleteAll();
     addErrorsToErrorExcelDto(errorExcel).then(function (res) {
         console.log(res);
+        $('#importModel').modal('hide');
+        renderErrorTable();
     });
 }
 
+function onDownloadForm() {
+    window.location.href = '/import-form/Errors.xlsx';
+}
+
+//filter handle
+$(document).on('change', `.error-group`, function () {
+    let errorGroupIds = $(`.error-group:checked`).map(function () {
+        return this.value;
+    }).get();
+
+    errorParams.errorGroupIds = errorGroupIds;
+    renderErrorTable();
+});
+
+$(document).on('change', `.error-category`, function () {
+    let errorCategoryIds = $(`.error-category:checked`).map(function () {
+        return this.value;
+    }).get();
+
+    errorParams.errorCategoryIds = errorCategoryIds;
+    renderErrorTable();
+});
+
+$(document).on('change', `.product-category`, function () {
+    let productCategoryIds = $(`.product-category:checked`).map(function () {
+        return this.value;
+    }).get();
+
+    errorParams.productCategoryIds = productCategoryIds;
+    renderErrorTable();
+});
+
+$(document).on('change', `.product-category`, function () {
+    let productCategoryIds = $(`.product-category:checked`).map(function () {
+        return this.value;
+    }).get();
+
+    errorParams.productCategoryIds = productCategoryIds;
+    renderErrorTable();
+});
+
+$(document).on('input', '#searchErrorCode', function () {
+    console.log(this.value);
+    errorParams.code = this.value;
+    renderErrorTable();
+});
+
+$(document).on('input', '#searchErrorName', function () {
+    errorParams.name = this.value;
+    renderErrorTable();
+});

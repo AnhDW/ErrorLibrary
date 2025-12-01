@@ -4,6 +4,7 @@ $(document).ready(function () {
     //menuItemActive(path.split('/')[1]);
     console.log(path);
     if (path.includes('/ErrorLibrary')) {
+        renderErrorHeadFilter();
         renderErrorTable();
     } else if (path.includes('/ProductLibrary')) {
         renderProductTable();

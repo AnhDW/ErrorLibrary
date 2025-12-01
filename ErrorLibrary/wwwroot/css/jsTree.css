@@ -93,3 +93,11 @@ table td {
     word-wrap: break-word;
 }
 
+#errorTable thead th {
+    position: sticky;
+    top: 0;
+    background: white; /* nên để màu nền để không bị trong suốt */
+    z-index: 10; /* đảm bảo nằm trên các ô khác */
+}
+
+

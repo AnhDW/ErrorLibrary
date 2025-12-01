@@ -10,7 +10,7 @@ function getErrorsPagination(errorParams) {
     return ajaxRequest({
         url: '/ErrorLibrary/GetErrorsPagination',
         method: 'GET',
-        data: errorParams
+        data: $.param(errorParams, true)
     });
 }
 

@@ -32,6 +32,9 @@
                         </div>
                         <form action="/" method="post">
                             <div class="modal-body">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="onDownloadForm()">
+                                    <i class="fas fa-file-download"></i>Tải form mẫu
+                                </button>
                                 <div class="row">
                                     <div class="mb-2 col-md-6">
                                         <label for="importErrors" class="form-label">Chọn file</label>
@@ -41,9 +44,6 @@
                                         <label for="sheetSelect" class="form-label">Work sheet</label>
                                         <select class="form-select" id="sheetSelect" aria-label="Default select example">
                                             <option selected="">Chọn work sheet</option>
-                                            <option value="1">Work sheet 1</option>
-                                            <option value="2">Work sheet 2</option>
-                                            <option value="3">Work sheet 3</option>
                                         </select>
                                     </div>
                                 </div>
@@ -52,7 +52,7 @@
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary" onclick="importErrorsExcel()">Import</button>
+                                <button type="button" class="btn btn-primary" onclick="importErrorsExcel()"><i class="fas fa-file-upload"></i>Tải lên</button>
                             </div>
                         </form>
                         <div id="preview" ></div>
@@ -194,16 +194,17 @@
         </div>
         <!-- Striped Rows -->
         <div class="card mt-4">
-            <div style="min-height:200px;max-height:500px;" class="table-responsive text-nowrap scrollspy-example">
+            
+            <div style="min-height:200px;max-height:594px;" class="table-responsive text-nowrap scrollspy-example">
                 <table id="errorTable" class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Nhóm lỗi</th>
-                            <th>Loại lỗi</th>
-                            <th>Chủng loại sản phẩm</th>
-                            <th>Mã lỗi</th>
-                            <th>Tên lỗi</th>
-                            <th>Hành động</th>
+                            <th id="errorGroupsHeader">Nhóm lỗi</th>
+                            <th id="errorCategoriesHeader">Loại lỗi</th>
+                            <th id="productCategoriesHeader">Chủng loại sản phẩm</th>
+                            <th id="errorCodesHeader">Mã lỗi</th>
+                            <th id="errorNamesHeader">Tên lỗi</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="errorTableBody" class="table-border-bottom-0" style="">

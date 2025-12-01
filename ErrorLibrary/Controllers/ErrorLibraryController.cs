@@ -284,29 +284,39 @@ namespace ErrorLibrary.Controllers
         {
             var user = await _userService.GetById(User.GetUserId());
             var errorGroups = await _errorGroupService.GetByNames(errorExcelDtos.Select(x => x.ErrorGroup).Distinct().ToList());
+            var errorCategories = await _errorCategoryService.GetByNames(errorExcelDtos.Select(x => x.ErrorCategory).Distinct().ToList());
+            var productCategories = await _productCategoryService.GetByNames(errorExcelDtos.Select(x => x.ProductCategory).Distinct().ToList());
+            var existingErrors = await _errorService.GetAll();
+            List<Error> errors = new();
+            var existingNames = new HashSet<string>(
+                existingErrors.Select(x => $"{x.ErrorGroupId}|{x.ErrorCategoryId}|{x.ProductCategoryId}|{x.Name}")
+            );
             foreach (var errorGroup in errorGroups)
             {
-                var existingErrorCodes = await _errorService.GetAllCodesByErrorGroupId(errorGroup.Id);
-                var errorExcelDtosByerrorGroup = errorExcelDtos.Where(x => x.ErrorGroup == errorGroup.Name);
-                foreach (var errorExcelDto in errorExcelDtosByerrorGroup)
+                var existingErrorCodes = existingErrors.Where(x => x.ErrorGroupId == errorGroup.Id).Select(x => x.Code).ToList();
+                var errorExcelDtosByErrorGroup = errorExcelDtos.Where(x => x.ErrorGroup == errorGroup.Name);
+                foreach (var errorExcelDto in errorExcelDtosByErrorGroup)
                 {
-                    var productCategoryId = await _productCategoryService.GetIdByName(errorExcelDto.ProductCategory);
-                    var errorCategoryId = await _errorCategoryService.GetIdByName(errorExcelDto.ErrorCategory);
-                    if (await _errorService.CheckNameExists(errorGroup.Id, errorCategoryId, productCategoryId, errorExcelDto.ErrorName))
-                        continue;
+                    var productCategoryId = productCategories.First(x => x.Name == errorExcelDto.ProductCategory).Id;
+                    var errorCategoryId = errorCategories.First(x => x.Name == errorExcelDto.ErrorCategory).Id;
+                    string key = $"{errorGroup.Id}|{errorCategoryId}|{productCategoryId}|{errorExcelDto.ErrorName}";
+                    
+                    if (existingNames.Contains(key)) continue;
+
                     var code = _errorService.GetNextErrorCode(errorGroup.Code, existingErrorCodes);
                     var error = new Error
                     {
                         Name = errorExcelDto.ErrorName,
-                        Code = _errorService.GetNextErrorCode(errorGroup.Code, existingErrorCodes),
+                        Code = code,
                         ErrorGroupId = errorGroup.Id,
                         ProductCategoryId = productCategoryId,
                         ErrorCategoryId = errorCategoryId,
                     };
                     existingErrorCodes.Add(code);
-                    _errorService.Add(error);
+                    errors.Add(error);
                 }
             }
+            _errorService.AddRange(errors);
             if (await _sharedService.SaveAllChanges())
             {
                 await _hubContext.Clients.All.SendAsync("Notification", $"{user.FullName} vừa thêm nhiều dòng 'error' từ file excel");
