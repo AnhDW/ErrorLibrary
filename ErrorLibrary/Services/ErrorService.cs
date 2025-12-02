@@ -34,6 +34,11 @@ namespace ErrorLibrary.Services
             _context.Errors.AddRange(errors);
         }
 
+        public HashSet<string> BuildExistingErrorKeySet(List<Error> errors)
+        {
+            return errors.Select(x => $"{x.ErrorGroupId}|{x.ErrorCategoryId}|{x.ProductCategoryId}|{x.Name}").ToHashSet();
+        }
+
         public async Task<bool> CheckCodeExists(string code)
         {
             return await _context.Errors.AnyAsync(x => x.Code == code);
@@ -47,6 +52,12 @@ namespace ErrorLibrary.Services
                 x.ProductCategoryId == productCategoryId &&
                 x.Name == name
             );
+        }
+
+        public bool CheckNameExistsFast(HashSet<string> existingKeys, int errorGroupId, int errorCategoryId, int productCategoryId, string name)
+        {
+            var key = $"{errorGroupId}|{errorCategoryId}|{productCategoryId}|{name}";
+            return existingKeys.Contains(key);
         }
 
         public void Delete(Error error)
@@ -145,6 +156,11 @@ namespace ErrorLibrary.Services
         public void Update(Error error)
         {
             _context.Errors.Update(error);
+        }
+
+        public void UpdateRange(List<Error> errors)
+        {
+            _context.Errors.UpdateRange(errors);
         }
     }
 }

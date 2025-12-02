@@ -1,4 +1,11 @@
-﻿function getErrorGroups() {
+﻿function getErrorGroupsPagination(errorGroupParams) {
+    return ajaxRequest({
+        url: '/ErrorGroupLibrary/GetErrorGroupsPagination',
+        method: 'GET',
+        data: $.param(errorGroupParams, true)
+    })
+}
+function getErrorGroups() {
     return ajaxRequest({
         url: '/ErrorGroupLibrary/GetErrorGroups',
         method: 'GET',

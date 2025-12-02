@@ -1,4 +1,12 @@
-﻿function getProductCategories() {
+﻿function getProductCategoriesPagination(productCategoryParams) {
+    return ajaxRequest({
+        url: '/ProductCategoryLibrary/GetProductCategoriesPagination',
+        method: 'GET',
+        data: $.param(productCategoryParams, true)
+    })
+}
+
+function getProductCategories() {
     return ajaxRequest({
         url: '/ProductCategoryLibrary/GetProductCategories',
         method: 'GET',

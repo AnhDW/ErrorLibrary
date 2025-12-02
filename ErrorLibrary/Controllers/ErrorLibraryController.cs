@@ -102,30 +102,29 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> AddError([FromBody] ErrorDto errorDto)
         {
             var user = await _userService.GetById(User.GetUserId());
+            var errors = await _errorService.GetAll();
             var errorGroup =  await _errorGroupService.GetById(errorDto.ErrorGroupId);
             var errorCategory = await _errorCategoryService.GetById(errorDto.ErrorCategoryId ?? -1);
             var productCategory = await _productCategoryService.GetById(errorDto.ProductCategoryId);
+            var existingNames = _errorService.BuildExistingErrorKeySet(errors);
+            var codes = errors.Select(x => x.Code).ToList();
             if (errorGroup == null || productCategory == null)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = errorGroup == null ? "Không tìm thấy 'Nhóm Lỗi' này trong thư viện" : "Không tìm thấy 'Chủng loại sản phẩm' này trong thư viện";
                 return Json(_responseDto);
             }
-
-            if (await _errorService.CheckNameExists(errorDto.ErrorGroupId, errorDto.ErrorCategoryId ?? -1, errorDto.ProductCategoryId, errorDto.Name))
-            {
-                _responseDto.IsSuccess = false;
-                _responseDto.Message = "Tên lỗi đã tồn tại";
-                return Json(_responseDto);
-            }
-
-            if (await _errorService.CheckCodeExists(errorDto.Code))
-            {
-                _responseDto.IsSuccess = false;
-                _responseDto.Message = "Mã lỗi đã tồn tại";
-                return Json(_responseDto);
-            }
             
+            bool isNameExists = _errorService.CheckNameExistsFast(existingNames, errorDto.ErrorGroupId, errorDto.ErrorCategoryId ?? -1, errorDto.ProductCategoryId, errorDto.Name);
+            bool isCodeExists = codes.Contains(errorDto.Code);
+            
+            if (isNameExists || isCodeExists)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = isNameExists ? "Tên lỗi đã tồn tại" : "Mã lỗi đã tồn tại";
+                return Json(_responseDto);
+            }
+
             var error = _mapper.Map<Error>(errorDto);
             _errorService.Add(error);
             if (await _sharedService.SaveAllChanges())
@@ -149,9 +148,12 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> UpdateError([FromBody] ErrorDto errorDto)
         {
             var user = await _userService.GetById(User.GetUserId());
+            var errors = await _errorService.GetAll();
             var errorGroup = await _errorGroupService.GetById(errorDto.ErrorGroupId);
             var errorCategory = await _errorCategoryService.GetById(errorDto.ErrorCategoryId ?? -1);
             var productCategory = await _productCategoryService.GetById(errorDto.ProductCategoryId);
+            var existingNames = _errorService.BuildExistingErrorKeySet(errors);
+            var codes = errors.Select(x => x.Code).ToList();
             if (errorGroup == null || productCategory == null)
             {
                 _responseDto.IsSuccess = false;
@@ -166,21 +168,14 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            bool isNameExists = await _errorService.CheckNameExists(errorDto.ErrorGroupId, errorDto.ErrorCategoryId ?? -1, errorDto.ProductCategoryId, errorDto.Name) 
+            bool isNameExists = _errorService.CheckNameExistsFast(existingNames, errorDto.ErrorGroupId, errorDto.ErrorCategoryId ?? -1, errorDto.ProductCategoryId, errorDto.Name) 
                 && errorDto.Name != error.Name;
-            bool isCodeExists = await _errorService.CheckCodeExists(errorDto.Code) && errorDto.Code != error.Code;
+            bool isCodeExists = codes.Contains(errorDto.Code) && errorDto.Code != error.Code;
 
-            if (isNameExists)
+            if (isNameExists || isCodeExists)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Tên lỗi đã tồn tại";
-                return Json(_responseDto);
-            }
-
-            if (isCodeExists)
-            {
-                _responseDto.IsSuccess = false;
-                _responseDto.Message = "Mã lỗi đã tồn tại";
+                _responseDto.Message = isNameExists ? "Tên lỗi đã tồn tại" : "Mã lỗi đã tồn tại";
                 return Json(_responseDto);
             }
 
@@ -287,10 +282,10 @@ namespace ErrorLibrary.Controllers
             var errorCategories = await _errorCategoryService.GetByNames(errorExcelDtos.Select(x => x.ErrorCategory).Distinct().ToList());
             var productCategories = await _productCategoryService.GetByNames(errorExcelDtos.Select(x => x.ProductCategory).Distinct().ToList());
             var existingErrors = await _errorService.GetAll();
+
             List<Error> errors = new();
-            var existingNames = new HashSet<string>(
-                existingErrors.Select(x => $"{x.ErrorGroupId}|{x.ErrorCategoryId}|{x.ProductCategoryId}|{x.Name}")
-            );
+            var existingNames = _errorService.BuildExistingErrorKeySet(existingErrors);
+            
             foreach (var errorGroup in errorGroups)
             {
                 var existingErrorCodes = existingErrors.Where(x => x.ErrorGroupId == errorGroup.Id).Select(x => x.Code).ToList();
@@ -299,9 +294,8 @@ namespace ErrorLibrary.Controllers
                 {
                     var productCategoryId = productCategories.First(x => x.Name == errorExcelDto.ProductCategory).Id;
                     var errorCategoryId = errorCategories.First(x => x.Name == errorExcelDto.ErrorCategory).Id;
-                    string key = $"{errorGroup.Id}|{errorCategoryId}|{productCategoryId}|{errorExcelDto.ErrorName}";
 
-                    if (existingNames.Contains(key)) continue;
+                    if (_errorService.CheckNameExistsFast(existingNames, errorGroup.Id, errorCategoryId, productCategoryId, errorExcelDto.ErrorName)) continue;
 
                     var code = _errorService.GetNextErrorCode(errorGroup.Code, existingErrorCodes);
                     var error = new Error

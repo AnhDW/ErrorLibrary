@@ -41,6 +41,14 @@ namespace ErrorLibrary.Services
         public async Task<PagedList<ErrorCategoryDto>> GetAll(ErrorCategoryParams errorCategoryParams)
         {
             var query = _context.ErrorCategories.AsQueryable();
+            if(!string.IsNullOrEmpty(errorCategoryParams.Name))
+            {
+                query = query.Where(x => x.Name!.Contains(errorCategoryParams.Name));
+            }
+            if(!string.IsNullOrEmpty(errorCategoryParams.Description))
+            {
+                query = query.Where(x => x.Description!.Contains(errorCategoryParams.Description));
+            }
             return await PagedList<ErrorCategoryDto>.CreateAsync(
                 query.AsNoTracking().ProjectTo<ErrorCategoryDto>(_mapper.ConfigurationProvider),
                 errorCategoryParams.PageNumber,

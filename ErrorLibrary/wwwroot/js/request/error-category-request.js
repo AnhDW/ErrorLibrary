@@ -1,4 +1,12 @@
-﻿function getErrorCategories() {
+﻿function getErrorCategorysPagination(errorCategoryParams) {
+    return ajaxRequest({
+        url: '/ErrorCategoryLibrary/GetErrorCategorysPagination',
+        method: 'GET',
+        data: $.param(errorCategoryParams, true)
+    })
+}
+
+function getErrorCategories() {
     return ajaxRequest({
         url: '/ErrorCategoryLibrary/GetErrorCategories',
         method: 'GET',

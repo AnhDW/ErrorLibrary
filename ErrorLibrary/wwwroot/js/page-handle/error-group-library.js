@@ -1,4 +1,9 @@
-﻿function addShowErrorGroupModalHandle() {
+﻿var errorGroupParams = {
+    name: '',
+    code: '',
+    pageNumber: 1, pageSize: 20
+}
+function addShowErrorGroupModalHandle() {
     console.log('show add')
 }
 
@@ -74,11 +79,17 @@ function handleDeleteErrorGroup(id) {
     });
 }
 
+async function renderErrorGroupHeadFilter() {
+    $('#errorGroupNamesHeader').html(renderFilterByField([], 'tên nhóm lỗi', 'searchErrorGroupName', '', '', '', true));
+    $('#errorGroupCodesHeader').html(renderFilterByField([], 'mã nhóm lỗi', 'searchErrorGroupCode', '', '', '', true));
+    $('#errorGroupDescriptionsHeader').html(renderFilterByField([], 'mô tả', 'searchErrorGroupDescription', '', '', '', true));
+}
+
 function renderErrorGroupTable() {
-    getErrorGroups().then(function (data) {
-        console.log(data)
+    getErrorGroupsPagination(errorGroupParams).then(function (res) {
+        console.log(res)
         let html = '';
-        data.forEach(item => {
+        res.result.forEach(item => {
             html += `
                     <tr>
                         <td>${item.name}</td>
@@ -102,7 +113,25 @@ function renderErrorGroupTable() {
                     `;
         });
         $('#errorGroupTableBody').html(html);
+        renderPagination(res.paginationHeader, 'errorGroupChangePage', 'errorGroupPagination');
     });
 }
 
 //request
+
+//filter handle
+$(document).on('input', '#searchErrorGroupCode', function () {
+    console.log(this.value);
+    errorGroupParams.code = this.value;
+    renderErrorGroupTable();
+});
+
+$(document).on('input', '#searchErrorGroupName', function () {
+    errorGroupParams.name = this.value;
+    renderErrorGroupTable();
+});
+
+$(document).on('input', '#searchErrorGroupDescription', function () {
+    errorGroupParams.description = this.value;
+    renderErrorGroupTable();
+});

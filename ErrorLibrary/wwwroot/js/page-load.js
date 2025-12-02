@@ -21,8 +21,10 @@ $(document).ready(function () {
     } else if (path.includes('/LineLibrary')) {
         renderLinesTable();
     } else if (path.includes('/ErrorGroupLibrary')) {
+        renderErrorGroupHeadFilter();
         renderErrorGroupTable();
     } else if (path.includes('/ErrorCategoryLibrary')) {
+        renderErrorCategoryHeadFilter();
         renderErrorCategoryTable();
     } else if (path.includes('/ProductCategoryLibrary')) {
         renderProductCategoryTable();

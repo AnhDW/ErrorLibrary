@@ -41,6 +41,14 @@ namespace ErrorLibrary.Services
         public async Task<PagedList<ProductCategoryDto>> GetAll(ProductCategoryParams productCategoryParams)
         {
             var query = _context.ProductCategories.AsQueryable();
+            if(!string.IsNullOrEmpty(productCategoryParams.Name))
+            {
+                query = query.Where(c => c.Name.Contains(productCategoryParams.Name));
+            }
+            if(!string.IsNullOrEmpty(productCategoryParams.Description))
+            {
+                query = query.Where(c => c.Description != null && c.Description.Contains(productCategoryParams.Description));
+            }
             return await PagedList<ProductCategoryDto>.CreateAsync(
                 query.AsNoTracking().ProjectTo<ProductCategoryDto>(_mapper.ConfigurationProvider),
                 productCategoryParams.PageNumber,

@@ -57,10 +57,10 @@ function handleDeleteProductCategory(id) {
 }
 
 function renderProductCategoryTable() {
-    getProductCategories().then(function (data) {
-        console.log(data)
+    getProductCategories().then(function (res) {
+        console.log(res)
         let html = '';
-        data.forEach(item => {
+        res.result.forEach(item => {
             html += `
                 <tr>
                     <td>${item.name}</td>

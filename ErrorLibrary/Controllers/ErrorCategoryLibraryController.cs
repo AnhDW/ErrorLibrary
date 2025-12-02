@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
+using ErrorLibrary.Extensions;
+using ErrorLibrary.Helper.EntityParams;
+using ErrorLibrary.Services;
 using ErrorLibrary.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,12 +29,20 @@ namespace ErrorLibrary.Controllers
         {
             return View();
         }
+        
+        public async Task<IActionResult> GetErrorCategorysPagination([FromQuery] ErrorCategoryParams errorCategoryParams)
+        {
+            var result = await _errorCategoryService.GetAll(errorCategoryParams);
+            Response.AddPaginationHeader(new Helper.PaginationHeader(result.CurrentPage, result.PageSize, result.TotalCount, result.TotalPages));
+            _responseDto.Result = result;
+            return Json(_responseDto);
+        }
 
         public async Task<IActionResult> GetErrorCategories()
         {
             var errorCategories = await _errorCategoryService.GetAll();
-            return Json(_mapper.Map<List<ErrorCategoryDto>>(errorCategories));
-
+            _responseDto.Result = _mapper.Map<List<ErrorCategoryDto>>(errorCategories);
+            return Json(_responseDto);
         }
 
         public async Task<IActionResult> GetErrorCategoryById(int id)

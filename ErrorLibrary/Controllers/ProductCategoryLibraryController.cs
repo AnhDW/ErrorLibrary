@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
+using ErrorLibrary.Extensions;
+using ErrorLibrary.Helper.EntityParams;
 using ErrorLibrary.Services;
 using ErrorLibrary.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -28,10 +30,19 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        public async Task<IActionResult> GetProductCategoriesPagination([FromQuery] ProductCategoryParams productCategoryParams)
+        {
+            var result = await _productCategoryService.GetAll(productCategoryParams);
+            Response.AddPaginationHeader(new Helper.PaginationHeader(result.CurrentPage, result.PageSize, result.TotalCount, result.TotalPages));
+            _responseDto.Result = result;
+            return Json(_responseDto);
+        }
+
         public async Task<IActionResult> GetProductCategories()
         {
             var productCategories = await _productCategoryService.GetAll();
-            return Json(_mapper.Map<List<ProductCategoryDto>>(productCategories));
+            _responseDto.Result = _mapper.Map<List<ProductCategoryDto>>(productCategories);
+            return Json(_responseDto);
         }
 
         public async Task<IActionResult> GetProductCategoryById(int id)

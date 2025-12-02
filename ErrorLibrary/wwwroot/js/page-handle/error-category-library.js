@@ -1,4 +1,10 @@
-﻿function addShowErrorCategoryModalHandle() {
+﻿var errorCategoryParams = {
+    name: '',
+    description: '',
+    pageNumber: 1, pageSize: 20
+}
+
+function addShowErrorCategoryModalHandle() {
     console.log('show add')
 }
 
@@ -56,11 +62,16 @@ function handleDeleteErrorCategory(id) {
     });
 }
 
+async function renderErrorCategoryHeadFilter() {
+    $('#errorCategoryNamesHeader').html(renderFilterByField([], 'tên loại lỗi', 'searchErrorCategoryName', '', '', '', true));
+    $('#errorCategoryDescriptionsHeader').html(renderFilterByField([], 'mô tả', 'searchErrorCategoryDescription', '', '', '', true));
+}
+
 function renderErrorCategoryTable() {
-    getErrorCategories().then(function (data) {
-        console.log(data)
+    getErrorCategorysPagination(errorCategoryParams).then(function (res) {
+        console.log(res)
         let html = '';
-        data.forEach(item => {
+        res.result.forEach(item => {
             html += `
                     <tr>
                         <td>${item.name}</td>
@@ -83,7 +94,20 @@ function renderErrorCategoryTable() {
                     `;
         });
         $('#errorCategoryTableBody').html(html);
+        renderPagination(res.paginationHeader, 'errorCategoryChangePage', 'errorCategoryPagination');
     });
 }
 
 //request
+
+//filter handle
+$(document).on('input', '#searchErrorCategoryName', function () {
+    console.log(this.value);
+    errorCategoryParams.name = this.value;
+    renderErrorCategoryTable();
+});
+
+$(document).on('input', '#searchErrorCategoryDescription', function () {
+    errorCategoryParams.description = this.value;
+    renderErrorCategoryTable();
+});
