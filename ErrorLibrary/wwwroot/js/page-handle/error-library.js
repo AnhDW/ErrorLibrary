@@ -129,15 +129,15 @@ function handleDeleteError(id) {
 }
 
 async function renderErrorHeadFilter() {
-    const [errorGroups, errorCategories, productCategories] = await Promise.all([
+    const [errorGroupsRes, errorCategoriesRes, productCategoriesRes] = await Promise.all([
         getErrorGroups(),
         getErrorCategories(),
         getProductCategories()
     ]);
 
-    $('#errorGroupsHeader').html(renderFilterByField(errorGroups, 'nhóm lỗi', 'ErrorGroup', 'id', 'name', 'error-group'));
-    $('#errorCategoriesHeader').html(renderFilterByField(errorCategories, 'loại lỗi', 'ErrorCategory', 'id', 'name', 'error-category'));
-    $('#productCategoriesHeader').html(renderFilterByField(productCategories, 'chủng loại sản phẩm', 'ProductCategory', 'id', 'name', 'product-category'));
+    $('#errorGroupsHeader').html(renderFilterByField(errorGroupsRes.result, 'nhóm lỗi', 'ErrorGroup', 'id', 'name', 'error-group'));
+    $('#errorCategoriesHeader').html(renderFilterByField(errorCategoriesRes.result, 'loại lỗi', 'ErrorCategory', 'id', 'name', 'error-category'));
+    $('#productCategoriesHeader').html(renderFilterByField(productCategoriesRes.result, 'chủng loại sản phẩm', 'ProductCategory', 'id', 'name', 'product-category'));
     $('#errorCodesHeader').html(renderFilterByField([], 'mã lỗi', 'searchErrorCode', '', '', '', true));
     $('#errorNamesHeader').html(renderFilterByField([], 'tên lỗi', 'searchErrorName', '', '', '', true));
 }

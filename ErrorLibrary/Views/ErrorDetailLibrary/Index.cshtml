@@ -72,8 +72,17 @@
                                         </select>
                                     </div>
                                     <div class="mb-2 col-md-6">
+                                        <label for="errorSearch" class="form-label">Mã lỗi</label>
 
+                                        <div class="custom-select">
+                                            <input id="errorSearch" type="text" placeholder="Tìm lỗi..." autocomplete="off" />
+
+                                            <div id="errorDropdown" class="dropdown-list hidden">
+                                                <div class="loading">Đang tải...</div>
+                                            </div>
+                                        </div>
                                     </div>
+
                                     <div class="mb-2 col-md-6">
                                         <label for="addProductSelect" class="form-label">Mã hàng</label>
                                         <select class="form-select" id="addProductSelect" aria-label="Default select example" disabled>
@@ -289,3 +298,86 @@
     <script src="~/js/request/error-detail-attachment-request.js"></script>
 }
 
+<script>
+        let page = 1;
+    let isLoading = false;
+    let hasMore = true;
+
+    const searchInput = document.getElementById("errorSearch");
+    const dropdown = document.getElementById("errorDropdown");
+
+    function debounce(fn, delay) {
+        let timer;
+        return function (...args) {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn.apply(this, args), delay);
+        };
+    }
+
+    async function loadData(reset = false) {
+        if (isLoading || (!hasMore && !reset)) return;
+
+        isLoading = true;
+        dropdown.querySelector(".loading").style.display = "block";
+
+        if (reset) {
+            page = 1;
+            hasMore = true;
+            dropdown.innerHTML = `<div class="loading">Đang tải...</div>`;
+        }
+
+        const query = searchInput.value.trim();
+        const res = await fetch(`/api/errors?page=${page}&size=20&search=${query}`);
+        const data = await res.json();
+
+        // Ví dụ: { items: [...], totalPages: 10 }
+        const items = data.items || [];
+
+        items.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "dropdown-item";
+            div.textContent = `${item.code} - ${item.name}`;
+            div.dataset.value = item.id;
+
+            div.addEventListener("click", () => {
+                searchInput.value = div.textContent;
+                dropdown.classList.add("hidden");
+            });
+
+            dropdown.appendChild(div);
+        });
+
+        hasMore = page < data.totalPages;
+        page++;
+        isLoading = false;
+
+        dropdown.querySelector(".loading").style.display = hasMore ? "block" : "none";
+    }
+
+    // Search input – debounce
+    searchInput.addEventListener("input", debounce(() => {
+        dropdown.classList.remove("hidden");
+        loadData(true);
+    }, 350));
+
+    // Show dropdown on focus
+    searchInput.addEventListener("focus", () => {
+        dropdown.classList.remove("hidden");
+        loadData(true);
+    });
+
+    // Hide on click outside
+    document.addEventListener("click", e => {
+        if (!e.target.closest(".custom-select")) {
+            dropdown.classList.add("hidden");
+        }
+    });
+
+    // Infinite scroll
+    dropdown.addEventListener("scroll", () => {
+        if (dropdown.scrollTop + dropdown.clientHeight >= dropdown.scrollHeight - 10) {
+            loadData();
+        }
+    });
+
+</script>

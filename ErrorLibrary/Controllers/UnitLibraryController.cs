@@ -30,7 +30,6 @@ namespace ErrorLibrary.Controllers
         {
             var units = await _unitService.GetAll();
             return Json(_mapper.Map<List<UnitDto>>(units));
-
         }
 
         public async Task<IActionResult> GetUnitById(int id)

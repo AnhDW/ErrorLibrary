@@ -57,11 +57,11 @@ async function handleSelectError(value, action) {
 async function addShowErrorDetailModalHandle() {
     const units = await getUnits();
     const products = await getProducts();
-    const errors = await getErrors();
+    const errorsRes = await getErrors();
     const unitHtml = renderSelectOptionsByField(units, 'Chọn đơn vị', 'id', 'name');
     const productHtml = renderSelectOptionsByField(products, 'Chọn mã hàng', 'id', 'code');
-    const errorHtml = renderSelectErrorOptions(errors, 'Chọn mã lỗi');
-    console.log(errors);
+    const errorHtml = renderSelectErrorOptions(errorsRes.result, 'Chọn mã lỗi');
+    console.log(units);
     $('#addUnitSelect').html(unitHtml);
     $('#addProductSelect').html(productHtml);
     $('#addErrorSelect').html(errorHtml);

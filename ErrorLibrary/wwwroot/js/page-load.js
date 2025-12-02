@@ -27,6 +27,7 @@ $(document).ready(function () {
         renderErrorCategoryHeadFilter();
         renderErrorCategoryTable();
     } else if (path.includes('/ProductCategoryLibrary')) {
+        renderErrorCategoryHeadFilter();
         renderProductCategoryTable();
     } else if (path.includes('/ErrorDetailLibrary')) {
         renderErrorDetailsTable();

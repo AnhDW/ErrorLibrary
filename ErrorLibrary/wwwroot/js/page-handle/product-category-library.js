@@ -1,4 +1,10 @@
-﻿function addShowProductCategoryModalHandle() {
+﻿var productCategoryParams = {
+    name: '',
+    description: '',
+    pageNumber: 1, pageSize: 20
+}
+
+function addShowProductCategoryModalHandle() {
     console.log('show add')
 }
 
@@ -56,8 +62,13 @@ function handleDeleteProductCategory(id) {
     });
 }
 
+async function renderErrorCategoryHeadFilter() {
+    $('#productCategoryNamesHeader').html(renderFilterByField([], 'tên loại lỗi', 'searchProductCategoryName', '', '', '', true));
+    $('#productCategoryDescriptionsHeader').html(renderFilterByField([], 'mô tả', 'searchProductCategoryDescription', '', '', '', true));
+}
+
 function renderProductCategoryTable() {
-    getProductCategories().then(function (res) {
+    getProductCategoriesPagination(productCategoryParams).then(function (res) {
         console.log(res)
         let html = '';
         res.result.forEach(item => {
@@ -83,5 +94,19 @@ function renderProductCategoryTable() {
                 `;
         });
         $('#productCategoryTableBody').html(html);
+        renderPagination(res.paginationHeader, 'productCategoryChangePage', 'productCategoryPagination');
     });
 }
+
+//filter handle
+$(document).on('input', '#searchProductCategoryName', function () {
+    console.log(this.value);
+    productCategoryParams.name = this.value;
+    renderProductCategoryTable();
+});
+
+$(document).on('input', '#searchProductCategoryDescription', function () {
+    productCategoryParams.description = this.value;
+    renderProductCategoryTable();
+});
+
