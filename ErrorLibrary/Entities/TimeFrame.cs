@@ -1,12 +1,12 @@
 ﻿namespace ErrorLibrary.Entities
 {
-    public class TimeRange
+    public class TimeFrame
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
 
-        public List<TimeRangeColorByQuantity> TimeRangeColorByQuantities { get; set; } = new();
+        public List<TimeFrameColor> TimeFrameColors { get; set; } = new();
     }
 }

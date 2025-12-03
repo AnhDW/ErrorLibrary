@@ -23,8 +23,10 @@ namespace ErrorLibrary.Data
         public DbSet<ErrorDetailAttachment> ErrorDetailAttachments { get; set; }
         public DbSet<UserOrganization> UserOrganizations { get; set; }
 
-        public DbSet<TimeRange> TimeRanges { get; set; }
-        public DbSet<TimeRangeColorByQuantity> TimeRangeColorByQuantities { get; set; }
+        public DbSet<TimeFrame> TimeFrames { get; set; }
+        public DbSet<TimeFrameColor> TimeFrameColors { get; set; }
+        public DbSet<InLine> InLines { get; set; }
+        public DbSet<InLineDetail> InLineDetails { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -107,13 +109,41 @@ namespace ErrorLibrary.Data
                 .WithMany(x => x.UserOrganizations)
                 .HasForeignKey(x => x.UserId);
 
-            builder.Entity<TimeRangeColorByQuantity>()
-                .HasKey(x => new { x.TimeRangeId, x.HexCode });
+            builder.Entity<TimeFrameColor>()
+                .HasOne(x => x.TimeFrame)
+                .WithMany(x => x.TimeFrameColors)
+                .HasForeignKey(x => x.TimeFrameId);
 
-            builder.Entity<TimeRangeColorByQuantity>()
-                .HasOne(x => x.TimeRange)
-                .WithMany(x => x.TimeRangeColorByQuantities)
-                .HasForeignKey(x => x.TimeRangeId);
+            builder.Entity<InLine>()
+                .HasOne(x => x.Line)
+                .WithMany(x => x.InLines)
+                .HasForeignKey(x => x.LineId);
+
+            builder.Entity<InLine>()
+                .HasOne(x => x.Product)
+                .WithMany(x => x.InLines)
+                .HasForeignKey(x => x.ProductId);
+
+            builder.Entity<InLine>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.InLines)
+                .HasForeignKey(x => x.UserId);
+
+            builder.Entity<InLineDetail>()
+                .HasOne(x=>x.TimeFrameColor)
+                .WithMany(x=>x.InLineDetails)
+                .HasForeignKey(x=>x.TimeFrameColorId);
+
+            builder.Entity<InLineDetail>()
+                .HasOne(x => x.InLine)
+                .WithMany(x => x.InLineDetails)
+                .HasForeignKey(x => x.InLineId);
+
+            builder.Entity<InLineDetail>()
+                .HasOne(x => x.Error)
+                .WithMany(x => x.InLineDetails)
+                .HasForeignKey(x => x.ErrorId);
+
         }
 
     }

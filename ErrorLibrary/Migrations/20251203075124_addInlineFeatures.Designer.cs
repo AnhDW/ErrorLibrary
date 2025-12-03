@@ -4,6 +4,7 @@ using ErrorLibrary.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ErrorLibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251203075124_addInlineFeatures")]
+    partial class addInlineFeatures
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,7 +152,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasIndex("FactoryId");
 
-                    b.ToTable("Enterprises", (string)null);
+                    b.ToTable("Enterprises");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.Error", b =>
@@ -185,7 +188,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasIndex("ProductCategoryId");
 
-                    b.ToTable("Errors", (string)null);
+                    b.ToTable("Errors");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.ErrorCategory", b =>
@@ -205,7 +208,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ErrorCategories", (string)null);
+                    b.ToTable("ErrorCategories");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.ErrorDetail", b =>
@@ -233,7 +236,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ErrorDetails", (string)null);
+                    b.ToTable("ErrorDetails");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.ErrorDetailAttachment", b =>
@@ -276,7 +279,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasIndex("LineId", "ProductId", "ErrorId", "UserId");
 
-                    b.ToTable("ErrorDetailAttachments", (string)null);
+                    b.ToTable("ErrorDetailAttachments");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.ErrorGroup", b =>
@@ -300,7 +303,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ErrorGroups", (string)null);
+                    b.ToTable("ErrorGroups");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.Factory", b =>
@@ -325,7 +328,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasIndex("UnitId");
 
-                    b.ToTable("Factories", (string)null);
+                    b.ToTable("Factories");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.InLine", b =>
@@ -360,7 +363,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("InLines", (string)null);
+                    b.ToTable("InLines");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.InLineDetail", b =>
@@ -397,7 +400,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasIndex("TimeFrameColorId");
 
-                    b.ToTable("InLineDetails", (string)null);
+                    b.ToTable("InLineDetails");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.Line", b =>
@@ -422,7 +425,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasIndex("EnterpriseId");
 
-                    b.ToTable("Lines", (string)null);
+                    b.ToTable("Lines");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.Product", b =>
@@ -454,7 +457,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasIndex("ProductCategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.ProductCategory", b =>
@@ -474,7 +477,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories", (string)null);
+                    b.ToTable("ProductCategories");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.Solution", b =>
@@ -506,7 +509,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasIndex("ErrorId");
 
-                    b.ToTable("Solutions", (string)null);
+                    b.ToTable("Solutions");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.TimeFrame", b =>
@@ -529,7 +532,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TimeFrames", (string)null);
+                    b.ToTable("TimeFrames");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.TimeFrameColor", b =>
@@ -557,7 +560,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasIndex("TimeFrameId");
 
-                    b.ToTable("TimeFrameColors", (string)null);
+                    b.ToTable("TimeFrameColors");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.Unit", b =>
@@ -577,7 +580,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Units", (string)null);
+                    b.ToTable("Units");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.UserOrganization", b =>
@@ -593,7 +596,7 @@ namespace ErrorLibrary.Migrations
 
                     b.HasKey("UserId", "OrganizationType", "OrganizationId");
 
-                    b.ToTable("UserOrganizations", (string)null);
+                    b.ToTable("UserOrganizations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -12,7 +12,8 @@
         public ErrorGroup ErrorGroup { get; set; }
         public ProductCategory ProductCategory { get; set; }
         public ErrorCategory? ErrorCategory { get; set; }
-        public List<Solution> Solutions { get; set; } = new List<Solution>();
-        public List<ErrorDetail> ErrorDetails { get; set; } = new List<ErrorDetail>();
+        public List<Solution> Solutions { get; set; } = new();
+        public List<ErrorDetail> ErrorDetails { get; set; } = new();
+        public List<InLineDetail> InLineDetails { get; set; } = new();
     }
 }

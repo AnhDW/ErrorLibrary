@@ -11,5 +11,6 @@
 
         public ProductCategory ProductCategory { get; set; }
         public List<ErrorDetail> ErrorDetails { get; set; } = new List<ErrorDetail>();
+        public List<InLine> InLines { get; set; } = new();
     }
 }

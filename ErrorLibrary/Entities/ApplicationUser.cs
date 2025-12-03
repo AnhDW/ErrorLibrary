@@ -8,7 +8,8 @@ namespace ErrorLibrary.Entities
         public string FullName { get; set; }
         public string? AvatarUrl { get; set; }
 
-        public List<ErrorDetail> ErrorDetails { get; set; } = new List<ErrorDetail>();
-        public List<UserOrganization> UserOrganizations { get; set; } = new List<UserOrganization>();
+        public List<InLine> InLines { get; set; } = new();
+        public List<ErrorDetail> ErrorDetails { get; set; } = new();
+        public List<UserOrganization> UserOrganizations { get; set; } = new();
     }
 }
