@@ -130,9 +130,9 @@ namespace ErrorLibrary.Data
                 .HasForeignKey(x => x.UserId);
 
             builder.Entity<InLineDetail>()
-                .HasOne(x=>x.TimeFrameColor)
+                .HasOne(x=>x.TimeFrame)
                 .WithMany(x=>x.InLineDetails)
-                .HasForeignKey(x=>x.TimeFrameColorId);
+                .HasForeignKey(x=>x.TimeFrameId);
 
             builder.Entity<InLineDetail>()
                 .HasOne(x => x.InLine)

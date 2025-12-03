@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public int InLineId { get; set; }
-        public int TimeFrameColorId { get; set; }
+        public int TimeFrameId { get; set; }
         public int ErrorId { get; set; }
 
         public DateTime CreateTime { get; set; }
@@ -14,6 +14,6 @@
 
         public Error Error { get; set; }
         public InLine InLine { get; set; }
-        public TimeFrameColor TimeFrameColor { get; set; }
+        public TimeFrame TimeFrame { get; set; }
     }
 }

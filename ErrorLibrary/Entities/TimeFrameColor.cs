@@ -9,6 +9,5 @@
         public int MaxQuantity { get; set; } = 0;
 
         public TimeFrame TimeFrame { get; set; }
-        public List<InLineDetail> InLineDetails { get; set; } = new();
     }
 }
