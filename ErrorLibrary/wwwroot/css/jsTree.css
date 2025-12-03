@@ -148,3 +148,11 @@ table td {
     color: #777;
 }
 
+.card-custom{
+    cursor: pointer
+}
+
+.card-custom:hover {
+    transform: scale(1.05);
+}
+

@@ -1,6 +1,6 @@
 ﻿@{
     var controllerName = ViewContext.RouteData.Values["controller"].ToString();
-    var featureControllers = new[] { "Home", "ErrorDetailLibrary" };
+    var featureControllers = new[] { "Home", "ErrorDetailLibrary", "InLine" };
     var libraryControllers = new[] { "ErrorLibrary", "ErrorGroupLibrary", "ErrorCategoryLibrary", "ProductCategoryLibrary", "ProductLibrary", "SolutionLibrary", "UnitLibrary", "FactoryLibrary", "EnterpriseLibrary", "LineLibrary" };
     var settingControllers = new[] { "UserLibrary" };
 }
@@ -99,6 +99,12 @@
                                 <a class="menu-link" asp-controller="ErrorDetailLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-circle-exclamation"></i>
                                     <div style="margin-left: 4px;">Lỗi theo mã hàng</div>
+                                </a>
+                            </li>
+                            <li class="menu-item @(controllerName == "InLine" ? "active" : "")">
+                                <a class="menu-link" asp-controller="InLine" asp-action="Index">
+                                    <i class="menu-icon tf-icons fa-solid fa-circle-exclamation"></i>
+                                    <div style="margin-left: 4px;">Kiểm InLine</div>
                                 </a>
                             </li>
                         </ul>

@@ -1,0 +1,182 @@
+﻿@{
+    ViewData["Title"] = "Inline";
+}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3"><span class="text-muted fw-light">Inline</span></h4>
+        <div class="d-flex flex-row flex-wrap">
+            <div class="d-flex flex-row align-items-center mt-1">
+                <label for="selectLine">Chuyền</label>
+                <select style="width: 150px;" class="form-select ms-1" id="selectLine" aria-label="Default select example">
+                    <option selected="">Chọn chuyền</option>
+                    <option value="A1">Chuyền 1</option>
+                    <option value="A2">Chuyền 2</option>
+                    <option value="A3">Chuyền 3</option>
+                </select>
+            </div>
+            <div class="d-flex flex-row align-items-center ms-1 mt-1">
+                <label for="selectProductCode">Mã hàng</label>
+                <select style="width: 150px;" class="form-select ms-1" id="selectProductCode" aria-label="Default select example">
+                    <option selected="">Chọn mã hàng</option>
+                    <option value="A1">ABC123</option>
+                    <option value="A2">JKL432</option>
+                    <option value="A3">UIO12</option>
+                </select>
+            </div>
+            <div class="d-flex flex-row align-items-center ms-1 mt-1">
+                <label for="date">Ngày</label>
+                <input style="width: 130px;" id="date" class="form-control ms-1" type="date" value="2025-12-01" disabled>
+            </div>
+            <div class="d-flex flex-row align-items-center ms-1 mt-1">
+                <label for="count">Số lượng kiểm</label>
+                <input style="width: 130px;" id="count" class="form-control ms-1" type="number" value="0" >
+            </div>
+            <div class="d-flex flex-row align-items-center ms-1 mt-1">
+                <label for="user">Người kiểm</label>
+                <input style="width: 130px;" id="user" class="form-control ms-1" type="text" value="itsc" disabled>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6 col-xl-3">
+                <div class="card card-custom bg-success text-white mb-3" data-bs-toggle="modal"
+                     data-bs-target="#addModel">
+                    <div class="card-header">Khung giờ: 7 - 9</div>
+                    <div class="card-body">
+                        <h5 class="card-title text-white">0 lỗi</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div style="background-color:#ffdd00;" class="card card-custom text-white mb-3" data-bs-toggle="modal"
+                     data-bs-target="#addModel">
+                    <div class="card-header">Khung giờ: 9 - 11</div>
+                    <div class="card-body">
+                        <h5 class="card-title text-white">1 lỗi</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card card-custom bg-danger text-white mb-3" data-bs-toggle="modal"
+                     data-bs-target="#addModel">
+                    <div class="card-header">Khung giờ: 12 - 14</div>
+                    <div class="card-body">
+                        <h5 class="card-title text-white">2 lỗi</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card card-custom card-custom bg-dark text-white mb-3" data-bs-toggle="modal"
+                     data-bs-target="#addModel">
+                    <div class="card-header">Khung giờ: 14 - 16</div>
+                    <div class="card-body">
+                        <h5 class="card-title text-white">3 lỗi</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-1">
+            <!-- Add Modal -->
+            <div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Thêm kiểm InLine</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <div class="mb-2">
+                                    <label for="addErrorCategory" class="form-label">Chọn nhóm lỗi</label>
+                                    <select class="form-select" id="addErrorCategory" aria-label="Default select example">
+                                        <option selected="">Chọn nhóm lỗi </option>
+                                        <option value="A1">Nhóm lỗi 1</option>
+                                        <option value="A2">Nhóm lỗi 2</option>
+                                        <option value="A3">Nhóm lỗi 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="addError" class="form-label">Chọn lỗi</label>
+                                    <select class="form-select" id="addError" aria-label="Default select example">
+                                        <option selected="">Chọn lỗi </option>
+                                        <option value="A1">Lỗi 1</option>
+                                        <option value="A2">Lỗi 2</option>
+                                        <option value="A3">Lỗi 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="quantity" class="form-label">Số lượng</label>
+                                    <div class="input-group">
+                                        <input id="quantity" type="number" class="form-control" value="0" min="0">
+                                        <button class="btn btn-outline-primary fs-5" type="button">+</button>
+                                        <button class="btn btn-outline-primary fs-5" type="button">-</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddFactory()">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- Striped Rows -->
+        <div class="card mt-4">
+            <div style="min-height:200px;" class="table-responsive text-nowrap">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Khung giờ</th>
+                            <th>Giờ</th>
+                            <th>Công đoạn</th>
+                            <th>Mã lỗi</th>
+                            <th>Tên lỗi</th>
+                            <th>Số lượng lỗi</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inlineTableBody" class="table-border-bottom-0">
+                        @*                         <tr>
+                            <td>Nhà máy 1</td>
+                            <td>Mô tả 1</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                data-bs-target="#editModel" onclick="editShowFactoryModalHandle(1)">
+                                            <i class="bx bx-edit-alt me-1"></i> Sửa
+                                        </button>
+                                        <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteFactory(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr> *@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--/ Striped Rows -->
+    </div>
+    <!-- / Content -->
+    <div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+@section Scripts {
+    <script src="~/js/page-handle/factory-library.js"></script>
+    <script src="~/js/request/factory-request.js"></script>
+    <script src="~/js/request/unit-request.js"></script>
+}
