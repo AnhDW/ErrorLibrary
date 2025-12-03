@@ -22,6 +22,9 @@ namespace ErrorLibrary.Data
         public DbSet<ErrorDetail> ErrorDetails { get; set; }
         public DbSet<ErrorDetailAttachment> ErrorDetailAttachments { get; set; }
         public DbSet<UserOrganization> UserOrganizations { get; set; }
+
+        public DbSet<TimeRange> TimeRanges { get; set; }
+        public DbSet<TimeRangeColorByQuantity> TimeRangeColorByQuantities { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -103,6 +106,14 @@ namespace ErrorLibrary.Data
                 .HasOne(x => x.User)
                 .WithMany(x => x.UserOrganizations)
                 .HasForeignKey(x => x.UserId);
+
+            builder.Entity<TimeRangeColorByQuantity>()
+                .HasKey(x => new { x.TimeRangeId, x.HexCode });
+
+            builder.Entity<TimeRangeColorByQuantity>()
+                .HasOne(x => x.TimeRange)
+                .WithMany(x => x.TimeRangeColorByQuantities)
+                .HasForeignKey(x => x.TimeRangeId);
         }
 
     }

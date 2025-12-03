@@ -106,7 +106,10 @@ namespace ErrorLibrary.Services
             {
                 query = query.Where(x => x.Name.Contains(errorParams.Name)).ToList();
             }
-
+            if(!string.IsNullOrEmpty(errorParams.CodeName))
+            {
+                query = query.Where(x => x.Code.Contains(errorParams.CodeName) || x.Name.Contains(errorParams.CodeName)).ToList();
+            }
             return await PagedList<ErrorDisplayDto>.CreateAsync(
                 query.AsQueryable().AsNoTracking().ProjectTo<ErrorDisplayDto>(_mapper.ConfigurationProvider),
                 errorParams.PageNumber,

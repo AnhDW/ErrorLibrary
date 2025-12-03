@@ -7,5 +7,6 @@
         public List<int> ProductCategoryIds { get; set; } = new List<int>();
         public string? Code { get; set; }
         public string? Name { get; set; }
+        public string? CodeName { get; set; }
     }
 }

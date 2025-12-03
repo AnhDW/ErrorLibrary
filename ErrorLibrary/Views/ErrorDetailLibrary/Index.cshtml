@@ -71,18 +71,19 @@
                                             <option value="3">A03</option>
                                         </select>
                                     </div>
-                                    <div class="mb-2 col-md-6">
+                                    @* <div class="mb-2 col-md-6">
                                         <label for="errorSearch" class="form-label">Mã lỗi</label>
 
                                         <div class="custom-select">
-                                            <input id="errorSearch" type="text" placeholder="Tìm lỗi..." autocomplete="off" />
+                                            <input id="errorSearch" type="text" placeholder="Tìm lỗi..." autocomplete="off">
 
-                                            <div id="errorDropdown" class="dropdown-list hidden">
+                                            <div id="errorDropdown" class="custom-dropdown hidden">
                                                 <div class="loading">Đang tải...</div>
                                             </div>
                                         </div>
-                                    </div>
 
+                                    </div> *@
+                                    @* <button id="color-picker-btn" type="button">Chọn màu</button> *@
                                     <div class="mb-2 col-md-6">
                                         <label for="addProductSelect" class="form-label">Mã hàng</label>
                                         <select class="form-select" id="addProductSelect" aria-label="Default select example" disabled>
@@ -296,88 +297,49 @@
     <script src="~/js/request/product-request.js"></script>
     <script src="~/js/request/error-request.js"></script>
     <script src="~/js/request/error-detail-attachment-request.js"></script>
+    <script src="~/js/share/custom-select.js"></script>
 }
-
 <script>
-        let page = 1;
-    let isLoading = false;
-    let hasMore = true;
+        // Simple example, see optional options for more configuration.
+    const pickr = Pickr.create({
+        el: '#color-picker-btn',
+        theme: 'classic', // or 'monolith', or 'nano'
 
-    const searchInput = document.getElementById("errorSearch");
-    const dropdown = document.getElementById("errorDropdown");
+        swatches: [
+            'rgba(244, 67, 54, 1)',
+            'rgba(233, 30, 99, 0.95)',
+            'rgba(156, 39, 176, 0.9)',
+            'rgba(103, 58, 183, 0.85)',
+            'rgba(63, 81, 181, 0.8)',
+            'rgba(33, 150, 243, 0.75)',
+            'rgba(3, 169, 244, 0.7)',
+            'rgba(0, 188, 212, 0.7)',
+            'rgba(0, 150, 136, 0.75)',
+            'rgba(76, 175, 80, 0.8)',
+            'rgba(139, 195, 74, 0.85)',
+            'rgba(205, 220, 57, 0.9)',
+            'rgba(255, 235, 59, 0.95)',
+            'rgba(255, 193, 7, 1)'
+        ],
 
-    function debounce(fn, delay) {
-        let timer;
-        return function (...args) {
-            clearTimeout(timer);
-            timer = setTimeout(() => fn.apply(this, args), delay);
-        };
-    }
+        components: {
 
-    async function loadData(reset = false) {
-        if (isLoading || (!hasMore && !reset)) return;
+            // Main components
+            preview: true,
+            opacity: true,
+            hue: true,
 
-        isLoading = true;
-        dropdown.querySelector(".loading").style.display = "block";
-
-        if (reset) {
-            page = 1;
-            hasMore = true;
-            dropdown.innerHTML = `<div class="loading">Đang tải...</div>`;
-        }
-
-        const query = searchInput.value.trim();
-        const res = await fetch(`/api/errors?page=${page}&size=20&search=${query}`);
-        const data = await res.json();
-
-        // Ví dụ: { items: [...], totalPages: 10 }
-        const items = data.items || [];
-
-        items.forEach(item => {
-            const div = document.createElement("div");
-            div.className = "dropdown-item";
-            div.textContent = `${item.code} - ${item.name}`;
-            div.dataset.value = item.id;
-
-            div.addEventListener("click", () => {
-                searchInput.value = div.textContent;
-                dropdown.classList.add("hidden");
-            });
-
-            dropdown.appendChild(div);
-        });
-
-        hasMore = page < data.totalPages;
-        page++;
-        isLoading = false;
-
-        dropdown.querySelector(".loading").style.display = hasMore ? "block" : "none";
-    }
-
-    // Search input – debounce
-    searchInput.addEventListener("input", debounce(() => {
-        dropdown.classList.remove("hidden");
-        loadData(true);
-    }, 350));
-
-    // Show dropdown on focus
-    searchInput.addEventListener("focus", () => {
-        dropdown.classList.remove("hidden");
-        loadData(true);
-    });
-
-    // Hide on click outside
-    document.addEventListener("click", e => {
-        if (!e.target.closest(".custom-select")) {
-            dropdown.classList.add("hidden");
+            // Input / output Options
+            interaction: {
+                hex: true,
+                rgba: false,
+                hsla: false,
+                hsva: false,
+                cmyk: false,
+                input: true,
+                clear: true,
+                save: true
+            }
         }
     });
-
-    // Infinite scroll
-    dropdown.addEventListener("scroll", () => {
-        if (dropdown.scrollTop + dropdown.clientHeight >= dropdown.scrollHeight - 10) {
-            loadData();
-        }
-    });
-
 </script>
