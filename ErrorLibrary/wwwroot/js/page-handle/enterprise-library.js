@@ -13,14 +13,14 @@
 }
 
 async function addShowEnterpriseModalHandle() {
-    const units = await getUnits();
+    const units = (await getUnits()).result);
     const unitHtml = renderSelectOptions(units, 'Chọn đơn vị');
     $('#addUnitSelect').html(unitHtml);
 }
 
 async function editShowEnterpriseModalHandle(enterprise) {
     console.log(enterprise);
-    const units = await getUnits();
+    const units = (await getUnits()).result;
     const factories = await getFactories();
     const unitHtml = renderSelectOptions(units, 'Chọn đơn vị');
     const factoryHtml = renderSelectOptions(factories, 'Chọn nhà máy');

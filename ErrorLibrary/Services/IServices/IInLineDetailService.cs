@@ -13,5 +13,7 @@ namespace ErrorLibrary.Services.IServices
         void Add(InLineDetail inLineDetail);
         void Update(InLineDetail inLineDetail);
         void Delete(InLineDetail inLineDetail);
+
+        Task<bool> CheckExists(int inLineId, int timeFrameId, int errorId);
     }
 }

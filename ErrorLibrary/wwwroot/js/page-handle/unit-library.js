@@ -4,7 +4,7 @@
 
 async function editShowUnitModalHandle(id) {
     console.log('show edit')
-    var unit = await getUnitById(id);
+    var unit = (await getUnitById(id)).result;
     $('#editUnitId').val(unit.id);
     $('#editUnitName').val(unit.name);
     $('#editUnitDescription').val(unit.description);
@@ -57,10 +57,10 @@ function handleDeleteUnit(id) {
 }
 
 function renderUnitTable() {
-    getUnits().then(function (data) {
-        console.log(data)
+    getUnits().then(function (res) {
+        console.log(res)
         let html = '';
-        data.forEach(item => {
+        res.result.forEach(item => {
             html += `
                     <tr>
                             <td>${item.name}</td>

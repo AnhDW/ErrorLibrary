@@ -28,6 +28,11 @@ namespace ErrorLibrary.Services
             _context.TimeFrameColors.Add(timeFrameColor);
         }
 
+        public async Task<bool> CheckExists(int timeFrameId, string hexCode)
+        {
+            return await _context.TimeFrameColors.AnyAsync(x => x.TimeFrameId == timeFrameId && x.HexCode == hexCode);
+        }
+
         public void Delete(TimeFrameColor timeFrameColor)
         {
             _context.TimeFrameColors.Remove(timeFrameColor);

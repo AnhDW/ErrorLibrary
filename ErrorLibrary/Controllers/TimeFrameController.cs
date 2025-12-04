@@ -1,22 +1,23 @@
 ﻿using AutoMapper;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
+using ErrorLibrary.Services;
 using ErrorLibrary.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ErrorLibrary.Controllers
 {
-    public class UnitLibraryController : Controller
+    public class TimeFrameController : Controller
     {
-        private readonly IUnitService _unitService;
         private readonly ISharedService _sharedService;
+        private readonly ITimeFrameService _timeFrameService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public UnitLibraryController(IUnitService unitService, ISharedService sharedService, IMapper mapper)
+        public TimeFrameController(ISharedService sharedService, ITimeFrameService timeFrameService, IMapper mapper)
         {
-            _unitService = unitService;
             _sharedService = sharedService;
+            _timeFrameService = timeFrameService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
         }
@@ -26,32 +27,33 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetUnits()
+
+        public async Task<IActionResult> GetTimeFrames()
         {
-            var units = await _unitService.GetAll();
-            _responseDto.Result = _mapper.Map<List<UnitDto>>(units);
+            var timeFrames = await _timeFrameService.GetAll();
+            _responseDto.Result = _mapper.Map<List<TimeFrameDto>>(timeFrames);
             return Json(_responseDto);
         }
 
-        public async Task<IActionResult> GetUnitById(int id)
+        public async Task<IActionResult> GetTimeFrameById(int id)
         {
-            var unit = await _unitService.GetById(id);
-            _responseDto.Result = _mapper.Map<UnitDto>(unit);
+            var timeFrame = await _timeFrameService.GetById(id);
+            _responseDto.Result = _mapper.Map<TimeFrameDto>(timeFrame);
             return Json(_responseDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUnit([FromBody]UnitDto unitDto)
+        public async Task<IActionResult> AddTimeFrame([FromBody] TimeFrameDto timeFrameDto)
         {
-            if(await _unitService.CheckNameExists(unitDto.Name))
+            if (await _timeFrameService.CheckNameExists(timeFrameDto.Name))
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Tên đơn vị đã tồn tại";
                 return Json(_responseDto);
             }
 
-            _unitService.Add(_mapper.Map<Unit>(unitDto));
-            if(await _sharedService.SaveAllChanges())
+            _timeFrameService.Add(_mapper.Map<TimeFrame>(timeFrameDto));
+            if (await _sharedService.SaveAllChanges())
             {
                 _responseDto.Message = "Thêm đơn vị thành công";
                 return Json(_responseDto);
@@ -63,17 +65,18 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateUnit([FromBody] UnitDto unitDto)
+        public async Task<IActionResult> UpdateTimeFrame([FromBody] TimeFrameDto timeFrameDto)
         {
-            var unit = await _unitService.GetById(unitDto.Id);
-            if(unit == null)
+            var timeFrame = await _timeFrameService.GetById(timeFrameDto.Id);
+            if (timeFrame == null)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
                 return Json(_responseDto);
             }
 
-            bool isNameExists = await _unitService.CheckNameExists(unitDto.Name) && unitDto.Name != unit.Name;
+            bool isNameExists = await _timeFrameService.CheckNameExists(timeFrameDto.Name) &&
+                timeFrameDto.Name != timeFrame.Name;
 
             if (isNameExists)
             {
@@ -82,7 +85,7 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            _unitService.Update(_mapper.Map(unitDto, unit));
+            _timeFrameService.Update(_mapper.Map(timeFrameDto, timeFrame));
             if (await _sharedService.SaveAllChanges())
             {
                 _responseDto.Message = "Cập nhật đơn vị thành công";
@@ -95,17 +98,17 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteUnit([FromBody] int id)
+        public async Task<IActionResult> DeleteTimeFrame([FromBody] int id)
         {
-            var unit = await _unitService.GetById(id);
-            if (unit == null)
+            var timeFrame = await _timeFrameService.GetById(id);
+            if (timeFrame == null)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
                 return Json(_responseDto);
             }
 
-            _unitService.Delete(unit);
+            _timeFrameService.Delete(timeFrame);
             if (await _sharedService.SaveAllChanges())
             {
                 _responseDto.Message = "Xóa đơn vị thành công";
@@ -116,6 +119,5 @@ namespace ErrorLibrary.Controllers
             _responseDto.Message = "Lỗi trong quá trình xóa";
             return Json(_responseDto);
         }
-
     }
 }

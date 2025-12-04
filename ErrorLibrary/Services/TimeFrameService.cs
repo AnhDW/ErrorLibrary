@@ -28,6 +28,11 @@ namespace ErrorLibrary.Services
             _context.TimeFrames.Add(timeFrame);
         }
 
+        public async Task<bool> CheckNameExists(string name)
+        {
+            return await _context.TimeFrames.AnyAsync(x => x.Name == name);
+        }
+
         public void Delete(TimeFrame timeFrame)
         {
             _context.TimeFrames.Remove(timeFrame);

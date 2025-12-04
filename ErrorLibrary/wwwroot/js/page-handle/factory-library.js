@@ -1,12 +1,12 @@
 ﻿async function addShowFactoryModalHandle() {
-    const data = await getUnits();
+    const data = (await getUnits()).result;
     const html = renderSelectOptions(data, 'Chọn đơn vị');
 
     $('#addUnitSelect').html(html);
 }
 
 async function editShowFactoryModalHandle(id) {
-    const data = await getUnits();
+    const data = (await getUnits()).result;
     const html = renderSelectOptions(data, 'Chọn đơn vị');
 
     var factory = await getFactoryById(id);

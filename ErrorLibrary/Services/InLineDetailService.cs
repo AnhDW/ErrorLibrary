@@ -28,6 +28,14 @@ namespace ErrorLibrary.Services
             _context.InLineDetails.Add(inLineDetail);
         }
 
+        public async Task<bool> CheckExists(int inLineId, int timeFrameId, int errorId)
+        {
+            return await _context.InLineDetails.AnyAsync(x =>
+                x.InLineId == inLineId &&
+                x.TimeFrameId == timeFrameId &&
+                x.ErrorId == errorId);
+        }
+
         public void Delete(InLineDetail inLineDetail)
         {
             _context.InLineDetails.Remove(inLineDetail);

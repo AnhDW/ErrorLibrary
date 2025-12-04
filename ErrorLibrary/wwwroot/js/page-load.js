@@ -31,9 +31,8 @@ $(document).ready(function () {
         renderProductCategoryTable();
     } else if (path.includes('/ErrorDetailLibrary')) {
         renderErrorDetailsTable();
-    } else if (path.includes('/InLineFeature')) {
+    } else if (path.includes('/InLineLibrary')) {
         initDropdown();
-        console.log('InLineFeature page loaded');
     }
 });
 

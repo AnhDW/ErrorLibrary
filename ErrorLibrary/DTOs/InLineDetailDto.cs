@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public int InLineId { get; set; }
-        public int TimeFrameColorId { get; set; }
+        public int TimeFrameId { get; set; }
         public int ErrorId { get; set; }
 
         public DateTime CreateTime { get; set; }

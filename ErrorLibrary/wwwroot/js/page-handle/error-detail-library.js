@@ -55,7 +55,7 @@ async function handleSelectError(value, action) {
 }
 
 async function addShowErrorDetailModalHandle() {
-    const units = await getUnits();
+    const units = (await getUnits()).result;
     const products = (await getProducts()).result;
     const errors = (await getErrors()).result;
     const unitHtml = renderSelectOptionsByField(units, 'Chọn đơn vị', 'id', 'name');
@@ -70,7 +70,7 @@ async function addShowErrorDetailModalHandle() {
 async function editShowErrorDetailModalHandle(errorDetail) {
     console.log(errorDetail);
 
-    const units = await getUnits();
+    const units = (await getUnits()).result;
     const factories = await getFactories();
     const enterprises = await getEnterprises();
     const lines = await getLines();

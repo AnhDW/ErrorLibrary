@@ -1,13 +1,4 @@
-﻿let orgTreeInitialized = false;
-
-$('#btnTreeOrganization').on('click', function () {
-    if (!orgTreeInitialized) {
-        initOrganizationTree();
-        orgTreeInitialized = true;
-    }
-});
-
-async function initOrganizationTree() {
+﻿async function initOrganizationTree() {
     $('.dropdown-menu').on('click', function (e) {
         e.stopPropagation();
     });
@@ -37,7 +28,8 @@ async function initOrganizationTree() {
                 document.getElementById('btnTreeOrganization')
             );
             dd.hide();
-        }, onNodeExpanded: function (event, node) {
+        },
+        onNodeExpanded: function (event, node) {
             console.log("Đã mở:", node.text);
         },
         onNodeCollapsed: function (event, node) {
@@ -46,6 +38,8 @@ async function initOrganizationTree() {
     });
 }
 async function initDropdown() {
+    initOrganizationTree();
+
     var products = (await getProducts()).result;
 
     var html = renderSelectOptionsByField(products, 'Chọn sản phẩm', 'id', 'code');

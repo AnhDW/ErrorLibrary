@@ -6,17 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ErrorLibrary.Controllers
 {
-    public class UnitLibraryController : Controller
+    public class InLineLibraryController : Controller
     {
-        private readonly IUnitService _unitService;
         private readonly ISharedService _sharedService;
+        private readonly IInLineService _inLineService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public UnitLibraryController(IUnitService unitService, ISharedService sharedService, IMapper mapper)
+        public InLineLibraryController(ISharedService sharedService, IInLineService inLineService, IMapper mapper)
         {
-            _unitService = unitService;
             _sharedService = sharedService;
+            _inLineService = inLineService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
         }
@@ -26,32 +26,32 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetUnits()
+        public async Task<IActionResult> GetInLines()
         {
-            var units = await _unitService.GetAll();
-            _responseDto.Result = _mapper.Map<List<UnitDto>>(units);
+            var inLines = await _inLineService.GetAll();
+            _responseDto.Result = _mapper.Map<List<InLineDto>>(inLines);
             return Json(_responseDto);
         }
 
-        public async Task<IActionResult> GetUnitById(int id)
+        public async Task<IActionResult> GetInLineById(int id)
         {
-            var unit = await _unitService.GetById(id);
-            _responseDto.Result = _mapper.Map<UnitDto>(unit);
+            var inLine = await _inLineService.GetById(id);
+            _responseDto.Result = _mapper.Map<InLineDto>(inLine);
             return Json(_responseDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUnit([FromBody]UnitDto unitDto)
+        public async Task<IActionResult> AddInLine([FromBody] InLineDto inLineDto)
         {
-            if(await _unitService.CheckNameExists(unitDto.Name))
+            if (await _inLineService.CheckExists(inLineDto.LineId, inLineDto.ProductId, inLineDto.UserId, inLineDto.CreateDate))
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Tên đơn vị đã tồn tại";
                 return Json(_responseDto);
             }
 
-            _unitService.Add(_mapper.Map<Unit>(unitDto));
-            if(await _sharedService.SaveAllChanges())
+            _inLineService.Add(_mapper.Map<InLine>(inLineDto));
+            if (await _sharedService.SaveAllChanges())
             {
                 _responseDto.Message = "Thêm đơn vị thành công";
                 return Json(_responseDto);
@@ -63,17 +63,18 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateUnit([FromBody] UnitDto unitDto)
+        public async Task<IActionResult> UpdateInLine([FromBody] InLineDto inLineDto)
         {
-            var unit = await _unitService.GetById(unitDto.Id);
-            if(unit == null)
+            var inLine = await _inLineService.GetById(inLineDto.Id);
+            if (inLine == null)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
                 return Json(_responseDto);
             }
 
-            bool isNameExists = await _unitService.CheckNameExists(unitDto.Name) && unitDto.Name != unit.Name;
+            bool isNameExists = await _inLineService.CheckExists(inLineDto.LineId, inLineDto.ProductId, inLineDto.UserId, inLineDto.CreateDate) &&
+                (inLineDto.LineId != inLine.LineId || inLineDto.ProductId != inLine.ProductId || inLineDto.UserId != inLine.UserId || inLineDto.CreateDate != inLine.CreateDate);
 
             if (isNameExists)
             {
@@ -82,7 +83,7 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            _unitService.Update(_mapper.Map(unitDto, unit));
+            _inLineService.Update(_mapper.Map(inLineDto, inLine));
             if (await _sharedService.SaveAllChanges())
             {
                 _responseDto.Message = "Cập nhật đơn vị thành công";
@@ -95,17 +96,17 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteUnit([FromBody] int id)
+        public async Task<IActionResult> DeleteInLine([FromBody] int id)
         {
-            var unit = await _unitService.GetById(id);
-            if (unit == null)
+            var inLine = await _inLineService.GetById(id);
+            if (inLine == null)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
                 return Json(_responseDto);
             }
 
-            _unitService.Delete(unit);
+            _inLineService.Delete(inLine);
             if (await _sharedService.SaveAllChanges())
             {
                 _responseDto.Message = "Xóa đơn vị thành công";
@@ -116,6 +117,5 @@ namespace ErrorLibrary.Controllers
             _responseDto.Message = "Lỗi trong quá trình xóa";
             return Json(_responseDto);
         }
-
     }
 }

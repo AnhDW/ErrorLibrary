@@ -1,22 +1,23 @@
 ﻿using AutoMapper;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
+using ErrorLibrary.Services;
 using ErrorLibrary.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ErrorLibrary.Controllers
 {
-    public class UnitLibraryController : Controller
+    public class TimeFrameColorController : Controller
     {
-        private readonly IUnitService _unitService;
         private readonly ISharedService _sharedService;
+        private readonly ITimeFrameColorService _timeFrameColorService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public UnitLibraryController(IUnitService unitService, ISharedService sharedService, IMapper mapper)
+        public TimeFrameColorController(ISharedService sharedService, ITimeFrameColorService timeFrameColorService, IMapper mapper)
         {
-            _unitService = unitService;
             _sharedService = sharedService;
+            _timeFrameColorService = timeFrameColorService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
         }
@@ -26,32 +27,32 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetUnits()
+        public async Task<IActionResult> GetTimeFrameColors()
         {
-            var units = await _unitService.GetAll();
-            _responseDto.Result = _mapper.Map<List<UnitDto>>(units);
+            var timeFrameColors = await _timeFrameColorService.GetAll();
+            _responseDto.Result = _mapper.Map<List<TimeFrameColorDto>>(timeFrameColors);
             return Json(_responseDto);
         }
 
-        public async Task<IActionResult> GetUnitById(int id)
+        public async Task<IActionResult> GetTimeFrameColorById(int id)
         {
-            var unit = await _unitService.GetById(id);
-            _responseDto.Result = _mapper.Map<UnitDto>(unit);
+            var timeFrameColor = await _timeFrameColorService.GetById(id);
+            _responseDto.Result = _mapper.Map<TimeFrameColorDto>(timeFrameColor);
             return Json(_responseDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUnit([FromBody]UnitDto unitDto)
+        public async Task<IActionResult> AddTimeFrameColor([FromBody] TimeFrameColorDto timeFrameColorDto)
         {
-            if(await _unitService.CheckNameExists(unitDto.Name))
+            if (await _timeFrameColorService.CheckExists(timeFrameColorDto.TimeFrameId, timeFrameColorDto.HexCode))
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Tên đơn vị đã tồn tại";
                 return Json(_responseDto);
             }
 
-            _unitService.Add(_mapper.Map<Unit>(unitDto));
-            if(await _sharedService.SaveAllChanges())
+            _timeFrameColorService.Add(_mapper.Map<TimeFrameColor>(timeFrameColorDto));
+            if (await _sharedService.SaveAllChanges())
             {
                 _responseDto.Message = "Thêm đơn vị thành công";
                 return Json(_responseDto);
@@ -63,17 +64,18 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateUnit([FromBody] UnitDto unitDto)
+        public async Task<IActionResult> UpdateTimeFrameColor([FromBody] TimeFrameColorDto timeFrameColorDto)
         {
-            var unit = await _unitService.GetById(unitDto.Id);
-            if(unit == null)
+            var timeFrameColor = await _timeFrameColorService.GetById(timeFrameColorDto.Id);
+            if (timeFrameColor == null)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
                 return Json(_responseDto);
             }
 
-            bool isNameExists = await _unitService.CheckNameExists(unitDto.Name) && unitDto.Name != unit.Name;
+            bool isNameExists = await _timeFrameColorService.CheckExists(timeFrameColorDto.TimeFrameId, timeFrameColorDto.HexCode) &&
+                (timeFrameColorDto.TimeFrameId != timeFrameColor.TimeFrameId || timeFrameColorDto.HexCode != timeFrameColor.HexCode);
 
             if (isNameExists)
             {
@@ -82,7 +84,7 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            _unitService.Update(_mapper.Map(unitDto, unit));
+            _timeFrameColorService.Update(_mapper.Map(timeFrameColorDto, timeFrameColor));
             if (await _sharedService.SaveAllChanges())
             {
                 _responseDto.Message = "Cập nhật đơn vị thành công";
@@ -95,17 +97,17 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteUnit([FromBody] int id)
+        public async Task<IActionResult> DeleteTimeFrameColor([FromBody] int id)
         {
-            var unit = await _unitService.GetById(id);
-            if (unit == null)
+            var timeFrameColor = await _timeFrameColorService.GetById(id);
+            if (timeFrameColor == null)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
                 return Json(_responseDto);
             }
 
-            _unitService.Delete(unit);
+            _timeFrameColorService.Delete(timeFrameColor);
             if (await _sharedService.SaveAllChanges())
             {
                 _responseDto.Message = "Xóa đơn vị thành công";
@@ -116,6 +118,5 @@ namespace ErrorLibrary.Controllers
             _responseDto.Message = "Lỗi trong quá trình xóa";
             return Json(_responseDto);
         }
-
     }
 }

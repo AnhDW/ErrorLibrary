@@ -168,8 +168,11 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
+            var currentNameKey = $"{error.ErrorGroupId}|{error.ErrorCategoryId}|{error.ProductCategoryId}|{error.Name}";
+            var updatedNameKey = $"{errorDto.ErrorGroupId}|{errorDto.ErrorCategoryId}|{errorDto.ProductCategoryId}|{errorDto.Name}";
+
             bool isNameExists = _errorService.CheckNameExistsFast(existingNames, errorDto.ErrorGroupId, errorDto.ErrorCategoryId ?? -1, errorDto.ProductCategoryId, errorDto.Name) 
-                && errorDto.Name != error.Name;
+                && updatedNameKey != currentNameKey;
             bool isCodeExists = codes.Contains(errorDto.Code) && errorDto.Code != error.Code;
 
             if (isNameExists || isCodeExists)

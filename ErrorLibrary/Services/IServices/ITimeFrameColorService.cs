@@ -13,5 +13,6 @@ namespace ErrorLibrary.Services.IServices
         void Add(TimeFrameColor timeFrameColor);
         void Update(TimeFrameColor timeFrameColor);
         void Delete(TimeFrameColor timeFrameColor);
+        Task<bool> CheckExists(int timeFrameId, string hexCode);
     }
 }
