@@ -2,7 +2,7 @@
 
 namespace ErrorLibrary.Controllers
 {
-    public class InLineController : Controller
+    public class InLineFeatureController : Controller
     {
         public IActionResult Index()
         {

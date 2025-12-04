@@ -7,53 +7,58 @@
 
     <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="fw-bold py-3"><span class="text-muted fw-light">Inline</span></h4>
-        <div class="d-flex flex-row flex-wrap">
-            <div class="d-flex flex-row align-items-center mt-1">
-                <label for="selectLine">Chuyền</label>
-                <select style="width: 150px;" class="form-select ms-1" id="selectLine" aria-label="Default select example">
-                    <option selected="">Chọn chuyền</option>
-                    <option value="A1">Chuyền 1</option>
-                    <option value="A2">Chuyền 2</option>
-                    <option value="A3">Chuyền 3</option>
-                </select>
-            </div>
-            <div class="d-flex flex-row align-items-center mt-1">
-                <label for="tree">Chuyền</label>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="treeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        Chọn danh mục
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="treeDropdown">
-                        <li>
-                            <div id="tree"></div>
-                        </li>
-                    </ul>
+
+        <div id="formWrapper" class="mb-2">
+
+            <div class="form-grid">
+                <div class="form-item">
+                    <label>Chuyền</label>
+                    <div class="dropdown w-100" data-bs-auto-close="false">
+                        <button class="btn btn-outline-primary dropdown-toggle w-100"
+                                type="button"
+                                id="btnTreeOrganization"
+                                data-bs-toggle="dropdown">
+                            Chọn chuyền
+                        </button>
+
+                        <ul class="dropdown-menu w-100" aria-labelledby="btnTreeOrganization">
+                            <li><div id="treeOrganization"></div></li>
+                        </ul>
+                    </div>
+                    <input type="hidden" id="selectedOrganizationNode" name="Organization" />
                 </div>
 
-                <input type="hidden" id="selectedNode" name="CategoryId" />
-            </div>
-            <div class="d-flex flex-row align-items-center ms-1 mt-1">
-                <label for="selectProductCode">Mã hàng</label>
-                <select style="width: 150px;" class="form-select ms-1" id="selectProductCode" aria-label="Default select example">
-                    <option selected="">Chọn mã hàng</option>
-                    <option value="A1">ABC123</option>
-                    <option value="A2">JKL432</option>
-                    <option value="A3">UIO12</option>
-                </select>
-            </div>
-            <div class="d-flex flex-row align-items-center ms-1 mt-1">
-                <label for="date">Ngày</label>
-                <input style="width: 130px;" id="date" class="form-control ms-1" type="date" value="2025-12-01" disabled>
-            </div>
-            <div class="d-flex flex-row align-items-center ms-1 mt-1">
-                <label for="count">Số lượng kiểm</label>
-                <input style="width: 130px;" id="count" class="form-control ms-1" type="number" value="0" >
-            </div>
-            <div class="d-flex flex-row align-items-center ms-1 mt-1">
-                <label for="user">Người kiểm</label>
-                <input style="width: 130px;" id="user" class="form-control ms-1" type="text" value="itsc" disabled>
+                <div class="form-item">
+                    <label for="selectProductCode">Mã hàng</label>
+                    <select id="selectProductCode" class="form-select">
+                        <option selected="">Chọn mã hàng</option>
+                        <option value="A1">ABC123</option>
+                        <option value="A2">JKL432</option>
+                        <option value="A3">UIO12</option>
+                    </select>
+                </div>
+
+                <div class="form-item">
+                    <label for="date">Ngày</label>
+                    <input id="date" class="form-control" type="date" value="2025-12-01" disabled>
+                </div>
+
+                <div class="form-item">
+                    <label for="count">Số lượng kiểm</label>
+                    <input id="count" class="form-control" type="number" value="0">
+                </div>
+
+                <div class="form-item">
+                    <label for="user">Người kiểm</label>
+                    <input id="user" class="form-control" type="text" value="itsc" disabled>
+                </div>
             </div>
         </div>
+        
+        <button id="toggleFormBtn" class="toggle-btn w-100">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+
         <div class="row mt-3">
             <div class="col-md-6 col-xl-3">
                 <div class="card card-custom bg-success text-white mb-3" data-bs-toggle="modal"
@@ -189,7 +194,50 @@
     <!-- / Content -->
     <div class="content-backdrop fade"></div>
 </div>
+<style>
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 12px 20px; /* khoảng cách giữa các ô */
+        margin-top: 10px;
+    }
+
+    .form-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-item label {
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
+    .toggle-btn {
+        width: 100%;
+        height: 32px; /* Thấp hơn */
+        border: none;
+        background: none; /* Màu nhẹ */
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Icon ở giữa */
+        cursor: pointer;
+        border-radius: 6px;
+        transition: background 0.2s ease;
+    }
+
+    .toggle-btn:hover {
+        background: #e0e0e0;
+    }
+
+    .toggle-btn span {
+        font-size: 18px;
+        transition: transform 0.2s ease;
+    }
+
+</style>
 <!-- Content wrapper -->
 @section Scripts {
     <script src="~/js/page-handle/in-line-library.js"></script>
+    <script src="~/js/request/organization-request.js"></script>
+    <script src="~/js/request/product-request.js"></script>
+    <script src="~/js/share/shared-service.js"></script>
 }

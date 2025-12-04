@@ -9,7 +9,7 @@ async function editShowProductModalHandle(productId) {
     const data = await getProductCategories();
     const html = renderSelectOptions(data, 'Chọn chủng loại');
 
-    var product = await getProductById(productId);
+    var product = (await getProductById(productId)).result;
     console.log(product);
     $('#editProductCategory').html(html);
 
@@ -78,9 +78,9 @@ function handleDeleteProduct(id) {
 }
 
 function renderProductTable() {
-    getProducts().then(function (data) {
+    getProducts().then(function (res) {
         let html = '';
-        data.forEach(item => {
+        res.result.forEach(item => {
             html += `
                     <tr>
                         <td>${item.code}</td>

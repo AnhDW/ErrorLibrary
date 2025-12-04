@@ -42,7 +42,7 @@ async function handleSelectEnterprise(value, action) {
 
 async function handleSelectError(value, action) {
     const error = await getErrorById(value);
-    const productsByProductCategory = await getProductsByProductCategoryById(error.productCategoryId);
+    const productsByProductCategory = (await getProductsByProductCategoryById(error.productCategoryId)).result;
     const html = renderSelectOptionsByField(productsByProductCategory, 'Chọn sản phẩm', 'id', 'code');
 
     if (action === 'add') {
@@ -56,11 +56,11 @@ async function handleSelectError(value, action) {
 
 async function addShowErrorDetailModalHandle() {
     const units = await getUnits();
-    const products = await getProducts();
-    const errorsRes = await getErrors();
+    const products = (await getProducts()).result;
+    const errors = (await getErrors()).result;
     const unitHtml = renderSelectOptionsByField(units, 'Chọn đơn vị', 'id', 'name');
     const productHtml = renderSelectOptionsByField(products, 'Chọn mã hàng', 'id', 'code');
-    const errorHtml = renderSelectErrorOptions(errorsRes.result, 'Chọn mã lỗi');
+    const errorHtml = renderSelectErrorOptions(errors, 'Chọn mã lỗi');
     console.log(units);
     $('#addUnitSelect').html(unitHtml);
     $('#addProductSelect').html(productHtml);
@@ -74,8 +74,8 @@ async function editShowErrorDetailModalHandle(errorDetail) {
     const factories = await getFactories();
     const enterprises = await getEnterprises();
     const lines = await getLines();
-    const errors = await getErrors();
-    const products = await getProducts();
+    const errors = (await getErrors()).result;
+    const products = (await getProducts()).result;
     const unitHtml = renderSelectOptionsByField(units, 'Chọn đơn vị', 'id', 'name');
     const factoryHtml = renderSelectOptionsByField(factories, 'Chọn nhà máy', 'id', 'name');
     const enterpriseHtml = renderSelectOptionsByField(enterprises, 'Chọn xưởng', 'id', 'name');

@@ -35,19 +35,22 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetProducts()
         {
             var products = await _productService.GetAll();
-            return Json(_mapper.Map<List<ProductDto>>(products));
+            _responseDto.Result = _mapper.Map<List<ProductDto>>(products);
+            return Json(_responseDto);
         }
 
         public async Task<IActionResult> GetProductsByProductCategoryById(int productCategoryId)
         {
             var products = await _productService.GetAllByProductCategoryId(productCategoryId);
-            return Json(_mapper.Map<List<ProductDto>>(products));
+            _responseDto.Result = _mapper.Map<List<ProductDto>>(products);
+            return Json(_responseDto);
         }
         
         public async Task<IActionResult> GetProductById(int id)
         {
             var product = await _productService.GetById(id);
-            return Json(_mapper.Map<ProductDto>(product));
+            _responseDto.Result = _mapper.Map<ProductDto>(product);
+            return Json(_responseDto);
         }
 
         [HttpPost]

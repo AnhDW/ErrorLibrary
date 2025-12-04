@@ -1,7 +1,7 @@
 ﻿var addTree = $('#addTree').jstree(true);
 var editTree = $('#editTree').jstree(true);
 async function addShowUserModalHandle() {
-    var tree = await GetOrganizationTree();
+    var tree = (await getOrganizationTree()).result;
     $('#addTree')
         .jstree({
             'core': {
@@ -15,7 +15,7 @@ async function addShowUserModalHandle() {
 
 async function editShowUserModalHandle(userId) {
     var user = await getUserById(userId);
-    var tree = await GetOrganizationTree();
+    var tree = (await getOrganizationTree()).result;
     //gán ids hiện tại
     var selectedIds = await getOrganizationsByUserId(userId);
     var organizationIds = selectedIds.map(x => { return x.organizationType + "_" + x.organizationId })

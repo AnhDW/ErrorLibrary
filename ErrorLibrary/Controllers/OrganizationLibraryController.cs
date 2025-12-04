@@ -26,7 +26,15 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetOrganizationTree()
         {
             var tree = await _organizationService.GetOrganizationTree();
-            return Json(tree);
+            _responseDto.Result = tree;
+            return Json(_responseDto);
+        }
+
+        public async Task<IActionResult> GetOrganizationTreeDropdown()
+        {
+            var tree = await _organizationService.GetOrganizationTreeDropdown();
+            _responseDto.Result = tree;
+            return Json(_responseDto);
         }
     }
 }
