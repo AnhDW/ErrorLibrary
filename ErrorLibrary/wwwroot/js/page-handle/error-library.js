@@ -9,11 +9,11 @@
 
 //handle
 async function addShowErrorModalHandle() {
-    const errorGroups = await getErrorGroups();
+    const errorGroups = (await getErrorGroups()).result;
     const errorGroupsHtml = renderSelectOptions(errorGroups, 'Chọn nhóm lỗi');
-    const errorCategories = await getErrorCategories();
+    const errorCategories = (await getErrorCategories()).result;
     const errorCategoriesHtml = renderSelectOptions(errorCategories, 'Chọn loại lỗi');
-    const productCategories = await getProductCategories();
+    const productCategories = (await getProductCategories()).result;
     const productCategoriesHtml = renderSelectOptions(productCategories, 'Chọn chủng loại sản phẩm');
     
     $('#addErrorGroupSelect').html(errorGroupsHtml);
@@ -22,11 +22,11 @@ async function addShowErrorModalHandle() {
 }
 
 async function editShowErrorModalHandle(errId) {
-    const errorGroups = await getErrorGroups();
+    const errorGroups = (await getErrorGroups()).result;
     const errorGroupsHtml = renderSelectOptions(errorGroups, 'Chọn nhóm lỗi');
-    const errorCategories = await getErrorCategories();
+    const errorCategories = (await getErrorCategories()).result;
     const errorCategoriesHtml = renderSelectOptions(errorCategories, 'Chọn loại lỗi');
-    const productCategories = await getProductCategories();
+    const productCategories = (await getProductCategories()).result;
     const productCategoriesHtml = renderSelectOptions(productCategories, 'Chọn chủng loại sản phẩm');
 
     var err = await getErrorById(errId);

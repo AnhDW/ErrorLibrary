@@ -2,7 +2,7 @@
     var controllerName = ViewContext.RouteData.Values["controller"].ToString();
     var featureControllers = new[] { "Home", "ErrorDetailLibrary", "InLineLibrary" };
     var libraryControllers = new[] { "ErrorLibrary", "ErrorGroupLibrary", "ErrorCategoryLibrary", "ProductCategoryLibrary", "ProductLibrary", "SolutionLibrary", "UnitLibrary", "FactoryLibrary", "EnterpriseLibrary", "LineLibrary" };
-    var settingControllers = new[] { "UserLibrary" };
+    var settingControllers = new[] { "UserLibrary", "TimeFrameLibrary" };
 }
 <!DOCTYPE html>
 
@@ -105,7 +105,7 @@
                             </li>
                             <li class="menu-item @(controllerName == "InLineLibrary" ? "active" : "")">
                                 <a class="menu-link" asp-controller="InLineLibrary" asp-action="Index">
-                                    <i class="menu-icon tf-icons fa-solid fa-circle-exclamation"></i>
+                                    <i class="menu-icon tf-icons fa-solid fa-ruler"></i>
                                     <div style="margin-left: 4px;">Kiểm InLine</div>
                                 </a>
                             </li>
@@ -189,6 +189,12 @@
                                 <a class="menu-link" asp-controller="UserLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-users"></i>
                                     <div style="margin-left: 4px;">Tài khoản</div>
+                                </a>
+                            </li>
+                            <li class="menu-item @(controllerName == "TimeFrameLibrary" ? "active" : "")">
+                                <a class="menu-link" asp-controller="TimeFrameLibrary" asp-action="Index">
+                                    <i class="menu-icon tf-icons fa-solid fa-clock"></i>
+                                    <div style="margin-left: 4px;">Khung thời gian</div>
                                 </a>
                             </li>
                         </ul>

@@ -33,6 +33,11 @@ namespace ErrorLibrary.Services
             return await _context.TimeFrames.AnyAsync(x => x.Name == name);
         }
 
+        public string CreateTitle(TimeOnly startTime, TimeOnly endTime)
+        {
+            return $"{startTime:HH\\:mm} - {endTime:HH\\:mm}";
+        }
+
         public void Delete(TimeFrame timeFrame)
         {
             _context.TimeFrames.Remove(timeFrame);

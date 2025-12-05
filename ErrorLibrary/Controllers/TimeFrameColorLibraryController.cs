@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ErrorLibrary.Controllers
 {
-    public class TimeFrameColorController : Controller
+    public class TimeFrameColorLibraryController : Controller
     {
         private readonly ISharedService _sharedService;
         private readonly ITimeFrameColorService _timeFrameColorService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public TimeFrameColorController(ISharedService sharedService, ITimeFrameColorService timeFrameColorService, IMapper mapper)
+        public TimeFrameColorLibraryController(ISharedService sharedService, ITimeFrameColorService timeFrameColorService, IMapper mapper)
         {
             _sharedService = sharedService;
             _timeFrameColorService = timeFrameColorService;

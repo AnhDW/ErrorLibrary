@@ -14,6 +14,7 @@ namespace ErrorLibrary.Services.IServices
         void Update(TimeFrame timeFrame);
         void Delete(TimeFrame timeFrame);
 
+        string CreateTitle(TimeOnly startTime, TimeOnly endTime);
         Task<bool> CheckNameExists(string name);
     }
 }

@@ -1,0 +1,179 @@
+﻿@{
+    ViewData["Title"] = "Khung thời gian";
+}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Khung thời gian</span></h4>
+        <div>
+            <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#addModel" onclick="addShowTimeFrameModalHandle()">
+                <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
+            </button>
+            <!-- Add Modal -->
+            <div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Thêm khung thời gian</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="mb-2 col-md-6">
+                                        <label for="addStartTime" class="form-label">Thời gian bắt đầu</label>
+                                        <input type="time" class="form-control" id="addStartTime" aria-describedby="defaultFormControlHelp">
+                                    </div>
+                                    <div class="mb-2 col-md-6">
+                                        <label for="addEndTime" class="form-label">Thời gian kết thúc</label>
+                                        <input type="time" class="form-control" id="addEndTime" aria-describedby="defaultFormControlHelp">
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="addTimeFrameName" class="form-label">Tên</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="addTimeFrameName" placeholder="Nhập tên">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="setTimeFrameName('add')">Tạo tên theo khung giờ</button>
+                                    </div>
+                                    <small class="form-text text-muted">
+                                        Tên sẽ tự sinh theo thời gian bắt đầu và thời gian kết thúc: 08:30 - 12:00, 14:05 - 18:20,...  .
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddTimeFrame()">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Sửa khung thời gian</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <input type="text" class="form-control" id="editTimeFrameId" hidden>
+
+                                <div class="row">
+                                    <div class="mb-2 col-md-6">
+                                        <label for="editStartTime" class="form-label">Thời gian bắt đầu</label>
+                                        <input type="time" class="form-control" id="editStartTime" aria-describedby="defaultFormControlHelp">
+                                    </div>
+                                    <div class="mb-2 col-md-6">
+                                        <label for="editEndTime" class="form-label">Thời gian kết thúc</label>
+                                        <input type="time" class="form-control" id="editEndTime" aria-describedby="defaultFormControlHelp">
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="editTimeFrameName" class="form-label">Tên</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="editTimeFrameName" placeholder="Nhập tên">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="setTimeFrameName('edit')">Tạo tên theo khung giờ</button>
+                                    </div>
+                                    <small class="form-text text-muted">
+                                        Tên sẽ tự sinh theo thời gian bắt đầu và thời gian kết thúc: 08:30 - 12:00, 14:05 - 18:20,...  .
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="handleEditTimeFrame()">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Color Modal -->
+            <div class="modal fade" id="colorsModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title">Màu theo số lượng lỗi</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <div class="d-flex justify-content-between mb-3">
+                                <h6 class="fw-bold">Danh sách màu</h6>
+                                <button class="btn btn-primary btn-sm" id="btnAddColor">
+                                    + Thêm màu
+                                </button>
+                            </div>
+
+                            <table class="table table-bordered table-hover text-center align-middle" id="colorTable">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Màu</th>
+                                        <th>Mã Hex</th>
+                                        <th>Min Qty</th>
+                                        <th>Max Qty</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Sẽ đổ dữ liệu bằng JS -->
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-success" id="btnSaveColors">Lưu</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- Striped Rows -->
+        <div class="card mt-4">
+            <div style="min-height:200px;" class="table-responsive text-nowrap">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Thời gian bắt đầu</th>
+                            <th>Thời gian kết thúc</th>
+                            <th>Tên khung giờ</th>
+                            <th>Màu</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timeFrameTableBody" class="table-border-bottom-0">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--/ Striped Rows -->
+    </div>
+    <!-- / Content -->
+    <div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+@section Scripts {
+    <script src="~/js/page-handle/time-frame-library.js"></script>
+    <script src="~/js/request/time-frame-request.js"></script>
+}

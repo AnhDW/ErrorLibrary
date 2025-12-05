@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ErrorLibrary.Controllers
 {
-    public class TimeFrameController : Controller
+    public class TimeFrameLibraryController : Controller
     {
         private readonly ISharedService _sharedService;
         private readonly ITimeFrameService _timeFrameService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public TimeFrameController(ISharedService sharedService, ITimeFrameService timeFrameService, IMapper mapper)
+        public TimeFrameLibraryController(ISharedService sharedService, ITimeFrameService timeFrameService, IMapper mapper)
         {
             _sharedService = sharedService;
             _timeFrameService = timeFrameService;
@@ -42,20 +42,27 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        public async Task<IActionResult> GenerateTimeFrameTitle([FromQuery] TimeOnly startTime, [FromQuery] TimeOnly endTime)
+        {
+            var title = _timeFrameService.CreateTitle(startTime, endTime);
+            _responseDto.Result = title;
+            return Json(_responseDto);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddTimeFrame([FromBody] TimeFrameDto timeFrameDto)
         {
             if (await _timeFrameService.CheckNameExists(timeFrameDto.Name))
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Tên đơn vị đã tồn tại";
+                _responseDto.Message = "Tên khung thời gian đã tồn tại";
                 return Json(_responseDto);
             }
 
             _timeFrameService.Add(_mapper.Map<TimeFrame>(timeFrameDto));
             if (await _sharedService.SaveAllChanges())
             {
-                _responseDto.Message = "Thêm đơn vị thành công";
+                _responseDto.Message = "Thêm khung thời gian thành công";
                 return Json(_responseDto);
             }
 
@@ -71,7 +78,7 @@ namespace ErrorLibrary.Controllers
             if (timeFrame == null)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
+                _responseDto.Message = "Không tìm thấy 'khung thời gian' này trong thư viện";
                 return Json(_responseDto);
             }
 
@@ -81,14 +88,14 @@ namespace ErrorLibrary.Controllers
             if (isNameExists)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Tên đơn vị đã tồn tại";
+                _responseDto.Message = "Tên khung thời gian đã tồn tại";
                 return Json(_responseDto);
             }
 
             _timeFrameService.Update(_mapper.Map(timeFrameDto, timeFrame));
             if (await _sharedService.SaveAllChanges())
             {
-                _responseDto.Message = "Cập nhật đơn vị thành công";
+                _responseDto.Message = "Cập nhật khung thời gian thành công";
                 return Json(_responseDto);
             }
 
@@ -104,14 +111,14 @@ namespace ErrorLibrary.Controllers
             if (timeFrame == null)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
+                _responseDto.Message = "Không tìm thấy 'khung thời gian' này trong thư viện";
                 return Json(_responseDto);
             }
 
             _timeFrameService.Delete(timeFrame);
             if (await _sharedService.SaveAllChanges())
             {
-                _responseDto.Message = "Xóa đơn vị thành công";
+                _responseDto.Message = "Xóa khung thời gian thành công";
                 return Json(_responseDto);
             }
 

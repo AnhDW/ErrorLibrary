@@ -24,6 +24,11 @@ namespace ErrorLibrary.Helper
             CreateMap<ErrorDetail, ErrorDetailDto>().ReverseMap();
             CreateMap<ErrorDetail, ErrorDetailDisplayDto>().ReverseMap();
             CreateMap<ErrorDetailAttachment, ErrorDetailAttachmentDto>().ReverseMap();
+            CreateMap<TimeFrame, TimeFrameDto>().ReverseMap();
+            CreateMap<TimeFrameColor, TimeFrameColorDto>().ReverseMap();
+            CreateMap<InLine, InLineDto>().ReverseMap();
+            CreateMap<InLineDetail, InLineDetailDto>().ReverseMap();
+
         }
     }
 }

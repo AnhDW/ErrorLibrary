@@ -33,6 +33,8 @@ $(document).ready(function () {
         renderErrorDetailsTable();
     } else if (path.includes('/InLineLibrary')) {
         initDropdown();
+    } else if (path.includes('/TimeFrameLibrary')) {
+        renderTimeFrameTable();
     }
 });
 
