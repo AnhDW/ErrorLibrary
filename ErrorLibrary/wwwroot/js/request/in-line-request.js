@@ -13,6 +13,15 @@ function getInLineById(id) {
     })
 }
 
+function checkInitAndUpdate(initAndUpdateInLineDto) {
+    return ajaxRequest({
+        url: '/InLineLibrary/CheckInitAndUpdate',
+        method: 'POST',
+        data: initAndUpdateInLineDto,
+        showLoading: true
+    })
+}
+
 function addInLine(inLineDto) {
     return ajaxRequest({
         url: '/InLineLibrary/AddInLine',

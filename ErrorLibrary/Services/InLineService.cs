@@ -28,23 +28,23 @@ namespace ErrorLibrary.Services
             _context.InLines.Add(inLine);
         }
 
-        public HashSet<string> BuildExistingErrorKeySet(List<InLine> inLines)
+        public HashSet<string> BuildExistingInLineKeySet(List<InLine> inLines)
         {
-            return inLines.Select(x => $"{x.LineId}|{x.ProductId}|{x.UserId}|{x.CreateDate}").ToHashSet();
+            return inLines.Select(x => $"{x.LineId}|{x.ProductId}|{x.UserId}|{x.Date}").ToHashSet();
         }
 
-        public Task<bool> CheckExists(int inLineId, int productId, string userId, DateOnly createDate)
+        public Task<bool> CheckExists(int inLineId, int productId, string userId, DateOnly date)
         {
             return _context.InLines.AnyAsync(x =>
                 x.LineId == inLineId &&
                 x.ProductId == productId &&
                 x.UserId == userId &&
-                x.CreateDate == createDate);
+                x.Date == date);
         }
 
-        public bool CheckNameExistsFast(HashSet<string> existingKeys, int lineId, int productId, string userId, DateOnly createDate)
+        public bool CheckNameExistsFast(HashSet<string> existingKeys, int lineId, int productId, string userId, DateOnly date)
         {
-            var key = $"{lineId}|{productId}|{userId}|{createDate}";
+            var key = $"{lineId}|{productId}|{userId}|{date}";
             return existingKeys.Contains(key);
         }
 

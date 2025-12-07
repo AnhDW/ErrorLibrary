@@ -19,8 +19,14 @@ function getErrors() {
         url: '/ErrorLibrary/GetErrors',
         method: 'GET',
     })
+} 
+function getErrorsByErrorGroupAndProductCategory(errorGroupId, productCategoryId) {
+    return ajaxRequest({
+        url: '/ErrorLibrary/GetErrorsByErrorGroupAndProductCategory',
+        method: 'GET',
+        data: { errorGroupId: errorGroupId, productCategoryId : productCategoryId }
+    })
 }
-
 function getErrorById(id) {
     return ajaxRequest({
         url: '/ErrorLibrary/GetErrorById',

@@ -59,6 +59,13 @@ namespace ErrorLibrary.Services
                 .FirstOrDefaultAsync(x => x.Id == id))!;
         }
 
+        public async Task<List<TimeFrameColor>> GetByTimeFrame(int timeFrameId)
+        {
+            return await _context.TimeFrameColors
+                .Where(x => x.TimeFrameId == timeFrameId)
+                .ToListAsync();
+        }
+
         public void Update(TimeFrameColor timeFrameColor)
         {
             _context.TimeFrameColors.Update(timeFrameColor);

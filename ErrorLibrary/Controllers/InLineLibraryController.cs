@@ -41,9 +41,51 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> CheckInitAndUpdate([FromBody] InitAndUpdateInLineDto initAndUpdateInLineDto)
+        {
+            var inLines = await _inLineService.GetAll();
+            var existingKeys = _inLineService.BuildExistingInLineKeySet(inLines);
+            var keyToCheck = _inLineService.CheckNameExistsFast(existingKeys, initAndUpdateInLineDto.LineId, initAndUpdateInLineDto.ProductId, initAndUpdateInLineDto.UserId, initAndUpdateInLineDto.Date);
+            InLine inLine;
+            if (keyToCheck)
+            {
+                inLine = (inLines.FirstOrDefault(inLines =>
+                    inLines.LineId == initAndUpdateInLineDto.LineId &&
+                    inLines.ProductId == initAndUpdateInLineDto.ProductId &&
+                    inLines.UserId == initAndUpdateInLineDto.UserId &&
+                    inLines.Date == initAndUpdateInLineDto.Date)) ?? new InLine();
+                if (initAndUpdateInLineDto.FirstLoad)
+                {
+                    _responseDto.Message = "Lấy số lượng 'số lượng kiểm' cho lần load đầu tiên";
+                    _responseDto.Result = inLine;
+                    return Json(_responseDto);
+                }
+                // không phải load lần đầu thì cập nhật
+                initAndUpdateInLineDto.Id = inLine.Id;
+                _inLineService.Update(_mapper.Map(initAndUpdateInLineDto, inLine));
+                _responseDto.Message = "Cập nhật 'In line' thành công";
+            }
+            else
+            {
+                inLine = _mapper.Map<InLine>(initAndUpdateInLineDto);
+                _inLineService.Add(inLine);
+                _responseDto.Message = "Khởi tạo 'In line' thành công";
+            }
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Result = inLine;
+                return Json(_responseDto);
+            }
+
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Lỗi trong quá trình khởi tạo hoặc cập nhật 'In line'";
+            return Json(_responseDto);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AddInLine([FromBody] InLineDto inLineDto)
         {
-            if (await _inLineService.CheckExists(inLineDto.LineId, inLineDto.ProductId, inLineDto.UserId, inLineDto.CreateDate))
+            if (await _inLineService.CheckExists(inLineDto.LineId, inLineDto.ProductId, inLineDto.UserId, inLineDto.Date))
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Tên đơn vị đã tồn tại";
@@ -73,8 +115,8 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            bool isNameExists = await _inLineService.CheckExists(inLineDto.LineId, inLineDto.ProductId, inLineDto.UserId, inLineDto.CreateDate) &&
-                (inLineDto.LineId != inLine.LineId || inLineDto.ProductId != inLine.ProductId || inLineDto.UserId != inLine.UserId || inLineDto.CreateDate != inLine.CreateDate);
+            bool isNameExists = await _inLineService.CheckExists(inLineDto.LineId, inLineDto.ProductId, inLineDto.UserId, inLineDto.Date) &&
+                (inLineDto.LineId != inLine.LineId || inLineDto.ProductId != inLine.ProductId || inLineDto.UserId != inLine.UserId || inLineDto.Date != inLine.Date);
 
             if (isNameExists)
             {

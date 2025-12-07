@@ -4,6 +4,7 @@ using ErrorLibrary.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ErrorLibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251206144856_editInLineDate")]
+    partial class editInLineDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -371,7 +374,7 @@ namespace ErrorLibrary.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreateAt")
+                    b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("ErrorId")
@@ -386,7 +389,7 @@ namespace ErrorLibrary.Migrations
                     b.Property<int>("TimeFrameId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdateAt")
+                    b.Property<DateTime>("UpdateTime")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");

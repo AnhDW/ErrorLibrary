@@ -14,10 +14,10 @@ namespace ErrorLibrary.Services.IServices
         void Update(InLine inLine);
         void Delete(InLine inLine);
 
-        Task<bool> CheckExists(int inLineId, int productId, string userId, DateOnly createDate);
+        Task<bool> CheckExists(int inLineId, int productId, string userId, DateOnly date);
 
-        HashSet<string> BuildExistingErrorKeySet(List<InLine> inLines);
-        bool CheckNameExistsFast(HashSet<string> existingKeys, int lineId, int productId, string userId, DateOnly createDate);
+        HashSet<string> BuildExistingInLineKeySet(List<InLine> inLines);
+        bool CheckNameExistsFast(HashSet<string> existingKeys, int lineId, int productId, string userId, DateOnly date);
 
     }
 }

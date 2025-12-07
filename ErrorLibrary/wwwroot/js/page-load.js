@@ -32,7 +32,7 @@ $(document).ready(function () {
     } else if (path.includes('/ErrorDetailLibrary')) {
         renderErrorDetailsTable();
     } else if (path.includes('/InLineLibrary')) {
-        initDropdown();
+        initialInLinePage();
     } else if (path.includes('/TimeFrameLibrary')) {
         renderTimeFrameTable();
     }

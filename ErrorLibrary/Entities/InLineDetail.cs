@@ -7,8 +7,8 @@
         public int TimeFrameId { get; set; }
         public int ErrorId { get; set; }
 
-        public DateTime CreateTime { get; set; }
-        public DateTime UpdateTime { get; set; }
+        public DateTime CreateAt { get; set; }
+        public DateTime UpdateAt { get; set; }
 
         public int Quantity { get; set; }
 

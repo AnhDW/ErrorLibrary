@@ -72,6 +72,16 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        public async Task<IActionResult> GetErrorsByErrorGroupAndProductCategory(int errorGroupId, int productCategoryId)
+        {
+            var errors = await _errorService.GetAll();
+            errors = errors.Where(x => x.ErrorGroupId == errorGroupId && x.ProductCategoryId == productCategoryId).ToList();
+            _responseDto.Result = _mapper.Map<List<ErrorDisplayDto>>(
+                errors.OrderBy(x => Regex.Match(x.Code, @"^[A-Za-z]+").Value)
+                .ThenBy(x => int.Parse(Regex.Match(x.Code, @"\d+").Value)));
+            return Json(_responseDto);
+        }
+
         public async Task<IActionResult> GetErrorById(int id)
         {
             var error = await _errorService.GetById(id);

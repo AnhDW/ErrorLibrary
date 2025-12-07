@@ -6,13 +6,17 @@
     return html;
 }
 
-function renderSelectOptionsByField(data, defaultLabel = 'Chọn mục', valueField = 'id', labelField = 'name') {
+function renderSelectOptionsByField(data, defaultLabel = 'Chọn mục', valueField = 'id', labelField = 'name', extraField = 'id') {
     let html = `<option value="" selected disabled>${defaultLabel}</option>`;
+
     data.forEach(item => {
-        html += `<option value="${item[valueField]}">${item[labelField]}</option>`;
+        
+        html += `<option value="${item[valueField]}" data-extra-field="${item[extraField]}">${item[labelField]}</option>`;
     });
+
     return html;
 }
+
 
 function renderSelectErrorOptions(error, defaultLabel = 'Chọn mục') {
     let html = `<option value="" selected disabled>${defaultLabel}</option>`;

@@ -34,6 +34,25 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        public async Task<IActionResult> GetByTimeFrame(int timeFrameId)
+        {
+            var timeFrameColors = await _timeFrameColorService.GetByTimeFrame(timeFrameId);
+            _responseDto.Result = _mapper.Map<List<TimeFrameColorDto>>(timeFrameColors.OrderBy(x => x.MinQuantity).ThenBy(x => x.MaxQuantity));
+            return Json(_responseDto);
+        }
+        
+        public async Task<IActionResult> GetTimeFrameColorByQuantity(int timeFrameId, int quantity)
+        {
+            var timeFrameColors = await _timeFrameColorService.GetByTimeFrame(timeFrameId);
+            if(timeFrameColors.Count == 0)
+            {
+                _responseDto.Result = new TimeFrameColor();
+            }
+            var timeFrameColor = timeFrameColors.FirstOrDefault(x => quantity >= x.MinQuantity && quantity < x.MaxQuantity) ?? new TimeFrameColor();
+            _responseDto.Result = _mapper.Map<TimeFrameColorDto>(timeFrameColor);
+            return Json(_responseDto);
+        }
+
         public async Task<IActionResult> GetTimeFrameColorById(int id)
         {
             var timeFrameColor = await _timeFrameColorService.GetById(id);
@@ -47,14 +66,14 @@ namespace ErrorLibrary.Controllers
             if (await _timeFrameColorService.CheckExists(timeFrameColorDto.TimeFrameId, timeFrameColorDto.HexCode))
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Tên đơn vị đã tồn tại";
+                _responseDto.Message = "Tên màu đã tồn tại";
                 return Json(_responseDto);
             }
 
             _timeFrameColorService.Add(_mapper.Map<TimeFrameColor>(timeFrameColorDto));
             if (await _sharedService.SaveAllChanges())
             {
-                _responseDto.Message = "Thêm đơn vị thành công";
+                _responseDto.Message = "Thêm màu thành công";
                 return Json(_responseDto);
             }
 
@@ -70,24 +89,24 @@ namespace ErrorLibrary.Controllers
             if (timeFrameColor == null)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
+                _responseDto.Message = "Không tìm thấy 'màu' này trong thư viện";
                 return Json(_responseDto);
             }
 
             bool isNameExists = await _timeFrameColorService.CheckExists(timeFrameColorDto.TimeFrameId, timeFrameColorDto.HexCode) &&
-                (timeFrameColorDto.TimeFrameId != timeFrameColor.TimeFrameId || timeFrameColorDto.HexCode != timeFrameColor.HexCode);
+                (timeFrameColorDto.TimeFrameId != timeFrameColor.TimeFrameId || timeFrameColorDto.HexCode.ToLower() != timeFrameColor.HexCode.ToLower());
 
             if (isNameExists)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Tên đơn vị đã tồn tại";
+                _responseDto.Message = "Tên màu đã tồn tại";
                 return Json(_responseDto);
             }
 
             _timeFrameColorService.Update(_mapper.Map(timeFrameColorDto, timeFrameColor));
             if (await _sharedService.SaveAllChanges())
             {
-                _responseDto.Message = "Cập nhật đơn vị thành công";
+                _responseDto.Message = "Cập nhật màu thành công";
                 return Json(_responseDto);
             }
 
@@ -103,14 +122,14 @@ namespace ErrorLibrary.Controllers
             if (timeFrameColor == null)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
+                _responseDto.Message = "Không tìm thấy 'màu' này trong thư viện";
                 return Json(_responseDto);
             }
 
             _timeFrameColorService.Delete(timeFrameColor);
             if (await _sharedService.SaveAllChanges())
             {
-                _responseDto.Message = "Xóa đơn vị thành công";
+                _responseDto.Message = "Xóa màu thành công";
                 return Json(_responseDto);
             }
 

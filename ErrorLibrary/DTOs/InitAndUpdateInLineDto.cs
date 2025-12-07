@@ -1,6 +1,6 @@
-﻿namespace ErrorLibrary.Entities
+﻿namespace ErrorLibrary.DTOs
 {
-    public class InLine
+    public class InitAndUpdateInLineDto
     {
         public int Id { get; set; }
         public int LineId { get; set; }
@@ -9,9 +9,6 @@
         public DateOnly Date { get; set; }
         public int Quantity { get; set; } = 0;
 
-        public Line Line { get; set; }
-        public Product Product { get; set; }
-        public ApplicationUser User { get; set; }
-        public List<InLineDetail> InLineDetails { get; set; } = new();
+        public bool FirstLoad { get; set; }
     }
 }

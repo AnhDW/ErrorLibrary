@@ -5,6 +5,25 @@
     })
 }
 
+function getInLineDetailsByInLine(inLineId) {
+    return ajaxRequest({
+        url: '/InLineDetailLibrary/GetInLineDetailsByInLine',
+        method: 'GET',
+        data: { inLineId: inLineId }
+    })
+}
+
+function getQuantityByInLineAndTimeFrame(inLineId, timeFrameId) {
+    return ajaxRequest({
+        url: '/InLineDetailLibrary/GetQuantityByInLineAndTimeFrame',
+        method: 'GET',
+        data: {
+            inLineId: inLineId,
+            timeFrameId: timeFrameId
+        }
+    })
+}
+
 function getInLineDetailById(id) {
     return ajaxRequest({
         url: '/InLineDetailLibrary/GetInLineDetailById',
@@ -13,7 +32,7 @@ function getInLineDetailById(id) {
     })
 }
 
-function addInLineDetail(inLineDetailDetailDto) {
+function addInLineDetail(inLineDetailDto) {
     return ajaxRequest({
         url: '/InLineDetailLibrary/AddInLineDetail',
         method: 'POST',

@@ -9,6 +9,7 @@ namespace ErrorLibrary.Services.IServices
     {
         Task<PagedList<TimeFrameColorDto>> GetAll(TimeFrameColorParams timeFrameColorParams);
         Task<List<TimeFrameColor>> GetAll();
+        Task<List<TimeFrameColor>> GetByTimeFrame(int timeFrameId);
         Task<TimeFrameColor> GetById(int id);
         void Add(TimeFrameColor timeFrameColor);
         void Update(TimeFrameColor timeFrameColor);

@@ -1,6 +1,8 @@
-﻿namespace ErrorLibrary.DTOs
+﻿using ErrorLibrary.Entities;
+
+namespace ErrorLibrary.DTOs
 {
-    public class InLineDetailDto
+    public class InLineDetailDisplayDto
     {
         public int Id { get; set; }
         public int InLineId { get; set; }
@@ -11,5 +13,9 @@
         public DateTime UpdateAt { get; set; }
 
         public int Quantity { get; set; }
+
+        public ErrorDisplayDto Error { get; set; }
+        public InLineDto InLine { get; set; }
+        public TimeFrameDto TimeFrame { get; set; }
     }
 }

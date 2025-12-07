@@ -10,15 +10,21 @@ namespace ErrorLibrary.Controllers
     {
         private readonly ISharedService _sharedService;
         private readonly IInLineDetailService _inLineDetailService;
+        private readonly IErrorService _errorService;
+        private readonly IErrorGroupService _errorGroupService;
+        private readonly ITimeFrameService _timeFrameService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public InLineDetailLibraryController(ISharedService sharedService, IInLineDetailService inLineDetailService, IMapper mapper)
+        public InLineDetailLibraryController(ISharedService sharedService, IInLineDetailService inLineDetailService, IMapper mapper, ITimeFrameService timeFrameService, IErrorService errorService, IErrorGroupService errorGroupService)
         {
             _sharedService = sharedService;
             _inLineDetailService = inLineDetailService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
+            _timeFrameService = timeFrameService;
+            _errorService = errorService;
+            _errorGroupService = errorGroupService;
         }
 
         public IActionResult Index()
@@ -30,6 +36,35 @@ namespace ErrorLibrary.Controllers
         {
             var inLineDetails = await _inLineDetailService.GetAll();
             _responseDto.Result = _mapper.Map<List<InLineDetailDto>>(inLineDetails);
+            return Json(_responseDto);
+        }
+
+        public async Task<IActionResult> GetInLineDetailsByInLine(int inLineId)
+        {
+            var inLineDetails = await _inLineDetailService.GetAll();
+            var errorGroups = await _errorGroupService.GetAll();
+            var errors = await _errorService.GetAll();
+            var timeFrames = await _timeFrameService.GetAll();
+            inLineDetails = inLineDetails.Where(x => x.InLineId == inLineId).ToList();
+            var inLineDetailsDto = _mapper.Map<List<InLineDetailDisplayDto>>(inLineDetails);
+            foreach(var item in inLineDetailsDto)
+            {
+                var error = errors.FirstOrDefault(x => x.Id == item.ErrorId) ?? new Error();
+                item.TimeFrame = _mapper.Map<TimeFrameDto>(timeFrames.FirstOrDefault(x => x.Id == item.TimeFrameId));
+                item.Error = _mapper.Map<ErrorDisplayDto>(error);
+                item.Error.ErrorGroup = _mapper.Map<ErrorGroupDto>(errorGroups.FirstOrDefault(x => x.Id == error.ErrorGroupId));
+
+            }
+            _responseDto.Result = inLineDetailsDto;
+            return Json(_responseDto);
+        }
+
+        public async Task<IActionResult> GetQuantityByInLineAndTimeFrame(int inLineId, int timeFrameId)
+        {
+            var inLineDetails = await _inLineDetailService.GetAll();
+            var inLineDetailsByInLineAndTimeFrame = inLineDetails.Where(x => x.InLineId == inLineId && x.TimeFrameId == timeFrameId).ToList();
+            var quantity = inLineDetailsByInLineAndTimeFrame.Sum(x => x.Quantity);
+            _responseDto.Result = quantity;
             return Json(_responseDto);
         }
 

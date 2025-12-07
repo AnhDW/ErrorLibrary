@@ -5,6 +5,25 @@
     })
 }
 
+function getByTimeFrame(timeFrameId) {
+    return ajaxRequest({
+        url: '/TimeFrameColorLibrary/GetByTimeFrame',
+        method: 'GET',
+        data: { timeFrameId: timeFrameId }
+    })
+}
+
+function getTimeFrameColorByQuantity(timeFrameId, quantity) {
+    return ajaxRequest({
+        url: '/TimeFrameColorLibrary/GetTimeFrameColorByQuantity',
+        method: 'GET',
+        data: {
+            timeFrameId: timeFrameId,
+            quantity: quantity
+        }
+    })
+}
+
 function getTimeFrameColorById(id) {
     return ajaxRequest({
         url: '/TimeFrameColorLibrary/GetTimeFrameColorById',
@@ -13,7 +32,7 @@ function getTimeFrameColorById(id) {
     })
 }
 
-function addTimeFrameColor(timeFrameColorDetailDto) {
+function addTimeFrameColor(timeFrameColorDto) {
     return ajaxRequest({
         url: '/TimeFrameColorLibrary/AddTimeFrameColor',
         method: 'POST',

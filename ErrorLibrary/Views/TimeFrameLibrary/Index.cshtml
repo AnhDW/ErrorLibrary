@@ -108,40 +108,25 @@
                     <div class="modal-content">
 
                         <div class="modal-header">
-                            <h5 class="modal-title">Màu theo số lượng lỗi</h5>
+                            @* <h5 class="modal-title">Màu theo số lượng lỗi</h5> *@
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
 
                         <div class="modal-body">
 
-                            <div class="d-flex justify-content-between mb-3">
-                                <h6 class="fw-bold">Danh sách màu</h6>
-                                <button class="btn btn-primary btn-sm" id="btnAddColor">
-                                    + Thêm màu
+                            <div class="d-flex flex-row-reverse mb-2 gap-1">
+                                <button class="btn btn-primary btn-sm" id="btnSelectColor">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn btn-primary btn-sm d-none" id="btnCopyColor">
+                                    <i class="far fa-copy"></i>
                                 </button>
                             </div>
 
-                            <table class="table table-bordered table-hover text-center align-middle" id="colorTable">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Màu</th>
-                                        <th>Mã Hex</th>
-                                        <th>Min Qty</th>
-                                        <th>Max Qty</th>
-                                        <th>Hành động</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Sẽ đổ dữ liệu bằng JS -->
-                                </tbody>
-                            </table>
+                            <div class="row g-3" id="colorCardContainer">
+                                <!-- Card items sẽ được render bằng JS -->
+                            </div>
 
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                            <button type="button" class="btn btn-success" id="btnSaveColors">Lưu</button>
                         </div>
 
                     </div>
@@ -172,8 +157,65 @@
     <!-- / Content -->
     <div class="content-backdrop fade"></div>
 </div>
+<style>
+    .color-card {
+        border-radius: 8px;
+        padding: 15px;
+        background: #ffffff;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        transition: 0.2s;
+    }
+
+    .color-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .color-preview {
+        width: 50px;
+        height: 50px;
+        border-radius: 6px;
+    }
+
+    .btn-add {
+        border-radius: 0 8px 8px 0;
+    }
+
+    .btn-edit {
+        border-radius: 0 8px 0 0;
+    }
+
+    .btn-delete {
+        border-radius: 0 0 8px 0;
+    }
+
+    .btn-add, .btn-edit, .btn-delete {
+        border: none;
+        background: rgba(255, 255, 255, 0.5); /* nền mờ nhẹ */
+        backdrop-filter: blur(2px); /* mịn đẹp */
+        padding: 6px;
+    }
+
+    .btn-add:hover, .btn-edit:hover, .btn-delete:hover {
+        background: rgba(255, 255, 255, 0.8);
+    }
+    .btn-add i {
+        color: #3ee08c; /* icon xám */
+    }
+
+    .btn-edit i {
+        color: #333; /* icon xám */
+    }
+
+    .btn-delete i {
+        color: #b30000; /* icon đỏ nhẹ */
+    }
+</style>
+
+
 <!-- Content wrapper -->
 @section Scripts {
     <script src="~/js/page-handle/time-frame-library.js"></script>
     <script src="~/js/request/time-frame-request.js"></script>
+    <script src="~/js/request/time-frame-color-request.js"></script>
 }
