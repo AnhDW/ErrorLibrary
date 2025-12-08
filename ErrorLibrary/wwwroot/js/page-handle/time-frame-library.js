@@ -66,8 +66,9 @@ async function setTimeFrameName(actionName) {
         $('#editTimeFrameName').val(name);
     }
 }
-
+let currentTimeFrameId = 0;
 async function showColorsModal(timeFrameId) {
+    currentTimeFrameId = timeFrameId;
     renderColorCards(timeFrameId);
 }
 
@@ -250,7 +251,7 @@ $(document).on("click", "#btnSelectColor", function () {
     let btnCopy = $('#btnCopyColor');
 
     checkBoxes.toggleClass('d-none');
-    btnCopy.toggleClass('d-none');
+    btnCopy.removeClass('d-none');
     if (checkBoxes.hasClass('d-none')) {
         // Khi ẩn đi thì reset trạng thái
         checkBoxes.prop('checked', false);
@@ -259,11 +260,42 @@ $(document).on("click", "#btnSelectColor", function () {
 
 $(document).on("click", "#btnCopyColor", function () {
     $('.check-color').removeClass('d-none');
-
+    $('#btnCopyColor').addClass('d-none');
     let selectedIds = $('.check-color:checked').map(function () {
         return $(this).val();
     }).get();
 
+    localStorage.setItem('selectedTimeFrameColorIds', JSON.stringify(selectedIds));
     console.log(selectedIds);
+    if (selectedIds.length === 0) {
+        toastr.warning("No colors selected to copy.");
+        return;
+    }
+
+    $('#btnPasteColor').removeClass('d-none');
+    navigator.clipboard.writeText(JSON.stringify(selectedIds))
+        .then(() => toastr.success("Copied!"))
+        .catch(err => toastr.error(err));
+});
+
+$(document).on("click", "#btnPasteColor", function () {
+    $('#btnPasteColor').addClass('d-none');
+
+    navigator.clipboard.readText()
+        .then(async text => {
+            try {
+                const ids = JSON.parse(text);
+                console.log("IDs:", ids);
+                const copyAndPasteColorDto = {
+                    timeFrameId: currentTimeFrameId,
+                    timeFrameColorIds : ids
+                }
+                const res = await copyAndPasteColor(copyAndPasteColorDto);
+                resToastr(res);
+                renderColorCards(currentTimeFrameId);
+            } catch {
+                console.log("Clipboard không phải JSON array");
+            }
+        });
 
 });

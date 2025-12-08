@@ -32,6 +32,15 @@ function getTimeFrameColorById(id) {
     })
 }
 
+function copyAndPasteColor(copyAndPasteColorDto) {
+    return ajaxRequest({
+        url: '/TimeFrameColorLibrary/CopyAndPasteColor',
+        method: 'POST',
+        data: copyAndPasteColorDto,
+        showLoading: true
+    })
+}
+
 function addTimeFrameColor(timeFrameColorDto) {
     return ajaxRequest({
         url: '/TimeFrameColorLibrary/AddTimeFrameColor',

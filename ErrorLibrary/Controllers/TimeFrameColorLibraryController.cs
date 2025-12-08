@@ -61,6 +61,32 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> CopyAndPasteColor([FromBody] CopyAndPasteColorDto copyAndPasteColorDto)
+        {
+            var timeFrameColors = await _timeFrameColorService.GetByIds(copyAndPasteColorDto.TimeFrameColorIds);
+            List<TimeFrameColor> copiedColors = new List<TimeFrameColor>();
+            foreach (var timeFrameColor in timeFrameColors)
+            {
+                copiedColors.Add(new TimeFrameColor
+                {
+                    TimeFrameId = copyAndPasteColorDto.TimeFrameId,
+                    HexCode = timeFrameColor.HexCode,
+                    MinQuantity = timeFrameColor.MinQuantity,
+                    MaxQuantity = timeFrameColor.MaxQuantity
+                });
+            }
+
+            _timeFrameColorService.AddRange(copiedColors);
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Message = "Sao chép thành công";
+                return Json(_responseDto);
+            }
+            _responseDto.Message = "Lỗi trong quá trình sao chép";
+            return Json(_responseDto);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AddTimeFrameColor([FromBody] TimeFrameColorDto timeFrameColorDto)
         {
             if (await _timeFrameColorService.CheckExists(timeFrameColorDto.TimeFrameId, timeFrameColorDto.HexCode))

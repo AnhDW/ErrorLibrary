@@ -28,6 +28,11 @@ namespace ErrorLibrary.Services
             _context.TimeFrameColors.Add(timeFrameColor);
         }
 
+        public void AddRange(List<TimeFrameColor> timeFrameColors)
+        {
+            _context.TimeFrameColors.AddRange(timeFrameColors);
+        }
+
         public async Task<bool> CheckExists(int timeFrameId, string hexCode)
         {
             return await _context.TimeFrameColors.AnyAsync(x => x.TimeFrameId == timeFrameId && x.HexCode == hexCode);
@@ -36,6 +41,11 @@ namespace ErrorLibrary.Services
         public void Delete(TimeFrameColor timeFrameColor)
         {
             _context.TimeFrameColors.Remove(timeFrameColor);
+        }
+
+        public void DeleteRange(List<TimeFrameColor> timeFrameColors)
+        {
+            _context.TimeFrameColors.RemoveRange(timeFrameColors);
         }
 
         public Task<PagedList<TimeFrameColorDto>> GetAll(TimeFrameColorParams timeFrameColorParams)
@@ -59,6 +69,12 @@ namespace ErrorLibrary.Services
                 .FirstOrDefaultAsync(x => x.Id == id))!;
         }
 
+        public async Task<List<TimeFrameColor>> GetByIds(List<int> ids)
+        {
+            return (await _context.TimeFrameColors
+                .Where(x => ids.Contains(x.Id)).ToListAsync())!;
+        }
+
         public async Task<List<TimeFrameColor>> GetByTimeFrame(int timeFrameId)
         {
             return await _context.TimeFrameColors
@@ -69,6 +85,11 @@ namespace ErrorLibrary.Services
         public void Update(TimeFrameColor timeFrameColor)
         {
             _context.TimeFrameColors.Update(timeFrameColor);
+        }
+
+        public void UpdateRange(List<TimeFrameColor> timeFrameColors)
+        {
+            _context.TimeFrameColors.UpdateRange(timeFrameColors);
         }
     }
 }

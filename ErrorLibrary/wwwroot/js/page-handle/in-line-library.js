@@ -239,6 +239,7 @@ function handleAddInLineDetail() {
     }
     console.log(inLineDetailDto);
     addInLineDetail(inLineDetailDto).then(function (res) {
+        renderTimeFrameCard();
         renderInLineDetailTable();
         resToastr(res);
     }).catch(function (err) {
@@ -260,6 +261,7 @@ function handleEditInLineDetail() {
     }
 
     updateInLineDetail(inLineDetailDto).then(function (res) {
+        renderTimeFrameCard();
         renderInLineDetailTable();
         resToastr(res);
     }).catch(function (err) {
@@ -269,9 +271,30 @@ function handleEditInLineDetail() {
 
 function handleDeleteInLineDetail(id) {
     deleteInLineDetail(id).then(function (res) {
+        renderTimeFrameCard();
         renderInLineDetailTable();
         resToastr(res);
     }).catch(function (err) {
         toastr.error(err);
     });
 }
+
+$('#addBtnIncreases').on('click', () => {
+    var quantity = $('#quantityInLine').val();
+    $('#quantityInLine').val(parseInt(quantity) + 1);
+})
+
+$('#addBtnDecreases').on('click', () => {
+    var quantity = $('#quantityInLine').val();
+    $('#quantityInLine').val(parseInt(quantity) - 1);
+})
+
+$('#editBtnIncreases').on('click', () => {
+    var quantity = $('#editQuantityInLine').val();
+    $('#editQuantityInLine').val(parseInt(quantity) + 1);
+})
+
+$('#editBtnDecreases').on('click', () => {
+    var quantity = $('#editQuantityInLine').val();
+    $('#editQuantityInLine').val(parseInt(quantity) - 1);
+})
