@@ -31,8 +31,10 @@ $(document).ready(function () {
         renderProductCategoryTable();
     } else if (path.includes('/ErrorDetailLibrary')) {
         renderErrorDetailsTable();
-    } else if (path.includes('/InLineLibrary')) {
+    } else if (path.includes('/InLineDetailLibrary')) {
         initialInLinePage();
+    }else if (path.includes('/InLineDetailLibrary')) {
+        
     } else if (path.includes('/TimeFrameLibrary')) {
         renderTimeFrameTable();
     }

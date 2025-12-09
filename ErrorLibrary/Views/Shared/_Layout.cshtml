@@ -1,6 +1,6 @@
 ﻿@{
     var controllerName = ViewContext.RouteData.Values["controller"].ToString();
-    var featureControllers = new[] { "Home", "ErrorDetailLibrary", "InLineLibrary" };
+    var featureControllers = new[] { "Home", "ErrorDetailLibrary", "InLineDetailLibrary", "InLineLibrary" };
     var libraryControllers = new[] { "ErrorLibrary", "ErrorGroupLibrary", "ErrorCategoryLibrary", "ProductCategoryLibrary", "ProductLibrary", "SolutionLibrary", "UnitLibrary", "FactoryLibrary", "EnterpriseLibrary", "LineLibrary" };
     var settingControllers = new[] { "UserLibrary", "TimeFrameLibrary" };
 }
@@ -103,10 +103,16 @@
                                     <div style="margin-left: 4px;">Lỗi theo mã hàng</div>
                                 </a>
                             </li>
-                            <li class="menu-item @(controllerName == "InLineLibrary" ? "active" : "")">
-                                <a class="menu-link" asp-controller="InLineLibrary" asp-action="Index">
+                            <li class="menu-item @(controllerName == "InLineDetailLibrary" ? "active" : "")">
+                                <a class="menu-link" asp-controller="InLineDetailLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-ruler"></i>
                                     <div style="margin-left: 4px;">Kiểm InLine</div>
+                                </a>
+                            </li>
+                            <li class="menu-item @(controllerName == "InLineLibrary" ? "active" : "")">
+                                <a class="menu-link" asp-controller="InLineLibrary" asp-action="Index">
+                                    <i class="menu-icon tf-icons fa-solid fa-history"></i>
+                                    <div style="margin-left: 4px;">Lịch sử kiểm InLine</div>
                                 </a>
                             </li>
                         </ul>
