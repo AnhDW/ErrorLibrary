@@ -41,12 +41,17 @@ namespace ErrorLibrary.Services
             _context.InLineDetails.Remove(inLineDetail);
         }
 
-        public Task<PagedList<InLineDetailDto>> GetAll(InLineDetailParams inLineDetailParams)
+        public Task<PagedList<InLineDetailDisplayDto>> GetAll(InLineDetailParams inLineDetailParams)
         {
             var query = _context.InLineDetails.AsQueryable();
 
-            return PagedList<InLineDetailDto>.CreateAsync(
-                query.AsNoTracking().ProjectTo<InLineDetailDto>(_mapper.ConfigurationProvider),
+            if (inLineDetailParams.TimeFrameIds.Count > 0)
+            {
+                query = query.Where(x => inLineDetailParams.TimeFrameIds.Contains(x.TimeFrameId));
+            }
+
+            return PagedList<InLineDetailDisplayDto>.CreateAsync(
+                query.AsNoTracking().ProjectTo<InLineDetailDisplayDto>(_mapper.ConfigurationProvider),
                 inLineDetailParams.PageNumber,
                 inLineDetailParams.PageSize);
         }

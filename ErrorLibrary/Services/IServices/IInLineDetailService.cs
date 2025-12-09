@@ -7,7 +7,7 @@ namespace ErrorLibrary.Services.IServices
 {
     public interface IInLineDetailService
     {
-        Task<PagedList<InLineDetailDto>> GetAll(InLineDetailParams inLineDetailParams);
+        Task<PagedList<InLineDetailDisplayDto>> GetAll(InLineDetailParams inLineDetailParams);
         Task<List<InLineDetail>> GetAll();
         Task<InLineDetail> GetById(int id);
         void Add(InLineDetail inLineDetail);
