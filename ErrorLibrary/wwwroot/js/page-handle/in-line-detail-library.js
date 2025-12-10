@@ -8,11 +8,16 @@ async function initOrganizationTree() {
     $('.dropdown-menu').on('click', function (e) {
         e.stopPropagation();
     });
+    var userId = JSON.parse(localStorage.getItem('user')).id;
+    var selectedIds = (await getOrganizationsByUserId(userId)).result;
+    var organizationIds = selectedIds.map(x => { return x.organizationType + "_" + x.organizationId })
 
-    const response = await getOrganizationTreeDropdown();
-
+    const tree = (await getOrganizationTreeDropdown()).result;
+    var filteredTree = filterTree(tree, organizationIds);
+    console.log(tree);
+    console.log(filteredTree);
     $('#treeOrganization').treeview({
-        data: response.result, 
+        data: filteredTree, 
         levels: 1,                        // Thu gọn toàn bộ
         expandIcon: 'fa fa-chevron-right',
         collapseIcon: 'fa fa-chevron-down',
@@ -49,6 +54,30 @@ async function initOrganizationTree() {
         $('#treeOrganization').treeview('selectNode', [firstLeaf.nodeId]);
     }
 }
+
+function filterTree(nodes, organizationIds) {
+    let result = [];
+
+    for (const node of nodes) {
+        const hasMatch = organizationIds.includes(node.id);
+
+        let children = [];
+        if (node.nodes && node.nodes.length > 0) {
+            children = filterTree(node.nodes, organizationIds);
+        }
+
+        // Nếu node khớp ID hoặc có con khớp
+        if (hasMatch || children.length > 0) {
+            result.push({
+                ...node,
+                nodes: children.length > 0 ? children : null
+            });
+        }
+    }
+
+    return result;
+}
+
 
 async function initialInLineDetailPage() {
     await Promise.all([

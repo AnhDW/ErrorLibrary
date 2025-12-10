@@ -31,26 +31,29 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetUserOrganizations()
         {
             var userOrganizations = await _userOrganizationService.GetAll();
-            return Json(_mapper.Map<List<UserOrganizationDto>>(userOrganizations));
+            _responseDto.Result = _mapper.Map<List<UserOrganizationDto>>(userOrganizations);
+            return Json(_responseDto);
         }
 
         public async Task<IActionResult> GetUserOrganizationById(string userId, string organizationType, int organizationId)
         {
             var userOrganization = await _userOrganizationService.GetById(userId, organizationType, organizationId);
-            return Json(_mapper.Map<UserOrganizationDto>(userOrganization));
+            _responseDto.Result = _mapper.Map<UserOrganizationDto>(userOrganization);
+            return Json(_responseDto);
         }
 
         public async Task<IActionResult> GetUserIdsByOrganization(string organizationType, int organizationId)
         {
             var userIds = await _userOrganizationService.GetUserIdsByOrganizationId(organizationType, organizationId);
-            return Json(userIds);
+            _responseDto.Result = userIds;
+            return Json(_responseDto);
         }
 
         public async Task<IActionResult> GetOrganizationsByUserId(string userId)
         {
             var organizations = await _userOrganizationService.GetOrganizationIdsByUserId(userId);
-            
-            return Json(organizations.Select(x=>new {x.organizationType, x.organizationId}));
+            _responseDto.Result = organizations.Select(x => new { x.organizationType, x.organizationId });
+            return Json(_responseDto);
         }
 
         [HttpPost]

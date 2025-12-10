@@ -17,7 +17,7 @@ async function editShowUserModalHandle(userId) {
     var user = await getUserById(userId);
     var tree = (await getOrganizationTree()).result;
     //gán ids hiện tại
-    var selectedIds = await getOrganizationsByUserId(userId);
+    var selectedIds = (await getOrganizationsByUserId(userId)).result;
     var organizationIds = selectedIds.map(x => { return x.organizationType + "_" + x.organizationId })
     console.log(selectedIds, organizationIds);
     if ($.jstree.reference('#editTree')) {
