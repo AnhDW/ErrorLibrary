@@ -44,7 +44,7 @@ async function initOrganizationTree() {
     });
 }
 
-async function initialInLinePage() {
+async function initialInLineDetailPage() {
     await Promise.all([
         initOrganizationTree(),
         renderTimeFrameCard(),

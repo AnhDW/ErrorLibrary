@@ -54,13 +54,14 @@ namespace ErrorLibrary.Controllers
                     inLines.ProductId == initAndUpdateInLineDto.ProductId &&
                     inLines.UserId == initAndUpdateInLineDto.UserId &&
                     inLines.Date == initAndUpdateInLineDto.Date)) ?? new InLine();
+                // Nếu là load lần đầu thì chỉ trả về thông tin 'In line'
                 if (initAndUpdateInLineDto.FirstLoad)
                 {
                     _responseDto.Message = "Lấy số lượng 'số lượng kiểm' cho lần load đầu tiên";
-                    _responseDto.Result = inLine;
+                    _responseDto.Result = _mapper.Map<InLineDto>(inLine);
                     return Json(_responseDto);
                 }
-                // không phải load lần đầu thì cập nhật
+                // Không phải load lần đầu thì cập nhật
                 initAndUpdateInLineDto.Id = inLine.Id;
                 _inLineService.Update(_mapper.Map(initAndUpdateInLineDto, inLine));
                 _responseDto.Message = "Cập nhật 'In line' thành công";
@@ -73,7 +74,7 @@ namespace ErrorLibrary.Controllers
             }
             if (await _sharedService.SaveAllChanges())
             {
-                _responseDto.Result = inLine;
+                _responseDto.Result = _mapper.Map<InLineDto>(inLine);
                 return Json(_responseDto);
             }
 

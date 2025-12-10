@@ -32,9 +32,9 @@ $(document).ready(function () {
     } else if (path.includes('/ErrorDetailLibrary')) {
         renderErrorDetailsTable();
     } else if (path.includes('/InLineDetailLibrary')) {
+        initialInLineDetailPage();
+    }else if (path.includes('/InLineLibrary')) {
         initialInLinePage();
-    }else if (path.includes('/InLineDetailLibrary')) {
-        
     } else if (path.includes('/TimeFrameLibrary')) {
         renderTimeFrameTable();
     }
