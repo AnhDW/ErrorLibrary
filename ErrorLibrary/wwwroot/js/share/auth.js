@@ -26,8 +26,22 @@ function handleLogout() {
     window.location.href = '/Login'; // hoặc URL login của bạn
 }
 
+function setUserInfo() {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user) {
+        $("#username").text(user.fullName);
+        $("#userAvatar1").attr("src", user.avatarUrl ? user.avatarUrl : "~/assets/img/avatars/1.png")
+        $("#userAvatar2").attr("src", user.avatarUrl ? user.avatarUrl : "~/assets/img/avatars/1.png")
+        //$("#role").text(user.roles[0])
+        $("#role").text("Admin")
+    }
+}
+
 // Kiểm tra mỗi 1 phút
 setInterval(autoLogoutIfExpired, 60 * 1000);
 
 // Kiểm tra ngay khi load trang
 autoLogoutIfExpired();
+
+setUserInfo();
