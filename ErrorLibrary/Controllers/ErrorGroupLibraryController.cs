@@ -12,16 +12,20 @@ namespace ErrorLibrary.Controllers
     public class ErrorGroupLibraryController : Controller
     {
         private readonly IErrorGroupService _errorGroupService;
+        private readonly IErrorService _errorService;
+        private readonly IProductService _productService;
         private readonly ISharedService _sharedService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public ErrorGroupLibraryController(IErrorGroupService errorGroupService, ISharedService sharedService, IMapper mapper)
+        public ErrorGroupLibraryController(IErrorGroupService errorGroupService, ISharedService sharedService, IMapper mapper, IErrorService errorService, IProductService productService)
         {
             _errorGroupService = errorGroupService;
             _sharedService = sharedService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
+            _errorService = errorService;
+            _productService = productService;
         }
 
         [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any)]
@@ -43,7 +47,18 @@ namespace ErrorLibrary.Controllers
             var errorGroups = await _errorGroupService.GetAll();
             _responseDto.Result = _mapper.Map<List<ErrorGroupDto>>(errorGroups.OrderBy(x => x.Code));
             return Json(_responseDto);
+        }
 
+        public async Task<IActionResult> GetErrorGroupsByProduct(int productId)
+        {
+            var product = await _productService.GetById(productId);
+            var errors = await _errorService.GetAll();
+            var errorGroups = await _errorGroupService.GetAll();
+            var errorsByProductCategoryId = errors.Where(x => x.ProductCategoryId == product.ProductCategoryId).ToList();
+            var errorGroupIds = errorsByProductCategoryId.Select(x => x.ErrorGroupId).Distinct().ToList();
+            errorGroups = errorGroups.Where(x => errorGroupIds.Contains(x.Id)).ToList();
+            _responseDto.Result = _mapper.Map<List<ErrorGroupDto>>(errorGroups.OrderBy(x => x.Code));
+            return Json(_responseDto);
         }
 
         public async Task<IActionResult> GetErrorGroupById(int id)

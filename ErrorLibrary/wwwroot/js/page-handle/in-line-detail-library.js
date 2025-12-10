@@ -42,6 +42,12 @@ async function initOrganizationTree() {
             //console.log("Đã đóng:", node.text);
         }
     });
+    let allNodes = $('#treeOrganization').treeview('getEnabled');
+    let firstLeaf = allNodes.find(n => n.id && n.id.startsWith("line_"));
+
+    if (firstLeaf) {
+        $('#treeOrganization').treeview('selectNode', [firstLeaf.nodeId]);
+    }
 }
 
 async function initialInLineDetailPage() {
@@ -112,17 +118,15 @@ async function renderInLineDetailTable() {
             <td>${item.error.name}</td>
             <td>${item.quantity}</td>
             <td>
-                <div class="dropdown">
-                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                        <i class="bx bx-dots-vertical-rounded"></i>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#editModel" onclick='initEditModal(${JSON.stringify(item).replace(/'/g, "\\'")})'>
+                        <i class="bx bx-edit-alt"></i>
                     </button>
-                    <div class="dropdown-menu">
-                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                data-bs-target="#editModel" onclick='initEditModal(${JSON.stringify(item).replace(/'/g, "\\'")})'>
-                            <i class="bx bx-edit-alt me-1"></i> Sửa
-                        </button>
-                        <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteInLineDetail(${item.id})"><i class="bx bx-trash me-1"></i> Xóa</a>
-                    </div>
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#editModel" onclick="handleDeleteInLineDetail(${item.id})">
+                        <i class="bx bx-trash"></i>
+                    </button>
                 </div>
             </td>
         </tr>` });
@@ -137,6 +141,7 @@ function checkAndInitInLine() {
     var date = $('#date').val();
     var quantity = $('#quantity').val();
 
+    console.log(lineId);
     if (!lineId || !productId || !userId || !date) {
         return;
     }
@@ -157,7 +162,7 @@ function checkAndInitInLine() {
         }
         renderTimeFrameCard();
         renderInLineDetailTable();
-        resToastr(res);
+        //resToastr(res);
     }).catch(function (err) {
         toastr.error(err);
     });
@@ -180,7 +185,7 @@ async function initAddModal(timeFrameId) {
     //render lỗi theo chủng loại sản phẩm
     $('#timeFrameId').val(timeFrameId);
 
-    var errorGroups = (await getErrorGroups()).result;
+    var errorGroups = (await getErrorGroupsByProduct(inLine.productId)).result;
     var html = renderSelectOptions(errorGroups, 'Chọn nhóm lỗi');
     $('#selectedErrorGroup').html(html);
 }

@@ -66,4 +66,4 @@ document.getElementById("toggleFormBtn").addEventListener("click", function () {
     }
 });
 
-function renderInLineTable()
+//function renderInLineTable()

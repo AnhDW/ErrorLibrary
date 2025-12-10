@@ -12,6 +12,14 @@ function getErrorGroups() {
     })
 }
 
+function getErrorGroupsByProduct(productId) {
+    return ajaxRequest({
+        url: '/ErrorGroupLibrary/GetErrorGroupsByProduct',
+        method: 'GET',
+        data: { productId: productId }
+    })
+}
+
 function getErrorGroupById(id) {
     return ajaxRequest({
         url: '/ErrorGroupLibrary/GetErrorGroupById',
