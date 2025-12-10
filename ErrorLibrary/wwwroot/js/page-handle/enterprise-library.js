@@ -13,7 +13,7 @@
 }
 
 async function addShowEnterpriseModalHandle() {
-    const units = (await getUnits()).result);
+    const units = (await getUnits()).result;
     const unitHtml = renderSelectOptions(units, 'Chọn đơn vị');
     $('#addUnitSelect').html(unitHtml);
 }
@@ -49,7 +49,7 @@ function handleAddEnterprise() {
 
     addEnterprise(enterpriseData).then(function (res) {
         if (res.isSuccess) {
-            $('#addModel').modal('hide');
+            //$('#addModel').modal('hide');
             renderEnterprisesTable();
         } else {
             alert(res.message);

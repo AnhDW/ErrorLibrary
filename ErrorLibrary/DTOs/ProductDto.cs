@@ -9,8 +9,10 @@ namespace ErrorLibrary.DTOs
         public string Code { get; set; }
         public string PO { get; set; }
         public int Quantity { get; set; }
-        public string? ImageUrl { get; set; }
-        public IFormFile? File { get; set; }
+        public string? FrontImageUrl { get; set; }
+        public string? BackImageUrl { get; set; }
+        public IFormFile? FrontFile { get; set; }
+        public IFormFile? BackFile { get; set; }
 
         public ProductCategoryDto? ProductCategory { get; set; }
     }

@@ -56,9 +56,13 @@ namespace ErrorLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProduct([FromForm] ProductDto productDto)
         {
-            if (productDto.File != null)
+            if (productDto.FrontFile != null)
             {
-                productDto.ImageUrl = await _fileService.AddCompressAttachment(productDto.File);
+                productDto.FrontImageUrl = await _fileService.AddCompressAttachment(productDto.FrontFile);
+            }
+            if (productDto.BackFile != null)
+            {
+                productDto.BackImageUrl = await _fileService.AddCompressAttachment(productDto.BackFile);
             }
             _productService.Add(_mapper.Map<Product>(productDto));
             if (await _sharedService.SaveAllChanges())
@@ -82,10 +86,13 @@ namespace ErrorLibrary.Controllers
                 _responseDto.Message = "Không tìm thấy 'sản phẩm' này trong thư viện";
                 return Json(_responseDto);
             }
-            if (productDto.File != null)
+            if (productDto.FrontFile != null)
             {
-                _fileService.DeleteAttachment(productDto.ImageUrl);
-                productDto.ImageUrl = await _fileService.AddCompressAttachment(productDto.File);
+                productDto.FrontImageUrl = await _fileService.AddCompressAttachment(productDto.FrontFile);
+            }
+            if (productDto.BackFile != null)
+            {
+                productDto.BackImageUrl = await _fileService.AddCompressAttachment(productDto.BackFile);
             }
             _productService.Update(_mapper.Map(productDto, product));
             if (await _sharedService.SaveAllChanges())
@@ -108,7 +115,8 @@ namespace ErrorLibrary.Controllers
                 _responseDto.Message = "Không tìm thấy 'sản phẩm' này trong thư viện";
                 return Json(_responseDto);
             }
-            _fileService.DeleteAttachment(product.ImageUrl);
+            _fileService.DeleteAttachment(product.FrontImageUrl);
+            _fileService.DeleteAttachment(product.BackImageUrl);
             _productService.Delete(product);
             if (await _sharedService.SaveAllChanges())
             {

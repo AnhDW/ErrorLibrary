@@ -28,7 +28,8 @@ function addProduct(productDto) {
     formData.append("code", productDto.code);
     formData.append("po", productDto.po);
     formData.append("quantity", productDto.quantity);
-    formData.append("file", $("#addProductImage")[0].files[0]);
+    formData.append("frontFile", $("#addProductFrontImage")[0].files[0]);
+    formData.append("backFile", $("#addProductBackImage")[0].files[0]);
 
     return ajaxRequest({
         url: '/ProductLibrary/AddProduct',
@@ -47,9 +48,10 @@ function updateProduct(productDto) {
     formData.append("code", productDto.code);
     formData.append("po", productDto.po);
     formData.append("quantity", productDto.quantity);
-    formData.append("imageUrl", productDto.imageUrl);
-    formData.append("file", $("#editProductImage")[0].files[0]);
-
+    formData.append("frontImageUrl", productDto.frontImageUrl);
+    formData.append("backImageUrl", productDto.backImageUrl);
+    formData.append("frontFile", $("#editProductFrontImage")[0].files[0]);
+    formData.append("backFile", $("#editProductBackImage")[0].files[0]);
     return ajaxRequest({
         url: '/ProductLibrary/UpdateProduct',
         method: 'POST',

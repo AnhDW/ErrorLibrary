@@ -26,14 +26,14 @@ async function handleSelectFactory(value, action) {
 }
 
 async function addShowLineModalHandle() {
-    const units = await getUnits();
+    const units = (await getUnits()).result;
     const unitHtml = renderSelectOptions(units, 'Chọn đơn vị');
     $('#addUnitSelect').html(unitHtml);
 }
 
 async function editShowLineModalHandle(line) {
     console.log(line)
-    const units = await getUnits();
+    const units = (await getUnits()).result;
     const factories = await getFactories();
     const enterprises = await getEnterprises();
 

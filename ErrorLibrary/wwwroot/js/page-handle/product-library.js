@@ -1,12 +1,13 @@
 ﻿async function addShowProductModalHandle() {
-    const data = await getProductCategories();
+    const data = (await getProductCategories()).result;
     const html = renderSelectOptions(data, 'Chọn chủng loại');
 
     $('#addProductCategory').html(html);
 }
 
 async function editShowProductModalHandle(productId) {
-    const data = await getProductCategories();
+    const data = (await getProductCategories()).result;
+    console.log(data);
     const html = renderSelectOptions(data, 'Chọn chủng loại');
 
     var product = (await getProductById(productId)).result;
@@ -18,7 +19,8 @@ async function editShowProductModalHandle(productId) {
     $('#editProductPO').val(product.po);
     $('#editProductCategory').val(product.productCategoryId);
     $('#editProductQuantity').val(product.quantity);
-    $('#editProductImageUrl').val(product.imageUrl);
+    $('#editProductFrontImageUrl').val(product.frontImageUrl);
+    $('#editProductBackImageUrl').val(product.backImageUrl);
 }
 
 function handleAddProduct() {
@@ -35,7 +37,8 @@ function handleAddProduct() {
     };
     console.log(productData);
     addProduct(productData).then(function (res) {
-        $('#addProductImage').val('');
+        $('#addProductFrontImage').val('');
+        $('#addProductBackImage').val('');
         $('#addModel').modal('hide');
         renderProductTable();
     }).catch(function (err) {
@@ -48,7 +51,8 @@ function handleEditProduct() {
     const code = $('#editProductCode').val();
     const po = $('#editProductPO').val();
     const productCategoryId = $('#editProductCategory').val();
-    const imageUrl = $('#editProductImageUrl').val();
+    const frontImageUrl = $('#editProductFrontImageUrl').val();
+    const backImageUrl = $('#editProductBackImageUrl').val();
     const quantity = $('#editProductQuantity').val();
 
     const productData = {
@@ -56,12 +60,14 @@ function handleEditProduct() {
         code,
         po,
         productCategoryId,
-        imageUrl,
+        frontImageUrl,
+        backImageUrl,
         quantity
     };
     console.log(productData);
     updateProduct(productData).then(function (res) {
-        $('#editProductImage').val('');
+        $('#editProductFrontImage').val('');
+        $('#editProductBackImage').val('');
         $('#editModel').modal('hide');
         renderProductTable();
     }).catch(function (err) {
@@ -87,7 +93,8 @@ function renderProductTable() {
                         <td>${item.po}</td>
                         <td>${item.productCategory.name}</td>
                         <td>${item.quantity}</td>
-                        <td><img src="${item.imageUrl}" alt="Product" style="width: 60px;" /></td>
+                        <td><img src="${item.frontImageUrl}" alt="Product" style="width: 60px;" /></td>
+                        <td><img src="${item.backImageUrl}" alt="Product" style="width: 60px;" /></td>
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
