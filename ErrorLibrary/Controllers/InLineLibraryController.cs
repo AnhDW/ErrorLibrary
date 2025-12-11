@@ -10,15 +10,21 @@ namespace ErrorLibrary.Controllers
     {
         private readonly ISharedService _sharedService;
         private readonly IInLineService _inLineService;
+        private readonly ILineService _lineService;
+        private readonly IProductService _productService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public InLineLibraryController(ISharedService sharedService, IInLineService inLineService, IMapper mapper)
+        public InLineLibraryController(ISharedService sharedService, IInLineService inLineService, IMapper mapper, ILineService lineService, IProductService productService, IUserService userService)
         {
             _sharedService = sharedService;
             _inLineService = inLineService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
+            _lineService = lineService;
+            _productService = productService;
+            _userService = userService;
         }
 
         public IActionResult Index()
@@ -29,7 +35,20 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetInLines()
         {
             var inLines = await _inLineService.GetAll();
-            _responseDto.Result = _mapper.Map<List<InLineDto>>(inLines);
+            var lines = await _lineService.GetAll();
+            var products = await _productService.GetAll();
+            var users = await _userService.GetAll();
+            var inLinesDto = _mapper.Map<List<InLineDisplayDto>>(inLines);
+            foreach (var inLine in inLinesDto)
+            {
+                var line = lines.FirstOrDefault(l => l.Id == inLine.LineId) ?? new Line();
+                var product = products.FirstOrDefault(p => p.Id == inLine.ProductId) ?? new Product();
+                var user = users.FirstOrDefault(u => u.Id == inLine.UserId) ?? new ApplicationUser();
+                inLine.Line = _mapper.Map<LineDto>(line);
+                inLine.Product = _mapper.Map<ProductDto>(product);
+                inLine.User = _mapper.Map<UserDto>(user);
+            }
+            _responseDto.Result = inLinesDto;
             return Json(_responseDto);
         }
 

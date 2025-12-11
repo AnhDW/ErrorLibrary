@@ -27,6 +27,7 @@ namespace ErrorLibrary.Helper
             CreateMap<TimeFrame, TimeFrameDto>().ReverseMap();
             CreateMap<TimeFrameColor, TimeFrameColorDto>().ReverseMap();
             CreateMap<InLine, InLineDto>().ReverseMap();
+            CreateMap<InLine, InLineDisplayDto>().ReverseMap();
             CreateMap<InLine, InitAndUpdateInLineDto>().ReverseMap();
             CreateMap<InLineDetail, InLineDetailDto>().ReverseMap();
             CreateMap<InLineDetail, InLineDetailDisplayDto>().ReverseMap();

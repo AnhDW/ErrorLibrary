@@ -1,21 +1,20 @@
 ﻿let inLine = {
     id:0,
-    lineId: 0, productId: 0, userId: '', date: '0001-01-01', quantity,
+    lineId: 0, productId: 0, userId: JSON.parse(localStorage.getItem('user')).id, date: new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().substring(0, 10), quantity,
 };
 let firstLoadInLine = true;
-
+let currentUserId = JSON.parse(localStorage.getItem('user')).id;
 async function initOrganizationTree() {
     $('.dropdown-menu').on('click', function (e) {
         e.stopPropagation();
     });
-    var userId = JSON.parse(localStorage.getItem('user')).id;
+    var userId = inLine.userId;
     var selectedIds = (await getOrganizationsByUserId(userId)).result;
     var organizationIds = selectedIds.map(x => { return x.organizationType + "_" + x.organizationId })
 
     const tree = (await getOrganizationTreeDropdown()).result;
     var filteredTree = filterTree(tree, organizationIds);
-    console.log(tree);
-    console.log(filteredTree);
+
     $('#treeOrganization').treeview({
         data: filteredTree, 
         levels: 1,                        // Thu gọn toàn bộ
@@ -55,43 +54,21 @@ async function initOrganizationTree() {
     }
 }
 
-function filterTree(nodes, organizationIds) {
-    let result = [];
-
-    for (const node of nodes) {
-        const hasMatch = organizationIds.includes(node.id);
-
-        let children = [];
-        if (node.nodes && node.nodes.length > 0) {
-            children = filterTree(node.nodes, organizationIds);
-        }
-
-        // Nếu node khớp ID hoặc có con khớp
-        if (hasMatch || children.length > 0) {
-            result.push({
-                ...node,
-                nodes: children.length > 0 ? children : null
-            });
-        }
-    }
-
-    return result;
-}
-
-
 async function initialInLineDetailPage() {
+    var products = (await getProducts()).result;
+    var html = renderSelectOptionsByField(products, 'Chọn sản phẩm', 'id', 'code', 'productCategoryId');
+    $('#selectProductCode').html(html);
+    await checkParams();
     await Promise.all([
         initOrganizationTree(),
         renderTimeFrameCard(),
         renderInLineDetailTable()
     ]);
-    var products = (await getProducts()).result;
-    var user = JSON.parse(localStorage.getItem('user'));
-    var html = renderSelectOptionsByField(products, 'Chọn sản phẩm', 'id', 'code', 'productCategoryId');
+    console.log(inLine);
+    var user = (await getUserById(inLine.userId)).result;
 
-    $('#selectProductCode').html(html);
     $('#user').val(user.fullName);
-    $('#date').val(new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().substring(0, 10));
+    $('#date').val(inLine.date);
 }
 
 document.getElementById("toggleFormBtn").addEventListener("click", function () {
@@ -134,6 +111,7 @@ async function renderTimeFrameCard() {
 }
 
 async function renderInLineDetailTable() {
+    console.log(inLine.id);
     if (inLine.id === 0) return;
     var inLineDetails = (await getInLineDetailsByInLine(inLine.id)).result;
     let html = '';
@@ -148,12 +126,10 @@ async function renderInLineDetailTable() {
             <td>${item.quantity}</td>
             <td>
                 <div class="d-flex gap-2">
-                    <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#editModel" onclick='initEditModal(${JSON.stringify(item).replace(/'/g, "\\'")})'>
+                    <button type="button" class="btn btn-outline-info btn-sm" onclick='initEditModal(${JSON.stringify(item).replace(/'/g, "\\'")})'>
                         <i class="bx bx-edit-alt"></i>
                     </button>
-                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#editModel" onclick="handleDeleteInLineDetail(${item.id})">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="handleDeleteInLineDetail(${item.id})">
                         <i class="bx bx-trash"></i>
                     </button>
                 </div>
@@ -164,13 +140,13 @@ async function renderInLineDetailTable() {
 
 function checkAndInitInLine() {
     //tạo 1 in line nếu chưa có
-    var lineId = ($('#selectedOrganizationNode').val().substring(5, 6));
+    var lineId = $('#selectedOrganizationNode').val().replace("line_", "");
     var productId = $('#selectProductCode').val();
-    var userId = JSON.parse(localStorage.getItem('user')).id;
+    var userId = inLine.userId;
     var date = $('#date').val();
     var quantity = $('#quantity').val();
 
-    console.log(lineId);
+    console.log(productId);
     if (!lineId || !productId || !userId || !date) {
         return;
     }
@@ -178,6 +154,7 @@ function checkAndInitInLine() {
     if (lineId != inLine.lineId || productId != inLine.productId || userId != inLine.userId || date != inLine.date) {
         firstLoadInLine = true;
     }
+
     var inLineDto = {
         lineId, productId, userId, date, quantity, firstLoad : firstLoadInLine
     }
@@ -198,11 +175,33 @@ function checkAndInitInLine() {
 
 }
 
+async function checkParams() {
+    const params = new URLSearchParams(window.location.search);
+    const inLineId = params.get("inLineId");
+    if (inLineId === null) return;
+
+    var inLineById = (await getInLineById(inLineId)).result;
+    var user = (await getUserById(inLineById.userId)).result;
+    inLine.id = inLineById.id;
+    inLine.userId = user.id;
+    inLine.productId = inLineById.productId;
+    inLine.date = inLineById.date;
+    $('#selectedOrganizationNode').val(inLineById.lineId);
+    $('#selectProductCode').val(inLineById.productId);
+    $('#user').val(user.fullName);
+    console.log(inLineById);
+}
+
 $('#selectProductCode, #date, #quantity').on('change keyup', function () {
     checkAndInitInLine();
 });
 
 async function initAddModal(timeFrameId) {
+    if (inLine.userId !== currentUserId) {
+        toastr.error("Bạn không có quyền thêm lỗi trong InLine này.");
+        return;
+    }
+
     if (inLine.id === 0) {
         toastr.warning("Bạn chưa chọn InLine");
         $('#formWrapper').addClass('shake border border-2 border-danger p-2 rounded');
@@ -222,7 +221,6 @@ async function initAddModal(timeFrameId) {
 $('#selectedErrorGroup').on('change', async function () {
     let productCategoryId = $('#selectProductCode option:selected').data('extraField');
     let errorGroupId = $(this).val();
-    console.log(productCategoryId, errorGroupId);
     var errors = (await getErrorsByErrorGroupAndProductCategory(errorGroupId, productCategoryId)).result;
     var html = renderSelectErrorOptions(errors, 'Chọn lỗi');
     
@@ -232,7 +230,12 @@ $('#selectedErrorGroup').on('change', async function () {
 });
 
 async function initEditModal(inLineDetail) {
-    console.log(inLineDetail);
+    if (inLine.userId !== currentUserId) {
+        toastr.error("Bạn không có quyền cập nhật lỗi trong InLine này.");
+        return;
+    }
+    var modal = new bootstrap.Modal(document.getElementById('editModel'));
+    modal.show();
     var errorGroups = (await getErrorGroups()).result;
     var errorGroupsHtml = renderSelectOptions(errorGroups, 'Chọn nhóm lỗi');
     var errors = (await getErrors()).result;
@@ -250,6 +253,7 @@ async function initEditModal(inLineDetail) {
     $('#editCreateAt').val(inLineDetail.createAt);
 
 }
+
 $('#editSelectedErrorGroup').on('change', async function () {
     let productCategoryId = $('#selectProductCode option:selected').data('extraField');
     let errorGroupId = $(this).val();
@@ -261,6 +265,7 @@ $('#editSelectedErrorGroup').on('change', async function () {
     $('#editSelectedError').html(html);
 
 });
+
 function handleAddInLineDetail() {
     var inLineId = inLine.id;
     var errorId = $('#selectedError').val();
@@ -304,6 +309,10 @@ function handleEditInLineDetail() {
 }
 
 function handleDeleteInLineDetail(id) {
+    if (inLine.userId !== currentUserId) {
+        toastr.error("Bạn không có quyền xóa lỗi trong InLine này.");
+        return;
+    }
     deleteInLineDetail(id).then(function (res) {
         renderTimeFrameCard();
         renderInLineDetailTable();

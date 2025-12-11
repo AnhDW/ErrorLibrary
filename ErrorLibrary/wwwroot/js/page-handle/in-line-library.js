@@ -2,11 +2,15 @@
     $('.dropdown-menu').on('click', function (e) {
         e.stopPropagation();
     });
+    var userId = JSON.parse(localStorage.getItem('user')).id;
+    var selectedIds = (await getOrganizationsByUserId(userId)).result;
+    var organizationIds = selectedIds.map(x => { return x.organizationType + "_" + x.organizationId })
 
-    const response = await getOrganizationTreeDropdown();
+    const tree = (await getOrganizationTreeDropdown()).result;
+    var filteredTree = filterTree(tree, organizationIds);
 
     $('#treeOrganization').treeview({
-        data: response.result,
+        data: filteredTree,
         levels: 1,                        // Thu gọn toàn bộ
         expandIcon: 'fa fa-chevron-right',
         collapseIcon: 'fa fa-chevron-down',
@@ -22,6 +26,7 @@
             $('#selectedOrganizationNode').val(node.id);
             $('#btnTreeOrganization').text(node.text);
 
+            console.log($('#selectedOrganizationNode').val());
             //checkAndInitInLine();
 
             let dd = bootstrap.Dropdown.getOrCreateInstance(
@@ -36,21 +41,16 @@
             //console.log("Đã đóng:", node.text);
         }
     });
+    let allNodes = $('#treeOrganization').treeview('getEnabled');
+    let firstLeaf = allNodes.find(n => n.id && n.id.startsWith("line_"));
+    if (firstLeaf) {
+        $('#treeOrganization').treeview('selectNode', [firstLeaf.nodeId]);
+    }
 }
 async function initialInLinePage() {
-    initOrganizationTree();
+    await initOrganizationTree();
     $('#date').val(new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().substring(0, 10));
-
-    //await Promise.all([
-    //    renderTimeFrameCard(),
-    //    renderInLineDetailTable()
-    //]);
-    //var products = (await getProducts()).result;
-    //var user = JSON.parse(localStorage.getItem('user'));
-    //var html = renderSelectOptionsByField(products, 'Chọn sản phẩm', 'id', 'code', 'productCategoryId');
-
-    //$('#selectProductCode').html(html);
-    //$('#user').val(user.fullName);
+    renderInLineTable();
 }
 
 document.getElementById("toggleFormBtn").addEventListener("click", function () {
@@ -66,4 +66,37 @@ document.getElementById("toggleFormBtn").addEventListener("click", function () {
     }
 });
 
-//function renderInLineTable()
+async function renderInLineTable() {
+    var lineId = $('#selectedOrganizationNode').val().replace("line_", "");
+    var date = $('#date').val();
+    var inLines = (await getInLines()).result;
+    inLines = inLines.filter(x => x.date === date && x.lineId == lineId);
+    let html = '';
+    inLines.forEach(item => {
+        html += `
+            <tr>
+                <td>${item.product.code}</td>
+                <td>${item.user.fullName}</td>
+                <td>${item.quantity}</td>
+                <td><small class="${item.isActive == true ? "text-success" : "text-danger"}">
+                        <i class="fas fa-dot-circle"></i> ${item.isActive == true ? "Đang hoạt động" : "Hủy kiểm"} 
+                    </small>
+                </td>
+                <td><small class="${item.isFinalized == true ? "text-success" : "text-info"}">
+                        <i class="fas fa-dot-circle"></i> ${item.isFinalized == true ? "Hoàn thành" : "Đang kiểm"} 
+                    </small>
+                </td>
+                <td><a href="/InLineDetailLibrary?inLineId=${item.id}"><i class="fas fa-info-circle"></i></a></td>
+            </tr>
+        `
+        return html;
+    })
+
+    console.log(inLines);
+    $('#inLineTableBody').html(html);
+
+}
+
+$('#selectedOrganizationNode, #date').on('change', function () {
+    renderInLineTable();
+});

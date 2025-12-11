@@ -14,7 +14,7 @@ async function addShowUserModalHandle() {
 }
 
 async function editShowUserModalHandle(userId) {
-    var user = await getUserById(userId);
+    var user = (await getUserById(userId)).result;
     var tree = (await getOrganizationTree()).result;
     //gán ids hiện tại
     var selectedIds = (await getOrganizationsByUserId(userId)).result;
@@ -133,7 +133,7 @@ function handleDeleteUser(id) {
 function renderUsersTable() {
     getUsers().then(function (data) {
         let html = '';
-        data.forEach(item => {
+        data.result.forEach(item => {
             html += `
                     <tr>
                         <td>${item.code}</td>

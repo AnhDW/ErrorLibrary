@@ -34,13 +34,15 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userService.GetAll();
-            return Json(_mapper.Map<List<UserDto>>(users));
+            _responseDto.Result = _mapper.Map<List<UserDto>>(users);
+            return Json(_responseDto);
         }
 
         public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _userService.GetById(id);
-            return Json(_mapper.Map<UserDto>(user));
+            _responseDto.Result = _mapper.Map<UserDto>(user);
+            return Json(_responseDto);
         }
 
         [HttpPost]

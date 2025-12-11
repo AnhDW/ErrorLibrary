@@ -7,7 +7,7 @@
     <!-- Content -->
 
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện đơn vị</span></h4>
+        @* <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện đơn vị</span></h4> *@
         <div id="formWrapper" class="mb-2">
             <div class="form-grid">
                 <div class="form-item">
@@ -38,7 +38,7 @@
         <button id="toggleFormBtn" class="toggle-btn w-100" style="border:none; border-radius:0 0 0 0;">
             <i class="fas fa-angle-double-up"></i>
         </button>
-        <div>
+        @* <div>
             <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
                     data-bs-target="#addModel" onclick="addShowUnitModalHandle()">
                 <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
@@ -109,7 +109,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> *@
         <!-- Striped Rows -->
         <div class="card mt-4">
             <div style="min-height:200px;" class="table-responsive text-nowrap">
@@ -121,17 +121,18 @@
                             <th>Số lượng kiểm</th>
                             <th>Is Active</th>
                             <th>Is Finalized</th>
+                            <th></th>
                         </tr>
                     </thead>
-                    <tbody id="unitTableBody" class="table-border-bottom-0">
+                    <tbody id="inLineTableBody" class="table-border-bottom-0">
                         <tr>
                             <td>Mã sản phẩm 1</td>
                             <td>Tên người kiểm 1</td>
                             <td>Số lượng kiểm 1</td>
-                            <td><small class="text-success"><i class="fas fa-circle"></i> Đang hoạt động</small></td>
-                            <td><small class="text-danger"><i class="fas fa-circle"></i> Chưa hoàn thành</small></td>
-                            <td><a asp-controller="TimeFrameLibrary"><i class="fas fa-arrow-right"></i> Chi tiết</a></td>
-                            <td>
+                            <td><small class="text-success"><i class="fas fa-dot-circle"></i> Đang hoạt động</small></td>
+                            <td><small class="text-danger"><i class="fas fa-dot-circle"></i> Chưa hoàn thành</small></td>
+                            <td><a asp-controller="TimeFrameLibrary"><i class="fas fa-info-circle"></i></a></td>
+                            @* <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                         <i class="bx bx-dots-vertical-rounded"></i>
@@ -144,7 +145,7 @@
                                         <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteUnit(1)"><i class="bx bx-trash me-1"></i> Xóa</a>
                                     </div>
                                 </div>
-                            </td>
+                            </td> *@
                         </tr>
                     </tbody>
                 </table>
@@ -201,5 +202,6 @@
     <script src="~/js/page-handle/in-line-library.js"></script>
     <script src="~/js/request/in-line-request.js"></script>
     <script src="~/js/request/organization-request.js"></script>
-
+    <script src="~/js/request/user-organization-request.js"></script>
+    <script src="~/js/share/tree-view-select.js"></script>
 }
