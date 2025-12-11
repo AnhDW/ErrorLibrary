@@ -78,12 +78,9 @@ async function renderInLineTable() {
                 <td>${item.product.code}</td>
                 <td>${item.user.fullName}</td>
                 <td>${item.quantity}</td>
-                <td><small class="${item.isActive == true ? "text-success" : "text-danger"}">
-                        <i class="fas fa-dot-circle"></i> ${item.isActive == true ? "Đang hoạt động" : "Hủy kiểm"} 
-                    </small>
-                </td>
-                <td><small class="${item.isFinalized == true ? "text-success" : "text-info"}">
-                        <i class="fas fa-dot-circle"></i> ${item.isFinalized == true ? "Hoàn thành" : "Đang kiểm"} 
+
+                <td><small class="${!item.isActive ? "text-danger" : item.isFinalized ? "text-success" : "text-info"}">
+                        <i class="fas fa-dot-circle"></i> ${!item.isActive ? "Hủy kiểm" : item.isFinalized ? "Hoàn thành" : "Đang kiểm"} 
                     </small>
                 </td>
                 <td><a href="/InLineDetailLibrary?inLineId=${item.id}"><i class="fas fa-info-circle"></i></a></td>
