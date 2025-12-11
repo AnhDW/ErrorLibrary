@@ -10,13 +10,14 @@ namespace ErrorLibrary.Controllers
     {
         private readonly ISharedService _sharedService;
         private readonly IInLineService _inLineService;
+        private readonly IInLineDetailService _inLineDetailService;
         private readonly ILineService _lineService;
         private readonly IProductService _productService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public InLineLibraryController(ISharedService sharedService, IInLineService inLineService, IMapper mapper, ILineService lineService, IProductService productService, IUserService userService)
+        public InLineLibraryController(ISharedService sharedService, IInLineService inLineService, IMapper mapper, ILineService lineService, IProductService productService, IUserService userService, IInLineDetailService inLineDetailService)
         {
             _sharedService = sharedService;
             _inLineService = inLineService;
@@ -25,6 +26,7 @@ namespace ErrorLibrary.Controllers
             _lineService = lineService;
             _productService = productService;
             _userService = userService;
+            _inLineDetailService = inLineDetailService;
         }
 
         public IActionResult Index()
@@ -35,6 +37,7 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetInLines()
         {
             var inLines = await _inLineService.GetAll();
+            var inLineDetails = await _inLineDetailService.GetAll();
             var lines = await _lineService.GetAll();
             var products = await _productService.GetAll();
             var users = await _userService.GetAll();
@@ -44,9 +47,11 @@ namespace ErrorLibrary.Controllers
                 var line = lines.FirstOrDefault(l => l.Id == inLine.LineId) ?? new Line();
                 var product = products.FirstOrDefault(p => p.Id == inLine.ProductId) ?? new Product();
                 var user = users.FirstOrDefault(u => u.Id == inLine.UserId) ?? new ApplicationUser();
+                var totalErrors = inLineDetails.Where(d => d.InLineId == inLine.Id).Sum(d => d.Quantity);
                 inLine.Line = _mapper.Map<LineDto>(line);
                 inLine.Product = _mapper.Map<ProductDto>(product);
                 inLine.User = _mapper.Map<UserDto>(user);
+                inLine.TotalErrors = totalErrors;
             }
             _responseDto.Result = inLinesDto;
             return Json(_responseDto);

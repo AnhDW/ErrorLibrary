@@ -78,7 +78,7 @@ async function renderInLineTable() {
                 <td>${item.product.code}</td>
                 <td>${item.user.fullName}</td>
                 <td>${item.quantity}</td>
-
+                <td>${item.totalErrors}</td>
                 <td><small class="${!item.isActive ? "text-danger" : item.isFinalized ? "text-success" : "text-info"}">
                         <i class="fas fa-dot-circle"></i> ${!item.isActive ? "Hủy kiểm" : item.isFinalized ? "Hoàn thành" : "Đang kiểm"} 
                     </small>

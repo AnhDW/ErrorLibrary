@@ -1,4 +1,5 @@
 ﻿using ErrorLibrary.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ErrorLibrary.DTOs
 {
@@ -12,6 +13,9 @@ namespace ErrorLibrary.DTOs
         public int Quantity { get; set; } = 0;
         public bool IsActive { get; set; } = true;
         public bool IsFinalized { get; set; } = false;
+
+        [NotMapped]
+        public int TotalErrors { get; set; } = 0;
 
         public LineDto Line { get; set; }
         public ProductDto Product { get; set; }
