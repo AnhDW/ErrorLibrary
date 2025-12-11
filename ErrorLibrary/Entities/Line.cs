@@ -9,6 +9,8 @@
 
         public Enterprise Enterprise { get; set; }
         public List<InLine> InLines { get; set; } = new();
+        public List<EndLine> EndLines { get; set; } = new();
         public List<ErrorDetail> ErrorDetails { get; set; } = new();
+
     }
 }

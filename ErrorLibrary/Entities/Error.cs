@@ -15,5 +15,6 @@
         public List<Solution> Solutions { get; set; } = new();
         public List<ErrorDetail> ErrorDetails { get; set; } = new();
         public List<InLineDetail> InLineDetails { get; set; } = new();
+        public List<EndLineDetail> EndLineDetails { get; set; } = new();
     }
 }

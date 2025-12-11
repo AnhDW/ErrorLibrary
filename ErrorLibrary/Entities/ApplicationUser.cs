@@ -11,5 +11,6 @@ namespace ErrorLibrary.Entities
         public List<InLine> InLines { get; set; } = new();
         public List<ErrorDetail> ErrorDetails { get; set; } = new();
         public List<UserOrganization> UserOrganizations { get; set; } = new();
+        public List<EndLineDetail> EndLineDetails { get; set; } = new();
     }
 }

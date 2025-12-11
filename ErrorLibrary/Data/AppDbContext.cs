@@ -27,6 +27,10 @@ namespace ErrorLibrary.Data
         public DbSet<TimeFrameColor> TimeFrameColors { get; set; }
         public DbSet<InLine> InLines { get; set; }
         public DbSet<InLineDetail> InLineDetails { get; set; }
+
+        public DbSet<EndLine> EndLines { get; set; }
+        public DbSet<EndLineDetail> EndLineDetails { get; set; }
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -144,6 +148,30 @@ namespace ErrorLibrary.Data
                 .WithMany(x => x.InLineDetails)
                 .HasForeignKey(x => x.ErrorId);
 
+            builder.Entity<EndLine>()
+                .HasOne(x => x.Line)
+                .WithMany(x => x.EndLines)
+                .HasForeignKey(x => x.LineId);
+
+            builder.Entity<EndLine>()
+                .HasOne(x => x.Product)
+                .WithMany(x => x.EndLines)
+                .HasForeignKey(x => x.ProductId);
+
+            builder.Entity<EndLineDetail>()
+                .HasOne(x => x.EndLine)
+                .WithMany(x => x.EndLineDetails)
+                .HasForeignKey(x => x.EndLineId);
+
+            builder.Entity<EndLineDetail>()
+                .HasOne(x => x.Error)
+                .WithMany(x => x.EndLineDetails)
+                .HasForeignKey(x => x.ErrorId);
+
+            builder.Entity<EndLineDetail>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.EndLineDetails)
+                .HasForeignKey(x => x.UserId);
         }
 
     }

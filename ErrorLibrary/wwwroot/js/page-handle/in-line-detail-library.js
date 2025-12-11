@@ -31,7 +31,6 @@ async function initOrganizationTree() {
 
             $('#selectedOrganizationNode').val(node.id);
             $('#btnTreeOrganization').text(node.text);
-
             checkAndInitInLine();
 
             let dd = bootstrap.Dropdown.getOrCreateInstance(
@@ -57,7 +56,12 @@ async function initOrganizationTree() {
 async function initialInLineDetailPage() {
     var products = (await getProducts()).result;
     var html = renderSelectOptionsByField(products, 'Chọn sản phẩm', 'id', 'code', 'productCategoryId');
+    var user = (await getUserById(inLine.userId)).result;
+
     $('#selectProductCode').html(html);
+    $('#user').val(user.fullName);
+    $('#date').val(inLine.date);
+
     await checkParams();
     await Promise.all([
         initOrganizationTree(),
@@ -65,10 +69,7 @@ async function initialInLineDetailPage() {
         renderInLineDetailTable()
     ]);
     console.log(inLine);
-    var user = (await getUserById(inLine.userId)).result;
 
-    $('#user').val(user.fullName);
-    $('#date').val(inLine.date);
 }
 
 document.getElementById("toggleFormBtn").addEventListener("click", function () {
@@ -94,7 +95,6 @@ async function renderTimeFrameCard() {
             quantity = (await getQuantityByInLineAndTimeFrame(inLine.id, item.id)).result;
             timeFrameColor = (await getTimeFrameColorByQuantity(item.id, quantity)).result;
         }
-        console.log(timeFrameColor.hexCode);
 
         html += `
             <div class="col-md-6 col-lg-4 col-xxl-3">
@@ -111,7 +111,6 @@ async function renderTimeFrameCard() {
 }
 
 async function renderInLineDetailTable() {
-    console.log(inLine.id);
     if (inLine.id === 0) return;
     var inLineDetails = (await getInLineDetailsByInLine(inLine.id)).result;
     let html = '';
@@ -146,7 +145,6 @@ function checkAndInitInLine() {
     var date = $('#date').val();
     var quantity = $('#quantity').val();
 
-    console.log(productId);
     if (!lineId || !productId || !userId || !date) {
         return;
     }
@@ -161,10 +159,11 @@ function checkAndInitInLine() {
 
     $('#formWrapper').removeClass('shake border border-2 border-danger p-2 rounded');
     checkInitAndUpdate(inLineDto).then(function (res) {
+
         inLine = res.result;
         if (firstLoadInLine) {
             firstLoadInLine = false;
-            $('#quantity').val(res.result.quantity);
+            $('#quantity').val(inLine.quantity);
         }
         renderTimeFrameCard();
         renderInLineDetailTable();
@@ -189,7 +188,7 @@ async function checkParams() {
     $('#selectedOrganizationNode').val(inLineById.lineId);
     $('#selectProductCode').val(inLineById.productId);
     $('#user').val(user.fullName);
-    console.log(inLineById);
+    $('#quantity').val(inLineById.quantity);
 }
 
 $('#selectProductCode, #date, #quantity').on('change keyup', function () {
@@ -257,7 +256,6 @@ async function initEditModal(inLineDetail) {
 $('#editSelectedErrorGroup').on('change', async function () {
     let productCategoryId = $('#selectProductCode option:selected').data('extraField');
     let errorGroupId = $(this).val();
-    console.log(productCategoryId, errorGroupId);
     var errors = (await getErrorsByErrorGroupAndProductCategory(errorGroupId, productCategoryId)).result;
     var html = renderSelectErrorOptions(errors, 'Chọn lỗi');
 
@@ -276,7 +274,6 @@ function handleAddInLineDetail() {
         createAt: new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString(),
         updateAt: new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString()
     }
-    console.log(inLineDetailDto);
     addInLineDetail(inLineDetailDto).then(function (res) {
         renderTimeFrameCard();
         renderInLineDetailTable();
