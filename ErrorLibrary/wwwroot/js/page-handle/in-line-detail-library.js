@@ -338,3 +338,11 @@ $('#editBtnDecreases').on('click', () => {
     var quantity = $('#editQuantityInLine').val();
     $('#editQuantityInLine').val(parseInt(quantity) - 1);
 })
+
+$('#btnIsFinalized').on('click', function () {
+    inLine.isFinalized = true;
+});
+
+$('#btnIsActive').on('click', function () {
+    inLine.isActive = false;
+});

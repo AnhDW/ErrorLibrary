@@ -1,6 +1,6 @@
 ﻿@{
     var controllerName = ViewContext.RouteData.Values["controller"].ToString();
-    var featureControllers = new[] { "Home", "ErrorDetailLibrary", "InLineDetailLibrary", "InLineLibrary" };
+    var featureControllers = new[] { "Home", "ErrorDetailLibrary", "InLineDetailLibrary", "InLineLibrary", "EndLineDetailLibrary", "EndLineLibrary" };
     var libraryControllers = new[] { "ErrorLibrary", "ErrorGroupLibrary", "ErrorCategoryLibrary", "ProductCategoryLibrary", "ProductLibrary", "SolutionLibrary", "UnitLibrary", "FactoryLibrary", "EnterpriseLibrary", "LineLibrary" };
     var settingControllers = new[] { "UserLibrary", "TimeFrameLibrary" };
 }
@@ -113,6 +113,18 @@
                                 <a class="menu-link" asp-controller="InLineLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-history"></i>
                                     <div style="margin-left: 4px;">Lịch sử kiểm InLine</div>
+                                </a>
+                            </li>
+                            <li class="menu-item @(controllerName == "EndLineDetailLibrary" ? "active" : "")">
+                                <a class="menu-link" asp-controller="EndLineDetailLibrary" asp-action="Index">
+                                    <i class="menu-icon tf-icons fa-solid fa-ruler"></i>
+                                    <div style="margin-left: 4px;">Kiểm EndLine</div>
+                                </a>
+                            </li>
+                            <li class="menu-item @(controllerName == "EndLineLibrary" ? "active" : "")">
+                                <a class="menu-link" asp-controller="EndLineLibrary" asp-action="Index">
+                                    <i class="menu-icon tf-icons fa-solid fa-history"></i>
+                                    <div style="margin-left: 4px;">Lịch sử kiểm EndLine</div>
                                 </a>
                             </li>
                         </ul>

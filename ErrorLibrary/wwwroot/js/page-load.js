@@ -35,6 +35,10 @@ $(document).ready(function () {
         initialInLineDetailPage();
     }else if (path.includes('/InLineLibrary')) {
         initialInLinePage();
+    } else if (path.includes('/EndLineDetailLibrary')) {
+        initialEndLineDetailPage();
+    } else if (path.includes('/EndLineLibrary')) {
+        //initialInLinePage();
     } else if (path.includes('/TimeFrameLibrary')) {
         renderTimeFrameTable();
     }
