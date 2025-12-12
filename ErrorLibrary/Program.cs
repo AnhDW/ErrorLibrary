@@ -47,8 +47,11 @@ builder.Services.AddScoped<IUserOrganizationService, UserOrganizationService>();
 builder.Services.AddScoped<IOrganizationService, OrganizationService>();
 builder.Services.AddScoped<IInLineService, InLineService>();
 builder.Services.AddScoped<IInLineDetailService, InLineDetailService>();
+builder.Services.AddScoped<IEndLineService, EndLineService>();
+builder.Services.AddScoped<IEndLineDetailService, EndLineDetailService>();
 builder.Services.AddScoped<ITimeFrameService, TimeFrameService>();
 builder.Services.AddScoped<ITimeFrameColorService, TimeFrameColorService>();
+
 var assemblies = AppDomain.CurrentDomain.GetAssemblies()
     .Where(a => !a.FullName.StartsWith("Microsoft.Data.SqlClient"))
     .ToArray();

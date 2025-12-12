@@ -13,5 +13,10 @@ namespace ErrorLibrary.Services.IServices
         void Add(EndLine endLine);
         void Update(EndLine endLine);
         void Delete(EndLine endLine);
+
+        Task<bool> CheckExists(int lineId, int productId, DateOnly date);
+
+        HashSet<string> BuildExistingEndLineKeySet(List<EndLine> endLines);
+        bool CheckExists(HashSet<string> existingKeys, int lineId, int productId, DateOnly date);
     }
 }

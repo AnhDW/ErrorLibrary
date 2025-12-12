@@ -7,16 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ErrorLibrary.Controllers
 {
-    public class EndLineLibraryController : Controller
+    public class EndLineDetailLibraryController : Controller
     {
-        private readonly IEndLineService _endLineService;
+        private readonly IEndLineDetailService _endLineDetailService;
         private readonly ISharedService _sharedService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public EndLineLibraryController(IEndLineService endLineService, ISharedService sharedService, IMapper mapper)
+        public EndLineDetailLibraryController(IEndLineDetailService endLineDetailService, ISharedService sharedService, IMapper mapper)
         {
-            _endLineService = endLineService;
+            _endLineDetailService = endLineDetailService;
             _sharedService = sharedService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
@@ -27,31 +27,31 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetEndLines()
+        public async Task<IActionResult> GetEndLineDetails()
         {
-            var endLines = await _endLineService.GetAll();
-            _responseDto.Result = _mapper.Map<List<EndLineDto>>(endLines);
+            var endLineDetails = await _endLineDetailService.GetAll();
+            _responseDto.Result = _mapper.Map<List<EndLineDetailDto>>(endLineDetails);
             return Json(_responseDto);
         }
 
-        public async Task<IActionResult> GetEndLineById(int id)
+        public async Task<IActionResult> GetEndLineDetailById(int id)
         {
-            var endLine = await _endLineService.GetById(id);
-            _responseDto.Result = _mapper.Map<EndLineDto>(endLine);
+            var endLineDetail = await _endLineDetailService.GetById(id);
+            _responseDto.Result = _mapper.Map<EndLineDetailDto>(endLineDetail);
             return Json(_responseDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEndLine([FromBody] EndLineDto endLineDto)
+        public async Task<IActionResult> AddEndLineDetail([FromBody] EndLineDetailDto endLineDetailDto)
         {
-            if (await _endLineService.CheckExists(endLineDto.LineId, endLineDto.ProductId, endLineDto.Date))
+            if (await _endLineDetailService.CheckExists(endLineDetailDto.EndLineId, endLineDetailDto.ErrorId, endLineDetailDto.UserId))
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Tên đơn vị đã tồn tại";
                 return Json(_responseDto);
             }
 
-            _endLineService.Add(_mapper.Map<EndLine>(endLineDto));
+            _endLineDetailService.Add(_mapper.Map<EndLineDetail>(endLineDetailDto));
             if (await _sharedService.SaveAllChanges())
             {
                 _responseDto.Message = "Thêm đơn vị thành công";
@@ -64,18 +64,18 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateEndLine([FromBody] EndLineDto endLineDto)
+        public async Task<IActionResult> UpdateEndLineDetail([FromBody] EndLineDetailDto endLineDetailDto)
         {
-            var endLine = await _endLineService.GetById(endLineDto.Id);
-            if (endLine == null)
+            var endLineDetail = await _endLineDetailService.GetById(endLineDetailDto.Id);
+            if (endLineDetail == null)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
                 return Json(_responseDto);
             }
 
-            bool isNameExists = await _endLineService.CheckExists(endLineDto.LineId, endLineDto.ProductId, endLineDto.Date) &&
-                (endLineDto.LineId != endLine.LineId || endLineDto.ProductId != endLine.ProductId || endLineDto.Date != endLine.Date);
+            bool isNameExists = await _endLineDetailService.CheckExists(endLineDetailDto.EndLineId, endLineDetailDto.ErrorId, endLineDetailDto.UserId) && 
+                (endLineDetailDto.EndLineId != endLineDetail.EndLineId || endLineDetailDto.ErrorId != endLineDetail.ErrorId || endLineDetailDto.UserId != endLineDetail.UserId);
 
             if (isNameExists)
             {
@@ -84,7 +84,7 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            _endLineService.Update(_mapper.Map(endLineDto, endLine));
+            _endLineDetailService.Update(_mapper.Map(endLineDetailDto, endLineDetail));
             if (await _sharedService.SaveAllChanges())
             {
                 _responseDto.Message = "Cập nhật đơn vị thành công";
@@ -97,17 +97,17 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteEndLine([FromBody] int id)
+        public async Task<IActionResult> DeleteEndLineDetail([FromBody] int id)
         {
-            var endLine = await _endLineService.GetById(id);
-            if (endLine == null)
+            var endLineDetail = await _endLineDetailService.GetById(id);
+            if (endLineDetail == null)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
                 return Json(_responseDto);
             }
 
-            _endLineService.Delete(endLine);
+            _endLineDetailService.Delete(endLineDetail);
             if (await _sharedService.SaveAllChanges())
             {
                 _responseDto.Message = "Xóa đơn vị thành công";

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using ErrorLibrary.Data;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
@@ -24,32 +25,56 @@ namespace ErrorLibrary.Services
 
         public void Add(EndLineDetail endLineDetail)
         {
-            throw new NotImplementedException();
+            _context.EndLineDetails.Add(endLineDetail);
+        }
+
+        public HashSet<string> BuildExistingEndLineDetailKeySet(List<EndLineDetail> endLineDetails)
+        {
+            return endLineDetails.Select(x => $"{x.EndLineId}|{x.ErrorId}|{x.UserId}").ToHashSet();
+        }
+
+        public async Task<bool> CheckExists(int endLineId, int errorId, string userId)
+        {
+            return await _context.EndLineDetails.AnyAsync(x =>
+                x.EndLineId == endLineId &&
+                x.ErrorId == errorId &&
+                x.UserId == userId);
+        }
+
+        public bool CheckExists(HashSet<string> existingKeys, int endLineId, int errorId, string userId)
+        {
+            var key = $"{endLineId}|{errorId}|{userId}";
+            return existingKeys.Contains(key);
         }
 
         public void Delete(EndLineDetail endLineDetail)
         {
-            throw new NotImplementedException();
+            _context.EndLineDetails.Remove(endLineDetail);
         }
 
         public Task<PagedList<EndLineDetailDto>> GetAll(EndLineDetailParams endLineDetailParam)
         {
-            throw new NotImplementedException();
+            var query = _context.EndLineDetails.AsQueryable();
+
+            return PagedList<EndLineDetailDto>.CreateAsync(
+                query.ProjectTo<EndLineDetailDto>(_mapper.ConfigurationProvider),
+                endLineDetailParam.PageNumber,
+                endLineDetailParam.PageSize);
         }
 
-        public Task<List<EndLineDetail>> GetAll()
+        public async Task<List<EndLineDetail>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _context.EndLineDetails.ToListAsync();
         }
 
-        public Task<EndLineDetail> GetById(int id)
+        public async Task<EndLineDetail> GetById(int id)
         {
-            throw new NotImplementedException();
+            return (await _context.EndLineDetails.FindAsync(id))!;
         }
 
         public void Update(EndLineDetail endLineDetail)
         {
-            throw new NotImplementedException();
+            _context.EndLineDetails.Update(endLineDetail);
         }
     }
 }
