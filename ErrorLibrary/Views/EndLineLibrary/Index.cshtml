@@ -1,0 +1,114 @@
+﻿@{
+    ViewData["Title"] = "End Line";
+}
+
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="rounded shadow-sm">
+            <div style="background-color:#0d6efd" class="rounded-top text-white">
+                <div class="fw-bold p-2 text-white mb-0 d-flex align-items-center">
+                    <div>Kiểm Tra Chất Lượng Endline </div>
+                    <div class="form-item ms-1">
+                        <div class="dropdown w-100" data-bs-auto-close="false">
+                            <button class="btn btn-light dropdown-toggle w-100"
+                                    type="button"
+                                    id="btnTreeOrganization"
+                                    data-bs-toggle="dropdown">
+                                Chọn chuyền
+                            </button>
+                            <ul class="dropdown-menu w-100" aria-labelledby="btnTreeOrganization">
+                                <li><div id="treeOrganization"></div></li>
+                            </ul>
+                        </div>
+                        <input type="hidden" id="selectedOrganizationNode" name="Organization" />
+                    </div>
+                    <input style="width: 100px;" type="text" class="form-control ms-1" id="PO" placeholder="PO" aria-describedby="defaultFormControlHelp">
+                </div>
+                <div class="d-flex flex-wrap">
+                    <div style="width: 20%;" class="p-2">
+                        <p>Mã Hàng (Style No.):</p>
+                        <p class="fw-bold">S-TEE-NAVY-L</p>
+                    </div>
+                    <div style="width: 20%;" class="p-2">
+                        <p>Số lượng đơn hàng:</p>
+                        <p class="fw-bold">5,000 Pcs</p>
+                    </div>
+                    <div style="width: 20%;" class="p-2">
+                        <p>Số lượng cần kiểm:</p>
+                        <p class="fw-bold">50 Pcs</p>
+                    </div>
+                    <div style="width: 20%;" class="p-2">
+                        <p>Số lượng đạt:</p>
+                        <p class="fw-bold text-success">15 Pcs</p>
+                    </div>
+                    <div style="width: 20%;" class="p-2">
+                        <p>Số lượng lỗi:</p>
+                        <p class="fw-bold text-danger">1 Pcs</p>
+                    </div>
+                </div>
+            </div>
+            <div class="rounded-bottom p-4 flex">
+                <div class="row">
+                    <div class="col-3">
+
+                    </div>
+                    <div class="col-9">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- / Content -->
+    <div class="content-backdrop fade"></div>
+</div>
+<style>
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 12px 20px; /* khoảng cách giữa các ô */
+        margin-top: 10px;
+    }
+
+    .form-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .form-item label {
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+    .toggle-btn {
+        width: 100%;
+        height: 32px; /* Thấp hơn */
+        border: none;
+        background: none; /* Màu nhẹ */
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Icon ở giữa */
+        cursor: pointer;
+        border-radius: 6px;
+        transition: background 0.2s ease;
+    }
+
+        .toggle-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .toggle-btn span {
+            font-size: 18px;
+            transition: transform 0.2s ease;
+        }
+
+</style>
+<!-- Content wrapper -->
+@section Scripts {
+    <script src="~/js/page-handle/in-line-library.js"></script>
+    <script src="~/js/request/in-line-request.js"></script>
+    <script src="~/js/request/organization-request.js"></script>
+    <script src="~/js/request/user-organization-request.js"></script>
+    <script src="~/js/share/tree-view-select.js"></script>
+}
