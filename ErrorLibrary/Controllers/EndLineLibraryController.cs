@@ -42,6 +42,48 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> CheckInitAndUpdateEndLine([FromBody] InitAndUpdateEndLineDto initAndUpdateEndLineDto)
+        {
+            var endLines = await _endLineService.GetAll();
+            var existingKeys = _endLineService.BuildExistingEndLineKeySet(endLines);
+            var keyToCheck = _endLineService.CheckNameExistsFast(existingKeys, initAndUpdateEndLineDto.LineId, initAndUpdateEndLineDto.ProductId, initAndUpdateEndLineDto.Date);
+            EndLine endLine;
+            if (keyToCheck)
+            {
+                endLine = (endLines.FirstOrDefault(endLines =>
+                    endLines.LineId == initAndUpdateEndLineDto.LineId &&
+                    endLines.ProductId == initAndUpdateEndLineDto.ProductId &&
+                    endLines.Date == initAndUpdateEndLineDto.Date)) ?? new EndLine();
+                // Nếu là load lần đầu thì chỉ trả về thông tin 'In line'
+                if (initAndUpdateEndLineDto.FirstLoad)
+                {
+                    _responseDto.Message = "Lấy thông tin 'In line' cho lần load đầu tiên";
+                    _responseDto.Result = _mapper.Map<EndLineDto>(endLine);
+                    return Json(_responseDto);
+                }
+                // Không phải load lần đầu thì cập nhật
+                initAndUpdateEndLineDto.Id = endLine.Id;
+                _endLineService.Update(_mapper.Map(initAndUpdateEndLineDto, endLine));
+                _responseDto.Message = "Cập nhật 'In line' thành công";
+            }
+            else
+            {
+                endLine = _mapper.Map<EndLine>(initAndUpdateEndLineDto);
+                _endLineService.Add(endLine);
+                _responseDto.Message = "Khởi tạo 'In line' thành công";
+            }
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Result = _mapper.Map<EndLineDto>(endLine);
+                return Json(_responseDto);
+            }
+
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Lỗi trong quá trình khởi tạo hoặc cập nhật 'In line'";
+            return Json(_responseDto);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AddEndLine([FromBody] EndLineDto endLineDto)
         {
             if (await _endLineService.CheckExists(endLineDto.LineId, endLineDto.ProductId, endLineDto.Date))

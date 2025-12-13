@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="form-item">
-                    <label for="quantityPO">Số lượng PO</label>
+                    <label for="quantityPO">Số lượng</label>
                     <input id="quantityPO" class="form-control" type="number" value="0">
                 </div>
 
@@ -44,12 +44,7 @@
                     <input id="date" class="form-control" type="date" disabled>
                 </div>
 
-                <div class="form-item">
-                    <label for="quantityCheck">Số lượng cần kiểm</label>
-                    <input id="quantityCheck" class="form-control" type="number" value="0" disabled>
-                </div>
-
-                <div class="form-item">
+                @*<div class="form-item">
                     <label for="quantitySuccess">Số lượng đạt</label>
                     <input id="quantitySuccess" class="form-control" type="number" value="0" disabled>
                 </div>
@@ -57,18 +52,30 @@
                 <div class="form-item">
                     <label for="quantityError">Số lượng lỗi</label>
                     <input id="quantityError" class="form-control" type="number" value="0" disabled>
-                </div>
-                <div class="form-item">
-                    <label for="status">Trạng thái</label>
-                    <input id="status" class="form-control" type="text" value="itsc" disabled>
-                </div>
+                </div> *@
             </div>
         </div>
 
         <button id="toggleFormBtn" class="toggle-btn w-100" style="border:none; border-radius:0 0 0 0;">
             <i class="fas fa-angle-double-up"></i>
         </button>
-
+        <div class="d-flex flex-wrap justify-content-between p-2">
+            <div>
+                <label class="text-black">Số lượng đạt: </label>
+                <h3 class="m-0 text-info" id="txtAcceptedQuantity"><span class="text-success">0</span>/0</h3>
+            </div>
+            <div>
+                <label class="text-black">Số lượng lỗi: </label>
+                <h3 class="m-0 text-info" id="txtErrorQuantity"><span class="text-danger">0</span>/0</h3>
+            </div>
+            <div>
+                <label></label>
+                <div class="d-flex flex-row-reverse gap-1">
+                    <button id="btnIsFinalized" class="btn btn-secondary btn-sm" type="button"><i class="fas fa-check"></i>Hoàn thành</button>
+                    <button id="btnIsActive" class="btn btn-secondary btn-sm" type="button"><i class="fas fa-times"></i>Hủy kiểm</button>
+                </div>
+            </div>
+        </div>
         <div class="row mt-3" id="categoryErrorCard">
             <div class="col-md-6 col-xl-3">
                 <div class="card card-custom bg-secondary text-white mb-3" data-bs-toggle="modal"
@@ -282,7 +289,7 @@
 
     @@media (min-width: 768px) and (max-width: 1024px) {
         .form-grid {
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(4, 1fr);
         }
     }
 </style>

@@ -13,6 +13,15 @@ function getEndLineById(id) {
     })
 }
 
+function checkInitAndUpdateEndLine(initAndUpdateEndLineDto) {
+    return ajaxRequest({
+        url: '/EndLineLibrary/CheckInitAndUpdateEndLine',
+        method: 'POST',
+        data: initAndUpdateEndLineDto,
+        showLoading: true
+    })
+}
+
 function addEndLine(endLineDto) {
     return ajaxRequest({
         url: '/EndLineLibrary/AddEndLine',

@@ -17,6 +17,6 @@ namespace ErrorLibrary.Services.IServices
         Task<bool> CheckExists(int lineId, int productId, DateOnly date);
 
         HashSet<string> BuildExistingEndLineKeySet(List<EndLine> endLines);
-        bool CheckExists(HashSet<string> existingKeys, int lineId, int productId, DateOnly date);
+        bool CheckNameExistsFast(HashSet<string> existingKeys, int lineId, int productId, DateOnly date);
     }
 }

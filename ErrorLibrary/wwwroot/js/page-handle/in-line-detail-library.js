@@ -1,6 +1,11 @@
 ﻿let inLine = {
     id:0,
-    lineId: 0, productId: 0, userId: JSON.parse(localStorage.getItem('user')).id, date: new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().substring(0, 10), quantity,
+    lineId: 0, productId: 0,
+    userId: JSON.parse(localStorage.getItem('user')).id,
+    date: new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().substring(0, 10),
+    quantity,
+    isActive: true,
+    isFinalized: false
 };
 let firstLoadInLine = true;
 let currentUserId = JSON.parse(localStorage.getItem('user')).id;
@@ -72,19 +77,6 @@ async function initialInLineDetailPage() {
 
 }
 
-document.getElementById("toggleFormBtn").addEventListener("click", function () {
-    const wrapper = document.getElementById("formWrapper");
-    const icon = document.getElementById("toggleIcon");
-
-    wrapper.classList.toggle("d-none");
-
-    if (wrapper.classList.contains("d-none")) {
-        this.innerHTML = '<i class="fas fa-angle-double-down"></i>';
-    } else {
-        this.innerHTML = '<i class="fas fa-angle-double-up"></i>';
-    }
-});
-
 async function renderTimeFrameCard() {
     var timeFrames = (await getTimeFrames()).result;
     let html = '';
@@ -144,7 +136,8 @@ function checkAndInitInLine() {
     var userId = inLine.userId;
     var date = $('#date').val();
     var quantity = $('#quantity').val();
-
+    var isActive = inLine.isActive;
+    var isFinalized = inLine.isFinalized;
     if (!lineId || !productId || !userId || !date) {
         return;
     }
@@ -154,17 +147,18 @@ function checkAndInitInLine() {
     }
 
     var inLineDto = {
-        lineId, productId, userId, date, quantity, firstLoad : firstLoadInLine
+        lineId, productId, userId, date, quantity, firstLoad: firstLoadInLine, isActive, isFinalized
     }
 
     $('#formWrapper').removeClass('shake border border-2 border-danger p-2 rounded');
-    checkInitAndUpdate(inLineDto).then(function (res) {
+    checkInitAndUpdateInLine(inLineDto).then(function (res) {
 
         inLine = res.result;
         if (firstLoadInLine) {
             firstLoadInLine = false;
             $('#quantity').val(inLine.quantity);
         }
+        setBtnStatus();
         renderTimeFrameCard();
         renderInLineDetailTable();
         //resToastr(res);
@@ -172,6 +166,21 @@ function checkAndInitInLine() {
         toastr.error(err);
     });
 
+}
+
+function setBtnStatus() {
+    if (inLine.isFinalized) {
+        $('#btnIsFinalized').removeClass('btn-success').addClass('btn-secondary');
+    } else {
+        $('#btnIsFinalized').removeClass('btn-secondary').addClass('btn-success');
+    }
+    if (inLine.isActive) {
+        $('#btnIsActive').removeClass('btn-secondary').addClass('btn-danger');
+        $('#btnIsFinalized').removeClass('d-none');
+    } else {
+        $('#btnIsActive').removeClass('btn-danger').addClass('btn-secondary');
+        $('#btnIsFinalized').addClass('d-none');
+    }
 }
 
 async function checkParams() {
@@ -190,10 +199,6 @@ async function checkParams() {
     $('#user').val(user.fullName);
     $('#quantity').val(inLineById.quantity);
 }
-
-$('#selectProductCode, #date, #quantity').on('change keyup', function () {
-    checkAndInitInLine();
-});
 
 async function initAddModal(timeFrameId) {
     if (inLine.userId !== currentUserId) {
@@ -216,17 +221,6 @@ async function initAddModal(timeFrameId) {
     var html = renderSelectOptions(errorGroups, 'Chọn nhóm lỗi');
     $('#selectedErrorGroup').html(html);
 }
-
-$('#selectedErrorGroup').on('change', async function () {
-    let productCategoryId = $('#selectProductCode option:selected').data('extraField');
-    let errorGroupId = $(this).val();
-    var errors = (await getErrorsByErrorGroupAndProductCategory(errorGroupId, productCategoryId)).result;
-    var html = renderSelectErrorOptions(errors, 'Chọn lỗi');
-    
-    $('#selectedError').prop('disabled', false);
-    $('#selectedError').html(html);
-
-});
 
 async function initEditModal(inLineDetail) {
     if (inLine.userId !== currentUserId) {
@@ -252,17 +246,6 @@ async function initEditModal(inLineDetail) {
     $('#editCreateAt').val(inLineDetail.createAt);
 
 }
-
-$('#editSelectedErrorGroup').on('change', async function () {
-    let productCategoryId = $('#selectProductCode option:selected').data('extraField');
-    let errorGroupId = $(this).val();
-    var errors = (await getErrorsByErrorGroupAndProductCategory(errorGroupId, productCategoryId)).result;
-    var html = renderSelectErrorOptions(errors, 'Chọn lỗi');
-
-    $('#editSelectedError').prop('disabled', false);
-    $('#editSelectedError').html(html);
-
-});
 
 function handleAddInLineDetail() {
     var inLineId = inLine.id;
@@ -290,10 +273,10 @@ function handleEditInLineDetail() {
     var timeFrameId = $('#editTimeFrameId').val();
     var quantity = $('#editQuantityInLine').val();
     var createAt = $('#editCreateAt').val();
-    
     var inLineDetailDto = {
         id,
-        errorId, inLineId, timeFrameId, quantity, createAt, updateAt: new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString()
+        errorId, inLineId, timeFrameId, quantity, createAt,
+        updateAt: new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString(),
     }
 
     updateInLineDetail(inLineDetailDto).then(function (res) {
@@ -319,6 +302,41 @@ function handleDeleteInLineDetail(id) {
     });
 }
 
+$('#selectProductCode, #date, #quantity').on('change keyup', function () {
+    checkAndInitInLine();
+});
+
+$('#btnIsFinalized').on('click', function () {
+    if (inLine.isFinalized === false) {
+        inLine.isFinalized = true;
+    } else {
+        inLine.isFinalized = false;
+    }
+    checkAndInitInLine();
+});
+
+$('#btnIsActive').on('click', function () {
+    if (inLine.isActive === false) {
+        inLine.isActive = true;
+    } else {
+        inLine.isActive = false;
+    }
+    checkAndInitInLine();
+});
+
+$("#toggleFormBtn").on("click", function () {
+    const wrapper = document.getElementById("formWrapper");
+    const icon = document.getElementById("toggleIcon");
+
+    wrapper.classList.toggle("d-none");
+
+    if (wrapper.classList.contains("d-none")) {
+        this.innerHTML = '<i class="fas fa-angle-double-down"></i>';
+    } else {
+        this.innerHTML = '<i class="fas fa-angle-double-up"></i>';
+    }
+});
+
 $('#addBtnIncreases').on('click', () => {
     var quantity = $('#quantityInLine').val();
     $('#quantityInLine').val(parseInt(quantity) + 1);
@@ -339,10 +357,25 @@ $('#editBtnDecreases').on('click', () => {
     $('#editQuantityInLine').val(parseInt(quantity) - 1);
 })
 
-$('#btnIsFinalized').on('click', function () {
-    inLine.isFinalized = true;
+$('#selectedErrorGroup').on('change', async function () {
+    let productCategoryId = $('#selectProductCode option:selected').data('extraField');
+    let errorGroupId = $(this).val();
+    var errors = (await getErrorsByErrorGroupAndProductCategory(errorGroupId, productCategoryId)).result;
+    var html = renderSelectErrorOptions(errors, 'Chọn lỗi');
+
+    $('#selectedError').prop('disabled', false);
+    $('#selectedError').html(html);
+
 });
 
-$('#btnIsActive').on('click', function () {
-    inLine.isActive = false;
+$('#editSelectedErrorGroup').on('change', async function () {
+    let productCategoryId = $('#selectProductCode option:selected').data('extraField');
+    let errorGroupId = $(this).val();
+    var errors = (await getErrorsByErrorGroupAndProductCategory(errorGroupId, productCategoryId)).result;
+    var html = renderSelectErrorOptions(errors, 'Chọn lỗi');
+
+    $('#editSelectedError').prop('disabled', false);
+    $('#editSelectedError').html(html);
+
 });
+

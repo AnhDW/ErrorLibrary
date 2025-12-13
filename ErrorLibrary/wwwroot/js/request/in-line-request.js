@@ -13,9 +13,9 @@ function getInLineById(id) {
     })
 }
 
-function checkInitAndUpdate(initAndUpdateInLineDto) {
+function checkInitAndUpdateInLine(initAndUpdateInLineDto) {
     return ajaxRequest({
-        url: '/InLineLibrary/CheckInitAndUpdate',
+        url: '/InLineLibrary/CheckInitAndUpdateInLine',
         method: 'POST',
         data: initAndUpdateInLineDto,
         showLoading: true

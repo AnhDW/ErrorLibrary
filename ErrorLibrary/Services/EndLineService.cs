@@ -41,7 +41,7 @@ namespace ErrorLibrary.Services
                 x.Date == date);
         }
 
-        public bool CheckExists(HashSet<string> existingKeys, int lineId, int productId, DateOnly date)
+        public bool CheckNameExistsFast(HashSet<string> existingKeys, int lineId, int productId, DateOnly date)
         {
             var key = $"{lineId}|{productId}|{date}";
             return existingKeys.Contains(key);

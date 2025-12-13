@@ -27,6 +27,7 @@ namespace ErrorLibrary.Controllers
             _errorGroupService = errorGroupService;
         }
 
+        [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any)]
         public IActionResult Index()
         {
             return View();

@@ -65,7 +65,7 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CheckInitAndUpdate([FromBody] InitAndUpdateInLineDto initAndUpdateInLineDto)
+        public async Task<IActionResult> CheckInitAndUpdateInLine([FromBody] InitAndUpdateInLineDto initAndUpdateInLineDto)
         {
             var inLines = await _inLineService.GetAll();
             var existingKeys = _inLineService.BuildExistingInLineKeySet(inLines);
@@ -81,7 +81,7 @@ namespace ErrorLibrary.Controllers
                 // Nếu là load lần đầu thì chỉ trả về thông tin 'In line'
                 if (initAndUpdateInLineDto.FirstLoad)
                 {
-                    _responseDto.Message = "Lấy số lượng 'số lượng kiểm' cho lần load đầu tiên";
+                    _responseDto.Message = "Lấy thông tin 'In line' cho lần load đầu tiên";
                     _responseDto.Result = _mapper.Map<InLineDto>(inLine);
                     return Json(_responseDto);
                 }
