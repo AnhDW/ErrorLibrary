@@ -61,20 +61,18 @@ async function initOrganizationTree() {
 async function initialInLineDetailPage() {
     var products = (await getProducts()).result;
     var html = renderSelectOptionsByField(products, 'Chọn sản phẩm', 'id', 'code', 'productCategoryId');
-    var user = (await getUserById(inLine.userId)).result;
-
     $('#selectProductCode').html(html);
+
+    await checkParams();
+    var user = (await getUserById(inLine.userId)).result;
     $('#user').val(user.fullName);
     $('#date').val(inLine.date);
 
-    await checkParams();
     await Promise.all([
         initOrganizationTree(),
         renderTimeFrameCard(),
         renderInLineDetailTable()
     ]);
-    console.log(inLine);
-
 }
 
 async function renderTimeFrameCard() {
@@ -100,6 +98,12 @@ async function renderTimeFrameCard() {
     }
 
     $('#timeFrameCard').html(html);
+    $('#timeFrameCard .card').each(function (i) {
+        let card = $(this);
+        setTimeout(() => {
+            card.addClass('show');
+        }, i * 50); // delay mỗi card 50ms
+    });
 }
 
 async function renderInLineDetailTable() {
