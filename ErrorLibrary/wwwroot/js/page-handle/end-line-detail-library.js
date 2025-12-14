@@ -1,4 +1,15 @@
-﻿document.getElementById("toggleFormBtn").addEventListener("click", function () {
+﻿let endLine = {
+    id: 0,
+    lineId: 0, productId: 0,
+    acceptedQuantity: 0,
+    checkQuantity: 0,
+    isActive: true,
+    isFinalized: false
+};
+let firstLoadEndLine = true;
+let currentUserId = JSON.parse(localStorage.getItem('user')).id;
+let errorQuantity = 0;
+document.getElementById("toggleFormBtn").addEventListener("click", function () {
     const wrapper = document.getElementById("formWrapper");
     const icon = document.getElementById("toggleIcon");
 
@@ -10,12 +21,14 @@
         this.innerHTML = '<i class="fas fa-angle-double-up"></i>';
     }
 });
+
 async function initialEndLineDetailPage() {
     var products = (await getProducts()).result;
     var html = renderSelectOptionsByField(products, 'Chọn sản phẩm', 'id', 'code', 'productCategoryId');
     $('#selectProductCode').html(html);
     initOrganizationTree();
 }
+
 async function initOrganizationTree() {
     $('.dropdown-menu').on('click', function (e) {
         e.stopPropagation();
@@ -64,3 +77,222 @@ async function initOrganizationTree() {
         $('#treeOrganization').treeview('selectNode', [firstLeaf.nodeId]);
     }
 }
+
+async function renderErrorGroupCard() {
+    var productId = $('#selectProductCode').val();
+    var errorGroups = (await getErrorGroupsByProduct(productId)).result;
+    var html = '';
+    errorGroups.forEach(item => {
+        html += `
+        <div class="col-md-6 col-xl-3">
+            <div class="card card-custom bg-secondary text-white mb-3" onclick="initAddModal(${item.id})">
+                <div class="card-header text-truncate">
+                    ${item.code}. ${item.name}
+                </div>
+            </div>
+        </div>`;
+    });
+    $('#errorGroupCard').html(html);
+
+    $('#errorGroupCard .card').each(function (i) {
+        let card = $(this);
+        setTimeout(() => {
+            card.addClass('show');
+        }, i * 50); // delay mỗi card 50ms
+    });
+}
+
+async function renderEndLineDetailTable() {
+    if (endLine.id === 0) return;
+    var endLineDetails = (await getEndLineDetailsByEndLine(endLine.id)).result;
+    let html = '';
+    errorQuantity = endLineDetails.length;
+    renderTxtQuantity();
+    console.log(endLineDetails);
+    endLineDetails.forEach((item, index) => {
+        html += `<tr>
+            <td>${index + 1}</td>
+            <td>${item.error.errorGroup.name}</td>
+            <td>${item.error.code}</td>
+            <td>${item.error.name}</td>
+            <td>${item.createdAt.substring(0, 10)} ${item.createdAt.substring(11, 16)}</td>
+            <td>${item.user.fullName}</td>
+            <td>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="handleDeleteEndLineDetail(${item.id})">
+                        <i class="bx bx-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>`;
+    });
+    $('#endLineDetailTableBody').html(html);
+}
+
+function renderTxtQuantity() {
+    $('#txtAcceptedQuantity').html(`<span class="text-success">${endLine.acceptedQuantity}</span>/${endLine.checkQuantity}`)
+    $('#txtErrorQuantity').html(`<span class="text-danger">${errorQuantity}</span>/${endLine.checkQuantity}`)
+}
+
+async function initAddModal(errorGroupId) {
+    var modal = new bootstrap.Modal(document.getElementById('addModel'));
+    modal.show();
+    var productId = $('#selectProductCode').val();
+    var product = (await getProductById(productId)).result;
+    var errors = (await getErrorsByErrorGroupAndProductCategory(errorGroupId, product.productCategoryId)).result;
+    console.log(errors);
+    var html = '';
+    errors.forEach(item => {
+        html += `
+        <div class="col-6">
+            <div class="card card-custom bg-secondary text-white mb-3" onclick="handleAddEndLineDetail(${item.id})">
+                <div class="card-header text-truncate">
+                    ${item.code}. ${item.name}
+                </div>
+            </div>
+        </div>`;
+    });
+    $('#errorCard').html(html);
+    $('#errorCard .card').each(function (i) {
+        let card = $(this);
+        setTimeout(() => {
+            card.addClass('show');
+        }, i * 50); // delay mỗi card 50ms
+    });
+}
+
+function handleAddEndLineDetail(errorId) {
+    // cần endLineId, errorId, userId, createdAt
+    var endLineId = endLine.id;
+    var userId = currentUserId;
+    var createdAt = new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString();
+    if (errorQuantity >= endLine.checkQuantity) {
+        $('#addModel').modal('hide');
+        toastr.warning('Lỗi ko thể vượt quá số lượng kiểm');
+        $('#errorQuantityWrapper').addClass('shake border border-2 border-danger p-2 rounded');
+        return;
+    }
+    if (errorQuantity + endLine.acceptedQuantity >= endLine.checkQuantity) {
+        endLine.acceptedQuantity--;
+        checkAndInitEndLine();
+    }
+
+    var endLineDetailDto = {
+        endLineId, errorId, userId, createdAt
+    }
+
+    addEndLineDetail(endLineDetailDto).then(function (res) {
+        renderEndLineDetailTable();
+        resToastr(res);
+    }).catch(function (err) {
+        toastr.error(err);
+    });
+}
+
+function handleDeleteEndLineDetail(id) {
+    deleteEndLineDetail(id).then(function (res) {
+        $('#errorQuantityWrapper').removeClass('shake border border-2 border-danger p-2 rounded');
+        renderEndLineDetailTable();
+        resToastr(res);
+    }).catch(function (err) {
+        toastr.error(err);
+    });
+}
+
+function checkAndInitEndLine() {
+    //tạo 1 in line nếu chưa có
+    var lineId = $('#selectedOrganizationNode').val().replace("line_", "");
+    var productId = $('#selectProductCode').val();
+    var orderQuantity = $('#orderQuantity').val();
+    var checkQuantity = $('#checkQuantity').val();
+    var isActive = endLine.isActive;
+    var isFinalized = endLine.isFinalized;
+    var acceptedQuantity = endLine.acceptedQuantity;
+    if (!lineId || !productId) {
+        return;
+    }
+
+    if (lineId != endLine.lineId || productId != endLine.productId) {
+        firstLoadEndLine = true;
+    }
+
+    var endLineDto = {
+        lineId, productId, orderQuantity, checkQuantity, acceptedQuantity, firstLoad: firstLoadEndLine, isActive, isFinalized
+    }
+
+    $('#formWrapper').removeClass('shake border border-2 border-danger p-2 rounded');
+    $('#errorQuantityWrapper').removeClass('shake border border-2 border-danger p-2 rounded');
+    checkInitAndUpdateEndLine(endLineDto).then(function (res) {
+
+        endLine = res.result;
+        if (firstLoadEndLine) {
+            firstLoadEndLine = false;
+            $('#orderQuantity').val(endLine.orderQuantity);
+            $('#checkQuantity').val(endLine.checkQuantity);
+            renderErrorGroupCard();
+        }
+        setBtnStatus();
+        renderEndLineDetailTable();
+        resToastr(res);
+    }).catch(function (err) {
+        toastr.error(err);
+    });
+
+}
+
+function setBtnStatus() {
+    if (endLine.isFinalized) {
+        $('#btnIsFinalized').removeClass('btn-success').addClass('btn-secondary');
+    } else {
+        $('#btnIsFinalized').removeClass('btn-secondary').addClass('btn-success');
+    }
+    if (endLine.isActive) {
+        $('#btnIsActive').removeClass('btn-secondary').addClass('btn-danger');
+        $('#btnIsFinalized').removeClass('d-none');
+    } else {
+        $('#btnIsActive').removeClass('btn-danger').addClass('btn-secondary');
+        $('#btnIsFinalized').addClass('d-none');
+    }
+}
+
+$('#selectProductCode, #orderQuantity, #checkQuantity').on('change keyup', function () {
+    checkAndInitEndLine();
+});
+
+$('#btnIsFinalized').on('click', function () {
+    if (endLine.id === 0) {
+        toastr.warning("Bạn chưa chọn EndLine");
+        $('#formWrapper').addClass('shake border border-2 border-danger p-2 rounded');
+        return;
+    }
+    if (endLine.isFinalized === false) {
+        endLine.isFinalized = true;
+    } else {
+        endLine.isFinalized = false;
+    }
+    checkAndInitEndLine();
+});
+
+$('#btnIsActive').on('click', function () {
+    if (endLine.id === 0) {
+        toastr.warning("Bạn chưa chọn EndLine");
+        $('#formWrapper').addClass('shake border border-2 border-danger p-2 rounded');
+        return;
+    }
+    if (endLine.isActive === false) {
+        endLine.isActive = true;
+    } else {
+        endLine.isActive = false;
+    }
+    checkAndInitEndLine();
+})
+
+$('#btnAcceptedQuantity').on('click', function () {
+    if (endLine.id === 0) {
+        toastr.warning("Bạn chưa chọn EndLine");
+        $('#formWrapper').addClass('shake border border-2 border-danger p-2 rounded');
+        return;
+    }
+    endLine.acceptedQuantity ++;
+    checkAndInitEndLine();
+})

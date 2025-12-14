@@ -10,13 +10,19 @@ namespace ErrorLibrary.Controllers
     public class EndLineDetailLibraryController : Controller
     {
         private readonly IEndLineDetailService _endLineDetailService;
+        private readonly IErrorGroupService _errorGroupService;
+        private readonly IErrorService _errorService;
+        private readonly IUserService _userService;
         private readonly ISharedService _sharedService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public EndLineDetailLibraryController(IEndLineDetailService endLineDetailService, ISharedService sharedService, IMapper mapper)
+        public EndLineDetailLibraryController(IEndLineDetailService endLineDetailService, IErrorGroupService errorGroupService, IErrorService errorService, IUserService userService, ISharedService sharedService, IMapper mapper)
         {
             _endLineDetailService = endLineDetailService;
+            _errorGroupService = errorGroupService;
+            _errorService = errorService;
+            _userService = userService;
             _sharedService = sharedService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
@@ -35,6 +41,26 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        public async Task<IActionResult> GetEndLineDetailsByEndLine(int endLineId)
+        {
+            var endLineDetails = await _endLineDetailService.GetAll();
+            var errorGroups = await _errorGroupService.GetAll();
+            var errors = await _errorService.GetAll();
+            var users = await _userService.GetAll();
+            endLineDetails = endLineDetails.Where(x => x.EndLineId == endLineId).ToList();
+            var endLineDetailsDto = _mapper.Map<List<EndLineDetailDisplayDto>>(endLineDetails);
+            foreach (var item in endLineDetailsDto)
+            {
+                var error = errors.FirstOrDefault(x => x.Id == item.ErrorId) ?? new Error();
+                var user = users.FirstOrDefault(x => x.Id == item.UserId);
+                item.Error = _mapper.Map<ErrorDisplayDto>(error);
+                item.Error.ErrorGroup = _mapper.Map<ErrorGroupDto>(errorGroups.FirstOrDefault(x => x.Id == error.ErrorGroupId));
+                item.User = _mapper.Map<UserDto>(user);
+            }
+            _responseDto.Result = endLineDetailsDto;
+            return Json(_responseDto);
+        }
+
         public async Task<IActionResult> GetEndLineDetailById(int id)
         {
             var endLineDetail = await _endLineDetailService.GetById(id);
@@ -48,14 +74,14 @@ namespace ErrorLibrary.Controllers
             if (await _endLineDetailService.CheckExists(endLineDetailDto.EndLineId, endLineDetailDto.ErrorId, endLineDetailDto.UserId))
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Tên đơn vị đã tồn tại";
+                _responseDto.Message = "Đã tồn tại";
                 return Json(_responseDto);
             }
 
             _endLineDetailService.Add(_mapper.Map<EndLineDetail>(endLineDetailDto));
             if (await _sharedService.SaveAllChanges())
             {
-                _responseDto.Message = "Thêm đơn vị thành công";
+                _responseDto.Message = "Thêm thành công";
                 return Json(_responseDto);
             }
 

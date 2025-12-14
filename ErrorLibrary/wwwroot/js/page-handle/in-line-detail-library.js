@@ -307,6 +307,11 @@ $('#selectProductCode, #date, #quantity').on('change keyup', function () {
 });
 
 $('#btnIsFinalized').on('click', function () {
+    if (inLine.id === 0) {
+        toastr.warning("Bạn chưa chọn InLine");
+        $('#formWrapper').addClass('shake border border-2 border-danger p-2 rounded');
+        return;
+    }
     if (inLine.isFinalized === false) {
         inLine.isFinalized = true;
     } else {
@@ -316,6 +321,11 @@ $('#btnIsFinalized').on('click', function () {
 });
 
 $('#btnIsActive').on('click', function () {
+    if (inLine.id === 0) {
+        toastr.warning("Bạn chưa chọn InLine");
+        $('#formWrapper').addClass('shake border border-2 border-danger p-2 rounded');
+        return;
+    }
     if (inLine.isActive === false) {
         inLine.isActive = true;
     } else {

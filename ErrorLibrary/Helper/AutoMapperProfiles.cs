@@ -32,6 +32,12 @@ namespace ErrorLibrary.Helper
             CreateMap<InLineDetail, InLineDetailDto>().ReverseMap();
             CreateMap<InLineDetail, InLineDetailDisplayDto>().ReverseMap();
 
+            CreateMap<EndLine, EndLineDto>().ReverseMap();
+            CreateMap<EndLine, EndLineDisplayDto>().ReverseMap();
+            CreateMap<EndLine, InitAndUpdateEndLineDto>().ReverseMap();
+            CreateMap<EndLineDetail, EndLineDetailDto>().ReverseMap();
+            CreateMap<EndLineDetail, EndLineDetailDisplayDto>().ReverseMap();
+
         }
     }
 }

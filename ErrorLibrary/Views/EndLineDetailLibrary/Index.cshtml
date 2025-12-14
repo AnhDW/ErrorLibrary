@@ -35,14 +35,17 @@
                 </div>
 
                 <div class="form-item">
-                    <label for="quantityPO">Số lượng</label>
-                    <input id="quantityPO" class="form-control" type="number" value="0">
+                    <label for="orderQuantity">Số lượng đơn hàng</label>
+                    <input id="orderQuantity" class="form-control" type="number" value="0">
                 </div>
-
                 <div class="form-item">
+                    <label for="checkQuantity">Số lượng cần kiểm</label>
+                    <input id="checkQuantity" class="form-control" type="number" value="0">
+                </div>
+                @* <div class="form-item">
                     <label for="date">Ngày</label>
                     <input id="date" class="form-control" type="date" disabled>
-                </div>
+                </div> *@
 
                 @*<div class="form-item">
                     <label for="quantitySuccess">Số lượng đạt</label>
@@ -64,7 +67,7 @@
                 <label class="text-black">Số lượng đạt: </label>
                 <h3 class="m-0 text-info" id="txtAcceptedQuantity"><span class="text-success">0</span>/0</h3>
             </div>
-            <div>
+            <div id="errorQuantityWrapper">
                 <label class="text-black">Số lượng lỗi: </label>
                 <h3 class="m-0 text-info" id="txtErrorQuantity"><span class="text-danger">0</span>/0</h3>
             </div>
@@ -76,39 +79,11 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-3" id="categoryErrorCard">
-            <div class="col-md-6 col-xl-3">
-                <div class="card card-custom bg-secondary text-white mb-3" data-bs-toggle="modal"
-                     data-bs-target="#addModel">
-                    <div class="card-header text-truncate">
-                        A. Nhóm lỗi cụm thân trước
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-3">
-                <div class="card card-custom bg-secondary text-white mb-3" data-bs-toggle="modal"
-                     data-bs-target="#addModel">
-                    <div class="card-header text-truncate">
-                        B. Nhóm lỗi cụm thân sau
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-3">
-                <div class="card card-custom bg-secondary text-white mb-3" data-bs-toggle="modal"
-                     data-bs-target="#addModel">
-                    <div class="card-header text-truncate">
-                        C. Nhóm lỗi cụm tay
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-3">
-                <div class="card card-custom bg-secondary text-white mb-3" data-bs-toggle="modal"
-                     data-bs-target="#addModel">
-                    <div class="card-header">
-                        D. Nhóm lỗi cụm cổ
-                    </div>
-                </div>
-            </div>
+        <div class="row mt-3" id="errorGroupCard"></div>
+        <div class="d-flex flex-wrap justify-content-between p-2">
+            <div></div>
+            <button id="btnAcceptedQuantity" class="btn btn-success" type="button"><i class="fas fa-check"></i>Sản phẩm đạt chất lượng</button>
+            <div></div>
         </div>
         @*<div class="d-flex justify-content-center">
             <a asp-controller="TimeFrameLibrary"><i class="fas fa-arrow-right"></i> Cài đặt khung thời gian</a>
@@ -116,7 +91,7 @@
         <div class="mt-1">
             <!-- Add Modal -->
             <div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="modalCenterTitle">Thêm kiểm EndLine</h5>
@@ -125,44 +100,7 @@
                                     data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                         </div>
-                        <form action="/" method="post">
-                            <div class="modal-body">
-                                <input id="timeFrameId" type="text" class="form-control" hidden>
-
-                                <div class="mb-2">
-                                    <label for="selectedErrorGroup" class="form-label">Chọn nhóm lỗi</label>
-                                    <select class="form-select" id="selectedErrorGroup" aria-label="Default select example">
-                                        <option selected="">Chọn nhóm lỗi </option>
-                                        <option value="A1">Nhóm lỗi 1</option>
-                                        <option value="A2">Nhóm lỗi 2</option>
-                                        <option value="A3">Nhóm lỗi 3</option>
-                                    </select>
-                                </div>
-                                <div class="mb-2">
-                                    <label for="selectedError" class="form-label">Chọn lỗi</label>
-                                    <select class="form-select" id="selectedError" aria-label="Default select example" disabled>
-                                        <option selected="">Chọn lỗi </option>
-                                        <option value="A1">Lỗi 1</option>
-                                        <option value="A2">Lỗi 2</option>
-                                        <option value="A3">Lỗi 3</option>
-                                    </select>
-                                </div>
-                                <div class="mb-2">
-                                    <label for="quantityInLine" class="form-label">Số lượng</label>
-                                    <div class="input-group">
-                                        <button class="btn btn-outline-primary fs-5" type="button" id="addBtnDecreases">-</button>
-                                        <input id="quantityInLine" type="number" class="form-control" value="0" min="0">
-                                        <button class="btn btn-outline-primary fs-5" type="button" id="addBtnIncreases">+</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                                    Đóng
-                                </button>
-                                <button type="button" class="btn btn-primary" onclick="handleAddInLineDetail()">Lưu</button>
-                            </div>
-                        </form>
+                        <div class="row m-3" id="errorCard"></div>
                     </div>
                 </div>
             </div>
@@ -229,6 +167,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th>STT</th>
                             <th>Cụm lỗi</th>
                             <th>Mã lỗi</th>
                             <th>Tên lỗi</th>
@@ -237,7 +176,7 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody id="inLineDetailTableBody" class="table-border-bottom-0">
+                    <tbody id="endLineDetailTableBody" class="table-border-bottom-0">
                     </tbody>
                 </table>
             </div>
@@ -260,10 +199,10 @@
         flex-direction: column;
     }
 
-        .form-item label {
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
+    .form-item label {
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
 
     .toggle-btn {
         width: 100%;
@@ -278,20 +217,33 @@
         transition: background 0.2s ease;
     }
 
-        .toggle-btn:hover {
-            background: #e0e0e0;
-        }
+    .toggle-btn:hover {
+        background: #e0e0e0;
+    }
 
-        .toggle-btn span {
-            font-size: 18px;
-            transition: transform 0.2s ease;
-        }
+    .toggle-btn span {
+        font-size: 18px;
+        transition: transform 0.2s ease;
+    }
 
     @@media (min-width: 768px) and (max-width: 1024px) {
         .form-grid {
             grid-template-columns: repeat(4, 1fr);
         }
     }
+
+    /* CSS cho hiệu ứng render card */
+    #errorCard, #errorGroupCard .card {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s ease;
+    }
+
+    #errorCard, #errorGroupCard .card.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
 </style>
 <!-- Content wrapper -->
 @section Scripts {

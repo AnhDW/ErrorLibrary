@@ -46,31 +46,30 @@ namespace ErrorLibrary.Controllers
         {
             var endLines = await _endLineService.GetAll();
             var existingKeys = _endLineService.BuildExistingEndLineKeySet(endLines);
-            var keyToCheck = _endLineService.CheckNameExistsFast(existingKeys, initAndUpdateEndLineDto.LineId, initAndUpdateEndLineDto.ProductId, initAndUpdateEndLineDto.Date);
+            var keyToCheck = _endLineService.CheckNameExistsFast(existingKeys, initAndUpdateEndLineDto.LineId, initAndUpdateEndLineDto.ProductId);
             EndLine endLine;
             if (keyToCheck)
             {
-                endLine = (endLines.FirstOrDefault(endLines =>
+                endLine = endLines.FirstOrDefault(endLines =>
                     endLines.LineId == initAndUpdateEndLineDto.LineId &&
-                    endLines.ProductId == initAndUpdateEndLineDto.ProductId &&
-                    endLines.Date == initAndUpdateEndLineDto.Date)) ?? new EndLine();
+                    endLines.ProductId == initAndUpdateEndLineDto.ProductId) ?? new EndLine();
                 // Nếu là load lần đầu thì chỉ trả về thông tin 'In line'
                 if (initAndUpdateEndLineDto.FirstLoad)
                 {
-                    _responseDto.Message = "Lấy thông tin 'In line' cho lần load đầu tiên";
+                    _responseDto.Message = "Lấy thông tin 'End line' cho lần load đầu tiên";
                     _responseDto.Result = _mapper.Map<EndLineDto>(endLine);
                     return Json(_responseDto);
                 }
                 // Không phải load lần đầu thì cập nhật
                 initAndUpdateEndLineDto.Id = endLine.Id;
                 _endLineService.Update(_mapper.Map(initAndUpdateEndLineDto, endLine));
-                _responseDto.Message = "Cập nhật 'In line' thành công";
+                _responseDto.Message = "Cập nhật 'End line' thành công";
             }
             else
             {
                 endLine = _mapper.Map<EndLine>(initAndUpdateEndLineDto);
                 _endLineService.Add(endLine);
-                _responseDto.Message = "Khởi tạo 'In line' thành công";
+                _responseDto.Message = "Khởi tạo 'End line' thành công";
             }
             if (await _sharedService.SaveAllChanges())
             {
@@ -86,7 +85,7 @@ namespace ErrorLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEndLine([FromBody] EndLineDto endLineDto)
         {
-            if (await _endLineService.CheckExists(endLineDto.LineId, endLineDto.ProductId, endLineDto.Date))
+            if (await _endLineService.CheckExists(endLineDto.LineId, endLineDto.ProductId))
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Tên đơn vị đã tồn tại";
@@ -116,8 +115,8 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            bool isNameExists = await _endLineService.CheckExists(endLineDto.LineId, endLineDto.ProductId, endLineDto.Date) &&
-                (endLineDto.LineId != endLine.LineId || endLineDto.ProductId != endLine.ProductId || endLineDto.Date != endLine.Date);
+            bool isNameExists = await _endLineService.CheckExists(endLineDto.LineId, endLineDto.ProductId) &&
+                (endLineDto.LineId != endLine.LineId || endLineDto.ProductId != endLine.ProductId);
 
             if (isNameExists)
             {

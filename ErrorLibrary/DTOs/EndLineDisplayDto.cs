@@ -1,6 +1,8 @@
-﻿namespace ErrorLibrary.DTOs
+﻿using ErrorLibrary.Entities;
+
+namespace ErrorLibrary.DTOs
 {
-    public class EndLineDto
+    public class EndLineDisplayDto
     {
         public int Id { get; set; }
         public int LineId { get; set; }
@@ -11,5 +13,7 @@
         public bool IsActive { get; set; } = true;
         public bool IsFinalized { get; set; } = false;
         //public DateOnly Date { get; set; }
+        public LineDto Line { get; set; }
+        public ProductDto Product { get; set; }
     }
 }

@@ -10,7 +10,7 @@
         public int AcceptedQuantity { get; set; } = 0;
         public bool IsActive { get; set; } = true;
         public bool IsFinalized { get; set; } = false;
-        public DateOnly Date { get; set; }
+        //public DateOnly Date { get; set; }
         public Line Line { get; set; }
         public Product Product { get; set; }
         public List<EndLineDetail> EndLineDetails { get; set; } = new();

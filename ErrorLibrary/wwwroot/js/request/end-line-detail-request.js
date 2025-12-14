@@ -5,6 +5,14 @@
     })
 }
 
+function getEndLineDetailsByEndLine(endLineId) {
+    return ajaxRequest({
+        url: '/EndLineDetailLibrary/GetEndLineDetailsByEndLine',
+        method: 'GET',
+        data: { endLineId: endLineId }
+    })
+}
+
 function getEndLineDetailById(id) {
     return ajaxRequest({
         url: '/EndLineDetailLibrary/GetEndLineDetailById',
