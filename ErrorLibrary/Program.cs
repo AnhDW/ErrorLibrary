@@ -1,9 +1,12 @@
+using ErrorLibrary.Authorization.Handlers;
+using ErrorLibrary.Authorization.Policies;
 using ErrorLibrary.Data;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Extensions;
 using ErrorLibrary.Services;
 using ErrorLibrary.Services.IServices;
 using ErrorLibrary.SignalR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProductCategoryLibrary.Services.IServices;
@@ -16,7 +19,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
 {
-    options.UseMySql(builder.Configuration.GetConnectionString("STConnect"),
+    options.UseMySql(builder.Configuration.GetConnectionString("BTConnect"),
         new MySqlServerVersion(new Version(8, 0, 36)));
 });
 
@@ -54,6 +57,9 @@ builder.Services.AddScoped<IEndLineDetailService, EndLineDetailService>();
 builder.Services.AddScoped<ITimeFrameService, TimeFrameService>();
 builder.Services.AddScoped<ITimeFrameColorService, TimeFrameColorService>();
 
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+builder.Services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+
 var assemblies = AppDomain.CurrentDomain.GetAssemblies()
     .Where(a => !a.FullName.StartsWith("Microsoft.Data.SqlClient"))
     .ToArray();
@@ -63,7 +69,6 @@ builder.AddAppAuthetication();
 builder.Services.AddSignalR().AddMessagePackProtocol();
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -86,6 +91,7 @@ app.MapControllerRoute(
 app.MapHub<ErrorHub>("/errorHub");
 
 await AddlyMigration();
+await PermissionRuntimeSeeder.SeedAsync(app.Services);
 app.Run();
 
 async Task AddlyMigration()

@@ -2,5 +2,28 @@
 {
     public enum PermissionEntity
     {
+        Users,
+        Roles,
+        Permissions,
+        RolePermissions,
+        Products,
+        ProductCategories,
+        Solutions,
+        Errors,
+        ErrorGroups,
+        ErrorCategories,
+        Lines,
+        Enterprises,
+        Factories,
+        Units,
+        ErrorDetails,
+        ErrorDetailAttachments,
+        UserOrganizations,
+        TimeFrames,
+        TimeFrameColors,
+        InLines,
+        InLineDetails,
+        EndLines,
+        EndLineDetails
     }
 }

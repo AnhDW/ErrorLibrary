@@ -1,4 +1,5 @@
-﻿using ErrorLibrary.Entities;
+﻿using ErrorLibrary.Authorization.Constants;
+using ErrorLibrary.Entities;
 using ErrorLibrary.Services.IServices;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -17,7 +18,7 @@ namespace ErrorLibrary.Services
             _jwtOptions = jwtOptions.Value;
         }
 
-        public string GenerateToken(ApplicationUser applicationUser, IEnumerable<string> roles)
+        public string GenerateToken(ApplicationUser applicationUser, IEnumerable<string> roleNames, IEnumerable<string> permissionCodes)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtOptions.Secret);
@@ -31,8 +32,8 @@ namespace ErrorLibrary.Services
                 new Claim("security_stamp", applicationUser.SecurityStamp),
             };
 
-            claimsList.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
-
+            claimsList.AddRange(roleNames.Select(role => new Claim(ClaimTypes.Role, role)));
+            claimsList.AddRange(permissionCodes.Select(p => new Claim(PermissionClaimTypes.Permission, p)));
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Audience = _jwtOptions.Audience,

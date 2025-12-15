@@ -4,6 +4,7 @@ using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services.IServices;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ErrorLibrary.Services
 {
@@ -95,8 +96,16 @@ namespace ErrorLibrary.Services
                 return new LoginResponseDto();
             }
 
-            var roles = await _userManager.GetRolesAsync(user!);
-            var token = _jwtTokenGenerator.GenerateToken(user!, roles);
+            var roles = await _context.Roles.ToListAsync();
+            var permissions = await _context.Permissions.ToListAsync();
+            
+            var roleIds = _context.UserRoles.Where(x=>x.UserId == user.Id).Select(x => x.RoleId).ToList();
+            var permissionIds = _context.RolePermissions.Where(x=> roleIds.Contains(x.RoleId)).Select(x => x.PermissionId).ToList();
+            
+            var roleNames = roles.Where(x=>roleIds.Contains(x.Id)).Select(x=>x.Name).ToList();
+            var permissionCodes = permissions.Where(x=>permissionIds.Contains(x.Id)).Select(x=>x.Code).ToList();
+
+            var token = _jwtTokenGenerator.GenerateToken(user!, roleNames, permissionCodes);
 
             UserDto userDto = new()
             {
@@ -106,7 +115,7 @@ namespace ErrorLibrary.Services
                 FullName = user.FullName,
                 PhoneNumber = user.PhoneNumber!,
                 AvatarUrl = user.AvatarUrl == null || user.AvatarUrl == "" ? "/images/default-avatar.jpg" : user.AvatarUrl,
-                Roles = roles,
+                Roles = roleNames,
             };
 
             LoginResponseDto loginResponseDto = new()
