@@ -5,5 +5,7 @@ namespace ErrorLibrary.Entities
     public class ApplicationRole : IdentityRole
     {
         public string DisplayName { get; set; } = string.Empty;
+
+        public List<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
     }
 }

@@ -8,6 +8,8 @@ namespace ErrorLibrary.Data
     {
         public DbSet<ApplicationUser> Users { get; set; }
         public DbSet<ApplicationRole> Roles { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Solution> Solutions { get; set; }
@@ -172,6 +174,19 @@ namespace ErrorLibrary.Data
                 .HasOne(x => x.User)
                 .WithMany(x => x.EndLineDetails)
                 .HasForeignKey(x => x.UserId);
+
+            builder.Entity<RolePermission>()
+                .HasKey(x => new { x.RoleId, x.PermissionId });
+
+            builder.Entity<RolePermission>()
+                .HasOne(x => x.Role)
+                .WithMany(x => x.RolePermissions)
+                .HasForeignKey(x => x.RoleId);
+
+            builder.Entity<RolePermission>()
+                .HasOne(x => x.Permission)
+                .WithMany(x => x.RolePermissions)
+                .HasForeignKey(x => x.PermissionId);
         }
 
     }
