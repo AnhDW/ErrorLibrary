@@ -137,6 +137,8 @@ async function renderEndLineDetailTable() {
 }
 
 function renderTxtQuantity() {
+    var totalCheckQuantity = endLine.acceptedQuantity + errorQuantity;
+    $('#txtTotalCheckQuantity').html(`${totalCheckQuantity}/${endLine.checkQuantity}`)
     $('#txtAcceptedQuantity').html(`<span class="text-success">${endLine.acceptedQuantity}</span>/${endLine.checkQuantity}`)
     $('#txtErrorQuantity').html(`<span class="text-danger">${errorQuantity}</span>/${endLine.checkQuantity}`)
 }

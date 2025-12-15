@@ -2,7 +2,7 @@
     var controllerName = ViewContext.RouteData.Values["controller"].ToString();
     var featureControllers = new[] { "Home", "ErrorDetailLibrary", "InLineDetailLibrary", "InLineLibrary", "EndLineDetailLibrary", "EndLineLibrary" };
     var libraryControllers = new[] { "ErrorLibrary", "ErrorGroupLibrary", "ErrorCategoryLibrary", "ProductCategoryLibrary", "ProductLibrary", "SolutionLibrary", "UnitLibrary", "FactoryLibrary", "EnterpriseLibrary", "LineLibrary" };
-    var settingControllers = new[] { "UserLibrary", "TimeFrameLibrary" };
+    var settingControllers = new[] { "UserLibrary", "RoleLibrary", "TimeFrameLibrary" };
 }
 <!DOCTYPE html>
 
@@ -209,6 +209,12 @@
                                     <div style="margin-left: 4px;">Tài khoản</div>
                                 </a>
                             </li>
+                            <li class="menu-item @(controllerName == "RoleLibrary" ? "active" : "")">
+                                <a class="menu-link" asp-controller="RoleLibrary" asp-action="Index">
+                                    <i class="menu-icon tf-icons fa-solid fa-user-tag"></i>
+                                    <div style="margin-left: 4px;">Vai trò</div>
+                                </a>
+                            </li>
                             <li class="menu-item @(controllerName == "TimeFrameLibrary" ? "active" : "")">
                                 <a class="menu-link" asp-controller="TimeFrameLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-clock"></i>
@@ -233,7 +239,7 @@
                     </div>
 
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                        <!-- Search -->
+                        @* <!-- Search -->
                         <div class="navbar-nav align-items-center">
                             <div class="nav-item d-flex align-items-center">
                                 <i class="bx bx-search fs-4 lh-0"></i>
@@ -243,7 +249,7 @@
                                        aria-label="Search..." />
                             </div>
                         </div>
-                        <!-- /Search -->
+                        <!-- /Search --> *@
 
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
                             <!-- User -->

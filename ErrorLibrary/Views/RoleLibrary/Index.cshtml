@@ -1,0 +1,128 @@
+﻿@{
+    ViewData["Title"] = "Thư viện vai trò";
+}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện vai trò</span></h4>
+        <div>
+            <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#addModel" onclick="addShowRoleModalHandle()">
+                <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
+            </button>
+            <!-- Add Modal -->
+            <div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Thêm vai trò</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <div class="mb-2">
+                                    <label for="addRoleName" class="form-label">Tên vai trò</label>
+                                    <input type="text" class="form-control" id="addRoleName" placeholder="Nhập tên vai trò" aria-describedby="defaultFormControlHelp">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="addRoleDisplayName" class="form-label">Tên hiển thị</label>
+                                    <input type="text" class="form-control" id="addRoleDisplayName" placeholder="Nhập tên hiển thị" aria-describedby="defaultFormControlHelp">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddRole()">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Sửa vai trò</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <input type="text" class="form-control" id="editRoleId" placeholder="ID" aria-describedby="defaultFormControlHelp" hidden>
+
+                                <div class="mb-2">
+                                    <label for="editRoleName" class="form-label">Tên vai trò</label>
+                                    <input type="text" class="form-control" id="editRoleName" placeholder="Nhập tên vai trò" aria-describedby="defaultFormControlHelp">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="editRoleDisplayName" class="form-label">Tên hiển thị</label>
+                                    <input type="text" class="form-control" id="editRoleDisplayName" placeholder="Nhập tên hiển thị" aria-describedby="defaultFormControlHelp">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="handleEditRole()">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Striped Rows -->
+        <div class="card mt-4">
+            <div style="min-height:200px;" class="table-responsive text-nowrap">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tên vai trò</th>
+                            <th>Tên chuẩn hóa</th>
+                            <th>Tên hiển thị</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="roleTableBody" class="table-border-bottom-0">
+                        <tr>
+                            <td>Tên vai trò 1</td>
+                            <td>Tên chuẩn hóa</td>
+                            <td>Tên hiển thị</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                                data-bs-target="#editModel" onclick="editShowRoleModalHandle(1)">
+                                            <i class="bx bx-edit-alt me-1"></i> Sửa
+                                        </button>
+                                        <a class="dropdown-item" href="javascript:void(0);" onclick="handleDeleteRole(1)"><i class="bx bx-trash me-1"></i> Xóa</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--/ Striped Rows -->
+    </div>
+    <!-- / Content -->
+    <div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+@section Scripts {
+    <script src="~/js/page-handle/role-library.js"></script>
+    <script src="~/js/request/role-request.js"></script>
+}

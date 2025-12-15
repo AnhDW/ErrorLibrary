@@ -97,7 +97,7 @@ namespace ErrorLibrary.Controllers
             if (endLineDetail == null)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
+                _responseDto.Message = "Không tìm thấy 'chi tiết end line' này trong thư viện";
                 return Json(_responseDto);
             }
 
@@ -107,14 +107,14 @@ namespace ErrorLibrary.Controllers
             if (isNameExists)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Tên đơn vị đã tồn tại";
+                _responseDto.Message = "Tên chi tiết end line đã tồn tại";
                 return Json(_responseDto);
             }
 
             _endLineDetailService.Update(_mapper.Map(endLineDetailDto, endLineDetail));
             if (await _sharedService.SaveAllChanges())
             {
-                _responseDto.Message = "Cập nhật đơn vị thành công";
+                _responseDto.Message = "Cập nhật chi tiết end line thành công";
                 return Json(_responseDto);
             }
 
@@ -130,14 +130,14 @@ namespace ErrorLibrary.Controllers
             if (endLineDetail == null)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = "Không tìm thấy 'đơn vị' này trong thư viện";
+                _responseDto.Message = "Không tìm thấy 'chi tiết end line' này trong thư viện";
                 return Json(_responseDto);
             }
 
             _endLineDetailService.Delete(endLineDetail);
             if (await _sharedService.SaveAllChanges())
             {
-                _responseDto.Message = "Xóa đơn vị thành công";
+                _responseDto.Message = "Xóa chi tiết end line thành công";
                 return Json(_responseDto);
             }
 

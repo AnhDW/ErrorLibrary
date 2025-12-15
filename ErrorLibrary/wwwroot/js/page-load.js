@@ -41,6 +41,8 @@ $(document).ready(function () {
         initialEndLinePage();
     } else if (path.includes('/TimeFrameLibrary')) {
         renderTimeFrameTable();
+    } else if (path.includes('/RoleLibrary')) {
+        renderRoleTable();
     }
 });
 
