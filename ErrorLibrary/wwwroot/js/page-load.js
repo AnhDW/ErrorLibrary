@@ -38,7 +38,7 @@ $(document).ready(function () {
     } else if (path.includes('/EndLineDetailLibrary')) {
         initialEndLineDetailPage();
     } else if (path.includes('/EndLineLibrary')) {
-        //initialInLinePage();
+        initialEndLinePage();
     } else if (path.includes('/TimeFrameLibrary')) {
         renderTimeFrameTable();
     }

@@ -26,6 +26,7 @@ async function initialEndLineDetailPage() {
     var products = (await getProducts()).result;
     var html = renderSelectOptionsByField(products, 'Chọn sản phẩm', 'id', 'code', 'productCategoryId');
     $('#selectProductCode').html(html);
+    checkParams();
     initOrganizationTree();
 }
 
@@ -56,7 +57,8 @@ async function initOrganizationTree() {
 
             $('#selectedOrganizationNode').val(node.id);
             $('#btnTreeOrganization').text(node.text);
-            //checkAndInitEndLine();
+            endLine.lineId = $('#selectedOrganizationNode').val().replace("line_", "");
+            checkAndInitEndLine();
 
             let dd = bootstrap.Dropdown.getOrCreateInstance(
                 document.getElementById('btnTreeOrganization')
@@ -71,10 +73,15 @@ async function initOrganizationTree() {
         }
     });
     let allNodes = $('#treeOrganization').treeview('getEnabled');
-    let firstLeaf = allNodes.find(n => n.id && n.id.startsWith("line_"));
-
-    if (firstLeaf) {
-        $('#treeOrganization').treeview('selectNode', [firstLeaf.nodeId]);
+    let leaf = {};
+    if (endLine.lineId !== 0) {
+        var lineNode = 'line_' + endLine.lineId;
+        leaf = allNodes.find(n => n.id && n.id.includes(lineNode));
+    } else {
+        leaf = allNodes.find(n => n.id && n.id.startsWith("line_"));
+    }
+    if (leaf) {
+        $('#treeOrganization').treeview('selectNode', [leaf.nodeId]);
     }
 }
 
@@ -173,7 +180,7 @@ function handleAddEndLineDetail(errorId) {
         return;
     }
     if (errorQuantity + endLine.acceptedQuantity >= endLine.checkQuantity) {
-        endLine.acceptedQuantity--;
+        endLine.acceptedQuantity = endLine.checkQuantity - (errorQuantity + 1);
         checkAndInitEndLine();
     }
 
@@ -201,7 +208,7 @@ function handleDeleteEndLineDetail(id) {
 
 function checkAndInitEndLine() {
     //tạo 1 in line nếu chưa có
-    var lineId = $('#selectedOrganizationNode').val().replace("line_", "");
+    var lineId = endLine.lineId;
     var productId = $('#selectProductCode').val();
     var orderQuantity = $('#orderQuantity').val();
     var checkQuantity = $('#checkQuantity').val();
@@ -233,13 +240,26 @@ function checkAndInitEndLine() {
         }
         setBtnStatus();
         renderEndLineDetailTable();
-        resToastr(res);
+        //resToastr(res);
     }).catch(function (err) {
         toastr.error(err);
     });
 
 }
 
+async function checkParams() {
+    const params = new URLSearchParams(window.location.search);
+    const endLineId = params.get("endLineId");
+    if (endLineId === null) return;
+    
+    var endLineById = (await getEndLineById(endLineId)).result;
+    console.log(endLineById);
+    endLine = endLineById;
+    console.log(endLine);
+
+    $('#selectProductCode').val(endLine.productId);
+    //$('#quantity').val(endLineById.quantity);
+}
 function setBtnStatus() {
     if (endLine.isFinalized) {
         $('#btnIsFinalized').removeClass('btn-success').addClass('btn-secondary');

@@ -9,6 +9,7 @@
 };
 let firstLoadInLine = true;
 let currentUserId = JSON.parse(localStorage.getItem('user')).id;
+
 async function initOrganizationTree() {
     $('.dropdown-menu').on('click', function (e) {
         e.stopPropagation();
@@ -36,6 +37,7 @@ async function initOrganizationTree() {
 
             $('#selectedOrganizationNode').val(node.id);
             $('#btnTreeOrganization').text(node.text);
+            inLine.lineId = $('#selectedOrganizationNode').val().replace("line_", "");
             checkAndInitInLine();
 
             let dd = bootstrap.Dropdown.getOrCreateInstance(
@@ -51,10 +53,15 @@ async function initOrganizationTree() {
         }
     });
     let allNodes = $('#treeOrganization').treeview('getEnabled');
-    let firstLeaf = allNodes.find(n => n.id && n.id.startsWith("line_"));
-
-    if (firstLeaf) {
-        $('#treeOrganization').treeview('selectNode', [firstLeaf.nodeId]);
+    let leaf = {};
+    if (inLine.lineId !== 0) {
+        var lineNode = 'line_' + inLine.lineId;
+        leaf = allNodes.find(n => n.id && n.id.includes(lineNode));
+    } else {
+        leaf = allNodes.find(n => n.id && n.id.startsWith("line_"));
+    }
+    if (leaf) {
+        $('#treeOrganization').treeview('selectNode', [leaf.nodeId]);
     }
 }
 
@@ -98,12 +105,6 @@ async function renderTimeFrameCard() {
     }
 
     $('#timeFrameCard').html(html);
-    $('#timeFrameCard .card').each(function (i) {
-        let card = $(this);
-        setTimeout(() => {
-            card.addClass('show');
-        }, i * 50); // delay mỗi card 50ms
-    });
 }
 
 async function renderInLineDetailTable() {
@@ -135,7 +136,7 @@ async function renderInLineDetailTable() {
 
 function checkAndInitInLine() {
     //tạo 1 in line nếu chưa có
-    var lineId = $('#selectedOrganizationNode').val().replace("line_", "");
+    var lineId = inLine.lineId;
     var productId = $('#selectProductCode').val();
     var userId = inLine.userId;
     var date = $('#date').val();
@@ -194,11 +195,8 @@ async function checkParams() {
 
     var inLineById = (await getInLineById(inLineId)).result;
     var user = (await getUserById(inLineById.userId)).result;
-    inLine.id = inLineById.id;
-    inLine.userId = user.id;
-    inLine.productId = inLineById.productId;
-    inLine.date = inLineById.date;
-    $('#selectedOrganizationNode').val(inLineById.lineId);
+
+    inLine = inLineById;
     $('#selectProductCode').val(inLineById.productId);
     $('#user').val(user.fullName);
     $('#quantity').val(inLineById.quantity);

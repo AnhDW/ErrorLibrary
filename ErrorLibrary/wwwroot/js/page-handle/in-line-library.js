@@ -27,7 +27,7 @@
             $('#btnTreeOrganization').text(node.text);
 
             console.log($('#selectedOrganizationNode').val());
-            //checkAndInitInLine();
+            renderInLineTable();
 
             let dd = bootstrap.Dropdown.getOrCreateInstance(
                 document.getElementById('btnTreeOrganization')
@@ -47,6 +47,7 @@
         $('#treeOrganization').treeview('selectNode', [firstLeaf.nodeId]);
     }
 }
+
 async function initialInLinePage() {
     await initOrganizationTree();
     $('#date').val(new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().substring(0, 10));
@@ -71,6 +72,7 @@ async function renderInLineTable() {
     var date = $('#date').val();
     var inLines = (await getInLines()).result;
     inLines = inLines.filter(x => x.date === date && x.lineId == lineId);
+    console.log(inLines);
     let html = '';
     inLines.forEach(item => {
         html += `
@@ -89,11 +91,10 @@ async function renderInLineTable() {
         return html;
     })
 
-    console.log(inLines);
     $('#inLineTableBody').html(html);
 
 }
 
-$('#selectedOrganizationNode, #date').on('change', function () {
+$('#date').on('change', function () {
     renderInLineTable();
 });

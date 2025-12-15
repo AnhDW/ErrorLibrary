@@ -10,16 +10,22 @@ namespace ErrorLibrary.Controllers
     public class EndLineLibraryController : Controller
     {
         private readonly IEndLineService _endLineService;
+        private readonly IEndLineDetailService _endLineDetailService;
+        private readonly IProductService _productService;
+        private readonly ILineService _lineService;
         private readonly ISharedService _sharedService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public EndLineLibraryController(IEndLineService endLineService, ISharedService sharedService, IMapper mapper)
+        public EndLineLibraryController(IEndLineService endLineService, ISharedService sharedService, IMapper mapper, IProductService productService, IEndLineDetailService endLineDetailService, ILineService lineService)
         {
             _endLineService = endLineService;
             _sharedService = sharedService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
+            _productService = productService;
+            _endLineDetailService = endLineDetailService;
+            _lineService = lineService;
         }
 
         public IActionResult Index()
@@ -30,7 +36,21 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetEndLines()
         {
             var endLines = await _endLineService.GetAll();
-            _responseDto.Result = _mapper.Map<List<EndLineDto>>(endLines);
+            var products = await _productService.GetAll();
+            var endLineDetails = await _endLineDetailService.GetAll();
+            var lines = await _lineService.GetAll();
+            var endLinesDto = _mapper.Map<List<EndLineDisplayDto>>(endLines);
+            foreach(var endLine in endLinesDto)
+            {
+                var totalErrors = endLineDetails.Where(x => x.EndLineId == endLine.Id).Count();
+                var product = products.FirstOrDefault(x => x.Id == endLine.ProductId);
+                var line = lines.FirstOrDefault(x => x.Id == endLine.LineId);
+                endLine.TotalErrors = totalErrors;
+                endLine.Product = _mapper.Map<ProductDto>(product);
+                endLine.Line = _mapper.Map<LineDto>(line);
+            }
+
+            _responseDto.Result = endLinesDto;
             return Json(_responseDto);
         }
 
