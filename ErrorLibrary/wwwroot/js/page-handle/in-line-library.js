@@ -70,9 +70,9 @@ document.getElementById("toggleFormBtn").addEventListener("click", function () {
 async function renderInLineTable() {
     var lineId = $('#selectedOrganizationNode').val().replace("line_", "");
     var date = $('#date').val();
+    if (!lineId || !date) return;
     var inLines = (await getInLines()).result;
     inLines = inLines.filter(x => x.date === date && x.lineId == lineId);
-    console.log(inLines);
     let html = '';
     inLines.forEach(item => {
         html += `
@@ -96,5 +96,6 @@ async function renderInLineTable() {
 }
 
 $('#date').on('change', function () {
+    console.log('date');
     renderInLineTable();
 });

@@ -56,7 +56,7 @@ function handleDeleteRole(id) {
     });
 }
 
-function renderRoleTable() {
+async function renderRoleTable() {
     getRoles().then(function (res) {
         console.log(res)
         let html = '';
@@ -85,6 +85,8 @@ function renderRoleTable() {
         });
         $('#roleTableBody').html(html);
     });
+    var permissions = await getTreePermissions();
+    console.log(permissions);
 }
 
 //request

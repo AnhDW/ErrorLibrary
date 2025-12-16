@@ -56,6 +56,7 @@ builder.Services.AddScoped<IEndLineService, EndLineService>();
 builder.Services.AddScoped<IEndLineDetailService, EndLineDetailService>();
 builder.Services.AddScoped<ITimeFrameService, TimeFrameService>();
 builder.Services.AddScoped<ITimeFrameColorService, TimeFrameColorService>();
+builder.Services.AddScoped<IPermissionService, PermissionService>();
 
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 builder.Services.AddScoped<IAuthorizationHandler, PermissionHandler>();
