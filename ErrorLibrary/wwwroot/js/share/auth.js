@@ -1,4 +1,23 @@
-﻿function isTokenExpired(token) {
+﻿function handleLogin() {
+    const userName = $("#username").val();
+    const password = $("#password").val();
+
+    console.log(userName);
+    ajaxRequest({
+        url: '/Auth/Login',
+        method: 'POST',
+        data: { userName, password },
+        useToken: false,
+        showLoading: true,
+        onSuccess: (res) => {
+            localStorage.setItem('user', JSON.stringify(res.result.user));
+            localStorage.setItem('access_token', res.result.token);
+            window.location.href = "/Home";
+        }
+    });
+}
+
+function isTokenExpired(token) {
     try {
         const payload = JSON.parse(atob(token.split('.')[1]));
         const exp = payload.exp * 1000; // exp là Unix timestamp (giây)

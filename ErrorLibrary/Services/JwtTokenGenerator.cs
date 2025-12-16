@@ -1,6 +1,8 @@
 ﻿using ErrorLibrary.Authorization.Constants;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services.IServices;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

@@ -3,7 +3,7 @@
     method = 'GET',
     data = {},
     isFormData = false,
-    useToken = false,
+    useToken = true,
     useAntiForgery = false,
     showLoading = false,
     onSuccess = () => { },

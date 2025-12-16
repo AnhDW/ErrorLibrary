@@ -67,6 +67,7 @@ var assemblies = AppDomain.CurrentDomain.GetAssemblies()
 builder.Services.AddAutoMapper(cfg => cfg.AddMaps(assemblies));
 builder.AddAppAuthetication();
 builder.Services.AddSignalR().AddMessagePackProtocol();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.

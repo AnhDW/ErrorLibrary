@@ -29,7 +29,10 @@ namespace ErrorLibrary.Controllers
         {
             return View();
         }
-        
+        //[HasPermission("Enterprises", "Create")]
+        //[HasPermission("Enterprises", "Update")]
+        //[HasPermission("Enterprises", "Delete")]
+        //[HasPermission("Enterprises", "View")]
         public async Task<IActionResult> GetErrorCategorysPagination([FromQuery] ErrorCategoryParams errorCategoryParams)
         {
             var result = await _errorCategoryService.GetAll(errorCategoryParams);

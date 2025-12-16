@@ -3,8 +3,10 @@ using ErrorLibrary.Data;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services.IServices;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace ErrorLibrary.Services
 {

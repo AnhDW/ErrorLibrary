@@ -30,13 +30,12 @@ namespace ErrorLibrary.Controllers
         }
 
         [ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any)]
-        //[HasPermission("EndLineDetail", "View")]
         public IActionResult Index()
         {
             return View();
         }
 
-        //[HasPermission("EndLineDetail", "View")]
+        [HasPermission("EndLineDetails", "View")]
         public async Task<IActionResult> GetEndLineDetails()
         {
             var endLineDetails = await _endLineDetailService.GetAll();
@@ -44,7 +43,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        //[HasPermission("EndLineDetail", "View")]
+        [HasPermission("EndLineDetails", "View")]
         public async Task<IActionResult> GetEndLineDetailsByEndLine(int endLineId)
         {
             var endLineDetails = await _endLineDetailService.GetAll();
@@ -65,7 +64,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        //[HasPermission("EndLineDetail", "View")]
+        [HasPermission("EndLineDetails", "View")]
         public async Task<IActionResult> GetEndLineDetailById(int id)
         {
             var endLineDetail = await _endLineDetailService.GetById(id);
@@ -73,7 +72,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        //[HasPermission("EndLineDetail", "Create")]
+        [HasPermission("EndLineDetails", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddEndLineDetail([FromBody] EndLineDetailDto endLineDetailDto)
         {
@@ -96,7 +95,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        //[HasPermission("EndLineDetail", "Update")]
+        [HasPermission("EndLineDetails", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateEndLineDetail([FromBody] EndLineDetailDto endLineDetailDto)
         {
@@ -130,7 +129,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        //[HasPermission("EndLineDetail", "Delete")]
+        [HasPermission("EndLineDetails", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteEndLineDetail([FromBody] int id)
         {

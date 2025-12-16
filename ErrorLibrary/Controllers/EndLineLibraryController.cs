@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services;
@@ -33,6 +34,7 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HasPermission("EndLines", "View")]
         public async Task<IActionResult> GetEndLines()
         {
             var endLines = await _endLineService.GetAll();
@@ -54,6 +56,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("EndLines", "View")]
         public async Task<IActionResult> GetEndLineById(int id)
         {
             var endLine = await _endLineService.GetById(id);
@@ -61,6 +64,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("EndLines", "Update")]
         [HttpPost]
         public async Task<IActionResult> CheckInitAndUpdateEndLine([FromBody] InitAndUpdateEndLineDto initAndUpdateEndLineDto)
         {
@@ -102,6 +106,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("EndLines", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddEndLine([FromBody] EndLineDto endLineDto)
         {
@@ -124,6 +129,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("EndLines", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateEndLine([FromBody] EndLineDto endLineDto)
         {
@@ -157,6 +163,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("EndLines", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteEndLine([FromBody] int id)
         {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services.IServices;
@@ -27,24 +28,28 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HasPermission("Enterprises", "View")]
         public async Task<IActionResult> GetEnterprises()
         {
             var enterprises = await _enterpriseService.GetAll();
             return Json(_mapper.Map<List<EnterpriseDto>>(enterprises.OrderBy(x => x.Factory.Unit.Name).ThenBy(x => x.Factory.Name).ThenBy(x => x.Name)));
         }
 
+        [HasPermission("Enterprises", "View")]
         public async Task<IActionResult> GetEnterprisesByFactoryId(int factoryId)
         {
             var enterprises = await _enterpriseService.GetAllByFactoryId(factoryId);
             return Json(_mapper.Map<List<EnterpriseDto>>(enterprises.OrderBy(x => x.Name)));
         }
 
+        [HasPermission("Enterprises", "View")]
         public async Task<IActionResult> GetEnterpriseById(int id)
         {
             var enterprise = await _enterpriseService.GetById(id);
             return Json(_mapper.Map<EnterpriseDto>(enterprise));
         }
 
+        [HasPermission("Enterprises", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddEnterprise([FromBody] EnterpriseDto enterpriseDto)
         {
@@ -65,6 +70,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Enterprises", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateEnterprise([FromBody] EnterpriseDto enterpriseDto)
         {
@@ -97,6 +103,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Enterprises", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteEnterprise([FromBody] int id)
         {
