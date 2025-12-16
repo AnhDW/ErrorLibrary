@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services;
@@ -27,7 +28,7 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-
+        [HasPermission("TimeFrames", "View")]
         public async Task<IActionResult> GetTimeFrames()
         {
             var timeFrames = await _timeFrameService.GetAll();
@@ -35,6 +36,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("TimeFrames", "View")]
         public async Task<IActionResult> GetTimeFrameById(int id)
         {
             var timeFrame = await _timeFrameService.GetById(id);
@@ -42,6 +44,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("TimeFrames", "View")]
         public async Task<IActionResult> GenerateTimeFrameTitle([FromQuery] TimeOnly startTime, [FromQuery] TimeOnly endTime)
         {
             var title = _timeFrameService.CreateTitle(startTime, endTime);
@@ -49,6 +52,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("TimeFrames", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddTimeFrame([FromBody] TimeFrameDto timeFrameDto)
         {
@@ -71,6 +75,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("TimeFrames", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateTimeFrame([FromBody] TimeFrameDto timeFrameDto)
         {
@@ -104,6 +109,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("TimeFrames", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteTimeFrame([FromBody] int id)
         {

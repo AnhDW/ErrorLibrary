@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Extensions;
@@ -33,19 +34,25 @@ namespace ErrorLibrary.Controllers
         {
             return View();
         }
-
+        //[HasPermission("ErrorDetails", "Create")]
+        //[HasPermission("ErrorDetails", "Update")]
+        //[HasPermission("ErrorDetails", "Delete")]
+        //[HasPermission("ErrorDetails", "View")]
+        [HasPermission("ErrorDetails", "View")]
         public async Task<IActionResult> GetErrorDetails()
         {
             var errorDetails = await _errorDetailService.GetAll();
             return Json(_mapper.Map<List<ErrorDetailDisplayDto>>(errorDetails));
         }
 
+        [HasPermission("ErrorDetails", "View")]
         public async Task<IActionResult> GetErrorDetailById(int lineId, int productId, int errorId, string userId)
         {
             var errorDetail = await _errorDetailService.GetById(lineId, productId, errorId, userId);
             return Json(_mapper.Map<ErrorDetailDisplayDto>(errorDetail));
         }
 
+        [HasPermission("ErrorDetails", "Create")]
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddErrorDetail([FromForm] ErrorDetailDto errorDetailDto)
@@ -83,6 +90,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("ErrorDetails", "Update")]
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> UpdateErrorDetail([FromBody] ErrorDetailDto errorDetailDto)
@@ -114,6 +122,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("ErrorDetails", "Delete")]
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> DeleteErrorDetail([FromBody] DeleteErrorDetailDto deleteErrorDetailDto)

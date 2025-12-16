@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services.IServices;
@@ -32,6 +33,7 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HasPermission("Products", "View")]
         public async Task<IActionResult> GetProducts()
         {
             var products = await _productService.GetAll();
@@ -39,13 +41,15 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Products", "View")]
         public async Task<IActionResult> GetProductsByProductCategoryById(int productCategoryId)
         {
             var products = await _productService.GetAllByProductCategoryId(productCategoryId);
             _responseDto.Result = _mapper.Map<List<ProductDto>>(products);
             return Json(_responseDto);
         }
-        
+
+        [HasPermission("Products", "View")]
         public async Task<IActionResult> GetProductById(int id)
         {
             var product = await _productService.GetById(id);
@@ -53,6 +57,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Products", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddProduct([FromForm] ProductDto productDto)
         {
@@ -75,6 +80,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Products", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateProduct([FromForm] ProductDto productDto)
         {
@@ -105,6 +111,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Products", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteProduct([FromBody] int id)
         {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Extensions;
@@ -30,6 +31,7 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HasPermission("ProductCategories", "View")]
         public async Task<IActionResult> GetProductCategoriesPagination([FromQuery] ProductCategoryParams productCategoryParams)
         {
             var result = await _productCategoryService.GetAll(productCategoryParams);
@@ -38,6 +40,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("ProductCategories", "View")]
         public async Task<IActionResult> GetProductCategories()
         {
             var productCategories = await _productCategoryService.GetAll();
@@ -45,12 +48,14 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("ProductCategories", "View")]
         public async Task<IActionResult> GetProductCategoryById(int id)
         {
             var productCategory = await _productCategoryService.GetById(id);
             return Json(_mapper.Map<ProductCategoryDto>(productCategory));
         }
 
+        [HasPermission("ProductCategories", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddProductCategory([FromBody] ProductCategoryDto productCategoryDto)
         {
@@ -73,6 +78,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("ProductCategories", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateProductCategory([FromBody] ProductCategoryDto productCategoryDto)
         {
@@ -105,6 +111,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("ProductCategories", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteProductCategory([FromBody] int id)
         {

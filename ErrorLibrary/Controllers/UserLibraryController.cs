@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services;
@@ -31,6 +32,7 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HasPermission("Users", "View")]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userService.GetAll();
@@ -38,6 +40,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Users", "View")]
         public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _userService.GetById(id);
@@ -45,6 +48,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Users", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddUser([FromForm] RegistrationRequestDto userDto)
         {
@@ -65,6 +69,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Users", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateUser([FromForm] UserDto userDto)
         {
@@ -91,6 +96,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Users", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteUser([FromBody] string id)
         {

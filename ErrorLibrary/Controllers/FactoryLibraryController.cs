@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services.IServices;
@@ -26,24 +27,28 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HasPermission("Factories", "View")]
         public async Task<IActionResult> GetFactories()
         {
             var factories = await _factoryService.GetAll();
             return Json(_mapper.Map<List<FactoryDto>>(factories.OrderBy(x => x.Unit.Name).ThenBy(x => x.Name)));
         }
 
+        [HasPermission("Factories", "View")]
         public async Task<IActionResult> GetFactoriesByUnitId(int unitId)
         {
             var factories = await _factoryService.GetAllByUnitId(unitId);
             return Json(_mapper.Map<List<FactoryDto>>(factories.OrderBy(x=>x.Name)));
         }
 
+        [HasPermission("Factories", "View")]
         public async Task<IActionResult> GetFactoryById(int id)
         {
             var factory = await _factoryService.GetById(id);
             return Json(_mapper.Map<FactoryDto>(factory));
         }
 
+        [HasPermission("Factories", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddFactory([FromBody] FactoryDto factoryDto)
         {
@@ -66,6 +71,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Factories", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateFactory([FromBody] FactoryDto factoryDto)
         {
@@ -99,6 +105,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Factories", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteFactory([FromBody] int id)
         {

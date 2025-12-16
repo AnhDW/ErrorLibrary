@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services.IServices;
@@ -26,6 +27,7 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HasPermission("Units", "View")]
         public async Task<IActionResult> GetUnits()
         {
             var units = await _unitService.GetAll();
@@ -33,6 +35,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Units", "View")]
         public async Task<IActionResult> GetUnitById(int id)
         {
             var unit = await _unitService.GetById(id);
@@ -40,6 +43,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Units", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddUnit([FromBody]UnitDto unitDto)
         {
@@ -62,6 +66,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Units", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateUnit([FromBody] UnitDto unitDto)
         {
@@ -94,6 +99,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Units", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteUnit([FromBody] int id)
         {

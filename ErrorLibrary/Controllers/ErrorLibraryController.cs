@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Extensions;
@@ -47,13 +48,18 @@ namespace ErrorLibrary.Controllers
         {
             return View();
         }
-
+        //[HasPermission("Errors", "Create")]
+        //[HasPermission("Errors", "Update")]
+        //[HasPermission("Errors", "Delete")]
+        //[HasPermission("Errors", "View")]
+        [HasPermission("Errors", "View")]
         [HttpPost]
         public async Task<IActionResult> ErrorExcelPreview([FromBody] PreviewErrorExcelDto previewErrorExcelDto)
         {
             return PartialView("ErrorExcelPreview", previewErrorExcelDto);
         }
 
+        [HasPermission("Errors", "View")]
         public async Task<IActionResult> GetErrorsPagination([FromQuery] ErrorParams errorParams)
         {
             var result = await _errorService.GetAll(errorParams);
@@ -62,7 +68,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        //[ResponseCache(Duration = 10, Location = ResponseCacheLocation.Client)]
+        [HasPermission("Errors", "View")]
         public async Task<IActionResult> GetErrors()
         {
             var errors = await _errorService.GetAll();
@@ -72,6 +78,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Errors", "View")]
         public async Task<IActionResult> GetErrorsByErrorGroupAndProductCategory(int errorGroupId, int productCategoryId)
         {
             var errors = await _errorService.GetAll();
@@ -82,6 +89,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Errors", "View")]
         public async Task<IActionResult> GetErrorById(int id)
         {
             var error = await _errorService.GetById(id);
@@ -106,7 +114,8 @@ namespace ErrorLibrary.Controllers
             _responseDto.Result = nextCode;
             return Json(_responseDto);
         }
-
+        
+        [HasPermission("Errors", "Create")]
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddError([FromBody] ErrorDto errorDto)
@@ -153,6 +162,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Errors", "Update")]
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> UpdateError([FromBody] ErrorDto errorDto)
@@ -208,7 +218,8 @@ namespace ErrorLibrary.Controllers
             _responseDto.Message = "Lỗi trong quá trình thêm";
             return Json(_responseDto);
         }
-        
+
+        [HasPermission("Errors", "Delete")]
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> DeleteError([FromBody] int id)

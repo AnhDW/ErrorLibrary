@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,7 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HasPermission("Organizations", "View")]
         public async Task<IActionResult> GetOrganizationTree()
         {
             var tree = await _organizationService.GetOrganizationTree();
@@ -30,6 +32,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Organizations", "View")]
         public async Task<IActionResult> GetOrganizationTreeDropdown()
         {
             var tree = await _organizationService.GetOrganizationTreeDropdown();

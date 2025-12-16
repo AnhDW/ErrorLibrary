@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services.IServices;
@@ -33,6 +34,7 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HasPermission("InLineDetails", "View")]
         public async Task<IActionResult> GetInLineDetails()
         {
             var inLineDetails = await _inLineDetailService.GetAll();
@@ -40,6 +42,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("InLineDetails", "View")]
         public async Task<IActionResult> GetInLineDetailsByInLine(int inLineId)
         {
             var inLineDetails = await _inLineDetailService.GetAll();
@@ -60,6 +63,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("InLineDetails", "View")]
         public async Task<IActionResult> GetQuantityByInLineAndTimeFrame(int inLineId, int timeFrameId)
         {
             var inLineDetails = await _inLineDetailService.GetAll();
@@ -69,6 +73,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("InLineDetails", "View")]
         public async Task<IActionResult> GetInLineDetailById(int id)
         {
             var inLineDetail = await _inLineDetailService.GetById(id);
@@ -76,6 +81,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("InLineDetails", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddInLineDetail([FromBody] InLineDetailDto inLineDetailDto)
         {
@@ -98,6 +104,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("InLineDetails", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateInLineDetail([FromBody] InLineDetailDto inLineDetailDto)
         {
@@ -131,6 +138,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("InLineDetails", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteInLineDetail([FromBody] int id)
         {

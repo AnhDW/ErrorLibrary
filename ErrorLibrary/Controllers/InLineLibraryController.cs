@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services.IServices;
@@ -34,6 +35,7 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HasPermission("InLines", "View")]
         public async Task<IActionResult> GetInLines()
         {
             var inLines = await _inLineService.GetAll();
@@ -57,6 +59,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("InLines", "View")]
         public async Task<IActionResult> GetInLineById(int id)
         {
             var inLine = await _inLineService.GetById(id);
@@ -64,6 +67,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("InLines", "Update")]
         [HttpPost]
         public async Task<IActionResult> CheckInitAndUpdateInLine([FromBody] InitAndUpdateInLineDto initAndUpdateInLineDto)
         {
@@ -107,6 +111,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("InLines", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddInLine([FromBody] InLineDto inLineDto)
         {
@@ -129,6 +134,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("InLines", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateInLine([FromBody] InLineDto inLineDto)
         {
@@ -162,6 +168,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("InLines", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteInLine([FromBody] int id)
         {

@@ -8,5 +8,9 @@ namespace ErrorLibrary.Controllers
         {
             return View();
         }
+        //[HasPermission("UserRoles", "Create")]
+        //[HasPermission("UserRoles", "Update")]
+        //[HasPermission("UserRoles", "Delete")]
+        //[HasPermission("UserRoles", "View")]
     }
 }

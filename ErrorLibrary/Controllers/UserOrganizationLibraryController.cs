@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services.IServices;
@@ -28,6 +29,7 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HasPermission("UserOrganizations", "View")]
         public async Task<IActionResult> GetUserOrganizations()
         {
             var userOrganizations = await _userOrganizationService.GetAll();
@@ -35,6 +37,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("UserOrganizations", "View")]
         public async Task<IActionResult> GetUserOrganizationById(string userId, string organizationType, int organizationId)
         {
             var userOrganization = await _userOrganizationService.GetById(userId, organizationType, organizationId);
@@ -42,6 +45,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("UserOrganizations", "View")]
         public async Task<IActionResult> GetUserIdsByOrganization(string organizationType, int organizationId)
         {
             var userIds = await _userOrganizationService.GetUserIdsByOrganizationId(organizationType, organizationId);
@@ -49,6 +53,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("UserOrganizations", "View")]
         public async Task<IActionResult> GetOrganizationsByUserId(string userId)
         {
             var organizations = await _userOrganizationService.GetOrganizationIdsByUserId(userId);
@@ -56,6 +61,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("UserOrganizations", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateOrganizationsByUser([FromBody] UpdateOrganizationsByUserDto updateOrganizationsByUserDto)
         {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Extensions;
@@ -29,10 +30,8 @@ namespace ErrorLibrary.Controllers
         {
             return View();
         }
-        //[HasPermission("Enterprises", "Create")]
-        //[HasPermission("Enterprises", "Update")]
-        //[HasPermission("Enterprises", "Delete")]
-        //[HasPermission("Enterprises", "View")]
+
+        [HasPermission("ErrorCategories", "View")]
         public async Task<IActionResult> GetErrorCategorysPagination([FromQuery] ErrorCategoryParams errorCategoryParams)
         {
             var result = await _errorCategoryService.GetAll(errorCategoryParams);
@@ -41,6 +40,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("ErrorCategories", "View")]
         public async Task<IActionResult> GetErrorCategories()
         {
             var errorCategories = await _errorCategoryService.GetAll();
@@ -48,12 +48,14 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("ErrorCategories", "View")]
         public async Task<IActionResult> GetErrorCategoryById(int id)
         {
             var errorCategory = await _errorCategoryService.GetById(id);
             return Json(_mapper.Map<ErrorCategoryDto>(errorCategory));
         }
 
+        [HasPermission("ErrorCategories", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddErrorCategory([FromBody] ErrorCategoryDto errorCategoryDto)
         {
@@ -77,6 +79,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("ErrorCategories", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateErrorCategory([FromBody] ErrorCategoryDto errorCategoryDto)
         {
@@ -109,6 +112,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("ErrorCategories", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteErrorCategory([FromBody] int id)
         {

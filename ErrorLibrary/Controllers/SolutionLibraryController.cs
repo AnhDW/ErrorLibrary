@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services;
@@ -33,24 +34,28 @@ namespace ErrorLibrary.Controllers
             return View(_mapper.Map<List<SolutionDto>>(solutions));
         }
 
+        [HasPermission("Solutions", "View")]
         public async Task<IActionResult> GetErrorsForSolution()
         {
             var errors = await _errorService.GetAll();
             return Json(_mapper.Map<List<ErrorDto>>(errors));
         }
 
+        [HasPermission("Solutions", "View")]
         public async Task<IActionResult> GetSolutions()
         {
             var solutions = await _solutionService.GetAll();
             return Json(_mapper.Map<List<SolutionDto>>(solutions));
         }
 
+        [HasPermission("Solutions", "View")]
         public async Task<IActionResult> GetSolutionById(int id)
         {
             var Solution = await _solutionService.GetById(id);
             return Json(_mapper.Map<SolutionDto>(Solution));
         }
 
+        [HasPermission("Solutions", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddSolution([FromForm] SolutionDto solutionDto)
         {
@@ -73,6 +78,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Solutions", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateSolution([FromForm] SolutionDto solutionDto)
         {
@@ -104,6 +110,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Solutions", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteSolution([FromBody] int id)
         {

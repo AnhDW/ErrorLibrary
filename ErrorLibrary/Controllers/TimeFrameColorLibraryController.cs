@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services;
@@ -27,6 +28,7 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HasPermission("TimeFrameColors", "View")]
         public async Task<IActionResult> GetTimeFrameColors()
         {
             var timeFrameColors = await _timeFrameColorService.GetAll();
@@ -34,13 +36,15 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("TimeFrameColors", "View")]
         public async Task<IActionResult> GetByTimeFrame(int timeFrameId)
         {
             var timeFrameColors = await _timeFrameColorService.GetByTimeFrame(timeFrameId);
             _responseDto.Result = _mapper.Map<List<TimeFrameColorDto>>(timeFrameColors.OrderBy(x => x.MinQuantity).ThenBy(x => x.MaxQuantity));
             return Json(_responseDto);
         }
-        
+
+        [HasPermission("TimeFrameColors", "View")]
         public async Task<IActionResult> GetTimeFrameColorByQuantity(int timeFrameId, int quantity)
         {
             var timeFrameColors = await _timeFrameColorService.GetByTimeFrame(timeFrameId);
@@ -53,6 +57,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("TimeFrameColors", "View")]
         public async Task<IActionResult> GetTimeFrameColorById(int id)
         {
             var timeFrameColor = await _timeFrameColorService.GetById(id);
@@ -60,6 +65,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("TimeFrameColors", "Create")]
         [HttpPost]
         public async Task<IActionResult> CopyAndPasteColor([FromBody] CopyAndPasteColorDto copyAndPasteColorDto)
         {
@@ -86,6 +92,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("TimeFrameColors", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddTimeFrameColor([FromBody] TimeFrameColorDto timeFrameColorDto)
         {
@@ -108,6 +115,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("TimeFrameColors", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateTimeFrameColor([FromBody] TimeFrameColorDto timeFrameColorDto)
         {
@@ -141,6 +149,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("TimeFrameColors", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteTimeFrameColor([FromBody] int id)
         {

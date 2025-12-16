@@ -2,11 +2,12 @@
 
 namespace ErrorLibrary.Controllers
 {
-    public class ReportController : Controller
+    public class ReportLibraryController : Controller
     {
         public IActionResult Index()
         {
             return View();
         }
+
     }
 }

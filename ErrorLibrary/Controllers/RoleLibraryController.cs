@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services.IServices;
@@ -26,6 +27,7 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HasPermission("Roles", "View")]
         public async Task<IActionResult> GetRoles()
         {
             var roles = await _roleService.GetAll();
@@ -33,6 +35,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Roles", "View")]
         public async Task<IActionResult> GetRoleById(string id)
         {
             var role = await _roleService.GetById(id);
@@ -40,6 +43,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Roles", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddRole([FromBody] RoleDto roleDto)
         {
@@ -63,6 +67,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Roles", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateRole([FromBody] RoleDto roleDto)
         {
@@ -95,6 +100,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Roles", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteRole([FromBody] string id)
         {

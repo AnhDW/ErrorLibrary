@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ErrorLibrary.Authorization.Attributes;
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Services;
@@ -28,6 +29,7 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
+        [HasPermission("Lines", "View")]
         public async Task<IActionResult> GetLines()
         {
             var lines = await _lineService.GetAll();
@@ -39,18 +41,21 @@ namespace ErrorLibrary.Controllers
                 ));
         }
 
+        [HasPermission("Lines", "View")]
         public async Task<IActionResult> GetLinesByEnterpriseId(int enterpriseId)
         {
             var lines = await _lineService.GetAllByEnterpriseId(enterpriseId);
             return Json(_mapper.Map<List<LineDto>>(lines.OrderBy(x=>x.Name)));
         }
 
+        [HasPermission("Lines", "View")]
         public async Task<IActionResult> GetLineById(int id)
         {
             var line = await _lineService.GetById(id);
             return Json(_mapper.Map<LineDto>(line));
         }
 
+        [HasPermission("Lines", "Create")]
         [HttpPost]
         public async Task<IActionResult> AddLine([FromBody] LineDto lineDto)
         {
@@ -71,6 +76,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Lines", "Update")]
         [HttpPost]
         public async Task<IActionResult> UpdateLine([FromBody] LineDto lineDto)
         {
@@ -103,6 +109,7 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HasPermission("Lines", "Delete")]
         [HttpPost]
         public async Task<IActionResult> DeleteLine([FromBody] int id)
         {
