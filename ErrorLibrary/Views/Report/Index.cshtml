@@ -1,0 +1,114 @@
+﻿@{
+    ViewData["Title"] = "End line";
+}
+
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        @* <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện đơn vị</span></h4> *@
+        <div id="formWrapper" class="mb-2">
+            <div class="form-grid">
+                <div class="form-item">
+                    <label for="selectTypeCheck">Loại kiểm</label>
+                    <select id="selectTypeCheck" class="form-select">
+                        <option selected="">Chọn loại kiểm</option>
+                        <option value="Inline">Inline</option>
+                        <option value="Endline">Endline</option>
+                    </select>
+                </div>
+
+                <div class="form-item">
+                    <label for="fromDate">Từ ngày</label>
+                    <input id="fromDate" class="form-control" type="date">
+                </div>
+                <div class="form-item">
+                    <label for="toDate">Đến ngày</label>
+                    <input id="toDate" class="form-control" type="date">
+                </div>
+            </div>
+        </div>
+
+        <button id="toggleFormBtn" class="toggle-btn w-100" style="border:none; border-radius:0 0 0 0;">
+            <i class="fas fa-angle-double-up"></i>
+        </button>
+        <div class="card mt-4 d-flex align-items-center">
+            <div id="topErrorChart">
+            </div>
+        </div>
+        <!-- Striped Rows -->
+        <div class="card mt-4">
+            <div style="min-height:200px;" class="table-responsive text-nowrap">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Chuyền</th>
+                            <th>Mã hàng</th>
+                            <th>Số lượng đơn hàng</th>
+                            <th>Số lượng kiểm</th>
+                            <th>Số lượng lỗi</th>
+                            <th>Tỉ lệ lỗi (%)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="endLineTableBody" class="table-border-bottom-0">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--/ Striped Rows -->
+    </div>
+    <!-- / Content -->
+    <div class="content-backdrop fade"></div>
+</div>
+<style>
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 12px 20px; /* khoảng cách giữa các ô */
+        margin-top: 10px;
+    }
+
+    .form-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .form-item label {
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+    .toggle-btn {
+        width: 100%;
+        height: 32px; /* Thấp hơn */
+        border: none;
+        background: none; /* Màu nhẹ */
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Icon ở giữa */
+        cursor: pointer;
+        border-radius: 6px;
+        transition: background 0.2s ease;
+    }
+
+    .toggle-btn:hover {
+        background: #e0e0e0;
+    }
+
+    .toggle-btn span {
+        font-size: 18px;
+        transition: transform 0.2s ease;
+    }
+
+</style>
+<!-- Content wrapper -->
+@section Scripts {
+    <script src="~/js/page-handle/end-line-library.js"></script>
+    <script src="~/js/request/end-line-request.js"></script>
+    <script src="~/js/request/organization-request.js"></script>
+    <script src="~/js/request/user-organization-request.js"></script>
+    <script src="~/js/share/tree-view-select.js"></script>
+}
+
