@@ -36,6 +36,24 @@ namespace ErrorLibrary.Controllers
         }
 
         [HasPermission("Roles", "View")]
+        public async Task<IActionResult> GetCustomRoles()
+        {
+            var roles = await _roleService.GetAll();
+            var customRoles = new List<object>();
+            foreach(var role in roles)
+            {
+                customRoles.Add(new
+                {
+                    Id = role.Id,
+                    Icon = "fa-solid fa-user-tag",
+                    Text = role.DisplayName
+                });
+            }
+            _responseDto.Result = customRoles;
+            return Json(_responseDto);
+        }
+
+        [HasPermission("Roles", "View")]
         public async Task<IActionResult> GetRoleById(string id)
         {
             var role = await _roleService.GetById(id);

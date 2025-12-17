@@ -10,7 +10,7 @@ async function addShowUserModalHandle() {
             },
             'plugins': ["wholerow", "checkbox"],
         })
-
+    renderRolesCheck('addRoles');
 }
 
 async function editShowUserModalHandle(userId) {
@@ -19,7 +19,10 @@ async function editShowUserModalHandle(userId) {
     //gán ids hiện tại
     var selectedIds = (await getOrganizationsByUserId(userId)).result;
     var organizationIds = selectedIds.map(x => { return x.organizationType + "_" + x.organizationId })
-    console.log(selectedIds, organizationIds);
+    var roleIds = (await getRoleIdsByUserId(userId)).result;
+    renderRolesCheck('editRoles', roleIds);
+
+    console.log(selectedIds, organizationIds, roleIds);
     if ($.jstree.reference('#editTree')) {
         $('#editTree').jstree('destroy').off(); // off để gỡ event cũ
     }
@@ -52,14 +55,14 @@ function handleAddUser() {
     const email = $('#addEmail').val();
 
     var selectedIds = $('#addTree').jstree('get_selected');
-    console.log(selectedIds);
+    var roleIds = $('#addRoles').jstree('get_selected');
+    console.log(selectedIds, roleIds);
     var organizations = selectedIds.map(x => {
         return {
             organizationType: x.split("_")[0],
             organizationId: x.split("_")[1]
         };
     });
-    console.log(selectedIds);
     const userData = {
         code: username,
         password,
@@ -75,7 +78,12 @@ function handleAddUser() {
             userId: res.result.id,
             organizations: organizations
         }
+        const updateRolesByUserDto = {
+            userId: res.result.id,
+            roleIds: roleIds
+        }
         updateOrganizationsByUser(updateOrganizationsByUserData);
+        updateRolesByUser(updateRolesByUserDto);
     }).catch(function (err) {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');
@@ -95,6 +103,7 @@ function handleEditUser() {
             organizationType: x.split("_")[0],
             organizationId: x.split("_")[1]
         }; });
+    var roleIds = $('#editRoles').jstree('get_selected');
 
     console.log(selectedIds, organizations);
     const userData = {
@@ -109,7 +118,9 @@ function handleEditUser() {
         userId: id,
         organizations: organizations
     }
-    
+    const updateRolesByUserDto = {
+        userId: id, roleIds: roleIds
+    }
     console.log(updateOrganizationsByUserData);
     updateUser(userData).then(function (res) {
         $('#editModel').modal('hide');
@@ -118,7 +129,9 @@ function handleEditUser() {
         console.error(err);
         alert('Có lỗi xảy ra khi cập nhật');
     });
+
     updateOrganizationsByUser(updateOrganizationsByUserData);
+    updateRolesByUser(updateRolesByUserDto);
 }
 
 function handleDeleteUser(id) {
@@ -135,29 +148,46 @@ function renderUsersTable() {
         let html = '';
         data.result.forEach(item => {
             html += `
-                    <tr>
-                        <td>${item.code}</td>
-                        <td>${item.fullName}</td>
-                        <td>${item.email}</td>
-                        <td>NBC</td>
-                        <td><img src="${item.avatarUrl}" alt="Avatar" style="width: 60px;" /></td>
-                        <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                    <i class="bx bx-dots-vertical-rounded"></i>
+                <tr>
+                    <td>${item.code}</td>
+                    <td>${item.fullName}</td>
+                    <td>${item.email}</td>
+                    <td><img src="${item.avatarUrl}" alt="Avatar" style="width: 60px;" /></td>
+                    <td>
+                        <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                        data-bs-target="#editModel" onclick=(editShowUserModalHandle('${item.id}'))>
+                                    <i class="bx bx-edit-alt me-1"></i> Sửa
                                 </button>
-                                <div class="dropdown-menu">
-                                    <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                            data-bs-target="#editModel" onclick=(editShowUserModalHandle('${item.id}'))>
-                                        <i class="bx bx-edit-alt me-1"></i> Sửa
-                                    </button>
-                                    <button type="button" class="dropdown-item" onclick="handleDeleteUser('${item.id}')"><i class="bx bx-trash me-1"></i> Xóa</a>
-                                </div>
+                                <button type="button" class="dropdown-item" onclick="handleDeleteUser('${item.id}')"><i class="bx bx-trash me-1"></i> Xóa</a>
                             </div>
-                        </td>
-                    </tr>
-                    `;
+                        </div>
+                    </td>
+                </tr>
+                `;
         });
         $('#userTableBody').html(html);
     });
+}
+
+async function renderRolesCheck(elementId, roleIds = []) {
+
+    var roles = (await getCustomRoles()).result;
+    $('#' + elementId)
+        .on('loaded.jstree', function () {
+            roleIds.forEach(id => {
+                $('#' + elementId).jstree('check_node', id);
+            });
+        })
+        .jstree({
+            'core': {
+                'data': roles,
+                'themes': { 'name': 'proton', 'responsive': true }
+            },
+            'plugins': ["wholerow", "checkbox"],
+        })
 }

@@ -5,6 +5,13 @@
     })
 }
 
+function getCustomRoles() {
+    return ajaxRequest({
+        url: '/RoleLibrary/GetCustomRoles',
+        method: 'GET',
+    })
+}
+
 function getRoleById(id) {
     return ajaxRequest({
         url: '/RoleLibrary/GetRoleById',

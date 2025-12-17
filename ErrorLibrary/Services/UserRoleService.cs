@@ -19,9 +19,25 @@ namespace ErrorLibrary.Services
             _mapper = mapper;
         }
 
+        public void Add(IdentityUserRole<string> identityUserRole)
+        {
+            _context.UserRoles.Add(identityUserRole);
+        }
+
+        public void Delete(IdentityUserRole<string> identityUserRole)
+        {
+            _context.UserRoles.Remove(identityUserRole);
+        }
+
         public async Task<List<IdentityUserRole<string>>> GetAll()
         {
             return await _context.UserRoles.ToListAsync();
+        }
+
+        public async Task<IdentityUserRole<string>> GetById(string userId, string roleId)
+        {
+            return (await _context.UserRoles
+                .FirstOrDefaultAsync(ur => ur.UserId == userId && ur.RoleId == roleId))!;
         }
 
         public async Task<List<string>> GetRoleIdsByUserId(string userId)

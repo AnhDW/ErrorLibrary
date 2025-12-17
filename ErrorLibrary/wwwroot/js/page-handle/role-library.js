@@ -56,7 +56,7 @@ function handleDeleteRole(id) {
     });
 }
 
-async function renderRoleTable() {
+function renderRoleTable() {
     getRoles().then(function (res) {
         console.log(res)
         let html = '';
@@ -66,6 +66,12 @@ async function renderRoleTable() {
                         <td>${item.name}</td>
                         <td>${item.normalizedName}</td>
                         <td>${item.displayName}</td>
+                        <td>
+                            <button type="button" class="btn rounded-pill btn-primary btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#permissionModel" onclick="initPermissionModalHandle('${item.id}')">
+                                <i class="fas fa-users-cog"></i>
+                            </button>
+                        </td>
                         <td>
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -85,8 +91,43 @@ async function renderRoleTable() {
         });
         $('#roleTableBody').html(html);
     });
-    var permissions = await getTreePermissions();
-    console.log(permissions);
 }
 
+async function initPermissionModalHandle(roleId) {
+    var permissionIds = (await getPermissionIdsByRoleId(roleId)).result;
+    var permissions = (await getTreePermissions()).result;
+    $('#permissionTree')
+        .on('loaded.jstree', function () {
+            permissionIds.forEach(id => {
+                $('#permissionTree').jstree('check_node', id);
+            });
+        })
+        .jstree({
+            'core': {
+                'data': permissions,
+                'themes': { 'name': 'proton', 'responsive': true }
+            },
+            'plugins': ["wholerow", "checkbox"],
+        })
+    $('#roleId').val(roleId);
+
+}
+
+function handleSaveRolePermission() {
+    var selectedIds = $('#permissionTree').jstree('get_selected');
+    const roleId = $('#roleId').val();
+    const permissionIds = selectedIds
+        .map(x => Number(x))
+        .filter(Number.isInteger);
+    updatePermissionsByRoleDto = {
+        roleId: roleId,
+        permissionIds: permissionIds
+    }
+    updatePermissionsByRole(updatePermissionsByRoleDto).then(function (res) {
+        resToastr(res);
+    }).catch(function (err) {
+        console.error(err);
+        alert('Có lỗi xảy ra khi cập nhật');
+    });
+}
 //request

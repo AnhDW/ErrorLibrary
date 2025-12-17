@@ -1,6 +1,7 @@
-﻿@{
+﻿@using ErrorLibrary.Authorization.Constants
+@{
     var controllerName = ViewContext.RouteData.Values["controller"].ToString();
-    var featureControllers = new[] { "Home", "ErrorDetailLibrary", "InLineDetailLibrary", "InLineLibrary", "EndLineDetailLibrary", "EndLineLibrary" };
+    var featureControllers = new[] { "Home", "ErrorDetailLibrary", "InLineDetailLibrary", "InLineLibrary", "EndLineDetailLibrary", "EndLineLibrary", "ReportLibrary" };
     var libraryControllers = new[] { "ErrorLibrary", "ErrorGroupLibrary", "ErrorCategoryLibrary", "ProductCategoryLibrary", "ProductLibrary", "SolutionLibrary", "UnitLibrary", "FactoryLibrary", "EnterpriseLibrary", "LineLibrary" };
     var settingControllers = new[] { "UserLibrary", "RoleLibrary", "TimeFrameLibrary" };
 }
@@ -101,6 +102,12 @@
                                 <a class="menu-link" asp-controller="ErrorDetailLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-circle-exclamation"></i>
                                     <div style="margin-left: 4px;">Lỗi theo mã hàng</div>
+                                </a>
+                            </li>
+                            <li class="menu-item @(controllerName == "ReportLibrary" ? "active" : "")">
+                                <a class="menu-link" asp-controller="ReportLibrary" asp-action="Index">
+                                    <i class="menu-icon tf-icons fa-solid fa-circle-exclamation"></i>
+                                    <div style="margin-left: 4px;">Báo cáo</div>
                                 </a>
                             </li>
                             <li class="menu-item @(controllerName == "InLineDetailLibrary" ? "active" : "")">
@@ -351,3 +358,18 @@
 
 </body>
 </html>
+
+<script>
+    const token = localStorage.getItem("access_token");
+
+    if (token) {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        window.AppPermissions = payload.Permission || [];
+    } else {
+        window.AppPermissions = [];
+    }
+
+    console.log("AppPermissions", window.AppPermissions);
+</script>
+
+

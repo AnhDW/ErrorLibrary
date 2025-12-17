@@ -79,6 +79,29 @@
                     </div>
                 </div>
             </div>
+            <!-- Permission Modal -->
+            <div class="modal fade" id="permissionModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Sửa vai trò</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <input type="text" class="form-control" id="roleId" hidden>
+
+                        <div class="p-4">
+                            <div id="permissionTree" class="p-2 border overflow-auto rounded" style="max-height:593px"></div>
+                        </div>
+                        <div class="modal-footer">
+
+                        <button type="button" class="btn btn-primary" onclick="handleSaveRolePermission()">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- Striped Rows -->
         <div class="card mt-4">
@@ -126,4 +149,5 @@
     <script src="~/js/page-handle/role-library.js"></script>
     <script src="~/js/request/role-request.js"></script>
     <script src="~/js/request/permission-request.js"></script>
+    <script src="~/js/request/role-permission-request.js"></script>
 }

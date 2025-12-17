@@ -49,6 +49,10 @@
                                     <label for="addImage" class="form-label">Ảnh</label>
                                     <input class="form-control" type="file" id="addAvatarFile">
                                 </div>
+                                <div class="mb-2">
+                                    <label for="addRoles" class="form-label">Vai trò</label>
+                                    <div id="addRoles"></div>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -95,6 +99,10 @@
                                     <input class="form-control" type="file" id="editAvatarFile">
                                     <input class="form-control" type="text" id="editAvatarUrl" hidden>
                                 </div>
+                                <div class="mb-2">
+                                    <label for="editRoles" class="form-label">Vai trò</label>
+                                    <div id="editRoles"></div>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -116,7 +124,6 @@
                             <th>Tên đăng nhập</th>
                             <th>Họ tên</th>
                             <th>Email</th>
-                            <th>Đơn vị</th>
                             <th>Ảnh</th>
                             <th>Hành động</th>
                         </tr>
@@ -137,4 +144,6 @@
     <script src="~/js/request/user-request.js"></script>
     <script src="~/js/request/organization-request.js"></script>
     <script src="~/js/request/user-organization-request.js"></script>
+    <script src="~/js/request/role-request.js"></script>
+    <script src="~/js/request/user-role-request.js"></script>
 }

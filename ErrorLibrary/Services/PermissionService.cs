@@ -6,6 +6,7 @@ using ErrorLibrary.Helper;
 using ErrorLibrary.Helper.EntityParams;
 using ErrorLibrary.Services.IServices;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace ErrorLibrary.Services
 {
@@ -30,7 +31,7 @@ namespace ErrorLibrary.Services
         public async Task<List<PermissionTreeDto>> GetPermissionTreeAsync()
         {
             var permissions = await _context.Permissions.ToListAsync();
-            var entities = permissions
+            var entities = permissions.OrderBy(x=>x.EntityName)
                 .Select(p => p.EntityName)
                 .Distinct();
             var nodes = new List<PermissionTreeDto>();
