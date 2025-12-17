@@ -34,21 +34,18 @@ namespace ErrorLibrary.Controllers
             return View(_mapper.Map<List<SolutionDto>>(solutions));
         }
 
-        [HasPermission("Solutions", "View")]
         public async Task<IActionResult> GetErrorsForSolution()
         {
             var errors = await _errorService.GetAll();
             return Json(_mapper.Map<List<ErrorDto>>(errors));
         }
 
-        [HasPermission("Solutions", "View")]
         public async Task<IActionResult> GetSolutions()
         {
             var solutions = await _solutionService.GetAll();
             return Json(_mapper.Map<List<SolutionDto>>(solutions));
         }
 
-        [HasPermission("Solutions", "View")]
         public async Task<IActionResult> GetSolutionById(int id)
         {
             var Solution = await _solutionService.GetById(id);

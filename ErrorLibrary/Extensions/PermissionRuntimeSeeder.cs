@@ -1,4 +1,5 @@
 ﻿using ErrorLibrary.Data;
+using ErrorLibrary.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ErrorLibrary.Extensions
@@ -17,9 +18,21 @@ namespace ErrorLibrary.Extensions
             var permissions = PermissionSeeder.Generate()
                 .Where(p => !existingCodes.Contains(p.Code))
                 .ToList();
+            var adminRole = await context.Roles
+                .FirstOrDefaultAsync(r => r.Name == "Admin");
+            var rolePermissions = new List<RolePermission>();
+            foreach ( var permission in permissions)
+            {
+                rolePermissions.Add(new RolePermission
+                {
+                    RoleId = adminRole.Id,
+                    Permission = permission
+                });
+            }
 
             if (permissions.Any())
             {
+                context.RolePermissions.AddRange(rolePermissions);
                 context.Permissions.AddRange(permissions);
                 await context.SaveChangesAsync();
             }

@@ -27,7 +27,6 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        [HasPermission("Units", "View")]
         public async Task<IActionResult> GetUnits()
         {
             var units = await _unitService.GetAll();
@@ -35,7 +34,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("Units", "View")]
         public async Task<IActionResult> GetUnitById(int id)
         {
             var unit = await _unitService.GetById(id);

@@ -33,7 +33,6 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        [HasPermission("Products", "View")]
         public async Task<IActionResult> GetProducts()
         {
             var products = await _productService.GetAll();
@@ -41,7 +40,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("Products", "View")]
         public async Task<IActionResult> GetProductsByProductCategoryById(int productCategoryId)
         {
             var products = await _productService.GetAllByProductCategoryId(productCategoryId);
@@ -49,7 +47,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("Products", "View")]
         public async Task<IActionResult> GetProductById(int id)
         {
             var product = await _productService.GetById(id);

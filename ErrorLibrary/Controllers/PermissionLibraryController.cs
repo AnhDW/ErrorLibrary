@@ -27,7 +27,6 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        [HasPermission("Permissions", "View")]
         public async Task<IActionResult> GetPermissions()
         {
             var permissions = await _permissionService.GetAll();
@@ -35,7 +34,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("Permissions", "View")]
         public async Task<IActionResult> GetTreePermissions()
         {
             var permissions = await _permissionService.GetPermissionTreeAsync();
@@ -43,7 +41,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("Permissions", "View")]
         public async Task<IActionResult> GetPermissionById(int id)
         {
             var permission = await _permissionService.GetById(id);

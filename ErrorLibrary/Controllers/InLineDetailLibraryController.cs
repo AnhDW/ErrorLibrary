@@ -34,7 +34,6 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        [HasPermission("InLineDetails", "View")]
         public async Task<IActionResult> GetInLineDetails()
         {
             var inLineDetails = await _inLineDetailService.GetAll();
@@ -42,7 +41,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("InLineDetails", "View")]
         public async Task<IActionResult> GetInLineDetailsByInLine(int inLineId)
         {
             var inLineDetails = await _inLineDetailService.GetAll();
@@ -63,7 +61,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("InLineDetails", "View")]
         public async Task<IActionResult> GetQuantityByInLineAndTimeFrame(int inLineId, int timeFrameId)
         {
             var inLineDetails = await _inLineDetailService.GetAll();
@@ -73,7 +70,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("InLineDetails", "View")]
         public async Task<IActionResult> GetInLineDetailById(int id)
         {
             var inLineDetail = await _inLineDetailService.GetById(id);

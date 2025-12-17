@@ -28,7 +28,6 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        [HasPermission("TimeFrameColors", "View")]
         public async Task<IActionResult> GetTimeFrameColors()
         {
             var timeFrameColors = await _timeFrameColorService.GetAll();
@@ -36,7 +35,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("TimeFrameColors", "View")]
         public async Task<IActionResult> GetByTimeFrame(int timeFrameId)
         {
             var timeFrameColors = await _timeFrameColorService.GetByTimeFrame(timeFrameId);
@@ -44,7 +42,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("TimeFrameColors", "View")]
         public async Task<IActionResult> GetTimeFrameColorByQuantity(int timeFrameId, int quantity)
         {
             var timeFrameColors = await _timeFrameColorService.GetByTimeFrame(timeFrameId);
@@ -57,7 +54,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("TimeFrameColors", "View")]
         public async Task<IActionResult> GetTimeFrameColorById(int id)
         {
             var timeFrameColor = await _timeFrameColorService.GetById(id);

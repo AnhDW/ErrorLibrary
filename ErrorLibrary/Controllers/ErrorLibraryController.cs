@@ -48,18 +48,13 @@ namespace ErrorLibrary.Controllers
         {
             return View();
         }
-        //[HasPermission("Errors", "Create")]
-        //[HasPermission("Errors", "Update")]
-        //[HasPermission("Errors", "Delete")]
-        //[HasPermission("Errors", "View")]
-        [HasPermission("Errors", "View")]
+
         [HttpPost]
         public async Task<IActionResult> ErrorExcelPreview([FromBody] PreviewErrorExcelDto previewErrorExcelDto)
         {
             return PartialView("ErrorExcelPreview", previewErrorExcelDto);
         }
 
-        [HasPermission("Errors", "View")]
         public async Task<IActionResult> GetErrorsPagination([FromQuery] ErrorParams errorParams)
         {
             var result = await _errorService.GetAll(errorParams);
@@ -68,7 +63,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("Errors", "View")]
         public async Task<IActionResult> GetErrors()
         {
             var errors = await _errorService.GetAll();
@@ -78,7 +72,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("Errors", "View")]
         public async Task<IActionResult> GetErrorsByErrorGroupAndProductCategory(int errorGroupId, int productCategoryId)
         {
             var errors = await _errorService.GetAll();
@@ -89,7 +82,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("Errors", "View")]
         public async Task<IActionResult> GetErrorById(int id)
         {
             var error = await _errorService.GetById(id);
@@ -346,19 +338,19 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> DeleteAll()
-        {
-            var errors = await _errorService.GetAll();
-            _errorService.DeleteRange(errors);
-            if (await _sharedService.SaveAllChanges())
-            {
-                _responseDto.Message = "Xóa tất cả lỗi thành công";
-                return Json(_responseDto);
-            }
-            _responseDto.IsSuccess = false;
-            _responseDto.Message = "Lỗi trong quá trình xóa";
-            return Json(_responseDto);
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> DeleteAll()
+        //{
+        //    var errors = await _errorService.GetAll();
+        //    _errorService.DeleteRange(errors);
+        //    if (await _sharedService.SaveAllChanges())
+        //    {
+        //        _responseDto.Message = "Xóa tất cả lỗi thành công";
+        //        return Json(_responseDto);
+        //    }
+        //    _responseDto.IsSuccess = false;
+        //    _responseDto.Message = "Lỗi trong quá trình xóa";
+        //    return Json(_responseDto);
+        //}
     }
 }

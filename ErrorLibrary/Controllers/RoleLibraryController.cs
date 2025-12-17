@@ -27,7 +27,6 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        [HasPermission("Roles", "View")]
         public async Task<IActionResult> GetRoles()
         {
             var roles = await _roleService.GetAll();
@@ -35,7 +34,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("Roles", "View")]
         public async Task<IActionResult> GetCustomRoles()
         {
             var roles = await _roleService.GetAll();
@@ -53,7 +51,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("Roles", "View")]
         public async Task<IActionResult> GetRoleById(string id)
         {
             var role = await _roleService.GetById(id);

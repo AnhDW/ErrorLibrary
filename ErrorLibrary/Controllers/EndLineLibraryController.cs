@@ -34,7 +34,6 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        [HasPermission("EndLines", "View")]
         public async Task<IActionResult> GetEndLines()
         {
             var endLines = await _endLineService.GetAll();
@@ -56,7 +55,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("EndLines", "View")]
         public async Task<IActionResult> GetEndLineById(int id)
         {
             var endLine = await _endLineService.GetById(id);

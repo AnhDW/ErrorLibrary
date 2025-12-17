@@ -35,7 +35,6 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        [HasPermission("ErrorGroups", "View")]
         public async Task<IActionResult> GetErrorGroupsPagination([FromQuery] ErrorGroupParams errorGroupParams)
         {
             var result = await _errorGroupService.GetAll(errorGroupParams);
@@ -44,7 +43,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("ErrorGroups", "View")]
         public async Task<IActionResult> GetErrorGroups()
         {
             var errorGroups = await _errorGroupService.GetAll();
@@ -52,7 +50,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("ErrorGroups", "View")]
         public async Task<IActionResult> GetErrorGroupsByProduct(int productId)
         {
             var product = await _productService.GetById(productId);
@@ -65,7 +62,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("ErrorGroups", "View")]
         public async Task<IActionResult> GetErrorGroupById(int id)
         {
             var errorGroup = await _errorGroupService.GetById(id);

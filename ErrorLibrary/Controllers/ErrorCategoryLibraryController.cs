@@ -31,7 +31,6 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        [HasPermission("ErrorCategories", "View")]
         public async Task<IActionResult> GetErrorCategorysPagination([FromQuery] ErrorCategoryParams errorCategoryParams)
         {
             var result = await _errorCategoryService.GetAll(errorCategoryParams);
@@ -40,7 +39,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("ErrorCategories", "View")]
         public async Task<IActionResult> GetErrorCategories()
         {
             var errorCategories = await _errorCategoryService.GetAll();
@@ -48,7 +46,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("ErrorCategories", "View")]
         public async Task<IActionResult> GetErrorCategoryById(int id)
         {
             var errorCategory = await _errorCategoryService.GetById(id);

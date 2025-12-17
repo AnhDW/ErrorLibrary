@@ -32,7 +32,6 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        [HasPermission("Users", "View")]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userService.GetAll();
@@ -40,7 +39,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("Users", "View")]
         public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _userService.GetById(id);

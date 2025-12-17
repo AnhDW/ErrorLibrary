@@ -32,7 +32,6 @@ namespace ErrorLibrary.Controllers
         //    return View();
         //}
 
-        [HasPermission("ErrorDetailAttachments", "View")]
         public async Task<IActionResult> GetByErrorDetail(int lineId, int productId, int errorId, string userId)
         {
             var attachments = await _errorDetailAttachmentService.GetByErrorDetail(lineId, productId, errorId, userId);
@@ -40,7 +39,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("ErrorDetailAttachments", "View")]
         public async Task<IActionResult> GetErrorDetailAttachmentById(int id)
         {
             var attachment = await _errorDetailAttachmentService.GetById(id);

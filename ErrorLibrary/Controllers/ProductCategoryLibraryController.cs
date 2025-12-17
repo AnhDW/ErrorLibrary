@@ -31,7 +31,6 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        [HasPermission("ProductCategories", "View")]
         public async Task<IActionResult> GetProductCategoriesPagination([FromQuery] ProductCategoryParams productCategoryParams)
         {
             var result = await _productCategoryService.GetAll(productCategoryParams);
@@ -40,7 +39,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("ProductCategories", "View")]
         public async Task<IActionResult> GetProductCategories()
         {
             var productCategories = await _productCategoryService.GetAll();
@@ -48,7 +46,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("ProductCategories", "View")]
         public async Task<IActionResult> GetProductCategoryById(int id)
         {
             var productCategory = await _productCategoryService.GetById(id);

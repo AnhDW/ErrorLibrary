@@ -28,7 +28,6 @@ namespace ErrorLibrary.Controllers
             _responseDto = new ResponseDto();
         }
 
-        [HasPermission("RolePermissions", "View")]
         public async Task<IActionResult> GetRoleIdsByPermissionId(int permissionId)
         {
             var roleIds = await _rolePermissionService.GetRoleIdsByPermissionId(permissionId);
@@ -36,7 +35,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("RolePermissions", "View")]
         public async Task<IActionResult> GetPermissionIdsByRoleId(string roleId)
         {
             var permissionIds = await _rolePermissionService.GetPermissionIdsByRoleId(roleId);

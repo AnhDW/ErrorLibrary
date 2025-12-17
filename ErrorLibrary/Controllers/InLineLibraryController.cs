@@ -35,7 +35,6 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        [HasPermission("InLines", "View")]
         public async Task<IActionResult> GetInLines()
         {
             var inLines = await _inLineService.GetAll();
@@ -59,7 +58,6 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-        [HasPermission("InLines", "View")]
         public async Task<IActionResult> GetInLineById(int id)
         {
             var inLine = await _inLineService.GetById(id);

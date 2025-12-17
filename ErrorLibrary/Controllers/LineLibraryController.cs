@@ -29,7 +29,6 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        [HasPermission("Lines", "View")]
         public async Task<IActionResult> GetLines()
         {
             var lines = await _lineService.GetAll();
@@ -41,14 +40,12 @@ namespace ErrorLibrary.Controllers
                 ));
         }
 
-        [HasPermission("Lines", "View")]
         public async Task<IActionResult> GetLinesByEnterpriseId(int enterpriseId)
         {
             var lines = await _lineService.GetAllByEnterpriseId(enterpriseId);
             return Json(_mapper.Map<List<LineDto>>(lines.OrderBy(x=>x.Name)));
         }
 
-        [HasPermission("Lines", "View")]
         public async Task<IActionResult> GetLineById(int id)
         {
             var line = await _lineService.GetById(id);

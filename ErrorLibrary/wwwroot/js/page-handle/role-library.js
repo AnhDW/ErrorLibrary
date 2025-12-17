@@ -67,8 +67,7 @@ function renderRoleTable() {
                         <td>${item.normalizedName}</td>
                         <td>${item.displayName}</td>
                         <td>
-                            <button type="button" class="btn rounded-pill btn-primary btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#permissionModel" onclick="initPermissionModalHandle('${item.id}')">
+                            <button type="button" class="btn rounded-pill btn-primary btn-sm" onclick="initPermissionModalHandle('${item.id}')">
                                 <i class="fas fa-users-cog"></i>
                             </button>
                         </td>
@@ -96,6 +95,12 @@ function renderRoleTable() {
 async function initPermissionModalHandle(roleId) {
     var permissionIds = (await getPermissionIdsByRoleId(roleId)).result;
     var permissions = (await getTreePermissions()).result;
+    var modal = new bootstrap.Modal(document.getElementById('permissionModel'));
+    modal.show();
+    console.log(roleId, permissionIds);
+    if ($.jstree.reference('#permissionTree')) {
+        $('#permissionTree').jstree('destroy').off(); // off để gỡ event cũ
+    }
     $('#permissionTree')
         .on('loaded.jstree', function () {
             permissionIds.forEach(id => {

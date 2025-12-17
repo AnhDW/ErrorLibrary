@@ -28,21 +28,18 @@ namespace ErrorLibrary.Controllers
             return View();
         }
 
-        [HasPermission("Enterprises", "View")]
         public async Task<IActionResult> GetEnterprises()
         {
             var enterprises = await _enterpriseService.GetAll();
             return Json(_mapper.Map<List<EnterpriseDto>>(enterprises.OrderBy(x => x.Factory.Unit.Name).ThenBy(x => x.Factory.Name).ThenBy(x => x.Name)));
         }
 
-        [HasPermission("Enterprises", "View")]
         public async Task<IActionResult> GetEnterprisesByFactoryId(int factoryId)
         {
             var enterprises = await _enterpriseService.GetAllByFactoryId(factoryId);
             return Json(_mapper.Map<List<EnterpriseDto>>(enterprises.OrderBy(x => x.Name)));
         }
 
-        [HasPermission("Enterprises", "View")]
         public async Task<IActionResult> GetEnterpriseById(int id)
         {
             var enterprise = await _enterpriseService.GetById(id);
