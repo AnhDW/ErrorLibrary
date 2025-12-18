@@ -43,6 +43,8 @@ $(document).ready(function () {
         renderTimeFrameTable();
     } else if (path.includes('/RoleLibrary')) {
         renderRoleTable();
+    } else if (path.includes('/ReportLibrary')) {
+        initialInLinePage();
     }
 });
 

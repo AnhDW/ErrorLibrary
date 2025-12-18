@@ -12,7 +12,7 @@ namespace ErrorLibrary.DTOs
         public int AcceptedQuantity { get; set; } = 0;
         public bool IsActive { get; set; } = true;
         public bool IsFinalized { get; set; } = false;
-        //public DateOnly Date { get; set; }
+        public DateOnly Date { get; set; }
         public int TotalErrors { get; set; } = 0;
 
         public LineDto Line { get; set; }

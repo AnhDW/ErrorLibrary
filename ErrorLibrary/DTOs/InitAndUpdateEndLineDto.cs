@@ -10,6 +10,7 @@
         public int AcceptedQuantity { get; set; } = 0;
         public bool IsActive { get; set; }
         public bool IsFinalized { get; set; }
+        public DateOnly Date { get; set; }
 
         public bool FirstLoad { get; set; }
     }

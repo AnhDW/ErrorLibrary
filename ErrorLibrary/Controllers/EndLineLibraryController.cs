@@ -68,7 +68,7 @@ namespace ErrorLibrary.Controllers
         {
             var endLines = await _endLineService.GetAll();
             var existingKeys = _endLineService.BuildExistingEndLineKeySet(endLines);
-            var keyToCheck = _endLineService.CheckNameExistsFast(existingKeys, initAndUpdateEndLineDto.LineId, initAndUpdateEndLineDto.ProductId);
+            var keyToCheck = _endLineService.CheckNameExistsFast(existingKeys, initAndUpdateEndLineDto.LineId, initAndUpdateEndLineDto.ProductId, initAndUpdateEndLineDto.Date);
             EndLine endLine;
             if (keyToCheck)
             {
@@ -108,7 +108,7 @@ namespace ErrorLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEndLine([FromBody] EndLineDto endLineDto)
         {
-            if (await _endLineService.CheckExists(endLineDto.LineId, endLineDto.ProductId))
+            if (await _endLineService.CheckExists(endLineDto.LineId, endLineDto.ProductId, endLineDto.Date))
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Tên đơn vị đã tồn tại";
@@ -139,8 +139,8 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            bool isNameExists = await _endLineService.CheckExists(endLineDto.LineId, endLineDto.ProductId) &&
-                (endLineDto.LineId != endLine.LineId || endLineDto.ProductId != endLine.ProductId);
+            bool isNameExists = await _endLineService.CheckExists(endLineDto.LineId, endLineDto.ProductId, endLineDto.Date) &&
+                (endLineDto.LineId != endLine.LineId || endLineDto.ProductId != endLine.ProductId || endLineDto.Date != endLine.Date);
 
             if (isNameExists)
             {

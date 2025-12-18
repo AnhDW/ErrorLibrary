@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "End line";
+    ViewData["Title"] = "Báo cáo";
 }
 
 <!-- Content wrapper -->
@@ -14,8 +14,8 @@
                     <label for="selectTypeCheck">Loại kiểm</label>
                     <select id="selectTypeCheck" class="form-select">
                         <option selected="">Chọn loại kiểm</option>
-                        <option value="Inline">Inline</option>
-                        <option value="Endline">Endline</option>
+                        <option value="Inline">In line</option>
+                        <option value="Endline">End line</option>
                     </select>
                 </div>
 
@@ -38,7 +38,26 @@
             </div>
         </div>
         <!-- Striped Rows -->
-        <div class="card mt-4">
+        <div class="card mt-4 d-none" id="inLineType">
+            <div style="min-height:200px;" class="table-responsive text-nowrap">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Chuyền</th>
+                            <th>Mã hàng</th>
+                            <th>Người kiểm</th>
+                            <th>Số lượng</th>
+                            <th>Số lượng lỗi</th>
+                            <th>Tỉ lệ lỗi (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportInLineTable" class="table-border-bottom-0">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mt-4 d-none" id="endLineType">
             <div style="min-height:200px;" class="table-responsive text-nowrap">
                 <table class="table table-striped">
                     <thead>
@@ -49,10 +68,9 @@
                             <th>Số lượng kiểm</th>
                             <th>Số lượng lỗi</th>
                             <th>Tỉ lệ lỗi (%)</th>
-                            <th></th>
                         </tr>
                     </thead>
-                    <tbody id="endLineTableBody" class="table-border-bottom-0">
+                    <tbody id="reportEndLineTable" class="table-border-bottom-0">
                     </tbody>
                 </table>
             </div>
@@ -75,10 +93,10 @@
         flex-direction: column;
     }
 
-        .form-item label {
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
+    .form-item label {
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
 
     .toggle-btn {
         width: 100%;
@@ -105,10 +123,8 @@
 </style>
 <!-- Content wrapper -->
 @section Scripts {
-    <script src="~/js/page-handle/end-line-library.js"></script>
-    <script src="~/js/request/end-line-request.js"></script>
-    <script src="~/js/request/organization-request.js"></script>
-    <script src="~/js/request/user-organization-request.js"></script>
+    <script src="~/js/page-handle/report-library.js"></script>
+    <script src="~/js/request/report-request.js"></script>
     <script src="~/js/share/tree-view-select.js"></script>
 }
 

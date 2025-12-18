@@ -49,9 +49,8 @@
 }
 
 async function initialInLinePage() {
-    await initOrganizationTree();
     $('#date').val(new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().substring(0, 10));
-    renderInLineTable();
+    await initOrganizationTree();
 }
 
 document.getElementById("toggleFormBtn").addEventListener("click", function () {
@@ -96,6 +95,5 @@ async function renderInLineTable() {
 }
 
 $('#date').on('change', function () {
-    console.log('date');
     renderInLineTable();
 });

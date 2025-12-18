@@ -105,12 +105,6 @@
                                     <div style="margin-left: 4px;">Lỗi theo mã hàng</div>
                                 </a>
                             </li>
-                            <li class="menu-item @(controllerName == "ReportLibrary" ? "active" : "")">
-                                <a class="menu-link" asp-controller="ReportLibrary" asp-action="Index">
-                                    <i class="menu-icon tf-icons fa-solid fa-circle-exclamation"></i>
-                                    <div style="margin-left: 4px;">Báo cáo</div>
-                                </a>
-                            </li>
                             <li class="menu-item @(controllerName == "InLineDetailLibrary" ? "active" : "")" 
                                 data-permission="InLineDetails.View">
                                 <a class="menu-link" asp-controller="InLineDetailLibrary" asp-action="Index">
@@ -137,6 +131,12 @@
                                 <a class="menu-link" asp-controller="EndLineLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-history"></i>
                                     <div style="margin-left: 4px;">Lịch sử kiểm EndLine</div>
+                                </a>
+                            </li>
+                            <li class="menu-item @(controllerName == "ReportLibrary" ? "active" : "")">
+                                <a class="menu-link" asp-controller="ReportLibrary" asp-action="Index">
+                                    <i class="menu-icon tf-icons fa-solid fa-circle-exclamation"></i>
+                                    <div style="margin-left: 4px;">Báo cáo</div>
                                 </a>
                             </li>
                         </ul>
@@ -363,6 +363,7 @@
     <script src="~/js/share/shared-service.js"></script>
     <script src="~/js/share/auth.js"></script>
     <script src="~/js/share/charts.js"></script>
+    <script src="~/js/share/date.js"></script>
     <script src="~/js/signal-r/toastr-hub.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
     <!-- Page JS -->

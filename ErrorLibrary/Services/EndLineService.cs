@@ -30,19 +30,20 @@ namespace ErrorLibrary.Services
 
         public HashSet<string> BuildExistingEndLineKeySet(List<EndLine> endLines)
         {
-            return endLines.Select(x => $"{x.LineId}|{x.ProductId}").ToHashSet();
+            return endLines.Select(x => $"{x.LineId}|{x.ProductId}|{x.Date}").ToHashSet();
         }
 
-        public async Task<bool> CheckExists(int lineId, int productId)
+        public async Task<bool> CheckExists(int lineId, int productId, DateOnly date)
         {
             return await _context.EndLines.AnyAsync(x =>
                 x.LineId == lineId &&
-                x.ProductId == productId);
+                x.ProductId == productId &&
+                x.Date == date);
         }
 
-        public bool CheckNameExistsFast(HashSet<string> existingKeys, int lineId, int productId)
+        public bool CheckNameExistsFast(HashSet<string> existingKeys, int lineId, int productId, DateOnly date)
         {
-            var key = $"{lineId}|{productId}";
+            var key = $"{lineId}|{productId}|{date}";
             return existingKeys.Contains(key);
         }
 

@@ -49,14 +49,17 @@
 }
 
 async function initialEndLinePage() {
+    $('#date').val(new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().substring(0, 10));
     await initOrganizationTree();
-    //$('#date').val(new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().substring(0, 10));
 }
 
 async function renderEndLineTable() {
     var lineId = $('#selectedOrganizationNode').val().replace('line_', '');
+    var date = $('#date').val();
     var endLines = (await getEndLines()).result;
-    endLines = endLines.filter(x => x.lineId == lineId);
+    console.log(date)
+    console.log(endLines)
+    endLines = endLines.filter(x => x.date === date && x.lineId == lineId);
     var html = '';
     endLines.forEach((item) => {
         html += `
@@ -77,3 +80,7 @@ async function renderEndLineTable() {
 
     $('#endLineTableBody').html(html);
 }
+
+$('#date').on('change', function () {
+    renderEndLineTable();
+});

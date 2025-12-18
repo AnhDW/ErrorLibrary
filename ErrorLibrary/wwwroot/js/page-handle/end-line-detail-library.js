@@ -3,6 +3,7 @@
     lineId: 0, productId: 0,
     acceptedQuantity: 0,
     checkQuantity: 0,
+    date: new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().substring(0, 10),
     isActive: true,
     isFinalized: false
 };
@@ -27,6 +28,7 @@ async function initialEndLineDetailPage() {
     var html = renderSelectOptionsByField(products, 'Chọn sản phẩm', 'id', 'code', 'productCategoryId');
     $('#selectProductCode').html(html);
     checkParams();
+    $('#date').val(endLine.date);
     initOrganizationTree();
 }
 
@@ -214,19 +216,21 @@ function checkAndInitEndLine() {
     var productId = $('#selectProductCode').val();
     var orderQuantity = $('#orderQuantity').val();
     var checkQuantity = $('#checkQuantity').val();
+    var date = $('#date').val();
+
     var isActive = endLine.isActive;
     var isFinalized = endLine.isFinalized;
     var acceptedQuantity = endLine.acceptedQuantity;
-    if (!lineId || !productId) {
+    if (!lineId || !productId || !date) {
         return;
     }
 
-    if (lineId != endLine.lineId || productId != endLine.productId) {
+    if (lineId != endLine.lineId || productId != endLine.productId || date != endLine.date) {
         firstLoadEndLine = true;
     }
 
     var endLineDto = {
-        lineId, productId, orderQuantity, checkQuantity, acceptedQuantity, firstLoad: firstLoadEndLine, isActive, isFinalized
+        lineId, productId, date, orderQuantity, checkQuantity, acceptedQuantity, firstLoad: firstLoadEndLine, isActive, isFinalized
     }
 
     $('#formWrapper').removeClass('shake border border-2 border-danger p-2 rounded');
@@ -277,7 +281,7 @@ function setBtnStatus() {
     }
 }
 
-$('#selectProductCode, #orderQuantity, #checkQuantity').on('change keyup', function () {
+$('#selectProductCode, #orderQuantity, #checkQuantity, #date').on('change keyup', function () {
     checkAndInitEndLine();
 });
 
