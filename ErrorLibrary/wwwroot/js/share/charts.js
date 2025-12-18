@@ -1,11 +1,25 @@
-﻿function renderTopErrorChart() {
+﻿function truncate(text, max = 15) {
+    return text.length > max ? text.substring(0, max) + "…" : text;
+}
+let topErrorChart = null;
+function renderTopErrorChart(series = [1], labels = [""]) {
+    const el = document.querySelector("#topErrorChart");
+    if (topErrorChart) {
+        topErrorChart.destroy();
+    }
+    const shortLabels = labels.map(l => truncate(l, 15));
     var options = {
-        series: [25, 30, 45],
+        series: series,
         chart: {
             width: 380,
             type: 'pie',
         },
-        labels: ['Lỗi 1', 'Lỗi 2', 'Lỗi 3'],
+        labels: shortLabels,
+        tooltip: {
+            custom: function ({ series, seriesIndex, w }) {
+                return `<div class="text-gray p-1">${labels[seriesIndex]}</div>`;
+            }
+        },
         responsive: [{
             breakpoint: 480,
             options: {
@@ -19,8 +33,8 @@
         }]
     };
 
-    var chart = new ApexCharts(document.querySelector("#topErrorChart"), options);
-    chart.render();
+    topErrorChart = new ApexCharts(el, options);
+    topErrorChart.render();
 }
 
 function renderErrorCharetoChart() {

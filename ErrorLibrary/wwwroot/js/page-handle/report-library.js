@@ -21,7 +21,7 @@ async function renderReportInLineTable() {
                 <td>${item.user.fullName}</td>
                 <td>${item.quantity}</td>
                 <td>${item.totalErrors}</td>
-                <td>${item.quantity == 0 ? "" : (item.totalErrors / item.quantity * 100) + "%"}</td>
+                <td>${item.quantity == 0 ? "" : (item.totalErrors / item.quantity * 100).toFixed(2) + "%"}</td>
             </tr>
         `
     })
@@ -45,12 +45,34 @@ async function renderReportEndLineTable() {
                 <td>${item.orderQuantity}</td>
                 <td>${item.checkQuantity}</td>
                 <td>${item.totalErrors}</td>
-                <td>${item.checkQuantity == 0 ? "" : (item.totalErrors / item.checkQuantity * 100) + "%"}</td>
+                <td>${item.checkQuantity == 0 ? "" : (item.totalErrors / item.checkQuantity * 100).toFixed(2) + "%"}</td>
             </tr>
         `
     })
 
     $('#reportEndLineTable').html(html);
+}
+
+async function topInLineErrorChart() {
+    var fromDate = $('#fromDate').val();
+    var toDate = $('#toDate').val();
+    var reportInLineParams = {
+        startDate: fromDate, endDate: toDate
+    }
+    var topInLineErrors = (await inLineErrorChart(reportInLineParams)).result;
+    console.log(topInLineErrors);
+    renderTopErrorChart(topInLineErrors.errorQuantitiesPercent, topInLineErrors.errorNames);
+}
+
+async function topEndLineErrorChart() {
+    var fromDate = $('#fromDate').val();
+    var toDate = $('#toDate').val();
+    var reportEndLineParams = {
+        startDate: fromDate, endDate: toDate
+    }
+    var topEndLineErrors = (await endLineErrorChart(reportEndLineParams)).result;
+    console.log(topEndLineErrors);
+    renderTopErrorChart(topEndLineErrors.errorQuantitiesPercent, topEndLineErrors.errorNames);
 }
 
 $('#fromDate, #toDate, #selectTypeCheck').on('change', function () {
@@ -59,10 +81,12 @@ $('#fromDate, #toDate, #selectTypeCheck').on('change', function () {
         $('#inLineType').removeClass('d-none');
         $('#endLineType').addClass('d-none');
         renderReportInLineTable();
+        topInLineErrorChart();
     } else if (type === 'Endline') {
         $('#endLineType').removeClass('d-none');
         $('#inLineType').addClass('d-none');
         renderReportEndLineTable();
+        topEndLineErrorChart();
     }
 
     return;
