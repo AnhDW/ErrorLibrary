@@ -107,15 +107,73 @@ namespace ErrorLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> InLineErrorChart([FromBody] ReportInLineParams reportInLineParams)
         {
+            var errors = await _errorService.GetAll();
+            var inLines = await _inLineService.GetAll();
             var inLineDetails = await _inLineDetailService.GetAll();
+            if (reportInLineParams.StartDate.HasValue)
+            {
+                inLines = inLines.Where(i => i.Date >= reportInLineParams.StartDate.Value).ToList();
+            }
+            if (reportInLineParams.EndDate.HasValue)
+            {
+                inLines = inLines.Where(i => i.Date <= reportInLineParams.EndDate.Value).ToList();
+            }
+            inLineDetails = inLineDetails.Where(d => inLines.Any(i => i.Id == d.InLineId)).ToList();
+            var quantityErrors = inLineDetails
+                .GroupBy(d => d.ErrorId)
+                .Select(g => new
+                {
+                    ErrorId = g.Key,
+                    TotalQuantity = g.Sum(d => d.Quantity)
+                })
+                .OrderByDescending(q => q.TotalQuantity).Take(3)
+                .ToList();
+            var errorIds = quantityErrors.Select(q => q.ErrorId).ToList();
+            var errorNames = errors.Where(e => errorIds.Contains(e.Id)).Select(e => e.Name).ToList();
+            var totalQuantitys = quantityErrors.Select(q => q.TotalQuantity);
+            
+            _responseDto.Result = new
+            {
+                ErrorNames = errorNames,
+                TotalQuantitys = totalQuantitys
+            };
 
-            throw new NotImplementedException();
+            return Json(_responseDto);
         }
 
         [HttpPost]
-        public Task<IActionResult> EndLineErrorChart([FromBody] ReportEndLineParams reportEndLineParams)
+        public async Task<IActionResult> EndLineErrorChart([FromBody] ReportEndLineParams reportEndLineParams)
         {
-            throw new NotImplementedException();
+            var errors = await _errorService.GetAll();
+            var endLines = await _endLineService.GetAll();
+            var endLineDetails = await _endLineDetailService.GetAll();
+            if (reportEndLineParams.StartDate.HasValue)
+            {
+                endLines = endLines.Where(i => i.Date >= reportEndLineParams.StartDate.Value).ToList();
+            }
+            if (reportEndLineParams.EndDate.HasValue)
+            {
+                endLines = endLines.Where(i => i.Date <= reportEndLineParams.EndDate.Value).ToList();
+            }
+            endLineDetails = endLineDetails.Where(d => endLines.Any(i => i.Id == d.EndLineId)).ToList();
+            var quantityErrors = endLineDetails
+                .GroupBy(d => d.ErrorId)
+                .Select(g => new
+                {
+                    ErrorId = g.Key,
+                    TotalQuantity = g.Count()
+                })
+                .OrderByDescending(q => q.TotalQuantity).Take(3)
+                .ToList();
+            var errorIds = quantityErrors.Select(q => q.ErrorId).ToList();
+            var errorNames = errors.Where(e => errorIds.Contains(e.Id)).Select(e => e.Name).ToList();
+            var totalQuantitys = quantityErrors.Select(q => q.TotalQuantity);
+            _responseDto.Result = new
+            {
+                ErrorNames = errorNames,
+                TotalQuantitys = totalQuantitys
+            };
+            return Json(_responseDto);
         }
     }
 }

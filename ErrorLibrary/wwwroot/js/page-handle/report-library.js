@@ -68,7 +68,6 @@ $('#fromDate, #toDate, #selectTypeCheck').on('change', function () {
     return;
 });
 
-
 $("#toggleFormBtn").on("click", function () {
     const wrapper = document.getElementById("formWrapper");
     const icon = document.getElementById("toggleIcon");
