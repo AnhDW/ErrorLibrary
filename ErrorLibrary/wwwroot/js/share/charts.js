@@ -3,6 +3,10 @@
 }
 let topErrorChart = null;
 function renderTopErrorChart(series = [1], labels = [""]) {
+    var total = series.reduce((acc, cur) => acc + cur, 0);
+    if (total == 0) {
+        series = [1]
+    }
     const el = document.querySelector("#topErrorChart");
     if (topErrorChart) {
         topErrorChart.destroy();
@@ -37,16 +41,22 @@ function renderTopErrorChart(series = [1], labels = [""]) {
     topErrorChart.render();
 }
 
-function renderErrorCharetoChart() {
+function renderErrorCharetoChart(data = [170, 160, 100, 70, 60]) {
+    var totalError = data.reduce((acc, cur) => acc + cur, 0);
+    const cumulativeError = data.reduce((acc, cur) => {
+        acc.push((acc.at(-1) ?? 0) + cur);
+        return acc;
+    }, []);
+    var cumulativePercentage = cumulativeError.map(x => +((x / totalError) * 100).toFixed(2));
     var options = {
         series: [{
             name: 'Số lỗi',
             type: 'column',
-            data: [170, 160, 100, 70, 60]
+            data: data
         }, {
             name: '% cộng dồn',
             type: 'line',
-            data: [30.91, 60.00, 78.18, 90.91, 100]
+            data: cumulativePercentage
         }],
         chart: {
             width: 500,

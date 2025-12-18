@@ -61,7 +61,7 @@ async function topInLineErrorChart() {
     }
     var topInLineErrors = (await inLineErrorChart(reportInLineParams)).result;
     console.log(topInLineErrors);
-    renderTopErrorChart(topInLineErrors.errorQuantitiesPercent, topInLineErrors.errorNames);
+    renderTopErrorChart(topInLineErrors.errorQuantities, topInLineErrors.errorNames);
 }
 
 async function topEndLineErrorChart() {
@@ -72,7 +72,7 @@ async function topEndLineErrorChart() {
     }
     var topEndLineErrors = (await endLineErrorChart(reportEndLineParams)).result;
     console.log(topEndLineErrors);
-    renderTopErrorChart(topEndLineErrors.errorQuantitiesPercent, topEndLineErrors.errorNames);
+    renderTopErrorChart(topEndLineErrors.errorQuantities, topEndLineErrors.errorNames);
 }
 
 $('#fromDate, #toDate, #selectTypeCheck').on('change', function () {

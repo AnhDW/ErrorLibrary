@@ -19,7 +19,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
 {
-    options.UseMySql(builder.Configuration.GetConnectionString("STConnect"),
+    options.UseMySql(builder.Configuration.GetConnectionString("BTConnect"),
         new MySqlServerVersion(new Version(8, 0, 36)));
 });
 

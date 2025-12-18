@@ -5,6 +5,7 @@ using ErrorLibrary.Helper.EntityParams;
 using ErrorLibrary.Services;
 using ErrorLibrary.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace ErrorLibrary.Controllers
 {
@@ -126,21 +127,18 @@ namespace ErrorLibrary.Controllers
                     ErrorId = g.Key,
                     ErrorQuantity = g.Sum(d => d.Quantity)
                 })
-                .OrderByDescending(q => q.ErrorQuantity).Take(3)
+                .OrderByDescending(q => q.ErrorQuantity).Take(reportInLineParams.RowTake ?? 3)
                 .ToList();
-            var totalErrorQuantities = quantityErrors.Sum(x => x.ErrorQuantity);
             var errorIds = quantityErrors.Select(q => q.ErrorId).ToList();
             var errorNames = errors.Where(e => errorIds.Contains(e.Id)).Select(e => e.Name).ToList();
             var errorCodes = errors.Where(e => errorIds.Contains(e.Id)).Select(e => e.Code).ToList();
             var errorQuantities = quantityErrors.Select(q => q.ErrorQuantity);
-            var errorQuantitiesPercent = errorQuantities.Select(x => Math.Round((decimal)x / totalErrorQuantities * 100, 2));
 
             _responseDto.Result = new
             {
                 ErrorNames = errorNames,
                 ErrorCodes = errorCodes,
                 ErrorQuantities = errorQuantities,
-                ErrorQuantitiesPercent = errorQuantitiesPercent
             };
 
             return Json(_responseDto);
@@ -168,21 +166,18 @@ namespace ErrorLibrary.Controllers
                     ErrorId = g.Key,
                     ErrorQuantity = g.Count()
                 })
-                .OrderByDescending(q => q.ErrorQuantity).Take(3)
+                .OrderByDescending(q => q.ErrorQuantity).Take(reportEndLineParams.RowTake ?? 3)
                 .ToList();
-            var totalErrorQuantities = quantityErrors.Sum(x => x.ErrorQuantity);
             var errorIds = quantityErrors.Select(q => q.ErrorId).ToList();
             var errorNames = errors.Where(e => errorIds.Contains(e.Id)).Select(e => e.Name).ToList();
             var errorCodes = errors.Where(e => errorIds.Contains(e.Id)).Select(e => e.Code).ToList();
             var errorQuantities = quantityErrors.Select(q => q.ErrorQuantity);
-            var errorQuantitiesPercent = errorQuantities.Select(x => Math.Round((decimal)x / totalErrorQuantities * 100, 2));
             
             _responseDto.Result = new
             {
                 ErrorNames = errorNames,
                 ErrorCodes = errorCodes,
                 ErrorQuantities = errorQuantities,
-                ErrorQuantitiesPercent = errorQuantitiesPercent
             };
 
             return Json(_responseDto);
