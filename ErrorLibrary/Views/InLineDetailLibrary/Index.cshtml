@@ -24,7 +24,10 @@
                     </div>
                     <input type="hidden" id="selectedOrganizationNode" name="Organization" />
                 </div>
-
+                <div class="form-item">
+                    <label>Chuyền</label>
+                    <div class="d-flex align-items-center" id="lineDropdown"></div>
+                </div>
                 <div class="form-item">
                     <label for="selectProductCode">Mã hàng</label>
                     <select id="selectProductCode" class="form-select">
@@ -118,10 +121,26 @@
                                     <label for="quantityInLine" class="form-label">Số lượng</label>
                                     <div class="input-group">
                                         <button class="btn btn-outline-primary fs-5" type="button" id="addBtnDecreases">-</button>
-                                        <input id="quantityInLine" type="number" class="form-control" value="0" min="0">
+                                        <input id="quantityInLine" type="number" class="form-control" value="1" min="0">
                                         <button class="btn btn-outline-primary fs-5" type="button" id="addBtnIncreases">+</button>
                                     </div>
                                 </div>
+                                @* <div class="mb-2">
+                                    <label for="browser" class="form-label">Số lượng</label>
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown" style="width:100%;">
+                                            <input type="text" class="form-control dropdown-toggle" data-bs-toggle="dropdown" placeholder="Chọn..." readonly style="cursor:pointer;" />
+
+                                            <ul class="dropdown-menu p-2" style="width:100%;">
+                                                <input type="text" class="form-control mb-2" placeholder="Tìm kiếm..." id="idHeader" />
+                                                <li class="dropdown-item" data-value="1">Option 1</li>
+                                                <li class="dropdown-item" data-value="2">Option 2</li>
+                                                <li class="dropdown-item" data-value="3">Option 3</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div> *@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -284,6 +303,27 @@
     <script src="~/js/request/error-group-request.js"></script>
     <script src="~/js/request/error-request.js"></script>
     <script src="~/js/request/user-request.js"></script>
+    <script src="~/js/request/line-request.js"></script>
     <script src="~/js/share/shared-service.js"></script>
     <script src="~/js/share/tree-view-select.js"></script>
 }
+
+@* <script>
+    document.querySelectorAll('.dropdown-menu .dropdown-item').forEach(item => {
+        item.addEventListener('click', function () {
+            const dropdown = this.closest('.dropdown');
+            const input = dropdown.querySelector('input.dropdown-toggle');
+
+            // set text
+            input.value = this.innerText;
+
+            // lưu value (giống select.value)
+            input.dataset.value = this.dataset.value;
+
+            // đóng dropdown
+            bootstrap.Dropdown.getInstance(input).hide();
+        });
+    });
+
+
+</script> *@

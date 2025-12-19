@@ -56,26 +56,30 @@ async function renderReportEndLineTable() {
 async function topInLineErrorChart() {
     var fromDate = $('#fromDate').val();
     var toDate = $('#toDate').val();
+    var rowTake = $('#quantityTopErrors').val();
     var reportInLineParams = {
-        startDate: fromDate, endDate: toDate
+        startDate: fromDate, endDate: toDate, rowTake: rowTake
     }
     var topInLineErrors = (await inLineErrorChart(reportInLineParams)).result;
     console.log(topInLineErrors);
     renderTopErrorChart(topInLineErrors.errorQuantities, topInLineErrors.errorNames);
+    renderErrorParetoChart(topInLineErrors.errorQuantities, topInLineErrors.errorNames);
 }
 
 async function topEndLineErrorChart() {
     var fromDate = $('#fromDate').val();
     var toDate = $('#toDate').val();
+    var rowTake = $('#quantityTopErrors').val();
     var reportEndLineParams = {
-        startDate: fromDate, endDate: toDate
+        startDate: fromDate, endDate: toDate, rowTake: rowTake
     }
     var topEndLineErrors = (await endLineErrorChart(reportEndLineParams)).result;
     console.log(topEndLineErrors);
     renderTopErrorChart(topEndLineErrors.errorQuantities, topEndLineErrors.errorNames);
+    renderErrorParetoChart(topEndLineErrors.errorQuantities, topEndLineErrors.errorNames);
 }
 
-$('#fromDate, #toDate, #selectTypeCheck').on('change', function () {
+$('#fromDate, #toDate, #selectTypeCheck, #quantityTopErrors').on('change keyup', function () {
     var type = $('#selectTypeCheck').val();
     if (type === 'Inline') {
         $('#inLineType').removeClass('d-none');
@@ -88,8 +92,6 @@ $('#fromDate, #toDate, #selectTypeCheck').on('change', function () {
         renderReportEndLineTable();
         topEndLineErrorChart();
     }
-
-    return;
 });
 
 $("#toggleFormBtn").on("click", function () {

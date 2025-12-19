@@ -78,8 +78,15 @@ async function initialInLineDetailPage() {
     await Promise.all([
         initOrganizationTree(),
         renderTimeFrameCard(),
-        renderInLineDetailTable()
+        renderInLineDetailTable(),
+        renderLineDropdown()
     ]);
+}
+
+async function renderLineDropdown() {
+    var lines = (await getLines()).result;
+    console.log(renderSelectDropdown(lines));
+    $('#lineDropdown').html(renderSelectDropdown(lines));
 }
 
 async function renderTimeFrameCard() {

@@ -95,7 +95,7 @@ function handleEditLine() {
 function renderLinesTable() {
     getLines().then(function (data) {
         let html = '';
-        data.forEach(item => {
+        data.result.forEach(item => {
             html += `
                 <tr>
                     <td>${item.enterprise.factory.unit.name}</td>

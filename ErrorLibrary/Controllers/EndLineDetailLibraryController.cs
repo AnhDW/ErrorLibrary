@@ -73,7 +73,7 @@ namespace ErrorLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEndLineDetail([FromBody] EndLineDetailDto endLineDetailDto)
         {
-            if (await _endLineDetailService.CheckExists(endLineDetailDto.EndLineId, endLineDetailDto.ErrorId, endLineDetailDto.UserId))
+            if (await _endLineDetailService.CheckExists(endLineDetailDto.EndLineId, endLineDetailDto.ErrorId, endLineDetailDto.UserId, endLineDetailDto.CreatedAt))
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Đã tồn tại";
@@ -104,8 +104,11 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            bool isNameExists = await _endLineDetailService.CheckExists(endLineDetailDto.EndLineId, endLineDetailDto.ErrorId, endLineDetailDto.UserId) && 
-                (endLineDetailDto.EndLineId != endLineDetail.EndLineId || endLineDetailDto.ErrorId != endLineDetail.ErrorId || endLineDetailDto.UserId != endLineDetail.UserId);
+            bool isNameExists = await _endLineDetailService.CheckExists(endLineDetailDto.EndLineId, endLineDetailDto.ErrorId, endLineDetailDto.UserId, endLineDetailDto.CreatedAt) &&
+                (endLineDetailDto.EndLineId != endLineDetail.EndLineId ||
+                endLineDetailDto.ErrorId != endLineDetail.ErrorId ||
+                endLineDetailDto.UserId != endLineDetail.UserId ||
+                endLineDetailDto.CreatedAt != endLineDetail.CreatedAt);
 
             if (isNameExists)
             {

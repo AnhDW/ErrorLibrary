@@ -32,24 +32,28 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetLines()
         {
             var lines = await _lineService.GetAll();
-            return Json(_mapper.Map<List<LineDto>>(lines
-                .OrderBy(x=>x.Enterprise.Factory.Unit.Name)
-                .ThenBy(x=>x.Enterprise.Factory.Name)
-                .ThenBy(x=>x.Enterprise.Name)
-                .ThenBy(x=>x.Name)
-                ));
+            _responseDto.Result = _mapper.Map<List<LineDto>>(lines
+                .OrderBy(x => x.Enterprise.Factory.Unit.Name)
+                .ThenBy(x => x.Enterprise.Factory.Name)
+                .ThenBy(x => x.Enterprise.Name)
+                .ThenBy(x => x.Name)
+                );
+
+            return Json(_responseDto);
         }
 
         public async Task<IActionResult> GetLinesByEnterpriseId(int enterpriseId)
         {
             var lines = await _lineService.GetAllByEnterpriseId(enterpriseId);
-            return Json(_mapper.Map<List<LineDto>>(lines.OrderBy(x=>x.Name)));
+            _responseDto.Result = _mapper.Map<List<LineDto>>(lines.OrderBy(x => x.Name));
+            return Json(_responseDto);
         }
 
         public async Task<IActionResult> GetLineById(int id)
         {
             var line = await _lineService.GetById(id);
-            return Json(_mapper.Map<LineDto>(line));
+            _responseDto.Result = _mapper.Map<LineDto>(line);
+            return Json(_responseDto);
         }
 
         [HasPermission("Lines", "Create")]

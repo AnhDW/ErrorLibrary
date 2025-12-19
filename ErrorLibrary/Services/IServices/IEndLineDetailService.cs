@@ -14,9 +14,9 @@ namespace ErrorLibrary.Services.IServices
         void Update(EndLineDetail endLineDetail);
         void Delete(EndLineDetail endLineDetail);
 
-        Task<bool> CheckExists(int endLineId, int errorId, string userId);
+        Task<bool> CheckExists(int endLineId, int errorId, string userId, DateTime createAt);
 
         HashSet<string> BuildExistingEndLineDetailKeySet(List<EndLineDetail> endLineDetails);
-        bool CheckExists(HashSet<string> existingKeys, int endLineId, int errorId, string userId);
+        bool CheckExists(HashSet<string> existingKeys, int endLineId, int errorId, string userId, DateTime createAt);
     }
 }

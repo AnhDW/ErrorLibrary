@@ -34,6 +34,20 @@
             <i class="fas fa-angle-double-up"></i>
         </button>
         <div class="card mt-4">
+            <div class="d-flex flex-wrap justify-content-between p-2">
+                <div>
+                </div>
+                <div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text fw-bold" id="inputGroup-sizing-sm" style="border:none;">Top</span>
+                        <input id="quantityTopErrors" type="number" class="form-control rounded" style="max-width:60px;" value="3">
+                        <span class="input-group-text fw-bold" id="inputGroup-sizing-sm" style="border:none;">lỗi cao nhất</span>
+                    </div>
+                </div>
+                <div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
                     <div id="topErrorChart">
@@ -51,12 +65,12 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Chuyền</th>
-                            <th>Mã hàng</th>
-                            <th>Người kiểm</th>
-                            <th>Số lượng</th>
-                            <th>Số lượng lỗi</th>
-                            <th>Tỉ lệ lỗi (%)</th>
+                            <th id="lineHeader">Chuyền</th>
+                            <th id="productHeader">Mã hàng</th>
+                            <th id="userHeader">Người kiểm</th>
+                            <th id="quantityHeader">Số lượng</th>
+                            <th id="quantityErrorHeader">Số lượng lỗi</th>
+                            <th id="errorPercentHeader">Tỉ lệ lỗi (%)</th>
                         </tr>
                     </thead>
                     <tbody id="reportInLineTable" class="table-border-bottom-0">
@@ -101,10 +115,10 @@
         flex-direction: column;
     }
 
-        .form-item label {
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
+    .form-item label {
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
 
     .toggle-btn {
         width: 100%;
@@ -119,14 +133,14 @@
         transition: background 0.2s ease;
     }
 
-        .toggle-btn:hover {
-            background: #e0e0e0;
-        }
+    .toggle-btn:hover {
+        background: #e0e0e0;
+    }
 
-        .toggle-btn span {
-            font-size: 18px;
-            transition: transform 0.2s ease;
-        }
+    .toggle-btn span {
+        font-size: 18px;
+        transition: transform 0.2s ease;
+    }
 
 </style>
 <!-- Content wrapper -->

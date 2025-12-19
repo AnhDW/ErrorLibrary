@@ -30,20 +30,21 @@ namespace ErrorLibrary.Services
 
         public HashSet<string> BuildExistingEndLineDetailKeySet(List<EndLineDetail> endLineDetails)
         {
-            return endLineDetails.Select(x => $"{x.EndLineId}|{x.ErrorId}|{x.UserId}").ToHashSet();
+            return endLineDetails.Select(x => $"{x.EndLineId}|{x.ErrorId}|{x.UserId}|{x.CreatedAt}").ToHashSet();
         }
 
-        public async Task<bool> CheckExists(int endLineId, int errorId, string userId)
+        public async Task<bool> CheckExists(int endLineId, int errorId, string userId, DateTime createAt)
         {
             return await _context.EndLineDetails.AnyAsync(x =>
                 x.EndLineId == endLineId &&
                 x.ErrorId == errorId &&
-                x.UserId == userId);
+                x.UserId == userId &&
+                x.CreatedAt == createAt);
         }
 
-        public bool CheckExists(HashSet<string> existingKeys, int endLineId, int errorId, string userId)
+        public bool CheckExists(HashSet<string> existingKeys, int endLineId, int errorId, string userId, DateTime createAt)
         {
-            var key = $"{endLineId}|{errorId}|{userId}";
+            var key = $"{endLineId}|{errorId}|{userId}|{createAt}";
             return existingKeys.Contains(key);
         }
 

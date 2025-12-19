@@ -48,6 +48,60 @@ function renderFilterByField(data, header = 'header', idHeader = 'searchErrorGro
     return html;
 }
 
+function renderSelectDropdown(data, valueField = 'id', labelField = 'name') {
+    return `
+        <div class="dropdown select-dropdown bg-white" style="width:100%;">
+            <input type="text"
+                   class="form-control dropdown-toggle select-input"
+                   data-bs-toggle="dropdown"
+                   placeholder="Chọn..."
+                   readonly />
+
+            <ul class="dropdown-menu p-2 w-100">
+                <input type="text"
+                       class="form-control mb-2 select-search"
+                       placeholder="Tìm kiếm..." />
+
+                ${data.map(item => `
+                    <li class="dropdown-item"
+                        data-value="${item[valueField]}">
+                        ${item[labelField]}
+                    </li>
+                `).join('')}
+            </ul>
+        </div>
+    `;
+}
+
+
+document.addEventListener('click', function (e) {
+
+    // chọn item
+    if (e.target.classList.contains('dropdown-item')) {
+        const dropdown = e.target.closest('.select-dropdown');
+        if (!dropdown) return;
+
+        const input = dropdown.querySelector('.select-input');
+
+        input.value = e.target.innerText;
+        input.dataset.value = e.target.dataset.value;
+
+        bootstrap.Dropdown.getInstance(input)?.hide();
+    }
+});
+
+document.addEventListener('input', function (e) {
+    if (!e.target.classList.contains('select-search')) return;
+
+    const keyword = e.target.value.toLowerCase();
+    const dropdown = e.target.closest('.dropdown-menu');
+
+    dropdown.querySelectorAll('.dropdown-item').forEach(item => {
+        item.style.display = item.innerText.toLowerCase().includes(keyword)
+            ? ''
+            : 'none';
+    });
+});
 
 
 

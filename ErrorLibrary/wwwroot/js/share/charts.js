@@ -2,10 +2,11 @@
     return text.length > max ? text.substring(0, max) + "…" : text;
 }
 let topErrorChart = null;
+let errorParetoChart = null;
 function renderTopErrorChart(series = [1], labels = [""]) {
     var total = series.reduce((acc, cur) => acc + cur, 0);
     if (total == 0) {
-        series = [1]
+        series = [1];
     }
     const el = document.querySelector("#topErrorChart");
     if (topErrorChart) {
@@ -28,7 +29,7 @@ function renderTopErrorChart(series = [1], labels = [""]) {
             breakpoint: 480,
             options: {
                 chart: {
-                    width: 200
+                    //width: 200
                 },
                 legend: {
                     position: 'bottom'
@@ -41,20 +42,26 @@ function renderTopErrorChart(series = [1], labels = [""]) {
     topErrorChart.render();
 }
 
-function renderErrorCharetoChart(data = [170, 160, 100, 70, 60]) {
-    var totalError = data.reduce((acc, cur) => acc + cur, 0);
+function renderErrorParetoChart(data = [], labels = []) {
+    var totalErrors = data.reduce((acc, cur) => acc + cur, 0);
+
     const cumulativeError = data.reduce((acc, cur) => {
         acc.push((acc.at(-1) ?? 0) + cur);
         return acc;
     }, []);
-    var cumulativePercentage = cumulativeError.map(x => +((x / totalError) * 100).toFixed(2));
+    var cumulativePercentage = cumulativeError.map(x => +((x / totalErrors) * 100).toFixed(2));
+    const el = document.querySelector("#errorParetoChart");
+    if (errorParetoChart) {
+        errorParetoChart.destroy();
+    }
+    const shortLabels = labels.map(l => truncate(l, 15));
     var options = {
         series: [{
-            name: 'Số lỗi',
+            name: 'Số lượng lỗi',
             type: 'column',
             data: data
         }, {
-            name: '% cộng dồn',
+            name: '% tích lũy',
             type: 'line',
             data: cumulativePercentage
         }],
@@ -72,10 +79,10 @@ function renderErrorCharetoChart(data = [170, 160, 100, 70, 60]) {
             enabled: true,
             enabledOnSeries: [1]
         },
-        labels: ['Hỏng máy', 'Lỗi sản phẩm', 'Thiếu nguyên liệu', 'Chậm giao hàng', 'Lỗi quy trình'],
+        labels: shortLabels,
         yaxis: [{
             title: {
-                text: 'Số lỗi',
+                text: 'Số lượng lỗi',
                 style: {
                     fontFamily: "var(--bs-body-font-family)",
                 },
@@ -83,7 +90,7 @@ function renderErrorCharetoChart(data = [170, 160, 100, 70, 60]) {
         }, {
             opposite: true,
             title: {
-                text: '% cộng dồn',
+                text: '% tích lũy',
                 style: {
                     fontFamily: "var(--bs-body-font-family)",
                 },
@@ -93,7 +100,7 @@ function renderErrorCharetoChart(data = [170, 160, 100, 70, 60]) {
             breakpoint: 480,
             options: {
                 chart: {
-                    width: 300
+                    //width: 300
                 },
                 legend: {
                     position: 'bottom'
@@ -102,9 +109,9 @@ function renderErrorCharetoChart(data = [170, 160, 100, 70, 60]) {
         }]
     };
 
-    var chart = new ApexCharts(document.querySelector("#errorParetoChart"), options);
-    chart.render();
+    errorParetoChart = new ApexCharts(el, options);
+    errorParetoChart.render();
 }
 
 renderTopErrorChart();
-renderErrorCharetoChart();
+renderErrorParetoChart();

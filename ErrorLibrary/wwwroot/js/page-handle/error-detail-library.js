@@ -28,7 +28,7 @@ async function handleSelectFactory(value, action) {
 }
 
 async function handleSelectEnterprise(value, action) {
-    const lineByEnterprise = await getLinesByEnterpriseId(value);
+    const lineByEnterprise = (await getLinesByEnterpriseId(value)).result;
     const html = renderSelectOptions(lineByEnterprise, 'Chọn chuyền');
 
     if (action === 'add') {
@@ -73,7 +73,7 @@ async function editShowErrorDetailModalHandle(errorDetail) {
     const units = (await getUnits()).result;
     const factories = await getFactories();
     const enterprises = await getEnterprises();
-    const lines = await getLines();
+    const lines = (await getLines()).result;
     const errors = (await getErrors()).result;
     const products = (await getProducts()).result;
     const unitHtml = renderSelectOptionsByField(units, 'Chọn đơn vị', 'id', 'name');
