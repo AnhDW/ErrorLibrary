@@ -50,22 +50,29 @@ function renderFilterByField(data, header = 'header', idHeader = 'searchErrorGro
 
 function renderSelectDropdown(data, valueField = 'id', labelField = 'name') {
     return `
-        <div class="dropdown select-dropdown bg-white" style="width:100%;">
+        <div class="dropdown select-dropdown w-100">
             <input type="text"
-                   class="form-control dropdown-toggle select-input"
+                   class="form-control bg-white dropdown-toggle select-input"
                    data-bs-toggle="dropdown"
                    placeholder="Chọn..."
                    readonly />
 
-            <ul class="dropdown-menu p-2 w-100">
+            <ul class="dropdown-menu p-2">
                 <input type="text"
                        class="form-control mb-2 select-search"
                        placeholder="Tìm kiếm..." />
 
                 ${data.map(item => `
                     <li class="dropdown-item"
-                        data-value="${item[valueField]}">
-                        ${item[labelField]}
+                        data-value="${item[valueField]}" data-label="${item[labelField]}">
+                        <div class="d-flex flex-column">
+                            <div class="d-flex flex-row  align-items-center">
+                                <small class="form-text text-muted m-0 text-info">${item.unitName}</small><i class="fas fa-caret-right"></i>
+                                <small class="form-text text-muted m-0">${item.factoryName}</small><i class="fas fa-caret-right"></i>
+                                <small class="form-text text-muted m-0">${item.enterpriseName}</small>
+                            </div>
+                            ${item[labelField]}
+                        </div>
                     </li>
                 `).join('')}
             </ul>
@@ -73,22 +80,63 @@ function renderSelectDropdown(data, valueField = 'id', labelField = 'name') {
     `;
 }
 
+function setSelectDropdownValue(container, value, triggerChange = true) {
+    const dropdown = typeof container === 'string'
+        ? document.querySelector(container)
+        : container;
+
+    if (!dropdown) return;
+
+    const input = dropdown.querySelector('.select-input');
+    const item = dropdown.querySelector(`.dropdown-item[data-value="${value}"]`);
+
+    if (!input || !item) return;
+
+    const oldValue = input.getAttribute('data-value');
+
+    input.value = item.getAttribute('data-label');
+    input.setAttribute('data-value', value);
+
+    if (triggerChange && oldValue !== value) {
+        $(input).trigger('change');
+    }
+}
+
+function selectFirstItem(container, triggerChange = true) {
+    const dropdown = typeof container === 'string'
+        ? document.querySelector(container)
+        : container;
+
+    if (!dropdown) return;
+
+    const firstItem = dropdown.querySelector('.dropdown-item');
+    if (!firstItem) return;
+
+    setSelectDropdownValue(dropdown, firstItem.getAttribute('data-value'), triggerChange);
+}
 
 document.addEventListener('click', function (e) {
 
-    // chọn item
-    if (e.target.classList.contains('dropdown-item')) {
-        const dropdown = e.target.closest('.select-dropdown');
-        if (!dropdown) return;
+    const item = e.target.closest('.dropdown-item');
+    if (!item) return;
 
-        const input = dropdown.querySelector('.select-input');
+    const dropdown = item.closest('.select-dropdown');
+    const input = dropdown.querySelector('.select-input');
 
-        input.value = e.target.innerText;
-        input.dataset.value = e.target.dataset.value;
+    const oldValue = input.getAttribute('data-value');
+    const newValue = item.getAttribute('data-value');
 
-        bootstrap.Dropdown.getInstance(input)?.hide();
+    input.value = item.getAttribute('data-label');
+    input.setAttribute('data-value', newValue);
+
+    if (oldValue !== newValue) {
+        $(input).trigger('change');
     }
+
+    bootstrap.Dropdown.getInstance(input)?.hide();
 });
+
+
 
 document.addEventListener('input', function (e) {
     if (!e.target.classList.contains('select-search')) return;

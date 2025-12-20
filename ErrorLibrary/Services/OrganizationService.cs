@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ErrorLibrary.Data;
+using ErrorLibrary.DTOs;
 using ErrorLibrary.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,27 @@ namespace ErrorLibrary.Services
             _dbContextFactory = dbContextFactory;
             _context = context;
             _mapper = mapper;
+        }
+
+        public async Task<List<OrganizationDisplayDto>> GetAllOrganizationsDisplay()
+        {
+            var organizations = await
+                (from line in _context.Lines
+                join enterprise in _context.Enterprises
+                    on line.EnterpriseId equals enterprise.Id
+                join factory in _context.Factories
+                    on enterprise.FactoryId equals factory.Id
+                join unit in _context.Units
+                    on factory.UnitId equals unit.Id
+                select new OrganizationDisplayDto
+                {
+                    Id = line.Id,
+                    UnitName = unit.Name,
+                    FactoryName = factory.Name,
+                    EnterpriseName = enterprise.Name,
+                    LineName = line.Name
+                }).AsNoTracking().ToListAsync();
+            return organizations;
         }
 
         public async Task<IEnumerable<object>> GetOrganizationTree()

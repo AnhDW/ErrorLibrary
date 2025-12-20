@@ -18,7 +18,7 @@ function checkInitAndUpdateInLine(initAndUpdateInLineDto) {
         url: '/InLineLibrary/CheckInitAndUpdateInLine',
         method: 'POST',
         data: initAndUpdateInLineDto,
-        showLoading: true
+        //showLoading: true
     })
 }
 

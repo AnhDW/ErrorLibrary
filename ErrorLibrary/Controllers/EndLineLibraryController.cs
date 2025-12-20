@@ -74,7 +74,8 @@ namespace ErrorLibrary.Controllers
             {
                 endLine = endLines.FirstOrDefault(endLines =>
                     endLines.LineId == initAndUpdateEndLineDto.LineId &&
-                    endLines.ProductId == initAndUpdateEndLineDto.ProductId) ?? new EndLine();
+                    endLines.ProductId == initAndUpdateEndLineDto.ProductId &&
+                    endLines.Date == initAndUpdateEndLineDto.Date) ?? new EndLine();
                 // Nếu là load lần đầu thì chỉ trả về thông tin 'In line'
                 if (initAndUpdateEndLineDto.FirstLoad)
                 {

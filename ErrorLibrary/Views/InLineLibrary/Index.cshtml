@@ -10,7 +10,7 @@
         @* <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện đơn vị</span></h4> *@
         <div id="formWrapper" class="mb-2">
             <div class="form-grid">
-                <div class="form-item">
+                @* <div class="form-item">
                     <label>Chuyền</label>
                     <div class="dropdown w-100" data-bs-auto-close="false">
                         <button class="btn btn-light dropdown-toggle w-100"
@@ -25,8 +25,11 @@
                         </ul>
                     </div>
                     <input type="hidden" id="selectedOrganizationNode" name="Organization" />
+                </div> *@
+                <div class="form-item">
+                    <label>Chuyền</label>
+                    <div class="d-flex align-items-center" id="lineDropdown"></div>
                 </div>
-
                 <div class="form-item">
                     <label for="date">Ngày</label>
                     <input id="date" class="form-control" type="date">

@@ -18,7 +18,7 @@ function checkInitAndUpdateEndLine(initAndUpdateEndLineDto) {
         url: '/EndLineLibrary/CheckInitAndUpdateEndLine',
         method: 'POST',
         data: initAndUpdateEndLineDto,
-        showLoading: true
+        //showLoading: true
     })
 }
 

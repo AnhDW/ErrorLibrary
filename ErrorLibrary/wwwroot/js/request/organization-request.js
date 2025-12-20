@@ -11,3 +11,10 @@ function getOrganizationTreeDropdown() {
         method: 'GET',
     })
 }
+
+function getOrganizationsDisplay() {
+    return ajaxRequest({
+        url: '/OrganizationLibrary/GetOrganizationsDisplay',
+        method: 'GET',
+    })
+}

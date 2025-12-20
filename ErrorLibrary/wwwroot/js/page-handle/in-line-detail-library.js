@@ -10,83 +10,85 @@
 let firstLoadInLine = true;
 let currentUserId = JSON.parse(localStorage.getItem('user')).id;
 
-async function initOrganizationTree() {
-    $('.dropdown-menu').on('click', function (e) {
-        e.stopPropagation();
-    });
-    var userId = inLine.userId;
-    var selectedIds = (await getOrganizationsByUserId(userId)).result;
-    var organizationIds = selectedIds.map(x => { return x.organizationType + "_" + x.organizationId })
+//async function initOrganizationTree() {
+//    $('.dropdown-menu').on('click', function (e) {
+//        e.stopPropagation();
+//    });
+//    var userId = inLine.userId;
+//    var selectedIds = (await getOrganizationsByUserId(userId)).result;
+//    var organizationIds = selectedIds.map(x => { return x.organizationType + "_" + x.organizationId })
 
-    const tree = (await getOrganizationTreeDropdown()).result;
-    var filteredTree = filterTree(tree, organizationIds);
+//    const tree = (await getOrganizationTreeDropdown()).result;
+//    var filteredTree = filterTree(tree, organizationIds);
 
-    $('#treeOrganization').treeview({
-        data: filteredTree, 
-        levels: 1,                        // Thu gọn toàn bộ
-        expandIcon: 'fa fa-chevron-right',
-        collapseIcon: 'fa fa-chevron-down',
-        showBorder: false,
-        highlightSelected: true,
-        onNodeSelected: function (event, node) {
-            if (!node.id.startsWith("line_")) {
-                $('#treeOrganization').treeview('unselectNode', [node.nodeId, { silent: true }]);
-                $('#treeOrganization').treeview('toggleNodeExpanded', [node.nodeId]);
-                return;
-            }
+//    $('#treeOrganization').treeview({
+//        data: filteredTree, 
+//        levels: 1,                        // Thu gọn toàn bộ
+//        expandIcon: 'fa fa-chevron-right',
+//        collapseIcon: 'fa fa-chevron-down',
+//        showBorder: false,
+//        highlightSelected: true,
+//        onNodeSelected: function (event, node) {
+//            if (!node.id.startsWith("line_")) {
+//                $('#treeOrganization').treeview('unselectNode', [node.nodeId, { silent: true }]);
+//                $('#treeOrganization').treeview('toggleNodeExpanded', [node.nodeId]);
+//                return;
+//            }
 
-            $('#selectedOrganizationNode').val(node.id);
-            $('#btnTreeOrganization').text(node.text);
-            inLine.lineId = $('#selectedOrganizationNode').val().replace("line_", "");
-            checkAndInitInLine();
+//            $('#selectedOrganizationNode').val(node.id);
+//            $('#btnTreeOrganization').text(node.text);
+//            inLine.lineId = $('#selectedOrganizationNode').val().replace("line_", "");
+//            checkAndInitInLine();
 
-            let dd = bootstrap.Dropdown.getOrCreateInstance(
-                document.getElementById('btnTreeOrganization')
-            );
-            dd.hide();
-        },
-        onNodeExpanded: function (event, node) {
-            //console.log("Đã mở:", node.text);
-        },
-        onNodeCollapsed: function (event, node) {
-            //console.log("Đã đóng:", node.text);
-        }
-    });
-    let allNodes = $('#treeOrganization').treeview('getEnabled');
-    let leaf = {};
-    if (inLine.lineId !== 0) {
-        var lineNode = 'line_' + inLine.lineId;
-        leaf = allNodes.find(n => n.id && n.id.includes(lineNode));
-    } else {
-        leaf = allNodes.find(n => n.id && n.id.startsWith("line_"));
-    }
-    if (leaf) {
-        $('#treeOrganization').treeview('selectNode', [leaf.nodeId]);
-    }
-}
+//            let dd = bootstrap.Dropdown.getOrCreateInstance(
+//                document.getElementById('btnTreeOrganization')
+//            );
+//            dd.hide();
+//        },
+//        onNodeExpanded: function (event, node) {
+//            //console.log("Đã mở:", node.text);
+//        },
+//        onNodeCollapsed: function (event, node) {
+//            //console.log("Đã đóng:", node.text);
+//        }
+//    });
+//    let allNodes = $('#treeOrganization').treeview('getEnabled');
+//    let leaf = {};
+//    if (inLine.lineId !== 0) {
+//        var lineNode = 'line_' + inLine.lineId;
+//        leaf = allNodes.find(n => n.id && n.id.includes(lineNode));
+//    } else {
+//        leaf = allNodes.find(n => n.id && n.id.startsWith("line_"));
+//    }
+//    if (leaf) {
+//        $('#treeOrganization').treeview('selectNode', [leaf.nodeId]);
+//    }
+//}
 
 async function initialInLineDetailPage() {
     var products = (await getProducts()).result;
     var html = renderSelectOptionsByField(products, 'Chọn sản phẩm', 'id', 'code', 'productCategoryId');
     $('#selectProductCode').html(html);
-
-    await checkParams();
+    await renderLineDropdown();
     var user = (await getUserById(inLine.userId)).result;
     $('#user').val(user.fullName);
     $('#date').val(inLine.date);
+    selectFirstItem('#lineDropdown');
+    await checkParams();
 
     await Promise.all([
-        initOrganizationTree(),
         renderTimeFrameCard(),
-        renderInLineDetailTable(),
-        renderLineDropdown()
+        renderInLineDetailTable()
     ]);
 }
 
 async function renderLineDropdown() {
-    var lines = (await getLines()).result;
-    console.log(renderSelectDropdown(lines));
-    $('#lineDropdown').html(renderSelectDropdown(lines));
+    var organizations = (await getOrganizationsDisplay()).result;
+    var userId = JSON.parse(localStorage.getItem('user')).id;
+    var organizationIds = (await getOrganizationsByUserId(userId)).result;
+    var lineIds = organizationIds.filter(x => x.organizationType == 'line').map(x => x.organizationId);
+    organizations = organizations.filter(x => lineIds.includes(x.id));
+    $('#lineDropdown').html(renderSelectDropdown(organizations, 'id', 'lineName'));
 }
 
 async function renderTimeFrameCard() {
@@ -143,7 +145,7 @@ async function renderInLineDetailTable() {
 
 function checkAndInitInLine() {
     //tạo 1 in line nếu chưa có
-    var lineId = inLine.lineId;
+    var lineId = $('#lineDropdown .select-input').attr('data-value');
     var productId = $('#selectProductCode').val();
     var userId = inLine.userId;
     var date = $('#date').val();
@@ -166,6 +168,7 @@ function checkAndInitInLine() {
     checkInitAndUpdateInLine(inLineDto).then(function (res) {
 
         inLine = res.result;
+            console.log('alo');
         if (firstLoadInLine) {
             firstLoadInLine = false;
             $('#quantity').val(inLine.quantity);
@@ -201,12 +204,14 @@ async function checkParams() {
     if (inLineId === null) return;
 
     var inLineById = (await getInLineById(inLineId)).result;
+    console.log(inLineById.lineId);
     var user = (await getUserById(inLineById.userId)).result;
 
     inLine = inLineById;
     $('#selectProductCode').val(inLineById.productId);
     $('#user').val(user.fullName);
     $('#quantity').val(inLineById.quantity);
+    setSelectDropdownValue('#lineDropdown', inLineById.lineId);
 }
 
 async function initAddModal(timeFrameId) {
@@ -311,6 +316,7 @@ function handleDeleteInLineDetail(id) {
     });
 }
 
+//Event listeners
 $('#selectProductCode, #date, #quantity').on('change keyup', function () {
     checkAndInitInLine();
 });
@@ -397,4 +403,9 @@ $('#editSelectedErrorGroup').on('change', async function () {
     $('#editSelectedError').html(html);
 
 });
+
+$('#lineDropdown').on('change', '.select-input', function () {
+    checkAndInitInLine();
+});
+
 

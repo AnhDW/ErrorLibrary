@@ -27,65 +27,74 @@ async function initialEndLineDetailPage() {
     var products = (await getProducts()).result;
     var html = renderSelectOptionsByField(products, 'Chọn sản phẩm', 'id', 'code', 'productCategoryId');
     $('#selectProductCode').html(html);
+    await renderLineDropdown();
+    selectFirstItem('#lineDropdown');
     checkParams();
     $('#date').val(endLine.date);
-    initOrganizationTree();
 }
 
-async function initOrganizationTree() {
-    $('.dropdown-menu').on('click', function (e) {
-        e.stopPropagation();
-    });
+async function renderLineDropdown() {
+    var organizations = (await getOrganizationsDisplay()).result;
     var userId = JSON.parse(localStorage.getItem('user')).id;
-    var selectedIds = (await getOrganizationsByUserId(userId)).result;
-    var organizationIds = selectedIds.map(x => { return x.organizationType + "_" + x.organizationId })
-
-    const tree = (await getOrganizationTreeDropdown()).result;
-    var filteredTree = filterTree(tree, organizationIds);
-
-    $('#treeOrganization').treeview({
-        data: filteredTree,
-        levels: 1,                        // Thu gọn toàn bộ
-        expandIcon: 'fa fa-chevron-right',
-        collapseIcon: 'fa fa-chevron-down',
-        showBorder: false,
-        highlightSelected: true,
-        onNodeSelected: function (event, node) {
-            if (!node.id.startsWith("line_")) {
-                $('#treeOrganization').treeview('unselectNode', [node.nodeId, { silent: true }]);
-                $('#treeOrganization').treeview('toggleNodeExpanded', [node.nodeId]);
-                return;
-            }
-
-            $('#selectedOrganizationNode').val(node.id);
-            $('#btnTreeOrganization').text(node.text);
-            endLine.lineId = $('#selectedOrganizationNode').val().replace("line_", "");
-            checkAndInitEndLine();
-
-            let dd = bootstrap.Dropdown.getOrCreateInstance(
-                document.getElementById('btnTreeOrganization')
-            );
-            dd.hide();
-        },
-        onNodeExpanded: function (event, node) {
-            //console.log("Đã mở:", node.text);
-        },
-        onNodeCollapsed: function (event, node) {
-            //console.log("Đã đóng:", node.text);
-        }
-    });
-    let allNodes = $('#treeOrganization').treeview('getEnabled');
-    let leaf = {};
-    if (endLine.lineId !== 0) {
-        var lineNode = 'line_' + endLine.lineId;
-        leaf = allNodes.find(n => n.id && n.id.includes(lineNode));
-    } else {
-        leaf = allNodes.find(n => n.id && n.id.startsWith("line_"));
-    }
-    if (leaf) {
-        $('#treeOrganization').treeview('selectNode', [leaf.nodeId]);
-    }
+    var organizationIds = (await getOrganizationsByUserId(userId)).result;
+    var lineIds = organizationIds.filter(x => x.organizationType == 'line').map(x => x.organizationId);
+    organizations = organizations.filter(x => lineIds.includes(x.id));
+    $('#lineDropdown').html(renderSelectDropdown(organizations, 'id', 'lineName'));
 }
+//async function initOrganizationTree() {
+//    $('.dropdown-menu').on('click', function (e) {
+//        e.stopPropagation();
+//    });
+//    var userId = JSON.parse(localStorage.getItem('user')).id;
+//    var selectedIds = (await getOrganizationsByUserId(userId)).result;
+//    var organizationIds = selectedIds.map(x => { return x.organizationType + "_" + x.organizationId })
+
+//    const tree = (await getOrganizationTreeDropdown()).result;
+//    var filteredTree = filterTree(tree, organizationIds);
+
+//    $('#treeOrganization').treeview({
+//        data: filteredTree,
+//        levels: 1,                        // Thu gọn toàn bộ
+//        expandIcon: 'fa fa-chevron-right',
+//        collapseIcon: 'fa fa-chevron-down',
+//        showBorder: false,
+//        highlightSelected: true,
+//        onNodeSelected: function (event, node) {
+//            if (!node.id.startsWith("line_")) {
+//                $('#treeOrganization').treeview('unselectNode', [node.nodeId, { silent: true }]);
+//                $('#treeOrganization').treeview('toggleNodeExpanded', [node.nodeId]);
+//                return;
+//            }
+
+//            $('#selectedOrganizationNode').val(node.id);
+//            $('#btnTreeOrganization').text(node.text);
+//            endLine.lineId = $('#selectedOrganizationNode').val().replace("line_", "");
+//            checkAndInitEndLine();
+
+//            let dd = bootstrap.Dropdown.getOrCreateInstance(
+//                document.getElementById('btnTreeOrganization')
+//            );
+//            dd.hide();
+//        },
+//        onNodeExpanded: function (event, node) {
+//            //console.log("Đã mở:", node.text);
+//        },
+//        onNodeCollapsed: function (event, node) {
+//            //console.log("Đã đóng:", node.text);
+//        }
+//    });
+//    let allNodes = $('#treeOrganization').treeview('getEnabled');
+//    let leaf = {};
+//    if (endLine.lineId !== 0) {
+//        var lineNode = 'line_' + endLine.lineId;
+//        leaf = allNodes.find(n => n.id && n.id.includes(lineNode));
+//    } else {
+//        leaf = allNodes.find(n => n.id && n.id.startsWith("line_"));
+//    }
+//    if (leaf) {
+//        $('#treeOrganization').treeview('selectNode', [leaf.nodeId]);
+//    }
+//}
 
 async function renderErrorGroupCard() {
     var productId = $('#selectProductCode').val();
@@ -194,7 +203,7 @@ function handleAddEndLineDetail(errorId) {
 
     addEndLineDetail(endLineDetailDto).then(function (res) {
         renderEndLineDetailTable();
-        resToastr(res);
+        //resToastr(res);
     }).catch(function (err) {
         toastr.error(err);
     });
@@ -212,7 +221,7 @@ function handleDeleteEndLineDetail(id) {
 
 function checkAndInitEndLine() {
     //tạo 1 in line nếu chưa có
-    var lineId = endLine.lineId;
+    var lineId = $('#lineDropdown .select-input').attr('data-value');
     var productId = $('#selectProductCode').val();
     var orderQuantity = $('#orderQuantity').val();
     var checkQuantity = $('#checkQuantity').val();
@@ -236,8 +245,8 @@ function checkAndInitEndLine() {
     $('#formWrapper').removeClass('shake border border-2 border-danger p-2 rounded');
     $('#errorQuantityWrapper').removeClass('shake border border-2 border-danger p-2 rounded');
     checkInitAndUpdateEndLine(endLineDto).then(function (res) {
-
         endLine = res.result;
+        console.log(res.result);
         if (firstLoadEndLine) {
             firstLoadEndLine = false;
             $('#orderQuantity').val(endLine.orderQuantity);
@@ -246,7 +255,7 @@ function checkAndInitEndLine() {
         }
         setBtnStatus();
         renderEndLineDetailTable();
-        //resToastr(res);
+        resToastr(res);
     }).catch(function (err) {
         toastr.error(err);
     });
@@ -257,7 +266,7 @@ async function checkParams() {
     const params = new URLSearchParams(window.location.search);
     const endLineId = params.get("endLineId");
     if (endLineId === null) return;
-    
+
     var endLineById = (await getEndLineById(endLineId)).result;
     console.log(endLineById);
     endLine = endLineById;
@@ -265,6 +274,7 @@ async function checkParams() {
 
     $('#selectProductCode').val(endLine.productId);
     //$('#quantity').val(endLineById.quantity);
+    setSelectDropdownValue('#lineDropdown', endLineById.lineId);
 }
 function setBtnStatus() {
     if (endLine.isFinalized) {
@@ -311,7 +321,7 @@ $('#btnIsActive').on('click', function () {
         endLine.isActive = false;
     }
     checkAndInitEndLine();
-})
+});
 
 $('#btnAcceptedQuantity').on('click', function () {
     if (endLine.id === 0) {
@@ -319,6 +329,10 @@ $('#btnAcceptedQuantity').on('click', function () {
         $('#formWrapper').addClass('shake border border-2 border-danger p-2 rounded');
         return;
     }
-    endLine.acceptedQuantity ++;
+    endLine.acceptedQuantity++;
     checkAndInitEndLine();
-})
+});
+
+$('#lineDropdown').on('change', '.select-input', function () {
+    checkAndInitEndLine();
+});
