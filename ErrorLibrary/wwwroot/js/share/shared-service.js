@@ -66,10 +66,12 @@ function renderSelectDropdown(data, valueField = 'id', labelField = 'name') {
                     <li class="dropdown-item"
                         data-value="${item[valueField]}" data-label="${item[labelField]}">
                         <div class="d-flex flex-column">
-                            <div class="d-flex flex-row  align-items-center">
-                                <small class="form-text text-muted m-0 text-info">${item.unitName}</small><i class="fas fa-caret-right"></i>
-                                <small class="form-text text-muted m-0">${item.factoryName}</small><i class="fas fa-caret-right"></i>
-                                <small class="form-text text-muted m-0">${item.enterpriseName}</small>
+                            <div class="d-flex flex-row align-items-center">
+                                <small class="form-text text-muted m-0 bg-secondary rounded-1"><span class="p-1 text-white">${item.unitName}</span></small>
+                                <i class="fas fa-caret-right"></i>
+                                <small class="form-text text-muted m-0 bg-secondary rounded-1"><span class="p-1 text-white">${item.factoryName}</span></small>
+                                <i class="fas fa-caret-right"></i>
+                                <small class="form-text text-muted m-0 bg-secondary rounded-1"><span class="p-1 text-white">${item.enterpriseName}</span></small>
                             </div>
                             ${item[labelField]}
                         </div>

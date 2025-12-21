@@ -85,7 +85,7 @@
         </div> *@
         <div class="mt-1">
             <!-- Add Modal -->
-            <div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true">
+            @* <div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -125,22 +125,57 @@
                                         <button class="btn btn-outline-primary fs-5" type="button" id="addBtnIncreases">+</button>
                                     </div>
                                 </div>
-                                @* <div class="mb-2">
-                                    <label for="browser" class="form-label">Số lượng</label>
-                                    <div class="d-flex align-items-center">
-                                        <div class="dropdown" style="width:100%;">
-                                            <input type="text" class="form-control dropdown-toggle" data-bs-toggle="dropdown" placeholder="Chọn..." readonly style="cursor:pointer;" />
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddInLineDetail()">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div> *@
+            <!-- Add Modal 1 -->
+            <div class="modal fade" id="addModel1" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Thêm kiểm InLine</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <input id="timeFrameId" type="text" class="form-control" hidden>
+                                <input id="errorId" type="text" class="form-control" hidden>
 
-                                            <ul class="dropdown-menu p-2" style="width:100%;">
-                                                <input type="text" class="form-control mb-2" placeholder="Tìm kiếm..." id="idHeader" />
-                                                <li class="dropdown-item" data-value="1">Option 1</li>
-                                                <li class="dropdown-item" data-value="2">Option 2</li>
-                                                <li class="dropdown-item" data-value="3">Option 3</li>
-                                            </ul>
-                                        </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Nhóm lỗi</label>
+                                    <div id="errorGroupList" class="d-flex flex-wrap gap-2">
+                                        <button type="button" class="btn btn-outline-primary error-group" data-id="A1">Nhóm lỗi 1</button>
+                                        <button type="button" class="btn btn-outline-primary error-group" data-id="A2">Nhóm lỗi 2</button>
+                                        <button type="button" class="btn btn-outline-primary error-group" data-id="A3">Nhóm lỗi 3</button>
                                     </div>
+                                </div>
 
-                                </div> *@
+                                <div class="mb-2">
+                                    <label class="form-label">Lỗi</label>
+                                    <div id="errorList" class="d-flex flex-wrap gap-2">
+                                        <!-- render động -->
+                                    </div>
+                                </div>
+
+                                <div class="mb-2">
+                                    <label for="quantityInLine" class="form-label">Số lượng</label>
+                                    <div class="input-group">
+                                        <button class="btn btn-outline-primary fs-5" type="button" id="addBtnDecreases">-</button>
+                                        <input id="quantityInLine" type="number" class="form-control" value="1" min="0">
+                                        <button class="btn btn-outline-primary fs-5" type="button" id="addBtnIncreases">+</button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -152,7 +187,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Edit Modal -->
             <div class="modal fade" id="editModel" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">

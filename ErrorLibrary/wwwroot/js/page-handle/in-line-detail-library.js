@@ -226,15 +226,60 @@ async function initAddModal(timeFrameId) {
         return;
     }
 
-    var modal = new bootstrap.Modal(document.getElementById('addModel'));
+    var modal = new bootstrap.Modal(document.getElementById('addModel1'));
     modal.show();
     //render lỗi theo chủng loại sản phẩm
     $('#timeFrameId').val(timeFrameId);
 
     var errorGroups = (await getErrorGroupsByProduct(inLine.productId)).result;
-    var html = renderSelectOptions(errorGroups, 'Chọn nhóm lỗi');
-    $('#selectedErrorGroup').html(html);
+    var html = '';
+    errorGroups.forEach(item => {
+        html += `
+            <button type="button" class="btn btn-outline-primary error-group" onclick="renderErrorButton(${item.id})">${item.name}</button>
+        `
+    });
+    $('#errorList').html('');
+    $('#errorGroupList').html(html);
+
 }
+
+async function renderErrorButton(errorGroupId){
+    let productCategoryId = $('#selectProductCode option:selected').data('extraField');
+    var errors = (await getErrorsByErrorGroupAndProductCategory(errorGroupId, productCategoryId)).result;
+    var html = '';
+    console.log(errors);
+    errors.forEach(item => {
+        html += `
+            <button type="button" class="btn btn-outline-primary error-group" onclick="setErrorId(${item.id})">${item.code}-${item.name}</button>
+        `
+    });
+    $('#errorList').html(html);
+}
+
+function setErrorId(errorId){
+    $('#errorId').val(errorId);
+}
+//async function initAddModal(timeFrameId) {
+//    if (inLine.userId !== currentUserId) {
+//        toastr.error("Bạn không có quyền thêm lỗi trong InLine này.");
+//        return;
+//    }
+
+//    if (inLine.id === 0) {
+//        toastr.warning("Bạn chưa chọn InLine");
+//        $('#formWrapper').addClass('shake border border-2 border-danger p-2 rounded');
+//        return;
+//    }
+
+//    var modal = new bootstrap.Modal(document.getElementById('addModel'));
+//    modal.show();
+//    //render lỗi theo chủng loại sản phẩm
+//    $('#timeFrameId').val(timeFrameId);
+
+//    var errorGroups = (await getErrorGroupsByProduct(inLine.productId)).result;
+//    var html = renderSelectOptions(errorGroups, 'Chọn nhóm lỗi');
+//    $('#selectedErrorGroup').html(html);
+//}
 
 async function initEditModal(inLineDetail) {
     if (inLine.userId !== currentUserId) {
@@ -263,7 +308,7 @@ async function initEditModal(inLineDetail) {
 
 function handleAddInLineDetail() {
     var inLineId = inLine.id;
-    var errorId = $('#selectedError').val();
+    var errorId = $('#errorId').val();
     var timeFrameId = $('#timeFrameId').val();
     var quantity = $('#quantityInLine').val();
     var inLineDetailDto = {
