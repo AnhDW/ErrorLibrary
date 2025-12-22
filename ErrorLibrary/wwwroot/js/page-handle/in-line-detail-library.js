@@ -235,7 +235,7 @@ async function initAddModal(timeFrameId) {
     var html = '';
     errorGroups.forEach(item => {
         html += `
-            <button type="button" class="btn btn-outline-primary error-group" onclick="renderErrorButton(${item.id})">${item.name}</button>
+            <button id="errorGroup${item.id}"  type="button" class="btn btn-outline-primary error-group" onclick="renderErrorButton(${item.id})">${item.name}</button>
         `
     });
     $('#errorList').html('');
@@ -250,14 +250,18 @@ async function renderErrorButton(errorGroupId){
     console.log(errors);
     errors.forEach(item => {
         html += `
-            <button type="button" class="btn btn-outline-primary error-group" onclick="setErrorId(${item.id})">${item.code}-${item.name}</button>
+            <button id="error${item.id}" type="button" class="btn btn-outline-primary error-group" onclick="setErrorId(${item.id})">${item.code}-${item.name}</button>
         `
     });
+    $(`#errorGroup${errorGroupId}`).addClass('btn-primary');
+    $(`#errorGroup${errorGroupId}`).removeClass('btn-outline-primary');
     $('#errorList').html(html);
 }
 
 function setErrorId(errorId){
     $('#errorId').val(errorId);
+    $(`#errorGroup${errorId}`).addClass('btn-primary');
+    $(`#errorGroup${errorId}`).removeClass('btn-outline-primary');
 }
 //async function initAddModal(timeFrameId) {
 //    if (inLine.userId !== currentUserId) {

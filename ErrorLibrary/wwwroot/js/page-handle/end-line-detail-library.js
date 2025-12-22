@@ -203,6 +203,7 @@ function handleAddEndLineDetail(errorId) {
 
     addEndLineDetail(endLineDetailDto).then(function (res) {
         renderEndLineDetailTable();
+        $('#addModel').modal('hide');
         //resToastr(res);
     }).catch(function (err) {
         toastr.error(err);
@@ -255,7 +256,7 @@ function checkAndInitEndLine() {
         }
         setBtnStatus();
         renderEndLineDetailTable();
-        resToastr(res);
+        //resToastr(res);
     }).catch(function (err) {
         toastr.error(err);
     });
