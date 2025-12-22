@@ -235,7 +235,7 @@ async function initAddModal(timeFrameId) {
     var html = '';
     errorGroups.forEach(item => {
         html += `
-            <button id="errorGroup${item.id}"  type="button" class="btn btn-outline-primary error-group" onclick="renderErrorButton(${item.id})">${item.name}</button>
+            <button id="errorGroup${item.id}"  type="button" class="btn btn-outline-primary error-group-btn" onclick="renderErrorButton(${item.id})">${item.name}</button>
         `
     });
     $('#errorList').html('');
@@ -250,16 +250,26 @@ async function renderErrorButton(errorGroupId){
     console.log(errors);
     errors.forEach(item => {
         html += `
-            <button id="error${item.id}" type="button" class="btn btn-outline-primary error-group" onclick="setErrorId(${item.id})">${item.code}-${item.name}</button>
+            <button id="error${item.id}" type="button" class="btn btn-outline-primary error-btn" onclick="setErrorId(${item.id})">${item.code}-${item.name}</button>
         `
     });
+    $('#errorList').html(html);
+    var selector = $("#errorGroupList").attr("error-group-btn"); 
+    var errorGroupBtn = $(selector);
+    if (errorGroupBtn.hasClass("btn-primary")) {
+        errorGroupBtn.removeClass("btn-primary").addClass("btn-outline-primary");
+    }
     $(`#errorGroup${errorGroupId}`).addClass('btn-primary');
     $(`#errorGroup${errorGroupId}`).removeClass('btn-outline-primary');
-    $('#errorList').html(html);
 }
 
 function setErrorId(errorId){
     $('#errorId').val(errorId);
+    var selector = $("#errorList").attr("error-btn");
+    var errorBtn = $(selector);
+    if (errorBtn.hasClass("btn-primary")) {
+        errorBtn.removeClass("btn-primary").addClass("btn-outline-primary");
+    }
     $(`#errorGroup${errorId}`).addClass('btn-primary');
     $(`#errorGroup${errorId}`).removeClass('btn-outline-primary');
 }
