@@ -243,7 +243,12 @@ async function initAddModal(timeFrameId) {
 
 }
 
-async function renderErrorButton(errorGroupId){
+async function renderErrorButton(errorGroupId) {
+    var selector = $("#errorGroupList .error-group-btn");
+    console.log(selector);
+    if (selector.hasClass("btn-primary")) {
+        selector.removeClass("btn-primary").addClass("btn-outline-primary");
+    }
     let productCategoryId = $('#selectProductCode option:selected').data('extraField');
     var errors = (await getErrorsByErrorGroupAndProductCategory(errorGroupId, productCategoryId)).result;
     var html = '';
@@ -254,24 +259,20 @@ async function renderErrorButton(errorGroupId){
         `
     });
     $('#errorList').html(html);
-    var selector = $("#errorGroupList").attr("error-group-btn"); 
-    var errorGroupBtn = $(selector);
-    if (errorGroupBtn.hasClass("btn-primary")) {
-        errorGroupBtn.removeClass("btn-primary").addClass("btn-outline-primary");
-    }
+    
+   
     $(`#errorGroup${errorGroupId}`).addClass('btn-primary');
     $(`#errorGroup${errorGroupId}`).removeClass('btn-outline-primary');
 }
 
 function setErrorId(errorId){
-    $('#errorId').val(errorId);
-    var selector = $("#errorList").attr("error-btn");
-    var errorBtn = $(selector);
-    if (errorBtn.hasClass("btn-primary")) {
-        errorBtn.removeClass("btn-primary").addClass("btn-outline-primary");
+    var selector = $("#errorList .error-btn");
+    console.log(selector);
+    if (selector.hasClass("btn-primary")) {
+        selector.removeClass("btn-primary").addClass("btn-outline-primary");
     }
-    $(`#errorGroup${errorId}`).addClass('btn-primary');
-    $(`#errorGroup${errorId}`).removeClass('btn-outline-primary');
+    $(`#error${errorId}`).addClass('btn-primary');
+    $(`#error${errorId}`).removeClass('btn-outline-primary');
 }
 //async function initAddModal(timeFrameId) {
 //    if (inLine.userId !== currentUserId) {
