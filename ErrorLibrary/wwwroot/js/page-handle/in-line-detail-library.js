@@ -271,6 +271,7 @@ function setErrorId(errorId){
     if (selector.hasClass("btn-primary")) {
         selector.removeClass("btn-primary").addClass("btn-outline-primary");
     }
+    $('#errorId').val(errorId);
     $(`#error${errorId}`).addClass('btn-primary');
     $(`#error${errorId}`).removeClass('btn-outline-primary');
 }
