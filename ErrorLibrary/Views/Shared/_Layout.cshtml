@@ -98,7 +98,7 @@
                             <div data-i18n="Chức năng">Chức năng</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item @(controllerName == "ErrorDetailLibrary" ? "active" : "")" 
+                            <li class="menu-item d-none @(controllerName == "ErrorDetailLibrary" ? "active" : "")" 
                             data-permission="ErrorDetails.View">
                                 <a class="menu-link" asp-controller="ErrorDetailLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-circle-exclamation"></i>
@@ -182,7 +182,7 @@
                                     <div style="margin-left: 4px;">Sản phẩm</div>
                                 </a>
                             </li>
-                            <li class="menu-item @(controllerName == "SolutionLibrary" ? "active" : "")"
+                            <li class="menu-item d-none @(controllerName == "SolutionLibrary" ? "active" : "")"
                                 data-permission="Solutions.View">
                                 <a class="menu-link" asp-controller="SolutionLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-check"></i>
