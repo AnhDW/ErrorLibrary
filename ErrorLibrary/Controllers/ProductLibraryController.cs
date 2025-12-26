@@ -66,6 +66,12 @@ namespace ErrorLibrary.Controllers
             {
                 productDto.BackImageUrl = await _fileService.AddCompressAttachment(productDto.BackFile);
             }
+            if(await _productService.CheckCodeExists(productDto.Code))
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "'Mã sản phẩm' đã tồn tại trong thư viện";
+                return Json(_responseDto);
+            }
             _productService.Add(_mapper.Map<Product>(productDto));
             if (await _sharedService.SaveAllChanges())
             {
@@ -96,6 +102,13 @@ namespace ErrorLibrary.Controllers
             if (productDto.BackFile != null)
             {
                 productDto.BackImageUrl = await _fileService.AddCompressAttachment(productDto.BackFile);
+            }
+            bool isCodeExisted = await _productService.CheckCodeExists(productDto.Code) && product.Code != productDto.Code;
+            if (isCodeExisted)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "'Mã sản phẩm' đã tồn tại trong thư viện";
+                return Json(_responseDto);
             }
             _productService.Update(_mapper.Map(productDto, product));
             if (await _sharedService.SaveAllChanges())

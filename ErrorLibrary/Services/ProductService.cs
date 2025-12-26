@@ -28,6 +28,11 @@ namespace ErrorLibrary.Services
             _context.Products.Add(product);
         }
 
+        public async Task<bool> CheckCodeExists(string code)
+        {
+            return await _context.Products.AnyAsync(x => x.Code == code);
+        }
+
         public void Delete(Product product)
         {
             _context.Products.Remove(product);

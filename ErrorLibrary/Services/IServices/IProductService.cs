@@ -14,5 +14,7 @@ namespace ErrorLibrary.Services.IServices
         void Add(Product product);
         void Update(Product product);
         void Delete(Product product);
+
+        Task<bool> CheckCodeExists(string code);
     }
 }
