@@ -188,74 +188,74 @@ namespace ErrorLibrary.Data
                 .WithMany(x => x.RolePermissions)
                 .HasForeignKey(x => x.PermissionId);
 
-            ////unique index
-            //builder.Entity<InLine>()
-            //    .HasIndex(x => new { x.LineId, x.ProductId, x.UserId, x.Date })
-            //    .IsUnique();
+            //unique index
+            builder.Entity<InLine>()
+                .HasIndex(x => new { x.LineId, x.ProductId, x.UserId, x.Date })
+                .IsUnique();
 
-            //builder.Entity<InLineDetail>()
-            //    .HasIndex(x => new { x.InLineId, x.TimeFrameId, x.ErrorId })
-            //    .IsUnique();
+            builder.Entity<InLineDetail>()
+                .HasIndex(x => new { x.InLineId, x.TimeFrameId, x.ErrorId })
+                .IsUnique();
 
-            //builder.Entity<EndLine>()
-            //    .HasIndex(x => new { x.LineId, x.ProductId, x.Date })
-            //    .IsUnique();
+            builder.Entity<EndLine>()
+                .HasIndex(x => new { x.LineId, x.ProductId, x.Date })
+                .IsUnique();
 
-            //builder.Entity<EndLineDetail>()
-            //    .HasIndex(x => new { x.EndLineId, x.ErrorId, x.UserId, x.CreatedAt })
-            //    .IsUnique();
+            builder.Entity<EndLineDetail>()
+                .HasIndex(x => new { x.EndLineId, x.ErrorId, x.UserId, x.CreatedAt })
+                .IsUnique();
 
-            //builder.Entity<Unit>()
-            //    .HasIndex(x => x.Name)
-            //    .IsUnique();
+            builder.Entity<Unit>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
 
-            //builder.Entity<Factory>()
-            //    .HasIndex(x => new { x.Name, x.UnitId })
-            //    .IsUnique();
+            builder.Entity<Factory>()
+                .HasIndex(x => new { x.Name, x.UnitId })
+                .IsUnique();
 
-            //builder.Entity<Enterprise>()
-            //    .HasIndex(x => new { x.Name, x.FactoryId })
-            //    .IsUnique();
+            builder.Entity<Enterprise>()
+                .HasIndex(x => new { x.Name, x.FactoryId })
+                .IsUnique();
 
-            //builder.Entity<Line>()
-            //    .HasIndex(x => new { x.Name, x.EnterpriseId })
-            //    .IsUnique();
+            builder.Entity<Line>()
+                .HasIndex(x => new { x.Name, x.EnterpriseId })
+                .IsUnique();
 
-            //builder.Entity<Error>()
-            //    .HasIndex(x => x.Code)
-            //    .IsUnique();
+            builder.Entity<Error>()
+                .HasIndex(x => x.Code)
+                .IsUnique();
 
-            //builder.Entity<Error>()
-            //    .HasIndex(x => new { x.ErrorGroupId, x.ErrorCategoryId, x.ProductCategoryId, x.Name })
-            //    .IsUnique();
+            builder.Entity<Error>()
+                .HasIndex(x => new { x.ErrorGroupId, x.ErrorCategoryId, x.ProductCategoryId, x.Name })
+                .IsUnique();
 
-            //builder.Entity<ErrorGroup>()
-            //    .HasIndex(x => x.Name)
-            //    .IsUnique();
+            builder.Entity<ErrorGroup>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
 
-            //builder.Entity<ErrorCategory>()
-            //    .HasIndex(x => x.Name)
-            //    .IsUnique();
+            builder.Entity<ErrorCategory>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
 
-            //builder.Entity<Product>()
-            //    .HasIndex(x => x.Code)
-            //    .IsUnique();
+            builder.Entity<Product>()
+                .HasIndex(x => x.Code)
+                .IsUnique();
 
-            //builder.Entity<ProductCategory>()
-            //    .HasIndex(x => x.Name)
-            //    .IsUnique();
+            builder.Entity<ProductCategory>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
 
-            //builder.Entity<TimeFrame>()
-            //    .HasIndex(x => x.Name)
-            //    .IsUnique();
+            builder.Entity<TimeFrame>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
 
-            //builder.Entity<TimeFrame>()
-            //    .HasIndex(x => new { x.StartTime, x.EndTime })
-            //    .IsUnique();
+            builder.Entity<TimeFrame>()
+                .HasIndex(x => new { x.StartTime, x.EndTime })
+                .IsUnique();
 
-            //builder.Entity<TimeFrameColor>()
-            //    .HasIndex(x => new { x.TimeFrameId, x.HexCode })
-            //    .IsUnique();
+            builder.Entity<TimeFrameColor>()
+                .HasIndex(x => new { x.TimeFrameId, x.HexCode })
+                .IsUnique();
 
         }
 
