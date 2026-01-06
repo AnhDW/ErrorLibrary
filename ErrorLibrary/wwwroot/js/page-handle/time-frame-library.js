@@ -273,29 +273,41 @@ $(document).on("click", "#btnCopyColor", function () {
     }
 
     $('#btnPasteColor').removeClass('d-none');
-    navigator.clipboard.writeText(JSON.stringify(selectedIds))
-        .then(() => toastr.success("Copied!"))
-        .catch(err => toastr.error(err));
+    //navigator.clipboard.writeText(JSON.stringify(selectedIds))
+    //    .then(() => toastr.success("Copied!"))
+    //    .catch(err => toastr.error(err));
+    localStorage.removeItem('selectedTimeFrameColorIds');
+    localStorage.setItem('selectedTimeFrameColorIds', JSON.stringify(selectedIds));
 });
 
 $(document).on("click", "#btnPasteColor", function () {
     $('#btnPasteColor').addClass('d-none');
-
-    navigator.clipboard.readText()
-        .then(async text => {
-            try {
-                const ids = JSON.parse(text);
-                console.log("IDs:", ids);
-                const copyAndPasteColorDto = {
-                    timeFrameId: currentTimeFrameId,
-                    timeFrameColorIds : ids
-                }
-                const res = await copyAndPasteColor(copyAndPasteColorDto);
-                resToastr(res);
-                renderColorCards(currentTimeFrameId);
-            } catch {
-                console.log("Clipboard không phải JSON array");
-            }
-        });
+    var selectedIds = localStorage.getItem('selectedTimeFrameColorIds');
+    const copyAndPasteColorDto = {
+        timeFrameId: currentTimeFrameId,
+        timeFrameColorIds: ids
+    }
+    copyAndPasteColor(copyAndPasteColorDto).then(function (res) {
+        resToastr(res);
+        renderColorCards(currentTimeFrameId);
+    }).catch(function (err) {
+        toastr.error(err);
+    });
+    //navigator.clipboard.readText()
+    //    .then(async text => {
+    //        try {
+    //            const ids = JSON.parse(text);
+    //            console.log("IDs:", ids);
+    //            const copyAndPasteColorDto = {
+    //                timeFrameId: currentTimeFrameId,
+    //                timeFrameColorIds : ids
+    //            }
+    //            const res = await copyAndPasteColor(copyAndPasteColorDto);
+    //            resToastr(res);
+    //            renderColorCards(currentTimeFrameId);
+    //        } catch {
+    //            console.log("Clipboard không phải JSON array");
+    //        }
+    //    });
 
 });
