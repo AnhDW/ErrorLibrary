@@ -93,22 +93,22 @@ app.MapControllerRoute(
     .WithStaticAssets();
 app.MapHub<ErrorHub>("/errorHub");
 
-await AddlyMigration();
+await ApplyMigration();
 await PermissionRuntimeSeeder.SeedAsync(app.Services);
 app.Run();
 
-async Task AddlyMigration()
+async Task ApplyMigration()
 {
     using (var scope = app.Services.CreateScope())
     {
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-
-        await DbInitializer.SeedAsync(userManager, roleManager);
         var _db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         if (_db.Database.GetPendingMigrations().Count() > 0)
         {
             _db.Database.Migrate();
         }
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+
+        await DbInitializer.SeedAsync(userManager, roleManager);
     }
 }

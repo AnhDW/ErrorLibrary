@@ -33,6 +33,17 @@ namespace ErrorLibrary.Data
         public DbSet<EndLine> EndLines { get; set; }
         public DbSet<EndLineDetail> EndLineDetails { get; set; }
 
+        public DbSet<Customer> Customers { get; set; }// khách hàng
+        public DbSet<Style> Styles { get; set; } // mã hàng
+        public DbSet<Defect> Defects { get; set; }// lỗi
+
+        //Report Final Factory
+        public DbSet<ReportFinalFactory> ReportFinalFactories { get; set; }
+        public DbSet<ReportFinalFactoryDetail> ReportFinalFactoryDetails { get; set; }
+        public DbSet<Inspection> Inspections { get; set; }
+        public DbSet<InspectionRound> InspectionRounds { get; set; }
+        public DbSet<InspectionDefect> InspectionDefects { get; set; }
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -187,6 +198,50 @@ namespace ErrorLibrary.Data
                 .HasOne(x => x.Permission)
                 .WithMany(x => x.RolePermissions)
                 .HasForeignKey(x => x.PermissionId);
+            
+
+            builder.Entity<ReportFinalFactory>()
+                .HasOne(x => x.Factory)
+                .WithMany(x => x.ReportFinalFactories)
+                .HasForeignKey(x => x.FactoryId);
+
+            builder.Entity<ReportFinalFactoryDetail>()
+                .HasOne(x=>x.Customer)
+                .WithMany(x=>x.ReportFinalFactoryDetails)
+                .HasForeignKey(x => x.CustomerId);
+
+            builder.Entity<ReportFinalFactoryDetail>()
+                .HasOne(x => x.Style)
+                .WithMany(x => x.ReportFinalFactoryDetails)
+                .HasForeignKey(x => x.StyleId);
+
+            builder.Entity<ReportFinalFactoryDetail>()
+                .HasOne(x => x.ReportFinalFactory)
+                .WithMany(x => x.ReportFinalFactoryDetails)
+                .HasForeignKey(x => x.ReportFinalFactoryId);
+
+            builder.Entity<Inspection>()
+                .HasOne(x => x.ReportFinalFactoryDetail)
+                .WithMany(x => x.Inspections)
+                .HasForeignKey(x => x.ReportFinalFactoryDetailId);
+
+            builder.Entity<InspectionDefect>()
+                .HasOne(x => x.ReportFinalFactoryDetail)
+                .WithMany(x => x.InspectionDefects)
+                .HasForeignKey(x => x.ReportFinalFactoryDetailId);
+            
+            builder.Entity<InspectionDefect>()
+                .HasOne(x => x.Defect)
+                .WithMany(x => x.InspectionDefects)
+                .HasForeignKey(x => x.DefectId);
+
+            builder.Entity<InspectionDefect>()
+                .HasKey(x => new { x.ReportFinalFactoryDetailId, x.DefectId });
+
+            builder.Entity<InspectionRound>()
+                .HasOne(x => x.Inspection)
+                .WithMany(x => x.InspectionRounds)
+                .HasForeignKey(x => x.InspectionId);
 
             //unique index
             builder.Entity<InLine>()
