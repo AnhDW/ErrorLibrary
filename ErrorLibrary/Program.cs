@@ -59,6 +59,16 @@ builder.Services.AddScoped<ITimeFrameColorService, TimeFrameColorService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 
+builder.Services.AddScoped<IDefectService, DefectService>();
+builder.Services.AddScoped<IStyleService, StyleService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+
+builder.Services.AddScoped<IReportFinalFactoryService, ReportFinalFactoryService>();
+builder.Services.AddScoped<IReportFinalFactoryDetailService, ReportFinalFactoryDetailService>();
+builder.Services.AddScoped<IInspectionService, InspectionService>();
+builder.Services.AddScoped<IInspectionRoundService, InspectionRoundService>();
+builder.Services.AddScoped<IInspectionDefectService, InspectionDefectService>();
+
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 builder.Services.AddScoped<IAuthorizationHandler, PermissionHandler>();
 
