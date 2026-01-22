@@ -9,5 +9,6 @@
 
         public Unit Unit { get; set; }
         public List<Enterprise> Enterprises { get; set; } = new List<Enterprise>();
+        public List<ReportFinalFactory> ReportFinalFactories { get; set; } = new List<ReportFinalFactory>();
     }
 }
