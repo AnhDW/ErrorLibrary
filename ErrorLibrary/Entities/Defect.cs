@@ -7,6 +7,6 @@
         public string Name { get; set; }
         public string? Description { get; set; }
 
-        public List<InspectionDefect> InspectionDefects { get; set; } = new List<InspectionDefect>();
+        public List<ReportFinalFactoryDetailDefect> ReportFinalFactoryDetailDefects { get; set; } = new List<ReportFinalFactoryDetailDefect>();
     }
 }

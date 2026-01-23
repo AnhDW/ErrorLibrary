@@ -1,6 +1,6 @@
 ﻿namespace ErrorLibrary.DTOs
 {
-    public class InspectionDefectDto
+    public class ReportFinalFactoryDetailDefectDto
     {
         public int ReportFinalFactoryDetailId { get; set; }
         public int DefectId { get; set; }

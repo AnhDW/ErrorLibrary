@@ -4,6 +4,7 @@ using ErrorLibrary.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ErrorLibrary.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260123012149_updateFeatureReportFinalFactory")]
+    partial class updateFeatureReportFinalFactory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -561,10 +564,8 @@ namespace ErrorLibrary.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("InspectionType")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                    b.Property<int>("InspectionType")
+                        .HasColumnType("int");
 
                     b.Property<int>("Major")
                         .HasColumnType("int");
@@ -590,7 +591,7 @@ namespace ErrorLibrary.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("InspectionId")
@@ -600,9 +601,8 @@ namespace ErrorLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Result")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                    b.Property<int>("Result")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -737,8 +737,8 @@ namespace ErrorLibrary.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly>("CreateDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("FactoryId")
                         .HasColumnType("int");
@@ -1358,13 +1358,13 @@ namespace ErrorLibrary.Migrations
             modelBuilder.Entity("ErrorLibrary.Entities.ReportFinalFactoryDetailDefect", b =>
                 {
                     b.HasOne("ErrorLibrary.Entities.Defect", "Defect")
-                        .WithMany("ReportFinalFactoryDetailDefects")
+                        .WithMany("InspectionDefects")
                         .HasForeignKey("DefectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ErrorLibrary.Entities.ReportFinalFactoryDetail", "ReportFinalFactoryDetail")
-                        .WithMany("ReportFinalFactoryDetailDefects")
+                        .WithMany("InspectionDefects")
                         .HasForeignKey("ReportFinalFactoryDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1500,7 +1500,7 @@ namespace ErrorLibrary.Migrations
 
             modelBuilder.Entity("ErrorLibrary.Entities.Defect", b =>
                 {
-                    b.Navigation("ReportFinalFactoryDetailDefects");
+                    b.Navigation("InspectionDefects");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.EndLine", b =>
@@ -1593,9 +1593,9 @@ namespace ErrorLibrary.Migrations
 
             modelBuilder.Entity("ErrorLibrary.Entities.ReportFinalFactoryDetail", b =>
                 {
-                    b.Navigation("Inspections");
+                    b.Navigation("InspectionDefects");
 
-                    b.Navigation("ReportFinalFactoryDetailDefects");
+                    b.Navigation("Inspections");
                 });
 
             modelBuilder.Entity("ErrorLibrary.Entities.Style", b =>

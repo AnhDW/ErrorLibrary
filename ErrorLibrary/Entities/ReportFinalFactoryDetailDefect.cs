@@ -1,6 +1,6 @@
 ﻿namespace ErrorLibrary.Entities
 {
-    public class InspectionDefect
+    public class ReportFinalFactoryDetailDefect
     {
         public int ReportFinalFactoryDetailId { get; set; }
         public int DefectId { get; set; }

@@ -28,6 +28,11 @@ namespace ErrorLibrary.Services
             _context.ReportFinalFactories.Add(reportFinalFactory);
         }
 
+        public async Task<bool> CheckExists(int factoryId, DateOnly createDate)
+        {
+            return await _context.ReportFinalFactories.AnyAsync(x => x.FactoryId == factoryId && x.CreateDate == createDate);
+        }
+
         public void Delete(ReportFinalFactory reportFinalFactory)
         {
             _context.ReportFinalFactories.Remove(reportFinalFactory);

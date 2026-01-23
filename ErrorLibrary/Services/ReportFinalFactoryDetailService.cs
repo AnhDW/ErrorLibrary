@@ -52,6 +52,13 @@ namespace ErrorLibrary.Services
             return (await _context.ReportFinalFactoryDetails.FindAsync(id))!;
         }
 
+        public async Task<List<ReportFinalFactoryDetail>> GetByReportFinalFactoryId(int reportFinalFactoryId)
+        {
+            return await _context.ReportFinalFactoryDetails
+                .Where(x => x.ReportFinalFactoryId == reportFinalFactoryId)
+                .ToListAsync();
+        }
+
         public void Update(ReportFinalFactoryDetail reportFinalFactoryDetail)
         {
             _context.ReportFinalFactoryDetails.Update(reportFinalFactoryDetail);

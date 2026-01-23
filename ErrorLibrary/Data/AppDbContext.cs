@@ -42,7 +42,7 @@ namespace ErrorLibrary.Data
         public DbSet<ReportFinalFactoryDetail> ReportFinalFactoryDetails { get; set; }
         public DbSet<Inspection> Inspections { get; set; }
         public DbSet<InspectionRound> InspectionRounds { get; set; }
-        public DbSet<InspectionDefect> InspectionDefects { get; set; }
+        public DbSet<ReportFinalFactoryDetailDefect> ReportFinalFactoryDetailDefects { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -225,17 +225,27 @@ namespace ErrorLibrary.Data
                 .WithMany(x => x.Inspections)
                 .HasForeignKey(x => x.ReportFinalFactoryDetailId);
 
-            builder.Entity<InspectionDefect>()
+            builder.Entity<Inspection>()
+                .Property(x => x.InspectionType)
+                .HasConversion<string>()
+                .HasMaxLength(20);
+
+            builder.Entity<InspectionRound>()
+                .Property(x => x.Result)
+                .HasConversion<string>()
+                .HasMaxLength(20);
+
+            builder.Entity<ReportFinalFactoryDetailDefect>()
                 .HasOne(x => x.ReportFinalFactoryDetail)
-                .WithMany(x => x.InspectionDefects)
+                .WithMany(x => x.ReportFinalFactoryDetailDefects)
                 .HasForeignKey(x => x.ReportFinalFactoryDetailId);
             
-            builder.Entity<InspectionDefect>()
+            builder.Entity<ReportFinalFactoryDetailDefect>()
                 .HasOne(x => x.Defect)
-                .WithMany(x => x.InspectionDefects)
+                .WithMany(x => x.ReportFinalFactoryDetailDefects)
                 .HasForeignKey(x => x.DefectId);
 
-            builder.Entity<InspectionDefect>()
+            builder.Entity<ReportFinalFactoryDetailDefect>()
                 .HasKey(x => new { x.ReportFinalFactoryDetailId, x.DefectId });
 
             builder.Entity<InspectionRound>()

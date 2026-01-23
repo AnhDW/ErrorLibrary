@@ -13,5 +13,7 @@ namespace ErrorLibrary.Services.IServices
         void Add(ReportFinalFactory reportFinalFactory);
         void Update(ReportFinalFactory reportFinalFactory);
         void Delete(ReportFinalFactory reportFinalFactory);
+
+        Task<bool> CheckExists(int factoryId, DateOnly createDate);
     }
 }

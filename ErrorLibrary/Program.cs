@@ -67,7 +67,7 @@ builder.Services.AddScoped<IReportFinalFactoryService, ReportFinalFactoryService
 builder.Services.AddScoped<IReportFinalFactoryDetailService, ReportFinalFactoryDetailService>();
 builder.Services.AddScoped<IInspectionService, InspectionService>();
 builder.Services.AddScoped<IInspectionRoundService, InspectionRoundService>();
-builder.Services.AddScoped<IInspectionDefectService, InspectionDefectService>();
+builder.Services.AddScoped<IReportFinalFactoryDetailDefectService, ReportFinalFactoryDetailDefectService>();
 
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 builder.Services.AddScoped<IAuthorizationHandler, PermissionHandler>();

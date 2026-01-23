@@ -1,6 +1,13 @@
-﻿namespace ErrorLibrary.Data
+﻿using ErrorLibrary.Entities;
+
+namespace ErrorLibrary.Data
 {
-    public class DefectSeeder
+    public static class DefectSeeder
     {
+        public static IEnumerable<Defect> Generate()
+        {
+            yield break;
+        }
+
     }
 }

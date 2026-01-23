@@ -9,13 +9,13 @@ namespace ErrorLibrary.Entities
         public int CustomerId { get; set; }
         public int StyleId { get; set; }
         public string PO { get; set; } = string.Empty;
-        public int Quantity { get; set; }
+        public int Quantity { get; set; } = 0;
 
         public Customer Customer { get; set; }
         public Style Style { get; set; }
         public ReportFinalFactory ReportFinalFactory { get; set; }
 
         public List<Inspection> Inspections { get; set; } = new List<Inspection>();
-        public List<InspectionDefect> InspectionDefects { get; set; } = new List<InspectionDefect>();
+        public List<ReportFinalFactoryDetailDefect> ReportFinalFactoryDetailDefects { get; set; } = new List<ReportFinalFactoryDetailDefect>();
     }
 }
