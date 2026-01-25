@@ -18,22 +18,24 @@ namespace ErrorLibrary.Controllers
         private readonly IDefectService _defectService;
         private readonly IFactoryService _factoryService;
         private readonly IInspectionService _inspectionService;
+        private readonly IInspectionRoundService _inspectionRoundService;
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public ReportFinalFactoryDetailLibraryController(ISharedService sharedService, IReportFinalFactoryService reportFinalFactoryService, IReportFinalFactoryDetailService reportFinalFactoryDetailService, IFactoryService factoryService, IMapper mapper, IDefectService defectService, ICustomerService customerService, IStyleService styleService, IInspectionService inspectionService, IReportFinalFactoryDetailDefectService reportFinalFactoryDetailDefectService)
+        public ReportFinalFactoryDetailLibraryController(ISharedService sharedService, IReportFinalFactoryService reportFinalFactoryService, IReportFinalFactoryDetailService reportFinalFactoryDetailService, IReportFinalFactoryDetailDefectService reportFinalFactoryDetailDefectService, ICustomerService customerService, IStyleService styleService, IDefectService defectService, IFactoryService factoryService, IInspectionService inspectionService, IMapper mapper, IInspectionRoundService inspectionRoundService)
         {
             _sharedService = sharedService;
             _reportFinalFactoryService = reportFinalFactoryService;
             _reportFinalFactoryDetailService = reportFinalFactoryDetailService;
-            _factoryService = factoryService;
-            _mapper = mapper;
-            _responseDto = new ResponseDto();
-            _defectService = defectService;
+            _reportFinalFactoryDetailDefectService = reportFinalFactoryDetailDefectService;
             _customerService = customerService;
             _styleService = styleService;
+            _defectService = defectService;
+            _factoryService = factoryService;
             _inspectionService = inspectionService;
-            _reportFinalFactoryDetailDefectService = reportFinalFactoryDetailDefectService;
+            _mapper = mapper;
+            _responseDto = new ResponseDto();
+            _inspectionRoundService = inspectionRoundService;
         }
 
         public IActionResult Index()
@@ -44,17 +46,25 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetByReportFinalFactory(int reportFinalFactoryId)
         {
             var reportFinalFactoryDetails = await _reportFinalFactoryDetailService.GetByReportFinalFactoryId(reportFinalFactoryId);
-            var customers = await _customerService.GetAll();
-            var styles = await _styleService.GetAll();
-            var inspections = await _inspectionService.GetAll();
-            var result = _mapper.Map<List<ReportFinalFactoryDetailDisplayDto>>(reportFinalFactoryDetails);
-            foreach (var reportFinalFactoryDetail in result)
-            {
-                reportFinalFactoryDetail.Customer = _mapper.Map<CustomerDto>(customers.FirstOrDefault(c => c.Id == reportFinalFactoryDetail.CustomerId)!);
-                reportFinalFactoryDetail.Style = _mapper.Map<StyleDto>(styles.FirstOrDefault(s => s.Id == reportFinalFactoryDetail.StyleId)!);
-                reportFinalFactoryDetail.Inspections = _mapper.Map<List<InspectionDisplayDto>>(inspections.Where(i => i.ReportFinalFactoryDetailId == reportFinalFactoryDetail.Id).ToList());
-            }
-            _responseDto.Result = result;
+            //var customers = await _customerService.GetAll();
+            //var styles = await _styleService.GetAll();
+            //var inspections = await _inspectionService.GetAll();
+            //var inspectionRounds = await _inspectionRoundService.GetAll();
+
+            //inspections.ForEach(i =>
+            //{
+            //    i.InspectionRounds = inspectionRounds.Where(ir => ir.InspectionId == i.Id).ToList();
+            //});
+
+            //var reportFinalFactoryDetailDefects = await _reportFinalFactoryDetailDefectService.GetAll();
+            //foreach (var reportFinalFactoryDetail in reportFinalFactoryDetails)
+            //{
+            //    reportFinalFactoryDetail.Customer = _mapper.Map<CustomerDto>(customers.FirstOrDefault(c => c.Id == reportFinalFactoryDetail.CustomerId)!);
+            //    reportFinalFactoryDetail.Style = _mapper.Map<StyleDto>(styles.FirstOrDefault(s => s.Id == reportFinalFactoryDetail.StyleId)!);
+            //    reportFinalFactoryDetail.Inspections = _mapper.Map<List<InspectionDisplayDto>>(inspections.Where(i => i.ReportFinalFactoryDetailId == reportFinalFactoryDetail.Id));
+            //    reportFinalFactoryDetail.ReportFinalFactoryDetailDefects = _mapper.Map<List<ReportFinalFactoryDetailDefectDto>>(reportFinalFactoryDetailDefects.Where(x=>x.ReportFinalFactoryDetailId==reportFinalFactoryDetail.Id));
+            //}
+            _responseDto.Result = reportFinalFactoryDetails;
             return Json(_responseDto);
         }
 
@@ -121,7 +131,8 @@ namespace ErrorLibrary.Controllers
         {
             var defects = await _defectService.GetAll();
             var reportFinalFactoryDetailDefects = new List<ReportFinalFactoryDetailDefect>();
-            foreach (var defect in defects) {
+            foreach (var defect in defects)
+            {
                 reportFinalFactoryDetailDefects.Add(new ReportFinalFactoryDetailDefect
                 {
                     DefectId = defect.Id,
