@@ -106,6 +106,28 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromBody] int id)
+        {
+            var reportFinalFactoryDetail = await _reportFinalFactoryDetailService.GetById(id);
+            if(reportFinalFactoryDetail == null)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "ReportFinalFactoryDetail not found.";
+                return Json(_responseDto);
+            }
+            _reportFinalFactoryDetailService.Delete(reportFinalFactoryDetail);
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.IsSuccess = true;
+                _responseDto.Message = "ReportFinalFactoryDetail deleted successfully.";
+                return Json(_responseDto);
+            }
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Failed to delete ReportFinalFactoryDetail.";
+            return Json(_responseDto);
+        }
+
         private List<Inspection> InitialInspections()
         {
             var inspections = new List<Inspection>() {
