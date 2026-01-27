@@ -1,3 +1,62 @@
 ﻿@{
     ViewData["Title"] = "Report final factory";
 }
+
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+        <div id="finalFactoryTable"></div>
+    </div>
+
+</div>
+<style>
+/*     .handsontable td {
+        white-space: normal; 
+        word-break: keep-all; 
+        overflow-wrap: break-word;
+    } */
+
+</style>
+<script>
+    const container = document.querySelector('#finalFactoryTable');
+
+    const hot = new Handsontable(container, {
+      themeName: 'ht-theme-main-dark-auto',
+      data: [
+        // ['Khách hàng/ Mã hàng', 'PO', 'Số lượng','Pre-final', '', 'Ngày kiểm lần 1', 'Kết quả kiểm lần 1',  'Ngày kiểm lần 2', 'Kết quả kiểm lần 2'],
+        // ['Khách hàng/ Mã hàng', 'PO', 'Số lượng','Tình trạng', '', 'Ngày kiểm lần 1', 'Kết quả kiểm lần 1',  'Ngày kiểm lần 2', 'Kết quả kiểm lần 2'],
+        // ['Khách hàng/ Mã hàng', 'PO', 'Số lượng', 'Major', 'Minor', 'Ngày kiểm lần 1', 'Kết quả kiểm lần 1',  'Ngày kiểm lần 2', 'Kết quả kiểm lần 2'],
+        [10, 11, 12, 13,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      ],
+      rowHeaders: true,
+      colHeaders: true,
+      height: 'auto',
+      autoWrapRow: true,
+      autoWrapCol: true,
+      manualColumnResize: true,
+      nestedHeaders:[
+        ['Khách hàng/ Mã hàng', 'PO', 'Số lượng',{ label: 'Pre-final', colspan:2 }, 'Ngày kiểm lần 1', 'Kết quả kiểm lần 1',  'Ngày kiểm lần 2', 'Kết quả kiểm lần 2'],
+        ['Khách hàng/ Mã hàng', 'PO', 'Số lượng',{ label: 'Tình trạng', colspan:2 }, 'Ngày kiểm lần 1', 'Kết quả kiểm lần 1',  'Ngày kiểm lần 2', 'Kết quả kiểm lần 2'],
+        ['Khách hàng/ Mã hàng', 'PO', 'Số lượng', 'Major', 'Minor', 'Ngày kiểm lần 1', 'Kết quả kiểm lần 1',  'Ngày kiểm lần 2', 'Kết quả kiểm lần 2'],
+      ],
+      mergeCells: [
+        // Gộp 3 hàng đầu tiên ở cột 0 (Khách hàng/ Mã hàng)
+        { row: 0, col: 0, rowspan: 3, colspan: 1 },
+        // Gộp 3 hàng đầu tiên ở cột 1 (PO)
+        { row: 0, col: 1, rowspan: 3, colspan: 1 },
+        // Gộp 3 hàng đầu tiên ở cột 2 (Số lượng)
+        { row: 0, col: 2, rowspan: 3, colspan: 1 },
+
+        { row: 0, col: 3, rowspan: 1, colspan: 2 },
+        { row: 1, col: 3, rowspan: 1, colspan: 2 },
+
+        { row: 0, col: 5, rowspan: 3, colspan: 1 },
+        { row: 0, col: 6, rowspan: 3, colspan: 1 },
+        { row: 0, col: 7, rowspan: 3, colspan: 1 },
+        { row: 0, col: 8, rowspan: 3, colspan: 1 },
+      ],
+      licenseKey: 'non-commercial-and-evaluation'
+    });
+
+
+</script>
