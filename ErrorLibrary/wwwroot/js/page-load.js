@@ -33,7 +33,7 @@ $(document).ready(function () {
         renderErrorDetailsTable();
     } else if (path.includes('/InLineDetailLibrary')) {
         initialInLineDetailPage();
-    }else if (path.includes('/InLineLibrary')) {
+    } else if (path.includes('/InLineLibrary')) {
         initialInLinePage();
     } else if (path.includes('/EndLineDetailLibrary')) {
         initialEndLineDetailPage();
@@ -45,6 +45,9 @@ $(document).ready(function () {
         renderRoleTable();
     } else if (path.includes('/ReportLibrary')) {
         initialInLinePage();
+    } else if (path.includes('/test')) {
+        console.log('a');
+        initGrid();
     }
 });
 
