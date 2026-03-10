@@ -46,30 +46,30 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetByReportFinalFactory(int reportFinalFactoryId)
         {
             var reportFinalFactoryDetails = await _reportFinalFactoryDetailService.GetByReportFinalFactoryId(reportFinalFactoryId);
-            //var customers = await _customerService.GetAll();
-            //var styles = await _styleService.GetAll();
-            //var inspections = await _inspectionService.GetAll();
-            //var inspectionRounds = await _inspectionRoundService.GetAll();
+            var customers = await _customerService.GetAll();
+            var styles = await _styleService.GetAll();
+            var inspections = await _inspectionService.GetAll();
+            var inspectionRounds = await _inspectionRoundService.GetAll();
 
-            //inspections.ForEach(i =>
-            //{
-            //    i.InspectionRounds = inspectionRounds.Where(ir => ir.InspectionId == i.Id).ToList();
-            //});
+            inspections.ForEach(i =>
+            {
+                i.InspectionRounds = inspectionRounds.Where(ir => ir.InspectionId == i.Id).ToList();
+            });
 
-            //var reportFinalFactoryDetailDefects = await _reportFinalFactoryDetailDefectService.GetAll();
-            //foreach (var reportFinalFactoryDetail in reportFinalFactoryDetails)
-            //{
-            //    reportFinalFactoryDetail.Customer = _mapper.Map<CustomerDto>(customers.FirstOrDefault(c => c.Id == reportFinalFactoryDetail.CustomerId)!);
-            //    reportFinalFactoryDetail.Style = _mapper.Map<StyleDto>(styles.FirstOrDefault(s => s.Id == reportFinalFactoryDetail.StyleId)!);
-            //    reportFinalFactoryDetail.Inspections = _mapper.Map<List<InspectionDisplayDto>>(inspections.Where(i => i.ReportFinalFactoryDetailId == reportFinalFactoryDetail.Id));
-            //    reportFinalFactoryDetail.ReportFinalFactoryDetailDefects = _mapper.Map<List<ReportFinalFactoryDetailDefectDto>>(reportFinalFactoryDetailDefects.Where(x=>x.ReportFinalFactoryDetailId==reportFinalFactoryDetail.Id));
-            //}
+            var reportFinalFactoryDetailDefects = await _reportFinalFactoryDetailDefectService.GetAll();
+            foreach (var reportFinalFactoryDetail in reportFinalFactoryDetails)
+            {
+                reportFinalFactoryDetail.Customer = _mapper.Map<CustomerDto>(customers.FirstOrDefault(c => c.Id == reportFinalFactoryDetail.CustomerId)!);
+                reportFinalFactoryDetail.Style = _mapper.Map<StyleDto>(styles.FirstOrDefault(s => s.Id == reportFinalFactoryDetail.StyleId)!);
+                reportFinalFactoryDetail.Inspections = _mapper.Map<List<InspectionDisplayDto>>(inspections.Where(i => i.ReportFinalFactoryDetailId == reportFinalFactoryDetail.Id));
+                reportFinalFactoryDetail.ReportFinalFactoryDetailDefects = _mapper.Map<List<ReportFinalFactoryDetailDefectDto>>(reportFinalFactoryDetailDefects.Where(x => x.ReportFinalFactoryDetailId == reportFinalFactoryDetail.Id));
+            }
             _responseDto.Result = reportFinalFactoryDetails;
             return Json(_responseDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ReportFinalFactoryDetailDto reportFinalFactoryDetailDto)
+        public async Task<IActionResult> CreateReportFinalFactoryDetail([FromBody] ReportFinalFactoryDetailDto reportFinalFactoryDetailDto)
         {
             var reportFinalFactory = await _reportFinalFactoryService.GetById(reportFinalFactoryDetailDto.ReportFinalFactoryId);
             if (reportFinalFactory == null)
@@ -107,7 +107,7 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete([FromBody] int id)
+        public async Task<IActionResult> DeleteReportFinalFactoryDetail([FromBody] int id)
         {
             var reportFinalFactoryDetail = await _reportFinalFactoryDetailService.GetById(id);
             if(reportFinalFactoryDetail == null)

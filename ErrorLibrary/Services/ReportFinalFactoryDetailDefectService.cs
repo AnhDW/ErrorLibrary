@@ -28,6 +28,11 @@ namespace ErrorLibrary.Services
             _context.ReportFinalFactoryDetailDefects.Add(customer);
         }
 
+        public async Task<bool> CheckExists(int reportFinalFactoryDetailId, int defectId)
+        {
+            return await _context.ReportFinalFactoryDetailDefects.AnyAsync(c => c.ReportFinalFactoryDetailId == reportFinalFactoryDetailId && c.DefectId == defectId);
+        }
+
         public void Delete(ReportFinalFactoryDetailDefect customer)
         {
             _context.ReportFinalFactoryDetailDefects.Remove(customer);
@@ -47,9 +52,9 @@ namespace ErrorLibrary.Services
             return await _context.ReportFinalFactoryDetailDefects.ToListAsync();
         }
 
-        public async Task<ReportFinalFactoryDetailDefect> GetById(int id)
+        public async Task<ReportFinalFactoryDetailDefect> GetById(int reportFinalFactoryDetailId, int defectId)
         {
-            return (await _context.ReportFinalFactoryDetailDefects.FindAsync(id))!;
+            return (await _context.ReportFinalFactoryDetailDefects.FindAsync(reportFinalFactoryDetailId, defectId))!;
         }
 
         public void Update(ReportFinalFactoryDetailDefect customer)
