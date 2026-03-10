@@ -42,9 +42,6 @@ namespace ErrorLibrary.Helper
             CreateMap<Style, StyleDto>().ReverseMap();
             CreateMap<Defect, DefectDto>().ReverseMap();
             CreateMap<Customer, CustomerDto>().ReverseMap();
-            CreateMap<Inspection, InspectionDto>().ReverseMap();
-            CreateMap<Inspection, InspectionDisplayDto>().ReverseMap();
-            CreateMap<InspectionRound, InspectionRoundDto>().ReverseMap();
             CreateMap<ReportFinalFactory, ReportFinalFactoryDto>().ReverseMap();
             CreateMap<ReportFinalFactoryDetail, ReportFinalFactoryDetailDto>().ReverseMap();
             CreateMap<ReportFinalFactoryDetail, ReportFinalFactoryDetailDisplayDto>().ReverseMap();

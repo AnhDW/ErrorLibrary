@@ -14,7 +14,6 @@ namespace ErrorLibrary.DTOs
         public CustomerDto Customer { get; set; }
         public StyleDto Style { get; set; }
 
-        public List<InspectionDisplayDto> Inspections { get; set; } = new();
         public List<ReportFinalFactoryDetailDefectDto> ReportFinalFactoryDetailDefects { get; set; } = new();
     }
 }

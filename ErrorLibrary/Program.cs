@@ -19,7 +19,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContextFactory<AppDbContext>(options =>
 {
-    options.UseMySql(builder.Configuration.GetConnectionString("STConnect"),
+    options.UseMySql(builder.Configuration.GetConnectionString("BTConnect"),
         new MySqlServerVersion(new Version(8, 0, 36)));
 });
 
@@ -65,8 +65,6 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 builder.Services.AddScoped<IReportFinalFactoryService, ReportFinalFactoryService>();
 builder.Services.AddScoped<IReportFinalFactoryDetailService, ReportFinalFactoryDetailService>();
-builder.Services.AddScoped<IInspectionService, InspectionService>();
-builder.Services.AddScoped<IInspectionRoundService, InspectionRoundService>();
 builder.Services.AddScoped<IReportFinalFactoryDetailDefectService, ReportFinalFactoryDetailDefectService>();
 
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();

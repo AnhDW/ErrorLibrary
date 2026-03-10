@@ -45,7 +45,7 @@ $(document).ready(function () {
         renderRoleTable();
     } else if (path.includes('/ReportLibrary')) {
         initialInLinePage();
-    } else if (path.includes('/test')) {
+    } else if (path.includes('/Test')) {
         console.log('a');
         initGrid();
     }

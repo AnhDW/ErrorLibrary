@@ -17,12 +17,11 @@ namespace ErrorLibrary.Controllers
         private readonly IStyleService _styleService;
         private readonly IDefectService _defectService;
         private readonly IFactoryService _factoryService;
-        private readonly IInspectionService _inspectionService;
-        private readonly IInspectionRoundService _inspectionRoundService;
+
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public ReportFinalFactoryDetailLibraryController(ISharedService sharedService, IReportFinalFactoryService reportFinalFactoryService, IReportFinalFactoryDetailService reportFinalFactoryDetailService, IReportFinalFactoryDetailDefectService reportFinalFactoryDetailDefectService, ICustomerService customerService, IStyleService styleService, IDefectService defectService, IFactoryService factoryService, IInspectionService inspectionService, IMapper mapper, IInspectionRoundService inspectionRoundService)
+        public ReportFinalFactoryDetailLibraryController(ISharedService sharedService, IReportFinalFactoryService reportFinalFactoryService, IReportFinalFactoryDetailService reportFinalFactoryDetailService, IReportFinalFactoryDetailDefectService reportFinalFactoryDetailDefectService, ICustomerService customerService, IStyleService styleService, IDefectService defectService, IFactoryService factoryService, IMapper mapper)
         {
             _sharedService = sharedService;
             _reportFinalFactoryService = reportFinalFactoryService;
@@ -32,10 +31,8 @@ namespace ErrorLibrary.Controllers
             _styleService = styleService;
             _defectService = defectService;
             _factoryService = factoryService;
-            _inspectionService = inspectionService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
-            _inspectionRoundService = inspectionRoundService;
         }
 
         public IActionResult Index()
@@ -48,20 +45,12 @@ namespace ErrorLibrary.Controllers
             var reportFinalFactoryDetails = await _reportFinalFactoryDetailService.GetByReportFinalFactoryId(reportFinalFactoryId);
             var customers = await _customerService.GetAll();
             var styles = await _styleService.GetAll();
-            var inspections = await _inspectionService.GetAll();
-            var inspectionRounds = await _inspectionRoundService.GetAll();
-
-            inspections.ForEach(i =>
-            {
-                i.InspectionRounds = inspectionRounds.Where(ir => ir.InspectionId == i.Id).ToList();
-            });
 
             var reportFinalFactoryDetailDefects = await _reportFinalFactoryDetailDefectService.GetAll();
             foreach (var reportFinalFactoryDetail in reportFinalFactoryDetails)
             {
                 reportFinalFactoryDetail.Customer = _mapper.Map<CustomerDto>(customers.FirstOrDefault(c => c.Id == reportFinalFactoryDetail.CustomerId)!);
                 reportFinalFactoryDetail.Style = _mapper.Map<StyleDto>(styles.FirstOrDefault(s => s.Id == reportFinalFactoryDetail.StyleId)!);
-                reportFinalFactoryDetail.Inspections = _mapper.Map<List<InspectionDisplayDto>>(inspections.Where(i => i.ReportFinalFactoryDetailId == reportFinalFactoryDetail.Id));
                 reportFinalFactoryDetail.ReportFinalFactoryDetailDefects = _mapper.Map<List<ReportFinalFactoryDetailDefectDto>>(reportFinalFactoryDetailDefects.Where(x => x.ReportFinalFactoryDetailId == reportFinalFactoryDetail.Id));
             }
             _responseDto.Result = reportFinalFactoryDetails;
@@ -79,7 +68,6 @@ namespace ErrorLibrary.Controllers
                 return Json(_responseDto);
             }
 
-            var inspections = InitialInspections();
             var reportFinalFactoryDetailDefects = await InitialReportFinalFactoryDetailDefects();
 
             var reportFinalFactoryDetail = new ReportFinalFactoryDetail
@@ -89,7 +77,6 @@ namespace ErrorLibrary.Controllers
                 StyleId = reportFinalFactoryDetailDto.StyleId,
                 PO = reportFinalFactoryDetailDto.PO,
                 Quantity = reportFinalFactoryDetailDto.Quantity,
-                Inspections = inspections,
                 ReportFinalFactoryDetailDefects = reportFinalFactoryDetailDefects
             };
 
@@ -126,27 +113,6 @@ namespace ErrorLibrary.Controllers
             _responseDto.IsSuccess = false;
             _responseDto.Message = "Failed to delete ReportFinalFactoryDetail.";
             return Json(_responseDto);
-        }
-
-        private List<Inspection> InitialInspections()
-        {
-            var inspections = new List<Inspection>() {
-                new Inspection { InspectionType = InspectionType.PreFinal,
-                    InspectionRounds = new List<InspectionRound>(){
-                        new InspectionRound() { Name = "Lần 1" },
-                        new InspectionRound() { Name = "Lần 2" },
-                        new InspectionRound() { Name = "Lần 3" }
-                    }
-                },
-                new Inspection { InspectionType = InspectionType.Final,
-                    InspectionRounds = new List<InspectionRound>(){
-                        new InspectionRound() { Name = "Lần 1" },
-                        new InspectionRound() { Name = "Lần 2" },
-                        new InspectionRound() { Name = "Lần 3" }
-                    }
-                }
-            };
-            return inspections;
         }
 
         private async Task<List<ReportFinalFactoryDetailDefect>> InitialReportFinalFactoryDetailDefects()

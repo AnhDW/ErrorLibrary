@@ -11,9 +11,18 @@ let changedRows = {};
 async function initGrid() {
     await getDefectData(); // lấy dữ liệu defect trước
     const gridOptions = {
+        autoSizeStrategy: {
+            type: 'fitGridWidth',
+            defaultMinWidth: 150,
+        },
         rowData: data,
         columnDefs: [
-            { field: "customer_style", editable: true, headerName: "Khách hàng/Mã hàng" },
+            {
+                field: "customer_style", editable: true, headerName: "Khách hàng/Mã hàng", children: [
+                    { field: "customer", editable: true, headerName: "Khách hàng" },
+                    { field: "style", editable: true, headerName: "Mã hàng" },
+                ]
+            },
             { field: "po", editable: true, headerName: "PO" },
             { field: "quantity", editable: true, headerName: "Số lượng" },
             {

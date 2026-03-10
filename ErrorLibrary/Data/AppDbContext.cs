@@ -40,8 +40,8 @@ namespace ErrorLibrary.Data
         //Report Final Factory
         public DbSet<ReportFinalFactory> ReportFinalFactories { get; set; }
         public DbSet<ReportFinalFactoryDetail> ReportFinalFactoryDetails { get; set; }
-        public DbSet<Inspection> Inspections { get; set; }
-        public DbSet<InspectionRound> InspectionRounds { get; set; }
+        //public DbSet<Inspection> Inspections { get; set; }
+        //public DbSet<InspectionRound> InspectionRounds { get; set; }
         public DbSet<ReportFinalFactoryDetailDefect> ReportFinalFactoryDetailDefects { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
@@ -220,21 +220,6 @@ namespace ErrorLibrary.Data
                 .WithMany(x => x.ReportFinalFactoryDetails)
                 .HasForeignKey(x => x.ReportFinalFactoryId);
 
-            builder.Entity<Inspection>()
-                .HasOne(x => x.ReportFinalFactoryDetail)
-                .WithMany(x => x.Inspections)
-                .HasForeignKey(x => x.ReportFinalFactoryDetailId);
-
-            builder.Entity<Inspection>()
-                .Property(x => x.InspectionType)
-                .HasConversion<string>()
-                .HasMaxLength(20);
-
-            builder.Entity<InspectionRound>()
-                .Property(x => x.Result)
-                .HasConversion<string>()
-                .HasMaxLength(20);
-
             builder.Entity<ReportFinalFactoryDetailDefect>()
                 .HasOne(x => x.ReportFinalFactoryDetail)
                 .WithMany(x => x.ReportFinalFactoryDetailDefects)
@@ -247,11 +232,6 @@ namespace ErrorLibrary.Data
 
             builder.Entity<ReportFinalFactoryDetailDefect>()
                 .HasKey(x => new { x.ReportFinalFactoryDetailId, x.DefectId });
-
-            builder.Entity<InspectionRound>()
-                .HasOne(x => x.Inspection)
-                .WithMany(x => x.InspectionRounds)
-                .HasForeignKey(x => x.InspectionId);
 
             //unique index
             builder.Entity<InLine>()
