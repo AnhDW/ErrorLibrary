@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Test";
+}
+
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thư viện nhà máy</span></h4>
+        <div>
+            <button type="button" class="btn rounded-pill btn-primary" 
+                     onclick="handleAddRow()">
+                <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
+            </button>
+            <button type="button" class="btn rounded-pill btn-primary"
+                    onclick="handleDeleteRow()">
+                <span class="tf-icons bx bx-plus"></span>&nbsp; Xóa
+            </button>
+        </div>
+        <!-- Your Data Grid container -->
+        <div class="mt-4" id="myGrid" style="height: 500px"></div>
+    </div>
+    <!-- / Content -->
+    <div class="content-backdrop fade"></div>
+</div>
+<!-- Content wrapper -->
+@section Scripts {
+    <script src="~/js/page-handle/test.js"></script>
+}
+
