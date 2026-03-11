@@ -81,7 +81,35 @@ function renderSelectDropdown(data, valueField = 'id', labelField = 'name') {
         </div>
     `;
 }
+function renderFactorySelectDropdown(data, valueField = 'id', labelField = 'name') {
+    return `
+        <div class="dropdown select-dropdown w-100">
+            <input type="text"
+                   class="form-control bg-white dropdown-toggle select-input"
+                   data-bs-toggle="dropdown"
+                   placeholder="Chọn..."
+                   readonly />
 
+            <ul class="dropdown-menu p-2">
+                <input type="text"
+                       class="form-control mb-2 select-search"
+                       placeholder="Tìm kiếm..." />
+
+                ${data.map(item => `
+                    <li class="dropdown-item"
+                        data-value="${item[valueField]}" data-label="${item[labelField]}">
+                        <div class="d-flex flex-column">
+                            <div class="d-flex flex-row align-items-center">
+                                <small class="form-text text-muted m-0 bg-secondary rounded-1"><span class="p-1 text-white">${item.unitName}</span></small>
+                            </div>
+                            ${item[labelField]}
+                        </div>
+                    </li>
+                `).join('')}
+            </ul>
+        </div>
+    `;
+}
 function setSelectDropdownValue(container, value, triggerChange = true) {
     const dropdown = typeof container === 'string'
         ? document.querySelector(container)

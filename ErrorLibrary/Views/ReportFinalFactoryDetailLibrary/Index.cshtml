@@ -3,67 +3,283 @@
 }
 
 <div class="content-wrapper">
+    <!-- Content -->
+
     <div class="container-xxl flex-grow-1 container-p-y">
+        <div id="formWrapper" class="mb-2">
+            <div class="form-grid">
+                <div class="form-item">
+                    <label>Nhà máy</label>
+                    <div class="d-flex align-items-center" id="factoryDropdown"></div>
+                </div>
+                <div class="form-item">
+                    <label for="date">Ngày</label>
+                    <input id="date" class="form-control" type="date" disabled>
+                </div>
+            </div>
+        </div>
+        
+        <button id="toggleFormBtn" class="toggle-btn w-100" style="border:none; border-radius:0 0 0 0;">
+            <i class="fas fa-angle-double-up"></i>
+        </button>
 
-        <div id="finalFactoryTable"></div>
+        <div class="d-flex flex-wrap justify-content-between p-2">
+            <div>
+                @* <label class="text-black">Số lượng đạt: </label>
+                <h3 class="m-0 text-info" id="txtAcceptedQuantity"><span class="text-success">0</span>/0</h3> *@
+            </div>
+            <div>
+                @* <label class="text-black">Trạng thái: </label>
+                <h3 class="m-0 text-info" id="txtErrorQuantity"><span class="text-danger">0</span>/0</h3> *@
+            </div>
+            <div>
+                @* <label></label>
+                <div class="d-flex flex-row-reverse gap-1">
+                    <button id="btnIsFinalized" class="btn btn-secondary btn-sm" type="button"><i class="fas fa-check"></i>Hoàn thành</button>
+                    <button id="btnIsActive" class="btn btn-secondary btn-sm" type="button"><i class="fas fa-times"></i>Hủy kiểm</button>
+                </div> *@
+            </div>
+        </div>
+
+        <div class="row mt-3" id="timeFrameCard">
+        </div>
+        @*<div class="d-flex justify-content-center">
+            <a asp-controller="TimeFrameLibrary"><i class="fas fa-arrow-right"></i> Cài đặt khung thời gian</a>
+        </div> *@
+        <div class="mt-1">
+            <button type="button" class="btn rounded-pill btn-primary" onclick="addReportFinalFactoryDetail()">
+                <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
+            </button>
+            <!-- Add Modal -->
+            @* <div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Thêm kiểm InLine</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <input id="timeFrameId" type="text" class="form-control" hidden>
+
+                                <div class="mb-2">
+                                    <label for="selectedErrorGroup" class="form-label">Chọn nhóm lỗi</label>
+                                    <select class="form-select" id="selectedErrorGroup" aria-label="Default select example">
+                                        <option selected="">Chọn nhóm lỗi </option>
+                                        <option value="A1">Nhóm lỗi 1</option>
+                                        <option value="A2">Nhóm lỗi 2</option>
+                                        <option value="A3">Nhóm lỗi 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="selectedError" class="form-label">Chọn lỗi</label>
+                                    <select class="form-select" id="selectedError" aria-label="Default select example" disabled>
+                                        <option selected="">Chọn lỗi </option>
+                                        <option value="A1">Lỗi 1</option>
+                                        <option value="A2">Lỗi 2</option>
+                                        <option value="A3">Lỗi 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="quantityInLine" class="form-label">Số lượng</label>
+                                    <div class="input-group">
+                                        <button class="btn btn-outline-primary fs-5" type="button" id="addBtnDecreases">-</button>
+                                        <input id="quantityInLine" type="number" class="form-control" value="1" min="0">
+                                        <button class="btn btn-outline-primary fs-5" type="button" id="addBtnIncreases">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddInLineDetail()">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div> *@
+            <!-- Add Modal 1 -->
+            <div class="modal fade" id="addModel1" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Thêm kiểm InLine</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <input id="timeFrameId" type="text" class="form-control" hidden>
+                                <input id="errorId" type="text" class="form-control" hidden>
+
+                                <div class="mb-2">
+                                    <label class="form-label">Nhóm lỗi</label>
+                                    <div id="errorGroupList" class="d-flex flex-wrap gap-2">
+                                        <button type="button" class="btn btn-outline-primary error-group" data-id="A1">Nhóm lỗi 1</button>
+                                        <button type="button" class="btn btn-outline-primary error-group" data-id="A2">Nhóm lỗi 2</button>
+                                        <button type="button" class="btn btn-outline-primary error-group" data-id="A3">Nhóm lỗi 3</button>
+                                    </div>
+                                </div>
+
+                                <div class="mb-2">
+                                    <label class="form-label">Lỗi</label>
+                                    <div id="errorList" class="d-flex flex-wrap gap-2">
+                                        <!-- render động -->
+                                    </div>
+                                </div>
+
+                                <div class="mb-2">
+                                    <label for="quantityInLine" class="form-label">Số lượng</label>
+                                    <div class="input-group">
+                                        <button class="btn btn-outline-primary fs-5" type="button" id="addBtnDecreases">-</button>
+                                        <input id="quantityInLine" type="number" class="form-control" value="1" min="0">
+                                        <button class="btn btn-outline-primary fs-5" type="button" id="addBtnIncreases">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="handleAddInLineDetail()">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Thêm kiểm InLine</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <input id="editInLineDetailId" type="text" class="form-control" hidden>
+                                <input id="editInLineId" type="text" class="form-control" hidden>
+                                <input id="editTimeFrameId" type="text" class="form-control" hidden>
+                                <input id="editCreateAt" type="text" class="form-control" hidden>
+
+                                <div class="mb-2">
+                                    <label for="editSelectedErrorGroup" class="form-label">Chọn nhóm lỗi</label>
+                                    <select class="form-select" id="editSelectedErrorGroup" aria-label="Default select example">
+                                        <option selected="">Chọn nhóm lỗi </option>
+                                        <option value="A1">Nhóm lỗi 1</option>
+                                        <option value="A2">Nhóm lỗi 2</option>
+                                        <option value="A3">Nhóm lỗi 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="editSelectedError" class="form-label">Chọn lỗi</label>
+                                    <select class="form-select" id="editSelectedError" aria-label="Default select example">
+                                        <option selected="">Chọn lỗi </option>
+                                        <option value="A1">Lỗi 1</option>
+                                        <option value="A2">Lỗi 2</option>
+                                        <option value="A3">Lỗi 3</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label for="editQuantityInLine" class="form-label">Số lượng</label>
+                                    <div class="input-group">
+                                        <button class="btn btn-outline-primary fs-5" type="button" id="editBtnDecreases">-</button>
+                                        <input id="editQuantityInLine" type="number" class="form-control" value="0" min="0">
+                                        <button class="btn btn-outline-primary fs-5" type="button" id="editBtnIncreases">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="handleEditInLineDetail()">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Striped Rows -->
+        <div class="card mt-4">
+            <div style="min-height:200px;" class="table-responsive text-nowrap">
+                <div id="myGrid" style="height: 500px"></div>
+            </div>
+        </div>
+        <!--/ Striped Rows -->
     </div>
-
+    <!-- / Content -->
+    <div class="content-backdrop fade"></div>
 </div>
 <style>
-/*     .handsontable td {
-        white-space: normal; 
-        word-break: keep-all; 
-        overflow-wrap: break-word;
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 12px 20px; /* khoảng cách giữa các ô */
+        margin-top: 10px;
+    }
+
+    .form-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-item label {
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
+    .toggle-btn {
+        width: 100%;
+        height: 32px; /* Thấp hơn */
+        border: none;
+        background: none; /* Màu nhẹ */
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Icon ở giữa */
+        cursor: pointer;
+        border-radius: 6px;
+        transition: background 0.2s ease;
+    }
+
+    .toggle-btn:hover {
+        background: #e0e0e0;
+    }
+
+    .toggle-btn span {
+        font-size: 18px;
+        transition: transform 0.2s ease;
+    }
+    @@media (min-width: 768px) and (max-width: 1024px) {
+        .form-grid {
+            grid-template-columns: repeat(5, 1fr);
+        }
+    }
+    /* CSS cho hiệu ứng render card */
+    /* #timeFrameCard .card {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s ease;
+    }
+
+    #timeFrameCard .card.show {
+        opacity: 1;
+        transform: translateY(0);
     } */
-
 </style>
-<script>
-    const container = document.querySelector('#finalFactoryTable');
-
-    const hot = new Handsontable(container, {
-      themeName: 'ht-theme-main-dark-auto',
-      data: [
-        // ['Khách hàng/ Mã hàng', 'PO', 'Số lượng','Pre-final', '', 'Ngày kiểm lần 1', 'Kết quả kiểm lần 1',  'Ngày kiểm lần 2', 'Kết quả kiểm lần 2'],
-        // ['Khách hàng/ Mã hàng', 'PO', 'Số lượng','Tình trạng', '', 'Ngày kiểm lần 1', 'Kết quả kiểm lần 1',  'Ngày kiểm lần 2', 'Kết quả kiểm lần 2'],
-        // ['Khách hàng/ Mã hàng', 'PO', 'Số lượng', 'Major', 'Minor', 'Ngày kiểm lần 1', 'Kết quả kiểm lần 1',  'Ngày kiểm lần 2', 'Kết quả kiểm lần 2'],
-        [10, 11, 12, 13,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      ],
-      rowHeaders: true,
-      colHeaders: true,
-      height: 'auto',
-      autoWrapRow: true,
-      autoWrapCol: true,
-      manualColumnResize: true,
-      nestedHeaders:[
-        ['Khách hàng/ Mã hàng', 'PO', 'Số lượng',{ label: 'Pre-final', colspan:2 }, 'Ngày kiểm lần 1', 'Kết quả kiểm lần 1',  'Ngày kiểm lần 2', 'Kết quả kiểm lần 2'],
-        ['Khách hàng/ Mã hàng', 'PO', 'Số lượng',{ label: 'Tình trạng', colspan:2 }, 'Ngày kiểm lần 1', 'Kết quả kiểm lần 1',  'Ngày kiểm lần 2', 'Kết quả kiểm lần 2'],
-        ['Khách hàng/ Mã hàng', 'PO', 'Số lượng', 'Major', 'Minor', 'Ngày kiểm lần 1', 'Kết quả kiểm lần 1',  'Ngày kiểm lần 2', 'Kết quả kiểm lần 2'],
-      ],
-      mergeCells: [
-        // Gộp 3 hàng đầu tiên ở cột 0 (Khách hàng/ Mã hàng)
-        { row: 0, col: 0, rowspan: 3, colspan: 1 },
-        // Gộp 3 hàng đầu tiên ở cột 1 (PO)
-        { row: 0, col: 1, rowspan: 3, colspan: 1 },
-        // Gộp 3 hàng đầu tiên ở cột 2 (Số lượng)
-        { row: 0, col: 2, rowspan: 3, colspan: 1 },
-
-        { row: 0, col: 3, rowspan: 1, colspan: 2 },
-        { row: 1, col: 3, rowspan: 1, colspan: 2 },
-
-        { row: 0, col: 5, rowspan: 3, colspan: 1 },
-        { row: 0, col: 6, rowspan: 3, colspan: 1 },
-        { row: 0, col: 7, rowspan: 3, colspan: 1 },
-        { row: 0, col: 8, rowspan: 3, colspan: 1 },
-      ],
-      licenseKey: 'non-commercial-and-evaluation'
-    });
-
-
-</script>
-
 @section Scripts {
     <script src="~/js/page-handle/report-final-factory-detail-library.js"></script>
     <script src="~/js/request/report-final-factory-detail-defects-request.js"></script>
     <script src="~/js/request/report-final-factory-detail-request.js"></script>
     <script src="~/js/request/report-final-factory-request.js"></script>
+    <script src="~/js/request/organization-request.js"></script>
+    <script src="~/js/request/defect-request.js"></script>
 }

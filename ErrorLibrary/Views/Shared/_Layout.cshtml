@@ -1,7 +1,7 @@
 ﻿@using ErrorLibrary.Authorization.Constants
 @{
     var controllerName = ViewContext.RouteData.Values["controller"].ToString();
-    var featureControllers = new[] { "Home", "ErrorDetailLibrary", "InLineDetailLibrary", "InLineLibrary", "EndLineDetailLibrary", "EndLineLibrary", "ReportLibrary" };
+    var featureControllers = new[] { "Home", "ErrorDetailLibrary", "InLineDetailLibrary", "InLineLibrary", "EndLineDetailLibrary", "EndLineLibrary", "ReportLibrary", "ReportFinalFactoryDetailLibrary" };
     var libraryControllers = new[] { "ErrorLibrary", "ErrorGroupLibrary", "ErrorCategoryLibrary", "ProductCategoryLibrary", "ProductLibrary", "SolutionLibrary", "UnitLibrary", "FactoryLibrary", "EnterpriseLibrary", "LineLibrary" };
     var settingControllers = new[] { "UserLibrary", "RoleLibrary", "TimeFrameLibrary" };
 }
@@ -143,6 +143,12 @@
                                 <a class="menu-link" asp-controller="ReportLibrary" asp-action="Index">
                                     <i class="menu-icon tf-icons fa-solid fa-circle-exclamation"></i>
                                     <div style="margin-left: 4px;">Báo cáo</div>
+                                </a>
+                            </li>
+                            <li class="menu-item @(controllerName == "ReportFinalFactoryDetailLibrary" ? "active" : "")">
+                                <a class="menu-link" asp-controller="ReportFinalFactoryDetailLibrary" asp-action="Index">
+                                    <i class="menu-icon tf-icons fa-solid fa-circle-exclamation"></i>
+                                    <div style="margin-left: 4px;">Báo cáo nhà máy</div>
                                 </a>
                             </li>
                         </ul>

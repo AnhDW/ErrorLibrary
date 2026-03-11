@@ -40,6 +40,21 @@ namespace ErrorLibrary.Services
             return organizations;
         }
 
+        public async Task<List<OrganizationDisplayDto>> GetFactoriesOrganizationsDisplay()
+        {
+            var organizations = await
+                (from factory in _context.Factories
+                 join unit in _context.Units
+                     on factory.UnitId equals unit.Id
+                 select new OrganizationDisplayDto
+                 {
+                     Id = factory.Id,
+                     UnitName = unit.Name,
+                     FactoryName = factory.Name,
+                 }).AsNoTracking().ToListAsync();
+            return organizations;
+        }
+
         public async Task<IEnumerable<object>> GetOrganizationTree()
         {
             using var unitsContext = _dbContextFactory.CreateDbContext();

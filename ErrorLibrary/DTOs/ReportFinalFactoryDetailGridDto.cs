@@ -1,13 +1,15 @@
-﻿using ErrorLibrary.Helper.Enums;
+﻿using ErrorLibrary.Entities;
+using ErrorLibrary.Helper.Enums;
 
-namespace ErrorLibrary.Entities
+namespace ErrorLibrary.DTOs
 {
-    public class ReportFinalFactoryDetail
+    public class ReportFinalFactoryDetailGridDto
     {
         public int Id { get; set; }
-        public int ReportFinalFactoryId { get; set; }
         public int CustomerId { get; set; }
         public int StyleId { get; set; }
+        public string CustomerCode { get; set; }
+        public string StyleCode { get; set; }
         public string PO { get; set; } = string.Empty;
         public int Quantity { get; set; } = 0;
         //pre-final
@@ -31,10 +33,6 @@ namespace ErrorLibrary.Entities
 
         public string? Remark { get; set; }
 
-        public Customer Customer { get; set; }
-        public Style Style { get; set; }
-        public ReportFinalFactory ReportFinalFactory { get; set; }
-
-        public List<ReportFinalFactoryDetailDefect> ReportFinalFactoryDetailDefects { get; set; } = new List<ReportFinalFactoryDetailDefect>();
+        public List<ReportFinalFactoryDetailDefectDto> ReportFinalFactoryDetailDefects { get; set; } = new List<ReportFinalFactoryDetailDefectDto>();
     }
 }

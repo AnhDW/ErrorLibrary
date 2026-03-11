@@ -55,5 +55,14 @@ namespace ErrorLibrary.Controllers
             _responseDto.Result = organizations.OrderBy(x=>x.UnitName).ThenBy(x=>x.FactoryName).ThenBy(x=>x.EnterpriseName).ThenBy(x=>x.LineName);
             return Json(_responseDto);
         }
+
+        public async Task<IActionResult> GetFactoriesOrganizationsDisplay()
+        {
+            var organizations = await _organizationService.GetFactoriesOrganizationsDisplay();
+
+            _responseDto.Result = organizations.OrderBy(x => x.UnitName).ThenBy(x => x.FactoryName);
+            return Json(_responseDto);
+        }
+
     }
 }

@@ -10,6 +10,7 @@ namespace ErrorLibrary.Services.IServices
         Task<PagedList<ReportFinalFactoryDto>> GetAll(ReportFinalFactoryParams reportFinalFactoryParam);
         Task<List<ReportFinalFactory>> GetAll();
         Task<ReportFinalFactory> GetById(int id);
+        Task<ReportFinalFactory> GetByFactoryIdAndCreateDate(int factoryId, DateOnly createDate);
         void Add(ReportFinalFactory reportFinalFactory);
         void Update(ReportFinalFactory reportFinalFactory);
         void Delete(ReportFinalFactory reportFinalFactory);

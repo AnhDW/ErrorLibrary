@@ -52,11 +52,10 @@ namespace ErrorLibrary.Services
             return (await _context.ReportFinalFactoryDetails.FindAsync(id))!;
         }
 
-        public async Task<List<ReportFinalFactoryDetailDisplayDto>> GetByReportFinalFactoryId(int reportFinalFactoryId)
+        public async Task<List<ReportFinalFactoryDetail>> GetByReportFinalFactoryId(int reportFinalFactoryId)
         {
             return await _context.ReportFinalFactoryDetails.AsNoTracking()
                 .Where(rffd => rffd.ReportFinalFactoryId == reportFinalFactoryId)
-                .ProjectTo<ReportFinalFactoryDetailDisplayDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 

@@ -65,5 +65,44 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CheckInitReportFinalFactory([FromBody] CreateReportFinalFactoryDto createReportFinalFactoryDto)
+        {
+            var factory = await _factoryService.GetById(createReportFinalFactoryDto.FactoryId);
+            if (factory == null)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Factory not found.";
+                return Json(_responseDto);
+            }
+            var reportFinalFactory = await _reportFinalFactoryService.GetByFactoryIdAndCreateDate(createReportFinalFactoryDto.FactoryId, createReportFinalFactoryDto.CreatedDate);
+            if (reportFinalFactory != null)
+            {
+                _responseDto.Result = _mapper.Map<ReportFinalFactoryDto>(reportFinalFactory);
+                _responseDto.IsSuccess = true;
+                _responseDto.Message = "A ReportFinalFactory with the same FactoryId and CreatedDate already exists.";
+                return Json(_responseDto);
+            }
+
+            var newReportFinalFactory = new Entities.ReportFinalFactory
+            {
+                FactoryId = createReportFinalFactoryDto.FactoryId,
+                Name = $"Report for {factory.Name} on {createReportFinalFactoryDto.CreatedDate}",
+                CreateDate = createReportFinalFactoryDto.CreatedDate
+            };
+            _reportFinalFactoryService.Add(newReportFinalFactory);
+
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Result = _mapper.Map<ReportFinalFactoryDto>(newReportFinalFactory);
+                _responseDto.IsSuccess = true;
+                _responseDto.Message = "ReportFinalFactory created successfully.";
+                return Json(_responseDto);
+            }
+
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Error occurred while creating ReportFinalFactory.";
+            return Json(_responseDto);
+        }
     }
 }

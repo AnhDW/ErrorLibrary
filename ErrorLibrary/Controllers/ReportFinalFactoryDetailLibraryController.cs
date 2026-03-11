@@ -47,10 +47,11 @@ namespace ErrorLibrary.Controllers
             var styles = await _styleService.GetAll();
 
             var reportFinalFactoryDetailDefects = await _reportFinalFactoryDetailDefectService.GetAll();
-            foreach (var reportFinalFactoryDetail in reportFinalFactoryDetails)
+            var result = _mapper.Map<List<ReportFinalFactoryDetailGridDto>>(reportFinalFactoryDetails);
+            foreach (var reportFinalFactoryDetail in result)
             {
-                reportFinalFactoryDetail.Customer = _mapper.Map<CustomerDto>(customers.FirstOrDefault(c => c.Id == reportFinalFactoryDetail.CustomerId)!);
-                reportFinalFactoryDetail.Style = _mapper.Map<StyleDto>(styles.FirstOrDefault(s => s.Id == reportFinalFactoryDetail.StyleId)!);
+                reportFinalFactoryDetail.CustomerCode = customers.FirstOrDefault(c => c.Id == reportFinalFactoryDetail.CustomerId)!.Code;
+                reportFinalFactoryDetail.StyleCode = styles.FirstOrDefault(c => c.Id == reportFinalFactoryDetail.StyleId)!.Code;
                 reportFinalFactoryDetail.ReportFinalFactoryDetailDefects = _mapper.Map<List<ReportFinalFactoryDetailDefectDto>>(reportFinalFactoryDetailDefects.Where(x => x.ReportFinalFactoryDetailId == reportFinalFactoryDetail.Id));
             }
             _responseDto.Result = reportFinalFactoryDetails;
@@ -67,17 +68,18 @@ namespace ErrorLibrary.Controllers
                 _responseDto.Message = "ReportFinalFactory not found.";
                 return Json(_responseDto);
             }
-
+            var customer = await _customerService.GetByCode(reportFinalFactoryDetailDto.CustomerCode);
+            var style = await _styleService.GetByCode(reportFinalFactoryDetailDto.StyleCode);
             var reportFinalFactoryDetailDefects = await InitialReportFinalFactoryDetailDefects();
 
             var reportFinalFactoryDetail = new ReportFinalFactoryDetail
             {
                 ReportFinalFactoryId = reportFinalFactoryDetailDto.ReportFinalFactoryId,
-                CustomerId = reportFinalFactoryDetailDto.CustomerId,
-                StyleId = reportFinalFactoryDetailDto.StyleId,
                 PO = reportFinalFactoryDetailDto.PO,
                 Quantity = reportFinalFactoryDetailDto.Quantity,
-                ReportFinalFactoryDetailDefects = reportFinalFactoryDetailDefects
+                ReportFinalFactoryDetailDefects = reportFinalFactoryDetailDefects,
+                Customer = customer,
+                Style = style
             };
 
             _reportFinalFactoryDetailService.Add(reportFinalFactoryDetail);

@@ -10,6 +10,7 @@ namespace ErrorLibrary.Services.IServices
         Task<PagedList<StyleDto>> GetAll(StyleParams styleParam);
         Task<List<Style>> GetAll();
         Task<Style> GetById(int id);
+        Task<Style> GetByCode(string code);
         void Add(Style style);
         void Update(Style style);
         void Delete(Style style);

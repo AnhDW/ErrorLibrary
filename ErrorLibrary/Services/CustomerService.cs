@@ -57,6 +57,11 @@ namespace ErrorLibrary.Services
             return await _context.Customers.ToListAsync();
         }
 
+        public async Task<Customer> GetByCode(string code)
+        {
+            return (await _context.Customers.FirstOrDefaultAsync(x => x.Code == code)) ?? new Customer { Code = code, Name = code, CreatedAt = DateTime.Now };
+        }
+
         public async Task<Customer> GetById(int id)
         {
             return (await _context.Customers.FindAsync(id))!;

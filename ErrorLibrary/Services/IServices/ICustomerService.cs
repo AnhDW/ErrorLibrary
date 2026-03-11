@@ -10,6 +10,7 @@ namespace ErrorLibrary.Services.IServices
         Task<PagedList<CustomerDto>> GetAll(CustomerParams customerParam);
         Task<List<Customer>> GetAll();
         Task<Customer> GetById(int id);
+        Task<Customer> GetByCode(string code);
         void Add(Customer customer);
         void Update(Customer customer);
         void Delete(Customer customer);

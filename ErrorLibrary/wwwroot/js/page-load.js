@@ -46,8 +46,9 @@ $(document).ready(function () {
     } else if (path.includes('/ReportLibrary')) {
         initialInLinePage();
     } else if (path.includes('/Test')) {
-        console.log('a');
         initGrid();
+    } else if (path.includes('/ReportFinalFactoryDetailLibrary')) {
+        initialReportFinalFactoryDetailPage();
     }
 });
 

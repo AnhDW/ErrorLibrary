@@ -44,6 +44,7 @@ namespace ErrorLibrary.Helper
             CreateMap<Customer, CustomerDto>().ReverseMap();
             CreateMap<ReportFinalFactory, ReportFinalFactoryDto>().ReverseMap();
             CreateMap<ReportFinalFactoryDetail, ReportFinalFactoryDetailDto>().ReverseMap();
+            CreateMap<ReportFinalFactoryDetail, ReportFinalFactoryDetailGridDto>().ReverseMap();
             CreateMap<ReportFinalFactoryDetail, ReportFinalFactoryDetailDisplayDto>().ReverseMap();
             CreateMap<ReportFinalFactoryDetailDefect, ReportFinalFactoryDetailDefectDto>().ReverseMap();
         }

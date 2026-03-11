@@ -7,5 +7,6 @@ namespace ErrorLibrary.Services.IServices
         Task<IEnumerable<object>> GetOrganizationTree();
         Task<IEnumerable<object>> GetOrganizationTreeDropdown();
         Task<List<OrganizationDisplayDto>> GetAllOrganizationsDisplay();
+        Task<List<OrganizationDisplayDto>> GetFactoriesOrganizationsDisplay();
     }
 }

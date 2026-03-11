@@ -18,3 +18,10 @@ function getOrganizationsDisplay() {
         method: 'GET',
     })
 }
+
+function getFactoriesOrganizationsDisplay() {
+    return ajaxRequest({
+        url: '/OrganizationLibrary/GetFactoriesOrganizationsDisplay',
+        method: 'GET',
+    })
+}
