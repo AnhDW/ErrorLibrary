@@ -23,7 +23,16 @@ async function checkAndInitReportFinalFactory() {
     reportFinalFactoryId = res.id;
     data = await getByReportFinalFactory(reportFinalFactoryId);
     console.log(data);
-    gridApi.setGridOption("rowData", data.result);
+    result = data.result.map(x => ({
+        ...x,
+        preFinalDate1: new Date(x.preFinalDate1),
+        preFinalDate2: new Date(x.preFinalDate2),
+        preFinalDate3: new Date(x.preFinalDate3),
+        finalDate1: new Date(x.finalDate1),
+        finalDate2: new Date(x.finalDate2),
+        finalDate3: new Date(x.finalDate3),
+    }));
+    gridApi.setGridOption("rowData", result);
 
 }
 

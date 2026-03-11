@@ -54,7 +54,7 @@ namespace ErrorLibrary.Controllers
                 reportFinalFactoryDetail.StyleCode = styles.FirstOrDefault(c => c.Id == reportFinalFactoryDetail.StyleId)!.Code;
                 reportFinalFactoryDetail.ReportFinalFactoryDetailDefects = _mapper.Map<List<ReportFinalFactoryDetailDefectDto>>(reportFinalFactoryDetailDefects.Where(x => x.ReportFinalFactoryDetailId == reportFinalFactoryDetail.Id));
             }
-            _responseDto.Result = reportFinalFactoryDetails;
+            _responseDto.Result = result;
             return Json(_responseDto);
         }
 

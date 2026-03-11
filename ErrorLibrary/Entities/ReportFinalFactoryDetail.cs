@@ -15,9 +15,9 @@ namespace ErrorLibrary.Entities
         public int PreFinalMinor { get; set; } = 0;
         public DateTime? PreFinalDate1 { get; set; }
         public Result? PreFinalResult1 { get; set; }
-        public DateTime? PreFinalPreFinalDate2 { get; set; }
+        public DateTime? PreFinalDate2 { get; set; }
         public Result? PreFinalResult2 { get; set; }
-        public DateTime? PreFinalPreFinalDate3 { get; set; }
+        public DateTime? PreFinalDate3 { get; set; }
         public Result? PreFinalResult3 { get; set; }
         //final
         public int FinalMajor { get; set; } = 0;
