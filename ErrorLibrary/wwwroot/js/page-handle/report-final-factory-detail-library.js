@@ -21,6 +21,43 @@ async function checkAndInitReportFinalFactory() {
     }
     const res = (await checkInitReportFinalFactory(createReportFinalFactoryDto)).result;
     reportFinalFactoryId = res.id;
+    setRowData();
+}
+
+const formatVNDate = (value) => {
+    if (!value) return "";
+
+    const date = new Date(value);
+
+    return new Intl.DateTimeFormat("vi-VN", {
+        timeZone: "Asia/Ho_Chi_Minh",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        //hour: "2-digit",
+        //minute: "2-digit"
+    }).format(date);
+};
+const dateColumn = {
+    editable: true,
+    cellEditor: "agDateCellEditor",
+    valueFormatter: params => formatVNDate(params.value),
+    valueParser: params => {
+        if (!params.newValue) return null;
+        return new Date(params.newValue).toISOString();
+    }
+};
+function normalizeDate(date) {
+    if (!date) return null;
+
+    const d = new Date(date);
+
+    if (d.getFullYear() <= 1) return null;
+
+    return d.toISOString();
+}
+
+async function setRowData(){
     data = await getByReportFinalFactory(reportFinalFactoryId);
     console.log(data);
     result = data.result.map(x => ({
@@ -33,7 +70,6 @@ async function checkAndInitReportFinalFactory() {
         finalDate3: new Date(x.finalDate3),
     }));
     gridApi.setGridOption("rowData", result);
-
 }
 
 let defectColumn = [];
@@ -45,12 +81,12 @@ function createGridOptions(defectColumn) {
     return {
         getRowId: params => params.data.id,
         rowData: data,
-        rowSelection: { mode: "multiRow" },
+        //rowSelection: { mode: "multiRow" },
         columnDefs: [
             {
                 headerName: "Khách hàng/Mã hàng", children: [
-                    { field: "customerCode", editable: true, headerName: "Khách hàng" },
-                    { field: "styleCode", editable: true, headerName: "Mã hàng" },
+                    { field: "customerCode", editable: true, headerName: "Khách hàng", pinned: "left", width: 112 },
+                    { field: "styleCode", editable: true, headerName: "Mã hàng", pinned: "left", width: 112 },
                 ]
             },
             { field: "po", editable: true, headerName: "PO" },
@@ -63,11 +99,11 @@ function createGridOptions(defectColumn) {
                             { field: "preFinalMajor", editable: true, headerName: "Nhẹ" }
                         ]
                     },
-                    { field: "preFinalDate1", editable: true, headerName: "Ngày kiểm lần 1" },
+                    { field: "preFinalDate1", editable: true, headerName: "Ngày kiểm lần 1", ...dateColumn },
                     { field: "preFinalResult1", editable: true, headerName: "Kết quả lần 1" },
-                    { field: "preFinalDate2", editable: true, headerName: "Ngày kiểm lần 2" },
+                    { field: "preFinalDate2", editable: true, headerName: "Ngày kiểm lần 2", ...dateColumn },
                     { field: "preFinalResult2", editable: true, headerName: "Kết quả lần 2" },
-                    { field: "preFinalDate3", editable: true, headerName: "Ngày kiểm lần 3" },
+                    { field: "preFinalDate3", editable: true, headerName: "Ngày kiểm lần 3", ...dateColumn },
                     { field: "preFinalResult3", editable: true, headerName: "Kết quả lần 3" },
                 ]
             },
@@ -79,28 +115,118 @@ function createGridOptions(defectColumn) {
                             { field: "finalMajor", editable: true, headerName: "Nhẹ" }
                         ]
                     },
-                    { field: "finalDate1", editable: true, headerName: "Ngày kiểm lần 1" },
+                    { field: "finalDate1", editable: true, headerName: "Ngày kiểm lần 1", ...dateColumn },
                     { field: "finalResult1", editable: true, headerName: "Kết quả lần 1" },
-                    { field: "finalDate2", editable: true, headerName: "Ngày kiểm lần 2" },
+                    { field: "finalDate2", editable: true, headerName: "Ngày kiểm lần 2", ...dateColumn },
                     { field: "finalResult2", editable: true, headerName: "Kết quả lần 2" },
-                    { field: "finalDate3", editable: true, headerName: "Ngày kiểm lần 3" },
+                    { field: "finalDate3", editable: true, headerName: "Ngày kiểm lần 3", ...dateColumn },
                     { field: "finalResult3", editable: true, headerName: "Kết quả lần 3" },
                 ]
             },
             { field: "remark", editable: true, headerName: "Ghi chú" },
-            { headerName: "Khuyết điểm", children: defectColumn }
+            { headerName: "Khuyết điểm", children: defectColumn },
+            {
+                headerName: "",
+                width: 50,
+                pinned: "right",
+                cellRenderer: (params) => {
+                    const e = document.createElement("i");
+                    e.className = "fas fa-times";
+                    e.style.color = "red";
+                    e.style.cursor = "pointer";
+
+                    e.onclick = () => {
+                        deleteRow(params);
+                    };
+
+                    return e;
+                }
+            }
         ],
         onCellValueChanged: function (event) {
-            const row = event.data;
-            changedRows[row.id] = row;
+            const reportFinalFactoryDetailId = event.data.id;
+            const columnId = event.column.getColId();
+            const colId = event.column.getColId();
+
+            const newValue = event.newValue;
+            const oldValue = event.oldValue;
+
+            if (colId.startsWith("defect_")) {
+
+                const defectId = parseInt(colId.replace("defect_", ""));
+
+                //update ReportFinalFactoryDetailDefect
+                var reportFinalFactoryDetailDefectDto = { reportFinalFactoryDetailId, defectId, quantity: newValue }
+                updateReportFinalFactoryDetailDefect(reportFinalFactoryDetailDefectDto).then(res => {
+                    console.log(res);
+                });
+            }
+
+            //update ReportFinalFactoryDetail
+            console.log("Row:", reportFinalFactoryDetailId);
+            console.log("Column:", columnId);
+            console.log("Old:", oldValue);
+            console.log("New:", newValue);
+            const x = event.data;
+
+            const reportFinalFactoryDetailDto = {
+                ...x,
+                reportFinalFactoryId,
+                preFinalDate1: normalizeDate(x.preFinalDate1),
+                preFinalDate2: normalizeDate(x.preFinalDate2),
+                preFinalDate3: normalizeDate(x.preFinalDate3),
+                finalDate1: normalizeDate(x.finalDate1),
+                finalDate2: normalizeDate(x.finalDate2),
+                finalDate3: normalizeDate(x.finalDate3),
+            };
+            console.log(reportFinalFactoryDetailDto);
+            updateReportFinalFactoryDetail(reportFinalFactoryDetailDto).then(res => {
+                console.log(res);
+            });
+
+            //if (columnId.startsWith("preFinalDate")) {
+            //console.log("New:", newValue.toISOString());
+            //}
+                
+            
         }
     };
 }
 
 async function initGrid() {
     var defects = (await getDefects()).result;
-    defectColumn = defects.map(x => ({ colId: x.id, field: x.code, headerName: x.name, editable: true }));
-    
+    //defectColumn = defects.map(x => ({ colId: x.id, field: x.code, headerName: x.name, editable: true }));
+    defectColumn = defects.map(d => ({
+        colId: "defect_" + d.id,
+        headerName: d.name,
+        headerTooltip: d.code,
+        editable: true,
+        width: 90,
+
+        valueGetter: params => {
+            const item = params.data.reportFinalFactoryDetailDefects
+                ?.find(x => x.defectId === d.id);
+            return item ? item.quantity : 0;
+        },
+
+        valueSetter: params => {
+            let item = params.data.reportFinalFactoryDetailDefects
+                ?.find(x => x.defectId === d.id);
+
+            if (item) {
+                item.quantity = Number(params.newValue);
+            } else {
+                params.data.reportFinalFactoryDetailDefects.push({
+                    reportFinalFactoryDetailId: params.data.id,
+                    defectId: d.id,
+                    quantity: Number(params.newValue)
+                });
+            }
+
+            return true; // báo grid refresh
+        }
+    }));
+    console.log(defectColumn);
     gridOptions = createGridOptions(defectColumn);
 
     const myGridElement = document.querySelector('#myGrid');
@@ -108,21 +234,46 @@ async function initGrid() {
 }
 
 function addReportFinalFactoryDetail() {
-    var newRow = { id: 0, customCode: "", styleCode: "", po: "", quantity: 0, preFinalMinor: 0, preFinalMajor: 0, preFinalDate1: new Date()}
-    gridApi.setGridOption("rowData", [newRow]);
+    if (reportFinalFactoryId === 0) {
+        $('#formWrapper').addClass('shake border border-2 border-danger p-2 rounded');
+        return;
+    }
     
     console.log(gridApi);
-    var reportFinalFactoryDetailDto = { reportFinalFactoryId, customerCode: 'Cus_Test', styleCode: 'Style_Test', po: 'PO_Test', quantity: 100 };
+    var reportFinalFactoryDetailDto = { reportFinalFactoryId, customerCode: '', styleCode: '', po: '', quantity: 0 };
     createReportFinalFactoryDetail(reportFinalFactoryDetailDto).then(res => {
-        console.log(res);
+        setRowData();
     });
 
 }
-
+function deleteRow(params) {
+    const rowNode = params.node;
+    deleteReportFinalFactoryDetail(rowNode.id).then(res => {
+        resToastr(res);
+        gridApi.applyTransaction({
+            remove: [params.data]
+        });
+    });
+}
 $('#factoryDropdown').on('change', '.select-input', async function () {
+    $('#formWrapper').removeClass('shake border border-2 border-danger p-2 rounded');
     await checkAndInitReportFinalFactory();
 });
 
 $('#date').on('change keyup', async function () {
+    $('#formWrapper').removeClass('shake border border-2 border-danger p-2 rounded');
     await checkAndInitReportFinalFactory();
+});
+
+$("#toggleFormBtn").on("click", function () {
+    const wrapper = document.getElementById("formWrapper");
+    const icon = document.getElementById("toggleIcon");
+
+    wrapper.classList.toggle("d-none");
+
+    if (wrapper.classList.contains("d-none")) {
+        this.innerHTML = '<i class="fas fa-angle-double-down"></i>';
+    } else {
+        this.innerHTML = '<i class="fas fa-angle-double-up"></i>';
+    }
 });

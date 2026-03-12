@@ -96,6 +96,33 @@ namespace ErrorLibrary.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> UpdateReportFinalFactoryDetail([FromBody] ReportFinalFactoryDetailDto reportFinalFactoryDetailDto)
+        {
+            var reportFinalFactoryDetail = await _reportFinalFactoryDetailService.GetById(reportFinalFactoryDetailDto.Id);
+            if (reportFinalFactoryDetail == null)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "ReportFinalFactoryDetail not found.";
+                return Json(_responseDto);
+            }
+            var customer = await _customerService.GetByCode(reportFinalFactoryDetailDto.CustomerCode);
+            var style = await _styleService.GetByCode(reportFinalFactoryDetailDto.StyleCode);
+            _mapper.Map(reportFinalFactoryDetailDto, reportFinalFactoryDetail);
+            reportFinalFactoryDetail.Customer = customer;
+            reportFinalFactoryDetail.Style = style;
+            _reportFinalFactoryDetailService.Update(reportFinalFactoryDetail);
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.IsSuccess = true;
+                _responseDto.Message = "ReportFinalFactoryDetail update successfully.";
+                return Json(_responseDto);
+            }
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Failed to update ReportFinalFactoryDetail.";
+            return Json(_responseDto);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> DeleteReportFinalFactoryDetail([FromBody] int id)
         {
             var reportFinalFactoryDetail = await _reportFinalFactoryDetailService.GetById(id);
