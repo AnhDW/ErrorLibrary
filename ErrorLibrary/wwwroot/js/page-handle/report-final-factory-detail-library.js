@@ -22,6 +22,7 @@ async function checkAndInitReportFinalFactory() {
     const res = (await checkInitReportFinalFactory(createReportFinalFactoryDto)).result;
     reportFinalFactoryId = res.id;
     setRowData();
+    gridColumnApi.autoSizeAllColumns();
 }
 
 const formatVNDate = (value) => {
