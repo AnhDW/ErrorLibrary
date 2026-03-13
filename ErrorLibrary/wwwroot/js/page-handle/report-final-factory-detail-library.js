@@ -256,6 +256,10 @@ function deleteRow(params) {
         });
     });
 }
+function onDownloadForm() {
+    console.log('export');
+    gridApi.exportDataAsExcel();
+}
 $('#factoryDropdown').on('change', '.select-input', async function () {
     $('#formWrapper').removeClass('shake border border-2 border-danger p-2 rounded');
     await checkAndInitReportFinalFactory();
