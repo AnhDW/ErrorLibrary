@@ -256,10 +256,55 @@ function deleteRow(params) {
         });
     });
 }
+
 function onDownloadForm() {
     console.log('export');
     gridApi.exportDataAsExcel();
 }
+
+//import handle
+document.getElementById('importReportFinalFactories').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+        const data = new Uint8Array(event.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+
+        // lấy danh sách sheet
+        const sheetNames = workbook.SheetNames;
+
+        let html = `<option value="" selected disabled>Chọn work sheet</option>`;
+        sheetNames.forEach((item, index) => {
+            html += `<option value="${index}">${item}</option>`;
+        });
+
+        $('#sheetSelect').html(html);
+
+    };
+
+    reader.readAsArrayBuffer(file);
+});
+
+document.getElementById('sheetSelect').addEventListener('change', function (e) {
+    const worksheetIndex = $('#sheetSelect').val();
+    const importModel = $('#importModel');
+    const importModelChild = importModel.find('.modal-dialog');
+    importModelChild.addClass('modal-xl');
+
+    console.log(importModel);
+    importReportFinalFactoryToExcel({ worksheetIndex: worksheetIndex }).then(async function (res) {
+        console.log(res);
+        var previewErrorExcel = res.result;
+        var html = await reportFinalFactoryDetailExcelPreview(previewErrorExcel);
+        $('#preview').html(html);
+        errorGroupNamesExcept = previewErrorExcel.errorGroupNamesExcept;
+        productCategoryNamesExcept = previewErrorExcel.productCategoryNamesExcept;
+        errorCategoryNamesExcept = previewErrorExcel.errorCategoryNamesExcept;
+        errorExcel = previewErrorExcel.excel;
+    });
+});
+
 $('#factoryDropdown').on('change', '.select-input', async function () {
     $('#formWrapper').removeClass('shake border border-2 border-danger p-2 rounded');
     await checkAndInitReportFinalFactory();

@@ -1,4 +1,12 @@
-﻿function getByReportFinalFactory(reportFinalFactoryId) {
+﻿function reportFinalFactoryDetailExcelPreview(reportFinalFactoryDetailGridDto) {
+    return ajaxRequest({
+        url: '/ReportFinalFactoryDetailLibrary/ReportFinalFactoryDetailExcelPreview',
+        method: 'POST',
+        data: reportFinalFactoryDetailGridDto
+    })
+}
+
+function getByReportFinalFactory(reportFinalFactoryId) {
     return ajaxRequest({
         url: '/ReportFinalFactoryDetailLibrary/GetByReportFinalFactory',
         method: 'GET',
@@ -39,5 +47,19 @@ function deleteReportFinalFactoryDetail (id) {
         method: 'POST',
         data: id,
         showLoading: true
+    })
+}
+
+function importReportFinalFactoryToExcel(importErrorDto) {
+    const formData = new FormData();
+    formData.append("file", $("#importReportFinalFactories")[0].files[0]);
+    formData.append("worksheetIndex", importErrorDto.worksheetIndex);
+
+    return ajaxRequest({
+        url: '/ReportFinalFactoryDetailLibrary/ImportReportFinalFactoryToExcel',
+        method: 'POST',
+        data: formData,
+        isFormData: true,
+        showLoading: true,
     })
 }

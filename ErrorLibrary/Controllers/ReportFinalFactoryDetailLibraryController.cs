@@ -2,8 +2,10 @@
 using ErrorLibrary.DTOs;
 using ErrorLibrary.Entities;
 using ErrorLibrary.Helper.Enums;
+using ErrorLibrary.Services;
 using ErrorLibrary.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 
 namespace ErrorLibrary.Controllers
 {
@@ -38,6 +40,13 @@ namespace ErrorLibrary.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ReportFinalFactoryDetailExcelPreview([FromBody] ReportFinalFactoryDetailGridDto reportFinalFactoryDetailGridDto)
+        {
+            return PartialView("ReportFinalFactoryDetailExcelPreview", reportFinalFactoryDetailGridDto);
         }
 
         public async Task<IActionResult> GetByReportFinalFactory(int reportFinalFactoryId)
@@ -157,6 +166,94 @@ namespace ErrorLibrary.Controllers
                 });
             }
             return reportFinalFactoryDetailDefects;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ImportReportFinalFactoryToExcel([FromForm] ImportExcelDto importExcelDto)
+        {
+            ExcelPackage.License.SetNonCommercialPersonal("ErrorLibrary");
+
+            var reportFinalFactoryDetailExcel = new List<ReportFinalFactoryDetailGridDto>();
+            var defects = new List<Defect>();
+            using (var stream = new MemoryStream())
+            {
+                await importExcelDto.File.CopyToAsync(stream);
+                using (var package = new ExcelPackage(stream))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[importExcelDto.WorksheetIndex];
+                    int rowCount = worksheet.Dimension.Rows;
+                    int columnCount = worksheet.Dimension.Columns;
+                    for (int col = 21; col <= columnCount; col++)
+                    {
+                        defects.Add(new Defect
+                        {
+                            Name = worksheet.Cells[3, col].Text
+                        });
+                    }
+                    for (int row = 4; row <= rowCount; row++) // Bỏ header
+                    {
+                        var customerStyle = worksheet.Cells[row, 1].Text;
+                        var reportFinalFactoryDetailDefects = new List<ReportFinalFactoryDetailDefectDto>();
+                        for(int col = 21; col <= columnCount; col++)
+                        {
+                            reportFinalFactoryDetailDefects.Add(new ReportFinalFactoryDetailDefectDto
+                            {
+                                DefectId = 1, // Ví dụ: DefectId = 1, bạn có thể thay đổi theo logic của mình
+                                Quantity = int.TryParse(worksheet.Cells[row, col].Text, out int defectQuantity) ? defectQuantity : 0
+                            });
+                        }
+                        reportFinalFactoryDetailExcel.Add(new ReportFinalFactoryDetailGridDto
+                        {
+                            CustomerCode = customerStyle.Split('/')[0],
+                            StyleCode = customerStyle.Substring(customerStyle.IndexOf('/') + 1),
+                            PO = worksheet.Cells[row, 2].Text,
+                            Quantity = int.TryParse(worksheet.Cells[row, 3].Text, out int quantity) ? quantity : 0,
+                            PreFinalMajor = int.TryParse(worksheet.Cells[row, 4].Text, out int preFinalMajor) ? preFinalMajor : 0,
+                            PreFinalMinor = int.TryParse(worksheet.Cells[row, 5].Text, out int preFinalMinor) ? preFinalMinor : 0,
+                            PreFinalDate1 = DateTime.TryParse(worksheet.Cells[row, 6].Text, out DateTime preFinalDate1) ? preFinalDate1 : (DateTime?)null,
+                            PreFinalResult1 = Enum.TryParse(worksheet.Cells[row, 7].Text, out Result preFinalResult1) ? preFinalResult1 : (Result?)null,
+                            PreFinalDate2 = DateTime.TryParse(worksheet.Cells[row, 8].Text, out DateTime preFinalDate2) ? preFinalDate2 : (DateTime?)null,
+                            PreFinalResult2 = Enum.TryParse(worksheet.Cells[row, 9].Text, out Result preFinalResult2) ? preFinalResult2 : (Result?)null,
+                            PreFinalDate3 = DateTime.TryParse(worksheet.Cells[row, 10].Text, out DateTime preFinalDate3) ? preFinalDate3 : (DateTime?)null,
+                            PreFinalResult3 = Enum.TryParse(worksheet.Cells[row, 11].Text, out Result preFinalResult3) ? preFinalResult3 : (Result?)null,
+                            FinalMajor = int.TryParse(worksheet.Cells[row, 12].Text, out int finalMajor) ? finalMajor : 0,
+                            FinalMinor = int.TryParse(worksheet.Cells[row, 13].Text, out int finalMinor) ? finalMinor : 0,
+                            FinalDate1 = DateTime.TryParse(worksheet.Cells[row, 14].Text, out DateTime finalDate1) ? finalDate1 : (DateTime?)null,
+                            FinalResult1 = Enum.TryParse(worksheet.Cells[row, 15].Text, out Result finalResult1) ? finalResult1 : (Result?)null,
+                            FinalDate2 = DateTime.TryParse(worksheet.Cells[row, 16].Text, out DateTime finalDate2) ? finalDate2 : (DateTime?)null,
+                            FinalResult2 = Enum.TryParse(worksheet.Cells[row, 17].Text, out Result finalResult2) ? finalResult2 : (Result?)null,
+                            FinalDate3 = DateTime.TryParse(worksheet.Cells[row, 18].Text, out DateTime finalDate3) ? finalDate3 : (DateTime?)null,
+                            FinalResult3 = Enum.TryParse(worksheet.Cells[row, 19].Text, out Result finalResult3) ? finalResult3 : (Result?)null,
+                            Remark = worksheet.Cells[row, 20].Text,
+                            ReportFinalFactoryDetailDefects = reportFinalFactoryDetailDefects
+                        });
+                    }
+                }
+            }
+            //var errorGroupNames = errorExcelDtos.Select(x => x.ErrorGroup).Distinct().ToList();
+            //var productCategoryNames = errorExcelDtos.Select(x => x.ProductCategory).Distinct().ToList();
+            //var errorCategoryNames = errorExcelDtos.Select(x => x.ErrorCategory).Distinct().ToList();
+
+            //var errorGroups = await _errorGroupService.GetByNames(errorGroupNames);
+            //var productCategories = await _productCategoryService.GetByNames(productCategoryNames);
+            //var errorCategories = await _errorCategoryService.GetByNames(errorCategoryNames);
+
+            //var errorGroupNamesExcept = errorGroupNames.Except(errorGroups.Select(x => x.Name)).ToList();
+            //var productCategoryNamesExcept = productCategoryNames.Except(productCategories.Select(x => x.Name)).ToList();
+            //var errorCategoryNamesExcept = errorCategoryNames.Except(errorCategories.Select(x => x.Name)).ToList();
+
+            //var previewErrorExcel = new PreviewErrorExcelDto
+            //{
+            //    ErrorGroups = _mapper.Map<List<ErrorGroupDto>>(errorGroups),
+            //    ProductCategories = _mapper.Map<List<ProductCategoryDto>>(productCategories),
+            //    ErrorCategories = _mapper.Map<List<ErrorCategoryDto>>(errorCategories),
+            //    ErrorGroupNamesExcept = errorGroupNamesExcept,
+            //    ProductCategoryNamesExcept = productCategoryNamesExcept,
+            //    ErrorCategoryNamesExcept = errorCategoryNamesExcept,
+            //    Excel = errorExcelDtos,
+            //};
+            _responseDto.Result = reportFinalFactoryDetailExcel;
+            return Json(_responseDto);
         }
 
     }

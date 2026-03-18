@@ -50,12 +50,51 @@
             <button type="button" class="btn rounded-pill btn-primary" onclick="addReportFinalFactoryDetail()">
                 <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
             </button>
-            <button type="button" class="btn rounded-pill ui-bg-overlay" >
+            <button type="button" class="btn rounded-pill ui-bg-overlay" data-bs-toggle="modal"
+                    data-bs-target="#importModel">
                 <i class="bx bx-import"></i>
             </button>
-            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="onDownloadForm()">
-                <i class="fas fa-file-download"></i>Tải form mẫu
-            </button>
+            <!-- Import Modal -->
+            <div class="modal fade" id="importModel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered " role="document">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalCenterTitle">Import</h5>
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <form action="/" method="post">
+                            <div class="modal-body">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="onDownloadForm()">
+                                    <i class="fas fa-file-download"></i>Tải form mẫu
+                                </button>
+                                <div class="row">
+                                    <div class="mb-2 col-md-6">
+                                        <label for="importReportFinalFactories" class="form-label">Chọn file</label>
+                                        <input class="form-control" type="file" id="importReportFinalFactories">
+                                    </div>
+                                    <div class="mb-2 col-md-6">
+                                        <label for="sheetSelect" class="form-label">Work sheet</label>
+                                        <select class="form-select" id="sheetSelect" aria-label="Default select example">
+                                            <option selected="">Chọn work sheet</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="importErrorsExcel()"><i class="fas fa-file-upload"></i>Tải lên</button>
+                            </div>
+                        </form>
+                        <div id="preview" class="p-2"></div>
+                    </div>
+                </div>
+            </div>
             <!-- Add Modal -->
             @* <div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
