@@ -237,57 +237,57 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
-            [HttpPost]
-            public async Task<IActionResult> ImportErrorsToExcel([FromForm] ImportExcelDto importErrorDto)
+        [HttpPost]
+        public async Task<IActionResult> ImportErrorsToExcel([FromForm] ImportExcelDto importErrorDto)
+        {
+            ExcelPackage.License.SetNonCommercialPersonal("ErrorLibrary");
+
+            var errorExcelDtos = new List<ErrorExcelDto>();
+            using (var stream = new MemoryStream())
             {
-                ExcelPackage.License.SetNonCommercialPersonal("ErrorLibrary");
-
-                var errorExcelDtos = new List<ErrorExcelDto>();
-                using (var stream = new MemoryStream())
+                await importErrorDto.File.CopyToAsync(stream);
+                using (var package = new ExcelPackage(stream))
                 {
-                    await importErrorDto.File.CopyToAsync(stream);
-                    using (var package = new ExcelPackage(stream))
-                    {
-                        ExcelWorksheet worksheet = package.Workbook.Worksheets[importErrorDto.WorksheetIndex];
-                        int rowCount = worksheet.Dimension.Rows;
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[importErrorDto.WorksheetIndex];
+                    int rowCount = worksheet.Dimension.Rows;
 
-                        for (int row = 2; row <= rowCount; row++) // Bỏ header
+                    for (int row = 2; row <= rowCount; row++) // Bỏ header
+                    {
+                        errorExcelDtos.Add(new ErrorExcelDto
                         {
-                            errorExcelDtos.Add(new ErrorExcelDto
-                            {
-                                ErrorGroup = worksheet.Cells[row, 1].Text,
-                                ProductCategory = worksheet.Cells[row, 2].Text,
-                                ErrorName = worksheet.Cells[row, 3].Text,
-                                ErrorCategory = worksheet.Cells[row, 4].Text,
-                            });
-                        }
+                            ErrorGroup = worksheet.Cells[row, 1].Text,
+                            ProductCategory = worksheet.Cells[row, 2].Text,
+                            ErrorName = worksheet.Cells[row, 3].Text,
+                            ErrorCategory = worksheet.Cells[row, 4].Text,
+                        });
                     }
                 }
-                var errorGroupNames = errorExcelDtos.Select(x => x.ErrorGroup).Distinct().ToList();
-                var productCategoryNames = errorExcelDtos.Select(x => x.ProductCategory).Distinct().ToList();
-                var errorCategoryNames = errorExcelDtos.Select(x => x.ErrorCategory).Distinct().ToList();
-
-                var errorGroups = await _errorGroupService.GetByNames(errorGroupNames);
-                var productCategories = await _productCategoryService.GetByNames(productCategoryNames);
-                var errorCategories = await _errorCategoryService.GetByNames(errorCategoryNames);
-
-                var errorGroupNamesExcept = errorGroupNames.Except(errorGroups.Select(x => x.Name)).ToList();
-                var productCategoryNamesExcept = productCategoryNames.Except(productCategories.Select(x => x.Name)).ToList();
-                var errorCategoryNamesExcept = errorCategoryNames.Except(errorCategories.Select(x => x.Name)).ToList();
-
-                var previewErrorExcel = new PreviewErrorExcelDto
-                {
-                    ErrorGroups = _mapper.Map<List<ErrorGroupDto>>(errorGroups),
-                    ProductCategories = _mapper.Map<List<ProductCategoryDto>>(productCategories),
-                    ErrorCategories = _mapper.Map<List<ErrorCategoryDto>>(errorCategories),
-                    ErrorGroupNamesExcept = errorGroupNamesExcept,
-                    ProductCategoryNamesExcept = productCategoryNamesExcept,
-                    ErrorCategoryNamesExcept = errorCategoryNamesExcept,
-                    Excel = errorExcelDtos,
-                };
-                _responseDto.Result = previewErrorExcel;
-                return Json(_responseDto);
             }
+            var errorGroupNames = errorExcelDtos.Select(x => x.ErrorGroup).Distinct().ToList();
+            var productCategoryNames = errorExcelDtos.Select(x => x.ProductCategory).Distinct().ToList();
+            var errorCategoryNames = errorExcelDtos.Select(x => x.ErrorCategory).Distinct().ToList();
+
+            var errorGroups = await _errorGroupService.GetByNames(errorGroupNames);
+            var productCategories = await _productCategoryService.GetByNames(productCategoryNames);
+            var errorCategories = await _errorCategoryService.GetByNames(errorCategoryNames);
+
+            var errorGroupNamesExcept = errorGroupNames.Except(errorGroups.Select(x => x.Name)).ToList();
+            var productCategoryNamesExcept = productCategoryNames.Except(productCategories.Select(x => x.Name)).ToList();
+            var errorCategoryNamesExcept = errorCategoryNames.Except(errorCategories.Select(x => x.Name)).ToList();
+
+            var previewErrorExcel = new PreviewErrorExcelDto
+            {
+                ErrorGroups = _mapper.Map<List<ErrorGroupDto>>(errorGroups),
+                ProductCategories = _mapper.Map<List<ProductCategoryDto>>(productCategories),
+                ErrorCategories = _mapper.Map<List<ErrorCategoryDto>>(errorCategories),
+                ErrorGroupNamesExcept = errorGroupNamesExcept,
+                ProductCategoryNamesExcept = productCategoryNamesExcept,
+                ErrorCategoryNamesExcept = errorCategoryNamesExcept,
+                Excel = errorExcelDtos,
+            };
+            _responseDto.Result = previewErrorExcel;
+            return Json(_responseDto);
+        }
 
         [Authorize]
         [HttpPost]

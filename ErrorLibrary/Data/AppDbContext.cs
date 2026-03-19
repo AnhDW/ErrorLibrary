@@ -233,6 +233,30 @@ namespace ErrorLibrary.Data
             builder.Entity<ReportFinalFactoryDetailDefect>()
                 .HasKey(x => new { x.ReportFinalFactoryDetailId, x.DefectId });
 
+            builder.Entity<ReportFinalFactoryDetail>()
+                .Property(x => x.PreFinalResult1)
+                .HasConversion<string>()
+                .HasMaxLength(20);
+            builder.Entity<ReportFinalFactoryDetail>()
+                .Property(x => x.PreFinalResult2)
+                .HasConversion<string>()
+                .HasMaxLength(20);
+            builder.Entity<ReportFinalFactoryDetail>()
+                .Property(x => x.PreFinalResult3)
+                .HasConversion<string>()
+                .HasMaxLength(20);
+            builder.Entity<ReportFinalFactoryDetail>()
+                .Property(x => x.FinalResult1)
+                .HasConversion<string>()
+                .HasMaxLength(20);
+            builder.Entity<ReportFinalFactoryDetail>()
+                .Property(x => x.FinalResult2)
+                .HasConversion<string>()
+                .HasMaxLength(20);
+            builder.Entity<ReportFinalFactoryDetail>()
+                .Property(x => x.FinalResult3)
+                .HasConversion<string>()
+                .HasMaxLength(20);
             //unique index
             builder.Entity<InLine>()
                 .HasIndex(x => new { x.LineId, x.ProductId, x.UserId, x.Date })

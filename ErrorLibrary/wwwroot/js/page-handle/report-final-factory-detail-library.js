@@ -78,6 +78,11 @@ let data = [];
 let changedRows = {};
 let gridOptions;
 let gridApi;
+let previewGridApi;
+let resultOptions = [
+    { id: 0, name: 'Pass' },
+    { id: 1, name: 'Fail' }
+];
 function createGridOptions(defectColumn) {
     return {
         getRowId: params => params.data.id,
@@ -101,11 +106,32 @@ function createGridOptions(defectColumn) {
                         ]
                     },
                     { field: "preFinalDate1", editable: true, headerName: "Ngày kiểm lần 1", ...dateColumn },
-                    { field: "preFinalResult1", editable: true, headerName: "Kết quả lần 1" },
+                    {
+                        field: "preFinalResult1", editable: true, headerName: "Kết quả lần 1",
+                        cellEditor: "agSelectCellEditor",
+                        cellEditorParams: {
+                            values: resultOptions.map(ro => ro.id),
+                        },
+                        valueFormatter: id => resultOptions.find(o => o.id === id.value)?.name
+                    },
                     { field: "preFinalDate2", editable: true, headerName: "Ngày kiểm lần 2", ...dateColumn },
-                    { field: "preFinalResult2", editable: true, headerName: "Kết quả lần 2" },
+                    {
+                        field: "preFinalResult2", editable: true, headerName: "Kết quả lần 2",
+                        cellEditor: "agSelectCellEditor",
+                        cellEditorParams: {
+                            values: resultOptions.map(ro => ro.id),
+                        },
+                        valueFormatter: id => resultOptions.find(o => o.id === id.value)?.name
+                    },
                     { field: "preFinalDate3", editable: true, headerName: "Ngày kiểm lần 3", ...dateColumn },
-                    { field: "preFinalResult3", editable: true, headerName: "Kết quả lần 3" },
+                    {
+                        field: "preFinalResult3", editable: true, headerName: "Kết quả lần 3",
+                        cellEditor: "agSelectCellEditor",
+                        cellEditorParams: {
+                            values: resultOptions.map(ro => ro.id),
+                        },
+                        valueFormatter: id => resultOptions.find(o => o.id === id.value)?.name
+                    },
                 ]
             },
             {
@@ -117,14 +143,42 @@ function createGridOptions(defectColumn) {
                         ]
                     },
                     { field: "finalDate1", editable: true, headerName: "Ngày kiểm lần 1", ...dateColumn },
-                    { field: "finalResult1", editable: true, headerName: "Kết quả lần 1" },
+                    {
+                        field: "finalResult1", editable: true, headerName: "Kết quả lần 1",
+                        cellEditor: "agSelectCellEditor",
+                        cellEditorParams: {
+                            values: resultOptions.map(ro => ro.id),
+                        },
+                        valueFormatter: id => resultOptions.find(o => o.id === id.value)?.name
+                    },
                     { field: "finalDate2", editable: true, headerName: "Ngày kiểm lần 2", ...dateColumn },
-                    { field: "finalResult2", editable: true, headerName: "Kết quả lần 2" },
+                    {
+                        field: "finalResult2", editable: true, headerName: "Kết quả lần 2",
+                        cellEditor: "agSelectCellEditor",
+                        cellEditorParams: {
+                            values: resultOptions.map(ro => ro.id),
+                        },
+                        valueFormatter: id => resultOptions.find(o => o.id === id.value)?.name
+                    },
                     { field: "finalDate3", editable: true, headerName: "Ngày kiểm lần 3", ...dateColumn },
-                    { field: "finalResult3", editable: true, headerName: "Kết quả lần 3" },
+                    {
+                        field: "finalResult3", editable: true, headerName: "Kết quả lần 3",
+                        cellEditor: "agSelectCellEditor",
+                        cellEditorParams: {
+                            values: resultOptions.map(ro => ro.id),
+                        },
+                        valueFormatter: id => resultOptions.find(o => o.id === id.value)?.name
+                    },
                 ]
             },
-            { field: "remark", editable: true, headerName: "Ghi chú" },
+            {
+                field: "remark", editable: true, headerName: "Ghi chú",
+                cellEditor: "agLargeTextCellEditor",
+                cellEditorPopup: true,
+                cellEditorParams: {
+                    maxLength: 100
+                }
+            },
             { headerName: "Khuyết điểm", children: defectColumn },
             {
                 headerName: "",
@@ -230,7 +284,7 @@ async function initGrid() {
     console.log(defectColumn);
     gridOptions = createGridOptions(defectColumn);
 
-    const myGridElement = document.querySelector('#myGrid');
+    const myGridElement = document.querySelector('#reportFinalFactoryDetailGrid');
     gridApi = agGrid.createGrid(myGridElement, gridOptions);
 }
 
@@ -260,6 +314,13 @@ function deleteRow(params) {
 function onDownloadForm() {
     console.log('export');
     gridApi.exportDataAsExcel();
+}
+//show import model
+function showImportModel() {
+    if (reportFinalFactoryId === 0) {
+        $('#formWrapper').addClass('shake border border-2 border-danger p-2 rounded');
+        return;
+    }
 }
 
 //import handle
@@ -294,14 +355,56 @@ document.getElementById('sheetSelect').addEventListener('change', function (e) {
 
     console.log(importModel);
     importReportFinalFactoryToExcel({ worksheetIndex: worksheetIndex }).then(async function (res) {
-        console.log(res);
-        var previewErrorExcel = res.result;
-        var html = await reportFinalFactoryDetailExcelPreview(previewErrorExcel);
+        console.log(res.result);
+        var previewReportFinalFactoryDetailExcel = res.result;
+        var html = await reportFinalFactoryDetailExcelPreview(previewReportFinalFactoryDetailExcel);
         $('#preview').html(html);
-        errorGroupNamesExcept = previewErrorExcel.errorGroupNamesExcept;
-        productCategoryNamesExcept = previewErrorExcel.productCategoryNamesExcept;
-        errorCategoryNamesExcept = previewErrorExcel.errorCategoryNamesExcept;
-        errorExcel = previewErrorExcel.excel;
+
+        var defects = (await getDefects()).result;
+        defectColumn = defects.map(d => ({
+            colId: "defect_" + d.id,
+            headerName: d.name,
+            headerTooltip: d.code,
+            editable: true,
+            width: 90,
+
+            valueGetter: params => {
+                const item = params.data.reportFinalFactoryDetailDefects
+                    ?.find(x => x.defectId === d.id);
+                return item ? item.quantity : 0;
+            },
+
+            valueSetter: params => {
+                let item = params.data.reportFinalFactoryDetailDefects
+                    ?.find(x => x.defectId === d.id);
+
+                if (item) {
+                    item.quantity = Number(params.newValue);
+                } else {
+                    params.data.reportFinalFactoryDetailDefects.push({
+                        reportFinalFactoryDetailId: params.data.id,
+                        defectId: d.id,
+                        quantity: Number(params.newValue)
+                    });
+                }
+
+                return true; // báo grid refresh
+            }
+        }));
+        gridOptions = createGridOptions(defectColumn);
+        const myGridElement = document.querySelector('#previewReportFinalFactoryDetailGrid');
+        previewGridApi = agGrid.createGrid(myGridElement, gridOptions);
+
+        result = res.result.excel.map(x => ({
+            ...x,
+            preFinalDate1: new Date(x.preFinalDate1),
+            preFinalDate2: new Date(x.preFinalDate2),
+            preFinalDate3: new Date(x.preFinalDate3),
+            finalDate1: new Date(x.finalDate1),
+            finalDate2: new Date(x.finalDate2),
+            finalDate3: new Date(x.finalDate3),
+        }));
+        previewGridApi.setGridOption("rowData", result);
     });
 });
 

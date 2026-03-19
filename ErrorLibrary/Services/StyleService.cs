@@ -57,6 +57,11 @@ namespace ErrorLibrary.Services
             return (await _context.Styles.FirstOrDefaultAsync(x => x.Code == code)) ?? new Style { Code = code, CreatedAt = DateTime.Now };
         }
 
+        public async Task<List<Style>> GetByCodes(List<string> codes)
+        {
+            return await _context.Styles.Where(x => codes.Contains(x.Code)).ToListAsync();
+        }
+
         public async Task<Style> GetById(int id)
         {
             return (await _context.Styles.FindAsync(id))!;

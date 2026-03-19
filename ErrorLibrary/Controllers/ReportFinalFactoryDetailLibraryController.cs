@@ -44,9 +44,9 @@ namespace ErrorLibrary.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> ReportFinalFactoryDetailExcelPreview([FromBody] ReportFinalFactoryDetailGridDto reportFinalFactoryDetailGridDto)
+        public async Task<IActionResult> ReportFinalFactoryDetailExcelPreview([FromBody] PreviewReportFinalFactoryDetailExcelDto previewReportFinalFactoryDetailExcelDto)
         {
-            return PartialView("ReportFinalFactoryDetailExcelPreview", reportFinalFactoryDetailGridDto);
+            return PartialView("ReportFinalFactoryDetailExcelPreview", previewReportFinalFactoryDetailExcelDto);
         }
 
         public async Task<IActionResult> GetByReportFinalFactory(int reportFinalFactoryId)
@@ -171,10 +171,10 @@ namespace ErrorLibrary.Controllers
         [HttpPost]
         public async Task<IActionResult> ImportReportFinalFactoryToExcel([FromForm] ImportExcelDto importExcelDto)
         {
-            ExcelPackage.License.SetNonCommercialPersonal("ErrorLibrary");
+            ExcelPackage.License.SetNonCommercialPersonal("ImportReportFinalFactoryLibrary");
 
             var reportFinalFactoryDetailExcel = new List<ReportFinalFactoryDetailGridDto>();
-            var defects = new List<Defect>();
+            var defects = await _defectService.GetAll();
             using (var stream = new MemoryStream())
             {
                 await importExcelDto.File.CopyToAsync(stream);
@@ -183,27 +183,27 @@ namespace ErrorLibrary.Controllers
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[importExcelDto.WorksheetIndex];
                     int rowCount = worksheet.Dimension.Rows;
                     int columnCount = worksheet.Dimension.Columns;
-                    for (int col = 21; col <= columnCount; col++)
-                    {
-                        defects.Add(new Defect
-                        {
-                            Name = worksheet.Cells[3, col].Text
-                        });
-                    }
+                   
                     for (int row = 4; row <= rowCount; row++) // Bỏ header
                     {
                         var customerStyle = worksheet.Cells[row, 1].Text;
                         var reportFinalFactoryDetailDefects = new List<ReportFinalFactoryDetailDefectDto>();
+
                         for(int col = 21; col <= columnCount; col++)
                         {
+                            var defectName = worksheet.Cells[3, col].Text;
+                            var defectCode = worksheet.Cells[2, col].Text;
+                            var defect = defects.FirstOrDefault(d => d.Name == defectName && d.Code == defectCode);
+                            if (defect == null) continue;
                             reportFinalFactoryDetailDefects.Add(new ReportFinalFactoryDetailDefectDto
                             {
-                                DefectId = 1, // Ví dụ: DefectId = 1, bạn có thể thay đổi theo logic của mình
+                                DefectId = defect.Id,
                                 Quantity = int.TryParse(worksheet.Cells[row, col].Text, out int defectQuantity) ? defectQuantity : 0
                             });
                         }
                         reportFinalFactoryDetailExcel.Add(new ReportFinalFactoryDetailGridDto
                         {
+                            Id = row,
                             CustomerCode = customerStyle.Split('/')[0],
                             StyleCode = customerStyle.Substring(customerStyle.IndexOf('/') + 1),
                             PO = worksheet.Cells[row, 2].Text,
@@ -230,29 +230,24 @@ namespace ErrorLibrary.Controllers
                     }
                 }
             }
-            //var errorGroupNames = errorExcelDtos.Select(x => x.ErrorGroup).Distinct().ToList();
-            //var productCategoryNames = errorExcelDtos.Select(x => x.ProductCategory).Distinct().ToList();
-            //var errorCategoryNames = errorExcelDtos.Select(x => x.ErrorCategory).Distinct().ToList();
+            var customerCodes = reportFinalFactoryDetailExcel.Select(x => x.CustomerCode).Distinct().ToList();
+            var styleCodes = reportFinalFactoryDetailExcel.Select(x => x.StyleCode).Distinct().ToList();
 
-            //var errorGroups = await _errorGroupService.GetByNames(errorGroupNames);
-            //var productCategories = await _productCategoryService.GetByNames(productCategoryNames);
-            //var errorCategories = await _errorCategoryService.GetByNames(errorCategoryNames);
+            var customers = await _customerService.GetByCodes(customerCodes);
+            var styles = await _styleService.GetByCodes(styleCodes);
 
-            //var errorGroupNamesExcept = errorGroupNames.Except(errorGroups.Select(x => x.Name)).ToList();
-            //var productCategoryNamesExcept = productCategoryNames.Except(productCategories.Select(x => x.Name)).ToList();
-            //var errorCategoryNamesExcept = errorCategoryNames.Except(errorCategories.Select(x => x.Name)).ToList();
+            var customerCodesExcept = customerCodes.Except(customers.Select(x => x.Code)).ToList();
+            var styleCodesExcept = styleCodes.Except(styles.Select(x => x.Code)).ToList();
 
-            //var previewErrorExcel = new PreviewErrorExcelDto
-            //{
-            //    ErrorGroups = _mapper.Map<List<ErrorGroupDto>>(errorGroups),
-            //    ProductCategories = _mapper.Map<List<ProductCategoryDto>>(productCategories),
-            //    ErrorCategories = _mapper.Map<List<ErrorCategoryDto>>(errorCategories),
-            //    ErrorGroupNamesExcept = errorGroupNamesExcept,
-            //    ProductCategoryNamesExcept = productCategoryNamesExcept,
-            //    ErrorCategoryNamesExcept = errorCategoryNamesExcept,
-            //    Excel = errorExcelDtos,
-            //};
-            _responseDto.Result = reportFinalFactoryDetailExcel;
+            var previewReportFinalFactoryDetailExcel = new PreviewReportFinalFactoryDetailExcelDto
+            {
+                Customers = _mapper.Map<List<CustomerDto>>(customers),
+                Styles = _mapper.Map<List<StyleDto>>(styles),
+                CustomerCodesExcept = customerCodesExcept,
+                StyleCodesExcept = styleCodesExcept,
+                Excel = reportFinalFactoryDetailExcel
+            };
+            _responseDto.Result = previewReportFinalFactoryDetailExcel;
             return Json(_responseDto);
         }
 

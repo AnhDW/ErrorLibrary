@@ -9,6 +9,7 @@ namespace ErrorLibrary.Services.IServices
     {
         Task<PagedList<StyleDto>> GetAll(StyleParams styleParam);
         Task<List<Style>> GetAll();
+        Task<List<Style>> GetByCodes(List<string> codes);
         Task<Style> GetById(int id);
         Task<Style> GetByCode(string code);
         void Add(Style style);

@@ -1,1 +1,95 @@
-﻿<p>Lấy dữ liệu từ excel</p>
+﻿@model PreviewReportFinalFactoryDetailExcelDto
+<p class="text-center text-warning"><i class="fas fa-exclamation-triangle"></i></i> Kiểm tra lại trước khi thêm</p>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="customer-tab" data-bs-toggle="tab" data-bs-target="#customer" type="button" role="tab" aria-controls="home" aria-selected="true">
+            Khách hàng
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="style-tab" data-bs-toggle="tab" data-bs-target="#style" type="button" role="tab" aria-controls="home" aria-selected="true">
+            Mã hàng
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="report-final-factory-tab" data-bs-toggle="tab" data-bs-target="#reportFinalFactoryDetail" type="button" role="tab" aria-controls="home" aria-selected="true">
+            Báo cáo nhà máy
+        </button>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="customer" role="tabpanel" aria-labelledby="customer-tab">
+        <div class="card mt-4">
+            <div style="max-height:480px;" class="table-responsive text-nowrap">
+                <table id="previewCustomerTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mã khách hàng</th>
+                            <th>Tên khách hàng</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewCustomerTableBody" class="table-border-bottom-0">
+                        @foreach (var item in Model.Customers)
+                        {
+                            <tr>
+                                <td>@item.Code</td>
+                                <td>@item.Name</td>
+                                <td><small class="badge text-wrap bg-info">Đã tồn tại trong thư viện</small></td>
+                            </tr>
+                        }
+                        @foreach (var item in Model.CustomerCodesExcept)
+                        {
+                            <tr>
+                                <td>@item</td>
+                                <td>@item</td>
+                                <td><small class="badge text-wrap bg-danger">Mới</small></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade show" id="style" role="tabpanel" aria-labelledby="style-tab">
+        <div class="card mt-4">
+            <div style="max-height:480px;" class="table-responsive text-nowrap">
+                <table id="previewStyleTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mã hàng</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewStyleTableBody" class="table-border-bottom-0 ">
+                        @foreach (var item in Model.Styles)
+                        {
+                            <tr>
+                                <td>@item.Code</td>
+                                <td><small class="badge text-wrap bg-info">Đã tồn tại trong thư viện</small></td>
+
+                            </tr>
+                        }
+                        @foreach (var item in Model.StyleCodesExcept)
+                        {
+                            <tr>
+                                <td>@item</td>
+                                <td><small class="badge text-wrap bg-danger">Mới</small></td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade show" id="reportFinalFactoryDetail" role="tabpanel" aria-labelledby="report-final-factory-tab">
+        <div class="card mt-4">
+            <div style="min-height:200px;" class="table-responsive text-nowrap">
+                <div id="previewReportFinalFactoryDetailGrid" style="height: 500px"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

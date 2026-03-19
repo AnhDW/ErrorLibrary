@@ -9,6 +9,7 @@ namespace ErrorLibrary.Services.IServices
     {
         Task<PagedList<CustomerDto>> GetAll(CustomerParams customerParam);
         Task<List<Customer>> GetAll();
+        Task<List<Customer>> GetByCodes(List<string> codes);
         Task<Customer> GetById(int id);
         Task<Customer> GetByCode(string code);
         void Add(Customer customer);

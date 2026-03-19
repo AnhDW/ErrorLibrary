@@ -1,8 +1,8 @@
-﻿function reportFinalFactoryDetailExcelPreview(reportFinalFactoryDetailGridDto) {
+﻿function reportFinalFactoryDetailExcelPreview(previewReportFinalFactoryDetailExcelDto) {
     return ajaxRequest({
         url: '/ReportFinalFactoryDetailLibrary/ReportFinalFactoryDetailExcelPreview',
         method: 'POST',
-        data: reportFinalFactoryDetailGridDto
+        data: previewReportFinalFactoryDetailExcelDto
     })
 }
 
