@@ -38,6 +38,11 @@ namespace ErrorLibrary.Services
             _context.ReportFinalFactoryDetailDefects.Remove(customer);
         }
 
+        public void DeleteRange(List<ReportFinalFactoryDetailDefect> reportFinalFactoryDetailDefects)
+        {
+            _context.ReportFinalFactoryDetailDefects.RemoveRange(reportFinalFactoryDetailDefects);
+        }
+
         public async Task<PagedList<ReportFinalFactoryDetailDefectDto>> GetAll(ReportFinalFactoryDetailDefectParams customerParam)
         {
             var query = _context.ReportFinalFactoryDetailDefects.AsQueryable();
@@ -55,6 +60,11 @@ namespace ErrorLibrary.Services
         public async Task<ReportFinalFactoryDetailDefect> GetById(int reportFinalFactoryDetailId, int defectId)
         {
             return (await _context.ReportFinalFactoryDetailDefects.FindAsync(reportFinalFactoryDetailId, defectId))!;
+        }
+
+        public async Task<List<ReportFinalFactoryDetailDefect>> GetByReportFinalFactoryDetailId(int reportFinalFactoryDetailId)
+        {
+            return await _context.ReportFinalFactoryDetailDefects.Where(c => c.ReportFinalFactoryDetailId == reportFinalFactoryDetailId).ToListAsync();
         }
 
         public void Update(ReportFinalFactoryDetailDefect customer)

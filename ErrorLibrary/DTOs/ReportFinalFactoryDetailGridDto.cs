@@ -6,6 +6,7 @@ namespace ErrorLibrary.DTOs
     public class ReportFinalFactoryDetailGridDto
     {
         public int Id { get; set; }
+        public int ReportFinalFactoryId { get; set; }
         public int CustomerId { get; set; }
         public int StyleId { get; set; }
         public string CustomerCode { get; set; }

@@ -50,8 +50,7 @@
             <button type="button" class="btn rounded-pill btn-primary" onclick="addReportFinalFactoryDetail()">
                 <span class="tf-icons bx bx-plus"></span>&nbsp; Thêm
             </button>
-            <button type="button" class="btn rounded-pill ui-bg-overlay" data-bs-toggle="modal"
-                    data-bs-target="#importModel" onclick="showImportModel()">
+            <button type="button" class="btn rounded-pill ui-bg-overlay" onclick="showImportModel()">
                 <i class="bx bx-import"></i>
             </button>
             <!-- Import Modal -->
@@ -88,7 +87,7 @@
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                     Đóng
                                 </button>
-                                <button type="button" class="btn btn-primary" onclick="importErrorsExcel()"><i class="fas fa-file-upload"></i>Tải lên</button>
+                                <button type="button" class="btn btn-primary" onclick="importReportFinalFactoryDetailsExcel()"><i class="fas fa-file-upload"></i>Tải lên</button>
                             </div>
                         </form>
                         <div id="preview" class="p-2"></div>

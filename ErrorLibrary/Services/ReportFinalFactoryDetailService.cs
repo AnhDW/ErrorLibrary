@@ -28,6 +28,11 @@ namespace ErrorLibrary.Services
             _context.ReportFinalFactoryDetails.Add(reportFinalFactoryDetail);
         }
 
+        public void AddRange(List<ReportFinalFactoryDetail> reportFinalFactoryDetails)
+        {
+            _context.ReportFinalFactoryDetails.AddRange(reportFinalFactoryDetails);
+        }
+
         public void Delete(ReportFinalFactoryDetail reportFinalFactoryDetail)
         {
             _context.ReportFinalFactoryDetails.Remove(reportFinalFactoryDetail);

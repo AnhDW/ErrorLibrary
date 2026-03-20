@@ -48,18 +48,19 @@ namespace ErrorLibrary.Helper
             CreateMap<ReportFinalFactoryDetailDefect, ReportFinalFactoryDetailDefectDto>().ReverseMap();
 
             CreateMap<ReportFinalFactoryDetail, ReportFinalFactoryDetailGridDto>()
-                .ForMember(dest => dest.PreFinalResult1, opt => opt.NullSubstitute(0))
-                .ForMember(dest => dest.PreFinalResult2, opt => opt.NullSubstitute(0))
-                .ForMember(dest => dest.PreFinalResult3, opt => opt.NullSubstitute(0))
-                .ForMember(dest => dest.FinalResult1, opt => opt.NullSubstitute(0))
-                .ForMember(dest => dest.FinalResult2, opt => opt.NullSubstitute(0))
-                .ForMember(dest => dest.FinalResult3, opt => opt.NullSubstitute(0))
+                //.ForMember(dest => dest.PreFinalResult1, opt => opt.NullSubstitute(0))
+                //.ForMember(dest => dest.PreFinalResult2, opt => opt.NullSubstitute(0))
+                //.ForMember(dest => dest.PreFinalResult3, opt => opt.NullSubstitute(0))
+                //.ForMember(dest => dest.FinalResult1, opt => opt.NullSubstitute(0))
+                //.ForMember(dest => dest.FinalResult2, opt => opt.NullSubstitute(0))
+                //.ForMember(dest => dest.FinalResult3, opt => opt.NullSubstitute(0))
                 .ForMember(dest => dest.PreFinalDate1, opt => opt.NullSubstitute(DateTime.MinValue))
                 .ForMember(dest => dest.PreFinalDate2, opt => opt.NullSubstitute(DateTime.MinValue))
                 .ForMember(dest => dest.PreFinalDate3, opt => opt.NullSubstitute(DateTime.MinValue))
                 .ForMember(dest => dest.FinalDate1, opt => opt.NullSubstitute(DateTime.MinValue))
                 .ForMember(dest => dest.FinalDate2, opt => opt.NullSubstitute(DateTime.MinValue))
-                .ForMember(dest => dest.FinalDate3, opt => opt.NullSubstitute(DateTime.MinValue));
+                .ForMember(dest => dest.FinalDate3, opt => opt.NullSubstitute(DateTime.MinValue))
+                .ReverseMap();
         }
     }
 }

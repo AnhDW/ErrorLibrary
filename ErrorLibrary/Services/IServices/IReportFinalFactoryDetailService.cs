@@ -14,5 +14,7 @@ namespace ErrorLibrary.Services.IServices
         void Add(ReportFinalFactoryDetail reportFinalFactoryDetail);
         void Update(ReportFinalFactoryDetail reportFinalFactoryDetail);
         void Delete(ReportFinalFactoryDetail reportFinalFactoryDetail);
+
+        void AddRange(List<ReportFinalFactoryDetail> reportFinalFactoryDetails);
     }
 }

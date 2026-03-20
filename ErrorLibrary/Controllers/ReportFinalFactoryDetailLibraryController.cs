@@ -90,7 +90,7 @@ namespace ErrorLibrary.Controllers
                 Customer = customer,
                 Style = style
             };
-
+            
             _reportFinalFactoryDetailService.Add(reportFinalFactoryDetail);
 
             if (await _sharedService.SaveAllChanges())
@@ -251,5 +251,54 @@ namespace ErrorLibrary.Controllers
             return Json(_responseDto);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddReportFinalFactoryDetailsFromExcel([FromBody] List<ReportFinalFactoryDetailGridDto> reportFinalFactoryDetailGridDtos)
+        {
+            var reportFinalFactoryDetails = new List<ReportFinalFactoryDetail>();
+            foreach(var reportFinalFactoryDetailGridDto in reportFinalFactoryDetailGridDtos)
+            {
+                var customer = await _customerService.GetByCode(reportFinalFactoryDetailGridDto.CustomerCode);
+                var style = await _styleService.GetByCode(reportFinalFactoryDetailGridDto.StyleCode);
+                var reportFinalFactoryDetail = new ReportFinalFactoryDetail();
+                _mapper.Map(reportFinalFactoryDetailGridDto, reportFinalFactoryDetail);
+                reportFinalFactoryDetail.Customer = customer;
+                reportFinalFactoryDetail.Style = style;
+                reportFinalFactoryDetails.Add(reportFinalFactoryDetail);
+            }
+            _reportFinalFactoryDetailService.AddRange(reportFinalFactoryDetails);
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Result = 
+                _responseDto.IsSuccess = true;
+                _responseDto.Message = "Report Final Factory Details added successfully.";
+                return Json(_responseDto);
+            }
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Failed to added Report Final Factory Details.";
+            return Json(_responseDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteReportFinalFactoryDetailsFromExcel([FromBody] int reportFinalFactoryId)
+        {
+            var reportFinalFactoryDetails = await _reportFinalFactoryDetailService.GetByReportFinalFactoryId(reportFinalFactoryId);
+
+            foreach(var reportFinalFactoryDetail in reportFinalFactoryDetails)
+            {
+                var reportFinalFactoryDetailDefects = await _reportFinalFactoryDetailDefectService.GetByReportFinalFactoryDetailId(reportFinalFactoryDetail.Id);
+                _reportFinalFactoryDetailDefectService.DeleteRange(reportFinalFactoryDetailDefects);
+                _reportFinalFactoryDetailService.Delete(reportFinalFactoryDetail);
+            }
+            if (await _sharedService.SaveAllChanges())
+            {
+                _responseDto.Result =
+                _responseDto.IsSuccess = true;
+                _responseDto.Message = "Report Final Factory Details added successfully.";
+                return Json(_responseDto);
+            }
+            _responseDto.IsSuccess = false;
+            _responseDto.Message = "Failed to added Report Final Factory Details.";
+            return Json(_responseDto);
+        }
     }
 }

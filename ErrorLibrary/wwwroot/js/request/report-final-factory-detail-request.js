@@ -63,3 +63,21 @@ function importReportFinalFactoryToExcel(importErrorDto) {
         showLoading: true,
     })
 }
+
+function addReportFinalFactoryDetailsFromExcel(reportFinalFactoryDetailGridDtos) {
+    return ajaxRequest({
+        url: '/ReportFinalFactoryDetailLibrary/AddReportFinalFactoryDetailsFromExcel',
+        method: 'POST',
+        data: reportFinalFactoryDetailGridDtos,
+        showLoading: true
+    })
+}
+
+function deleteReportFinalFactoryDetailsFromExcel(reportFinalFactoryId) {
+    return ajaxRequest({
+        url: '/ReportFinalFactoryDetailLibrary/DeleteReportFinalFactoryDetailsFromExcel',
+        method: 'POST',
+        data: reportFinalFactoryId,
+        showLoading: true
+    })
+}

@@ -7,7 +7,6 @@ function initialReportFinalFactoryDetailPage() {
 
 async function renderLineDropdown() {
     var organizations = (await getFactoriesOrganizationsDisplay()).result;
-    console.log(organizations);
     $('#factoryDropdown').html(renderFactorySelectDropdown(organizations, 'id', 'factoryName'));
 }
 
@@ -15,14 +14,13 @@ async function checkAndInitReportFinalFactory() {
     //tạo 1 in line nếu chưa có
     var factoryId = $('#factoryDropdown .select-input').attr('data-value');
     var createdDate = $('#date').val();
-    console.log(date);
     var createReportFinalFactoryDto = {
         factoryId, createdDate
     }
     const res = (await checkInitReportFinalFactory(createReportFinalFactoryDto)).result;
     reportFinalFactoryId = res.id;
     setRowData();
-    gridColumnApi.autoSizeAllColumns();
+    gridApi.autoSizeAllColumns();
 }
 
 const formatVNDate = (value) => {
@@ -60,7 +58,6 @@ function normalizeDate(date) {
 
 async function setRowData(){
     data = await getByReportFinalFactory(reportFinalFactoryId);
-    console.log(data);
     result = data.result.map(x => ({
         ...x,
         preFinalDate1: new Date(x.preFinalDate1),
@@ -242,8 +239,6 @@ function createGridOptions(defectColumn) {
             //if (columnId.startsWith("preFinalDate")) {
             //console.log("New:", newValue.toISOString());
             //}
-                
-            
         }
     };
 }
@@ -281,7 +276,6 @@ async function initGrid() {
             return true; // báo grid refresh
         }
     }));
-    console.log(defectColumn);
     gridOptions = createGridOptions(defectColumn);
 
     const myGridElement = document.querySelector('#reportFinalFactoryDetailGrid');
@@ -294,7 +288,6 @@ function addReportFinalFactoryDetail() {
         return;
     }
     
-    console.log(gridApi);
     var reportFinalFactoryDetailDto = { reportFinalFactoryId, customerCode: '', styleCode: '', po: '', quantity: 0 };
     createReportFinalFactoryDetail(reportFinalFactoryDetailDto).then(res => {
         setRowData();
@@ -312,15 +305,21 @@ function deleteRow(params) {
 }
 
 function onDownloadForm() {
-    console.log('export');
     gridApi.exportDataAsExcel();
 }
 //show import model
 function showImportModel() {
+    var myModal = new bootstrap.Modal(document.getElementById('importModel'));
     if (reportFinalFactoryId === 0) {
         $('#formWrapper').addClass('shake border border-2 border-danger p-2 rounded');
         return;
     }
+    // Nếu hợp lệ thì mở modal
+    myModal.show();
+}
+
+function onDownloadForm() {
+    window.location.href = '/import-form/ReportFinalDefault.xlsx';
 }
 
 //import handle
@@ -353,9 +352,7 @@ document.getElementById('sheetSelect').addEventListener('change', function (e) {
     const importModelChild = importModel.find('.modal-dialog');
     importModelChild.addClass('modal-xl');
 
-    console.log(importModel);
     importReportFinalFactoryToExcel({ worksheetIndex: worksheetIndex }).then(async function (res) {
-        console.log(res.result);
         var previewReportFinalFactoryDetailExcel = res.result;
         var html = await reportFinalFactoryDetailExcelPreview(previewReportFinalFactoryDetailExcel);
         $('#preview').html(html);
@@ -405,8 +402,21 @@ document.getElementById('sheetSelect').addEventListener('change', function (e) {
             finalDate3: new Date(x.finalDate3),
         }));
         previewGridApi.setGridOption("rowData", result);
+        previewExcel = result;
     });
 });
+let previewExcel;
+function importReportFinalFactoryDetailsExcel() {
+    var reportFinalFactoryDetail = previewExcel.map(x => ({
+        ...x,
+        id:0,
+        reportFinalFactoryId,
+    }));
+    deleteReportFinalFactoryDetailsFromExcel(reportFinalFactoryId);
+    addReportFinalFactoryDetailsFromExcel(reportFinalFactoryDetail).then(res => {
+        setRowData();
+    });
+}
 
 $('#factoryDropdown').on('change', '.select-input', async function () {
     $('#formWrapper').removeClass('shake border border-2 border-danger p-2 rounded');
