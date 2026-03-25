@@ -5,6 +5,7 @@ using ErrorLibrary.Helper.Enums;
 using ErrorLibrary.Services;
 using ErrorLibrary.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Template;
 using OfficeOpenXml;
 
 namespace ErrorLibrary.Controllers
@@ -249,6 +250,69 @@ namespace ErrorLibrary.Controllers
             };
             _responseDto.Result = previewReportFinalFactoryDetailExcel;
             return Json(_responseDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExportReportFinalFactoryToExcel([FromBody] int factoryId)
+        {
+            ExcelPackage.License.SetNonCommercialPersonal("ExportReportFinalFactoryLibrary");
+
+            var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "import-form", "ReportFinalFactoryTemplate.xlsx");
+            var sourceFile = new FileInfo(sourceFilePath);
+            var factory = await _factoryService.GetById(factoryId);
+            var defects = await _defectService.GetAll();
+
+            using (var package = new ExcelPackage(sourceFile))
+            {
+                var worksheet = package.Workbook.Worksheets[0]; // Sheet1 của template
+
+                var startRow = worksheet.Dimension.Start.Row;
+                var endRow = worksheet.Dimension.End.Row;
+
+                var newPackage = new ExcelPackage();
+                var newSheet = newPackage.Workbook.Worksheets.Add("Sheet1");
+
+                // Copy giá trị từ cột A đến T
+                worksheet.Cells[startRow, 1, endRow, 20].Copy(newSheet.Cells[startRow, 1, endRow, 20]);
+
+                // Gán giá trị cho ô merge
+                int dynamicStartCol = 21;
+                int dynamicEndCol = defects.Count + 20;
+                newSheet.Cells[1, dynamicStartCol, 1, dynamicEndCol].Merge = true;
+                newSheet.Cells[1, dynamicStartCol].Value = "Defects";
+                newSheet.Cells[1, dynamicStartCol].Style.Font.Bold = true;
+                newSheet.Cells[1, dynamicStartCol].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                newSheet.Cells[1, dynamicStartCol].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                for (int col = dynamicStartCol; col <= dynamicEndCol; col++)
+                {
+                    var defect = defects[col - 21];
+                    newSheet.Cells[2, col].Value = defect.Code;
+                    newSheet.Cells[3, col].Value = defect.Name;
+
+                    newSheet.Cells[2, col].Style.Font.Bold = true;
+                    newSheet.Cells[2, col].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    newSheet.Cells[2, col].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+
+                    newSheet.Cells[3, col].Style.Font.Bold = true;
+                    newSheet.Cells[3, col].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    newSheet.Cells[3, col].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                }
+
+                var dynamicRange = newSheet.Cells[1, dynamicStartCol, endRow, dynamicEndCol];
+                dynamicRange.Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                dynamicRange.Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                dynamicRange.Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                dynamicRange.Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                var stream = new MemoryStream();
+                newPackage.SaveAs(stream);
+                stream.Position = 0;
+
+                string excelName = $"ReportFinalFactoryTemplate.xlsx";
+                Response.Headers["Content-Disposition"] = $"attachment; filename={excelName}";
+                return File(stream,
+                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            }
         }
 
         [HttpPost]

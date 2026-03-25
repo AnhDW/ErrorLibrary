@@ -319,7 +319,11 @@ function showImportModel() {
 }
 
 function onDownloadForm() {
-    window.location.href = '/import-form/ReportFinalDefault.xlsx';
+    //window.location.href = '/import-form/ReportFinalDefault.xlsx';
+    var factoryId = $('#factoryDropdown .select-input').attr('data-value');
+    exportReportFinalFactoryToExcel(factoryId).then(res => {
+        
+    });
 }
 
 //import handle

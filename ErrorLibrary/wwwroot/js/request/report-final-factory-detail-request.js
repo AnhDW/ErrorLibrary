@@ -73,6 +73,39 @@ function addReportFinalFactoryDetailsFromExcel(reportFinalFactoryDetailGridDtos)
     })
 }
 
+function exportReportFinalFactoryToExcel(factoryId) {
+    return $.ajax({
+        url: '/ReportFinalFactoryDetailLibrary/ExportReportFinalFactoryToExcel',
+        type: 'POST',
+        data: JSON.stringify(factoryId),
+        contentType: 'application/json',
+        xhrFields: {
+            responseType: 'blob'   // 👈 quan trọng
+        },
+        success: function (blob, status, xhr) {
+            // Tạo link download từ blob
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+
+            // Lấy tên file từ header nếu có
+            const disposition = xhr.getResponseHeader('Content-Disposition');
+            let fileName = "Report.xlsx";
+            if (disposition && disposition.indexOf('filename=') !== -1) {
+                fileName = disposition.split('filename=')[1].trim();
+            }
+
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        },
+        error: function (xhr) {
+            toastr.error("Xuất Excel thất bại");
+        }
+    });
+}
+
 function deleteReportFinalFactoryDetailsFromExcel(reportFinalFactoryId) {
     return ajaxRequest({
         url: '/ReportFinalFactoryDetailLibrary/DeleteReportFinalFactoryDetailsFromExcel',
