@@ -64,6 +64,13 @@ namespace ErrorLibrary.Services
                 .ToListAsync();
         }
 
+        public async Task<List<ReportFinalFactoryDetail>> GetByReportFinalFactoryIds(List<int> reportFinalFactoryIds)
+        {
+            return await _context.ReportFinalFactoryDetails.AsNoTracking()
+                .Where(rffd => reportFinalFactoryIds.Contains(rffd.ReportFinalFactoryId))
+                .ToListAsync();
+        }
+
         public void Update(ReportFinalFactoryDetail reportFinalFactoryDetail)
         {
             _context.ReportFinalFactoryDetails.Update(reportFinalFactoryDetail);

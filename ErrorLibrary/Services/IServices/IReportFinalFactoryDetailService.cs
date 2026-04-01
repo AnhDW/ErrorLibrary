@@ -9,6 +9,7 @@ namespace ErrorLibrary.Services.IServices
     {
         Task<PagedList<ReportFinalFactoryDetailDto>> GetAll(ReportFinalFactoryDetailParams reportFinalFactoryDetailParam);
         Task<List<ReportFinalFactoryDetail>> GetAll();
+        Task<List<ReportFinalFactoryDetail>> GetByReportFinalFactoryIds(List<int> reportFinalFactoryIds);
         Task<List<ReportFinalFactoryDetail>> GetByReportFinalFactoryId(int reportFinalFactoryId);
         Task<ReportFinalFactoryDetail> GetById(int id);
         void Add(ReportFinalFactoryDetail reportFinalFactoryDetail);

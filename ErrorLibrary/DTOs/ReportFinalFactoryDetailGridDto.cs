@@ -9,6 +9,8 @@ namespace ErrorLibrary.DTOs
         public int ReportFinalFactoryId { get; set; }
         public int CustomerId { get; set; }
         public int StyleId { get; set; }
+        public string UnitName { get; set; }
+        public string FactoryName { get; set; }
         public string CustomerCode { get; set; }
         public string StyleCode { get; set; }
         public string PO { get; set; } = string.Empty;

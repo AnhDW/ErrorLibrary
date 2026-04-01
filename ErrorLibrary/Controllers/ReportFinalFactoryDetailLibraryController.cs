@@ -4,6 +4,7 @@ using ErrorLibrary.Entities;
 using ErrorLibrary.Helper.Enums;
 using ErrorLibrary.Services;
 using ErrorLibrary.Services.IServices;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Template;
 using OfficeOpenXml;
@@ -20,6 +21,7 @@ namespace ErrorLibrary.Controllers
         private readonly IStyleService _styleService;
         private readonly IDefectService _defectService;
         private readonly IFactoryService _factoryService;
+        private readonly IUnitService _unitService;
 
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
@@ -53,18 +55,55 @@ namespace ErrorLibrary.Controllers
         public async Task<IActionResult> GetByReportFinalFactory(int reportFinalFactoryId)
         {
             var reportFinalFactoryDetails = await _reportFinalFactoryDetailService.GetByReportFinalFactoryId(reportFinalFactoryId);
+            var reportFinalFactoryDetailIds = reportFinalFactoryDetails.Select(rff => rff.Id).ToList();
             var customers = await _customerService.GetAll();
             var styles = await _styleService.GetAll();
 
-            var reportFinalFactoryDetailDefects = await _reportFinalFactoryDetailDefectService.GetAll();
+            var reportFinalFactoryDetailDefects = await _reportFinalFactoryDetailDefectService.GetByReportFinalFactoryDetailIds(reportFinalFactoryDetailIds);
             var result = _mapper.Map<List<ReportFinalFactoryDetailGridDto>>(reportFinalFactoryDetails);
             foreach (var reportFinalFactoryDetail in result)
             {
                 reportFinalFactoryDetail.CustomerCode = customers.FirstOrDefault(c => c.Id == reportFinalFactoryDetail.CustomerId)!.Code;
-                reportFinalFactoryDetail.StyleCode = styles.FirstOrDefault(c => c.Id == reportFinalFactoryDetail.StyleId)!.Code;
+                reportFinalFactoryDetail.StyleCode = styles.FirstOrDefault(s => s.Id == reportFinalFactoryDetail.StyleId)!.Code;
                 reportFinalFactoryDetail.ReportFinalFactoryDetailDefects = _mapper.Map<List<ReportFinalFactoryDetailDefectDto>>(reportFinalFactoryDetailDefects.Where(x => x.ReportFinalFactoryDetailId == reportFinalFactoryDetail.Id));
             }
             _responseDto.Result = result;
+            return Json(_responseDto);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetByDate(DateOnly date)
+        {
+            var reportFinalFactories = await _reportFinalFactoryService.GetAllByCreateDate(date);
+            var reportFinalFactoryIds = reportFinalFactories.Select(rff => rff.Id).ToList();
+            var reportFinalFactoryDetails = await _reportFinalFactoryDetailService.GetByReportFinalFactoryIds(reportFinalFactoryIds);
+            var reportFinalFactoryDetailIds = reportFinalFactoryDetails.Select(rffd => rffd.Id).ToList();
+            var customers = await _customerService.GetAll();
+            var styles = await _styleService.GetAll();
+
+            var reportFinalFactoryDetailDefects = await _reportFinalFactoryDetailDefectService.GetByReportFinalFactoryDetailIds(reportFinalFactoryDetailIds);
+            var result = _mapper.Map<List<ReportFinalFactoryDetailGridDto>>(reportFinalFactoryDetails);
+
+            var units = await _unitService.GetAll();
+            var factories = await _factoryService.GetAll();
+
+
+
+            foreach (var reportFinalFactoryDetail in result)
+            {
+                var reportFinalFactory = reportFinalFactories.FirstOrDefault(rff => rff.Id == reportFinalFactoryDetail.ReportFinalFactoryId);
+                var factory = factories.FirstOrDefault(f => f.Id == reportFinalFactory!.FactoryId);
+                var unit = units.FirstOrDefault(u => u.Id == factory!.UnitId);
+
+                reportFinalFactoryDetail.FactoryName = factory!.Name;
+                reportFinalFactoryDetail.UnitName = unit!.Name;
+                reportFinalFactoryDetail.CustomerCode = customers.FirstOrDefault(c => c.Id == reportFinalFactoryDetail.CustomerId)!.Code;
+                reportFinalFactoryDetail.StyleCode = styles.FirstOrDefault(s => s.Id == reportFinalFactoryDetail.StyleId)!.Code;
+                reportFinalFactoryDetail.ReportFinalFactoryDetailDefects = _mapper.Map<List<ReportFinalFactoryDetailDefectDto>>(reportFinalFactoryDetailDefects.Where(x => x.ReportFinalFactoryDetailId == reportFinalFactoryDetail.Id));
+            }
+
+            _responseDto.Result = result.OrderBy(x => x.UnitName).ThenBy(x => x.FactoryName);
+            _responseDto.IsSuccess = true;
             return Json(_responseDto);
         }
 

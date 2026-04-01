@@ -52,9 +52,14 @@ namespace ErrorLibrary.Services
             return await _context.ReportFinalFactories.ToListAsync();
         }
 
-        public Task<ReportFinalFactory> GetByFactoryIdAndCreateDate(int factoryId, DateOnly createDate)
+        public async Task<List<ReportFinalFactory>> GetAllByCreateDate(DateOnly createDate)
         {
-            return _context.ReportFinalFactories.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.CreateDate == createDate)!;
+            return await _context.ReportFinalFactories.Where(x => x.CreateDate == createDate).ToListAsync();
+        }
+
+        public async Task<ReportFinalFactory> GetByFactoryIdAndCreateDate(int factoryId, DateOnly createDate)
+        {
+            return (await _context.ReportFinalFactories.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.CreateDate == createDate))!;
         }
 
         public async Task<ReportFinalFactory> GetById(int id)

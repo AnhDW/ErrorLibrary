@@ -67,6 +67,11 @@ namespace ErrorLibrary.Services
             return await _context.ReportFinalFactoryDetailDefects.Where(c => c.ReportFinalFactoryDetailId == reportFinalFactoryDetailId).ToListAsync();
         }
 
+        public async Task<List<ReportFinalFactoryDetailDefect>> GetByReportFinalFactoryDetailIds(List<int> reportFinalFactoryDetailIds)
+        {
+            return await _context.ReportFinalFactoryDetailDefects.Where(c => reportFinalFactoryDetailIds.Contains(c.ReportFinalFactoryDetailId)).ToListAsync();
+        }
+
         public void Update(ReportFinalFactoryDetailDefect customer)
         {
             _context.ReportFinalFactoryDetailDefects.Update(customer);

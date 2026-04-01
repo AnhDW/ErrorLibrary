@@ -14,6 +14,14 @@ function getByReportFinalFactory(reportFinalFactoryId) {
     })
 }
 
+function getByDate(date) {
+    return ajaxRequest({
+        url: '/ReportFinalFactoryDetailLibrary/GetByDate',
+        method: 'GET',
+        data: { date: date }
+    })
+}
+
 function createReportFinalFactoryDetail(reportFinalFactoryDetailDto) {
     return ajaxRequest({
         url: '/ReportFinalFactoryDetailLibrary/CreateReportFinalFactoryDetail',
