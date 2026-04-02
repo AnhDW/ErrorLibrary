@@ -1,0 +1,128 @@
+﻿@{
+    ViewData["Title"] = "Report final factory";
+}
+
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div id="formWrapper" class="mb-2">
+            <div class="form-grid">
+
+                <div class="form-item">
+                    <label for="date">Ngày</label>
+                    <input id="date" class="form-control" type="date">
+                </div>
+                <div class="form-item">
+
+                </div>
+                <div class="form-item">
+                </div>
+            </div>
+        </div>
+        
+        <button id="toggleFormBtn" class="toggle-btn w-100" style="border:none; border-radius:0 0 0 0;">
+            <i class="fas fa-angle-double-up"></i>
+        </button>
+
+        <div class="d-flex flex-wrap justify-content-between p-2">
+            <div>
+                @* <label class="text-black">Số lượng đạt: </label>
+                <h3 class="m-0 text-info" id="txtAcceptedQuantity"><span class="text-success">0</span>/0</h3> *@
+            </div>
+            <div>
+                @* <label class="text-black">Trạng thái: </label>
+                <h3 class="m-0 text-info" id="txtErrorQuantity"><span class="text-danger">0</span>/0</h3> *@
+            </div>
+            <div>
+                @* <label></label>
+                <div class="d-flex flex-row-reverse gap-1">
+                    <button id="btnIsFinalized" class="btn btn-secondary btn-sm" type="button"><i class="fas fa-check"></i>Hoàn thành</button>
+                    <button id="btnIsActive" class="btn btn-secondary btn-sm" type="button"><i class="fas fa-times"></i>Hủy kiểm</button>
+                </div> *@
+            </div>
+        </div>
+
+        <div class="row mt-3" id="timeFrameCard">
+        </div>
+        @*<div class="d-flex justify-content-center">
+            <a asp-controller="TimeFrameLibrary"><i class="fas fa-arrow-right"></i> Cài đặt khung thời gian</a>
+        </div> *@
+
+        <!-- Striped Rows -->
+        <div class="card mt-4">
+            <div class="table-responsive text-nowrap">
+                <div id="reportFinalFactoryDetailGrid" style="height: 500px"></div>
+            </div>
+            
+        </div>
+        <div class="card mt-4">
+            <div style="min-height:200px;" class="table-responsive text-nowrap">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="totalNumberOf" class="table-border-bottom-0">
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        
+        <!--/ Striped Rows -->
+    </div>
+    <!-- / Content -->
+    <div class="content-backdrop fade"></div>
+</div>
+<style>
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 12px 20px; /* khoảng cách giữa các ô */
+        margin-top: 10px;
+    }
+
+    .form-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-item label {
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
+
+    .toggle-btn {
+        width: 100%;
+        height: 32px; /* Thấp hơn */
+        border: none;
+        background: none; /* Màu nhẹ */
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Icon ở giữa */
+        cursor: pointer;
+        border-radius: 6px;
+        transition: background 0.2s ease;
+    }
+
+        .toggle-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .toggle-btn span {
+            font-size: 18px;
+            transition: transform 0.2s ease;
+        }
+
+</style>
+@section Scripts {
+    <script src="~/js/page-handle/report-final-factory-library.js"></script>
+    <script src="~/js/request/report-final-factory-detail-defects-request.js"></script>
+    <script src="~/js/request/report-final-factory-detail-request.js"></script>
+    <script src="~/js/request/report-final-factory-request.js"></script>
+    <script src="~/js/request/organization-request.js"></script>
+    <script src="~/js/request/defect-request.js"></script>
+}

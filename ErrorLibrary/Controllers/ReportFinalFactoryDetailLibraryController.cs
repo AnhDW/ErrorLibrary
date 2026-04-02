@@ -26,7 +26,7 @@ namespace ErrorLibrary.Controllers
         private readonly IMapper _mapper;
         protected ResponseDto _responseDto;
 
-        public ReportFinalFactoryDetailLibraryController(ISharedService sharedService, IReportFinalFactoryService reportFinalFactoryService, IReportFinalFactoryDetailService reportFinalFactoryDetailService, IReportFinalFactoryDetailDefectService reportFinalFactoryDetailDefectService, ICustomerService customerService, IStyleService styleService, IDefectService defectService, IFactoryService factoryService, IMapper mapper)
+        public ReportFinalFactoryDetailLibraryController(ISharedService sharedService, IReportFinalFactoryService reportFinalFactoryService, IReportFinalFactoryDetailService reportFinalFactoryDetailService, IReportFinalFactoryDetailDefectService reportFinalFactoryDetailDefectService, ICustomerService customerService, IStyleService styleService, IDefectService defectService, IFactoryService factoryService, IMapper mapper, IUnitService unitService)
         {
             _sharedService = sharedService;
             _reportFinalFactoryService = reportFinalFactoryService;
@@ -38,13 +38,13 @@ namespace ErrorLibrary.Controllers
             _factoryService = factoryService;
             _mapper = mapper;
             _responseDto = new ResponseDto();
+            _unitService = unitService;
         }
 
         public IActionResult Index()
         {
             return View();
         }
-
 
         [HttpPost]
         public async Task<IActionResult> ReportFinalFactoryDetailExcelPreview([FromBody] PreviewReportFinalFactoryDetailExcelDto previewReportFinalFactoryDetailExcelDto)
@@ -102,7 +102,27 @@ namespace ErrorLibrary.Controllers
                 reportFinalFactoryDetail.ReportFinalFactoryDetailDefects = _mapper.Map<List<ReportFinalFactoryDetailDefectDto>>(reportFinalFactoryDetailDefects.Where(x => x.ReportFinalFactoryDetailId == reportFinalFactoryDetail.Id));
             }
 
-            _responseDto.Result = result.OrderBy(x => x.UnitName).ThenBy(x => x.FactoryName);
+            var numberOfPO = result.Count;
+            var totalNumberOfChecks = result.Sum(x => x.Quantity);
+            var totalNumberOfChecksOfPreFinal = result.Sum(x => (x.PreFinalResult1 == Result.Pass ? 1 : 0) + (x.PreFinalResult2 == Result.Pass ? 1 : 0) + (x.PreFinalResult3 == Result.Pass ? 1 : 0));
+            var totalNumberOfChecksOfFinal = result.Sum(x => (x.FinalResult1 == Result.Pass ? 1 : 0) + (x.FinalResult2 == Result.Pass ? 1 : 0) + (x.FinalResult3 == Result.Pass ? 1 : 0));
+            var totalNumberOfRecyclingOfPreFinal = result.Sum(x => (x.PreFinalResult1 == Result.Fail ? 1 : 0) + (x.PreFinalResult2 == Result.Fail ? 1 : 0) + (x.PreFinalResult3 == Result.Fail ? 1 : 0));
+            var totalNumberOfRecyclingOfFinal = result.Sum(x => (x.FinalResult1 == Result.Fail ? 1 : 0) + (x.FinalResult2 == Result.Fail ? 1 : 0) + (x.FinalResult3 == Result.Fail ? 1 : 0));
+            var percentageOfRecyclingOfPreFinal = totalNumberOfChecksOfPreFinal > 0 ? Math.Round((double)totalNumberOfRecyclingOfPreFinal / totalNumberOfChecksOfPreFinal * 100, 2) : 0;
+            var percentageOfRecyclingOfFinal = totalNumberOfChecksOfFinal > 0 ? Math.Round((double)totalNumberOfRecyclingOfFinal / totalNumberOfChecksOfFinal * 100, 2) : 0;
+
+            _responseDto.Result = new
+            {
+                data = result.OrderBy(x => x.UnitName).ThenBy(x => x.FactoryName),
+                numberOfPO,
+                totalNumberOfChecks,
+                totalNumberOfChecksOfPreFinal,
+                totalNumberOfChecksOfFinal,
+                totalNumberOfRecyclingOfPreFinal,
+                totalNumberOfRecyclingOfFinal,
+                percentageOfRecyclingOfPreFinal,
+                percentageOfRecyclingOfFinal
+            };
             _responseDto.IsSuccess = true;
             return Json(_responseDto);
         }
