@@ -48,7 +48,7 @@ $(document).ready(function () {
     } else if (path.includes('/Test')) {
         initGrid();
     } else if (path.includes('/ReportFinalFactoryLibrary')) {
-        initialReportFinalFactoryDetailPage();
+        initialReportFinalFactoryDetailByDatePage();
     } else if (path.includes('/ReportFinalFactoryDetailLibrary')) {
         initialReportFinalFactoryDetailPage();
     }

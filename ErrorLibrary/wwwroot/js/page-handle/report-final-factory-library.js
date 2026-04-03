@@ -1,5 +1,5 @@
 ﻿let reportFinalFactoryId = 0;
-function initialReportFinalFactoryDetailPage() {
+function initialReportFinalFactoryDetailByDatePage() {
     renderLineDropdown();
     $('#date').val(new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().substring(0, 10));
     initGrid();
@@ -83,11 +83,11 @@ async function setRowData() {
                     </tr>
                     <tr>
                         <td>% tái chế của P.QTCL</td>
-                        <td>${data.result.percentageOfRecyclingOfPreFinal}</td>
+                        <td>${data.result.percentageOfRecyclingOfPreFinal}%</td>
                     </tr>
                     <tr>
                         <td>% tái chế của KH</td>
-                        <td>${data.result.percentageOfRecyclingOfFinal}</td>
+                        <td>${data.result.percentageOfRecyclingOfFinal}%</td>
                     </tr>
                 `;
     $('#totalNumberOf').html(html);

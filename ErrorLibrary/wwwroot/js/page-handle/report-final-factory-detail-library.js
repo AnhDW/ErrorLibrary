@@ -58,7 +58,7 @@ function normalizeDate(date) {
 
 async function setRowData(){
     data = await getByReportFinalFactory(reportFinalFactoryId);
-    result = data.result.map(x => ({
+    result = data.result.data.map(x => ({
         ...x,
         preFinalDate1: new Date(x.preFinalDate1),
         preFinalDate2: new Date(x.preFinalDate2),
@@ -68,6 +68,41 @@ async function setRowData(){
         finalDate3: new Date(x.finalDate3),
     }));
     gridApi.setGridOption("rowData", result);
+    let html = `
+                    <tr>
+                        <td>Tổng số PO</td>
+                        <td>${data.result.numberOfPO}</td>
+                    </tr>
+                    <tr>
+                        <td>Tổng số lượng kiểm</td>
+                        <td>${data.result.totalNumberOfChecks}</td>
+                    </tr>
+                    <tr>
+                        <td>Tổng số lần kiểm của P.QTCL</td>
+                        <td>${data.result.totalNumberOfChecksOfPreFinal}</td>
+                    </tr>
+                    <tr>
+                        <td>Tổng số lần kiểm của KH</td>
+                        <td>${data.result.totalNumberOfChecksOfFinal}</td>
+                    </tr>
+                    <tr>
+                        <td>Tổng số lần tái chế của P.QTCL</td>
+                        <td>${data.result.totalNumberOfRecyclingOfPreFinal}</td>
+                    </tr>
+                    <tr>
+                        <td>Tổng số lần tái chế của KH</td>
+                        <td>${data.result.totalNumberOfRecyclingOfFinal}</td>
+                    </tr>
+                    <tr>
+                        <td>% tái chế của P.QTCL</td>
+                        <td>${data.result.percentageOfRecyclingOfPreFinal}%</td>
+                    </tr>
+                    <tr>
+                        <td>% tái chế của KH</td>
+                        <td>${data.result.percentageOfRecyclingOfFinal}%</td>
+                    </tr>
+                `;
+    $('#totalNumberOf').html(html);
 }
 
 let defectColumn = [];

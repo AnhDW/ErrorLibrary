@@ -67,7 +67,28 @@ namespace ErrorLibrary.Controllers
                 reportFinalFactoryDetail.StyleCode = styles.FirstOrDefault(s => s.Id == reportFinalFactoryDetail.StyleId)!.Code;
                 reportFinalFactoryDetail.ReportFinalFactoryDetailDefects = _mapper.Map<List<ReportFinalFactoryDetailDefectDto>>(reportFinalFactoryDetailDefects.Where(x => x.ReportFinalFactoryDetailId == reportFinalFactoryDetail.Id));
             }
-            _responseDto.Result = result;
+
+            var numberOfPO = result.Count;
+            var totalNumberOfChecks = result.Sum(x => x.Quantity);
+            var totalNumberOfChecksOfPreFinal = result.Sum(x => (x.PreFinalResult1 == Result.Pass ? 1 : 0) + (x.PreFinalResult2 == Result.Pass ? 1 : 0) + (x.PreFinalResult3 == Result.Pass ? 1 : 0));
+            var totalNumberOfChecksOfFinal = result.Sum(x => (x.FinalResult1 == Result.Pass ? 1 : 0) + (x.FinalResult2 == Result.Pass ? 1 : 0) + (x.FinalResult3 == Result.Pass ? 1 : 0));
+            var totalNumberOfRecyclingOfPreFinal = result.Sum(x => (x.PreFinalResult1 == Result.Fail ? 1 : 0) + (x.PreFinalResult2 == Result.Fail ? 1 : 0) + (x.PreFinalResult3 == Result.Fail ? 1 : 0));
+            var totalNumberOfRecyclingOfFinal = result.Sum(x => (x.FinalResult1 == Result.Fail ? 1 : 0) + (x.FinalResult2 == Result.Fail ? 1 : 0) + (x.FinalResult3 == Result.Fail ? 1 : 0));
+            var percentageOfRecyclingOfPreFinal = totalNumberOfChecksOfPreFinal > 0 ? Math.Round((double)totalNumberOfRecyclingOfPreFinal / totalNumberOfChecksOfPreFinal * 100, 2) : 0;
+            var percentageOfRecyclingOfFinal = totalNumberOfChecksOfFinal > 0 ? Math.Round((double)totalNumberOfRecyclingOfFinal / totalNumberOfChecksOfFinal * 100, 2) : 0;
+
+            _responseDto.Result = new
+            {
+                data = result,
+                numberOfPO,
+                totalNumberOfChecks,
+                totalNumberOfChecksOfPreFinal,
+                totalNumberOfChecksOfFinal,
+                totalNumberOfRecyclingOfPreFinal,
+                totalNumberOfRecyclingOfFinal,
+                percentageOfRecyclingOfPreFinal,
+                percentageOfRecyclingOfFinal
+            };
             return Json(_responseDto);
         }
 
